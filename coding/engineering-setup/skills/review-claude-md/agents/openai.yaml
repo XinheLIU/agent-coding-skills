@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review CLAUDE.md"
+  short_description: "Audit & restructure CLAUDE.md what/why context to a canonical 9-section skeleton"
+  default_prompt: "Use $review-claude-md to audit and restructure CLAUDE.md and the docs it references — focused on project overview, architecture, modules, and interfaces. Run $extract-rules separately for coding conventions or .claude/rules."

@@ -1,0 +1,19 @@
+{
+  "skill_name": "review-implementation-gaps",
+  "evals": [
+    {
+      "id": 0,
+      "name": "gap-analysis-explicit-plan",
+      "prompt": "Compare the current codebase to docs/plans/implementation-plan.md and tell me what's done, what's partial, what's missing, and what's divergent. Write a gap analysis artifact I can hand to the next reviewer.",
+      "expected_output": "Structured artifact at .claude/artifacts/eng-reviews/gap-analysis-*.md matching the schema: Summary line with counts, Gap Diagram, Components section with Status/Planned/Actual/Confidence per item, Dependency Order, Unexpected Code list, and a Next-stage hand-off hint line.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "status-check-framing",
+      "prompt": "Am I done with docs/plans/implementation-plan.md? What's left?",
+      "expected_output": "Same structured artifact, scoped by the same design doc. Output ends with a short completion report pointing the user to /review-code-quality as the next step. Classification uses COMPLETE/PARTIAL/MISSING/DIVERGENT/UNEXPECTED labels with confidence scores.",
+      "files": []
+    }
+  ]
+}

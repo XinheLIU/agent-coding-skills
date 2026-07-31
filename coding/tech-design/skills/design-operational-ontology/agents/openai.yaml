@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Operational Ontology"
+  short_description: "Design AI-ready kinetic and dynamic ontologies"
+  default_prompt: "Use $design-operational-ontology to turn this PRD or technical design into a decision-first operational ontology architecture."

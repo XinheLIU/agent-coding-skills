@@ -1,0 +1,4 @@
+interface:
+  display_name: "Translate Agent Context"
+  short_description: "Port Claude-specific surfaces (rules, slash commands, hooks, skills, orchestrators) agent-agnostic"
+  default_prompt: "Use $translate-agent-context to port Claude-specific surfaces (CLAUDE.md, .claude/rules, slash commands, hooks, .claude/skills, orchestrator subagents) into agent-agnostic equivalents. Owns mechanism translation, orchestrator decomposition, and shared skills/ symlink layout. Run $review-agent-md after translation to tidy AGENTS.md structure."

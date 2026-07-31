@@ -1,0 +1,11 @@
+{
+  "name": "agent-coding-skills",
+  "owner": { "name": "Xinhe LIU", "url": "https://github.com/XinheLIU" },
+  "plugins": [
+    {
+      "name": "agent-coding-skills",
+      "source": "./",
+      "description": "Architecture design + code review suite and coding skills (engineering setup, technical design, feature delivery, code quality, frontend, git) — 26 skills and shared sub-agents."
+    }
+  ]
+}

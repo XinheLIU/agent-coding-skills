@@ -1,0 +1,19 @@
+{
+  "skill_name": "review-design-doc",
+  "evals": [
+    {
+      "id": 0,
+      "name": "review-explicit-path",
+      "prompt": "Review the plan at docs/plans/implementation-plan.md before I start coding. Flag scope creep, missing sections, implicit assumptions, and any failure modes the plan does not account for.",
+      "expected_output": "Interactive review walking Scope Challenge through Required Sections, findings in [P0|P1|P2] (confidence: N/10) format, a written artifact under .claude/artifacts/eng-reviews/plan-review-*.md, and a Completion Summary at the end.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "autodetect-latest-plan",
+      "prompt": "I'm about to start coding. Review my most recent plan doc and tell me what's missing before I write a line of code.",
+      "expected_output": "Skill auto-detects docs/plans/*.md (should pick tdd-execution-plan.md — newest — OR ask which one if it picks anything else), reads it, produces interactive review with confidence-calibrated findings and an artifact.",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "skill_name": "review-code-quality",
+  "evals": [
+    {
+      "id": 0,
+      "name": "chain-consume-gap-artifact",
+      "prompt": "I've got a gap analysis at /tmp/eng-skills-eval-fixtures/gap-analysis-sample.md for this codebase. Review code quality of the COMPLETE and PARTIAL components and give me a prioritized next-steps plan.",
+      "expected_output": "Skill picks Mode A, reads the gap analysis, focuses on the listed COMPLETE+PARTIAL components, attempts parallel subagent dispatch (api/db/auth/reliability/performance/security/code-reviewer) and falls back to inline review if unavailable, produces interactive findings in [P0|P1|P2] (confidence: N/10) format, a coverage diagram, and a prioritized next-steps artifact at docs/eng-reviews/next-steps-*.md with CRITICAL / IMPORTANT / NICE-TO-HAVE buckets plus a READY | READY-WITH-FIXES | NOT-READY verdict.",
+      "files": ["/tmp/eng-skills-eval-fixtures/gap-analysis-sample.md"]
+    },
+    {
+      "id": 1,
+      "name": "standalone-pr-readiness",
+      "prompt": "Review code quality of my recent changes — am I ready to open a PR?",
+      "expected_output": "Skill picks Mode A, falls back to branch-diff scope (no gap-analysis artifact), tries parallel subagent dispatch and falls back to inline review if the runtime has no subagents, walks changed files, flags DRY/error-handling/over-engineering issues with confidence scores, produces coverage diagram, writes prioritized next-steps artifact, and ends with a READY | READY-WITH-FIXES | NOT-READY verdict.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "no-subagents-fallback",
+      "prompt": "Review my recent changes for PR readiness. No subagent runtime is available here.",
+      "expected_output": "Skill announces 'Subagents unavailable → running inline review', performs the full domain-lens inline review (api/db/auth/reliability/performance/security/code-quality) itself, produces the same format findings + coverage diagram + next-steps artifact + verdict. Output artifact lists Subagents used: none — inline only.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "drill-down-mode-c",
+      "prompt": "Here's the architecture review output:\n\n# Architecture Review\n## Critical\n- [src/agent/runtime.py:142] missing timeout on OpenAI call — Confirmed by: reliability, api\n- [src/ops.py:89] N+1 query in promotion batch loop — Confirmed by: performance, db\n\nDrill into these at the code level.",
+      "expected_output": "Skill detects Mode C automatically (arch-review pasted), parses the two Critical findings, extracts src/agent/runtime.py and src/ops.py as scope, dispatches only the relevant domain subagent pairs (reliability+api for runtime.py, performance+db for ops.py) in parallel with parent findings filtered per-domain, or falls back to targeted inline review. Produces confirmed/refuted/partial status per parent finding and the same next-steps artifact + verdict.",
+      "files": []
+    }
+  ]
+}
