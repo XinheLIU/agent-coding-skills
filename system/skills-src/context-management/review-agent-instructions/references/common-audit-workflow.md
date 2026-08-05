@@ -1,6 +1,6 @@
 # Common Audit Workflow
 
-Last updated: 2026-08-02
+Last updated: 2026-08-06
 
 Use this workflow when auditing a root AI context file such as `CLAUDE.md` or `AGENTS.md` plus every file it references.
 
@@ -43,7 +43,7 @@ If the audit involves migration between agent runtimes, also build a mechanism-t
 Old surface -> behavior -> new canonical surface -> parity status
 ```
 
-## Step 3 — Per-File Analysis Against the 12 Principles
+## Step 3 — Per-File Analysis Against the 14 Principles
 
 For the root context file and each referenced file, record each issue as:
 
@@ -55,7 +55,7 @@ For the root context file and each referenced file, record each issue as:
 
 When a target-specific rewrite template exists, use that template as the canonical output shape during the rewrite phase.
 
-### The 12 Principles
+### The 14 Principles
 
 1. **Less Is More**: the root context file should usually land in the 60-300 line range. Delete anything a competent engineer can infer from reading the repo.
 2. **Be Specific, Not Generic**: every sentence must change agent behavior. If covering the line changes nothing, delete it.
@@ -69,6 +69,25 @@ When a target-specific rewrite template exists, use that template as the canonic
 10. **Factor Repetition**: if the same multi-step workflow appears twice, extract it into a script, command, or one canonical doc.
 11. **Live Context over Static Text**: facts that change often should be represented as commands the agent can run, not prose snapshots.
 12. **MECE**: each fact should have one canonical home, and each file should have one clear purpose.
+13. **Checkable Constraints**: verification only checks what the constraint names. Every rule must be stated so that a test, linter, CI gate, or reviewer could decide whether it was violated. "Keep the code clean" is unverifiable and therefore unenforced — delete or sharpen it. Prefer naming the check itself: "response shapes of `/api/v1/*` are frozen — `tests/contract/` covers them."
+14. **Earned by Experience**: a rule earns its line when something went wrong without it. Rules with no incident, no regression, and no explicit decision behind them are speculation. During audit, ask of each rule: what breaks if this line is deleted? No answer means delete.
+
+## Index Plus Common Sense
+
+The single most common failure is writing too much: prose restatements of the architecture diagram, the whole interface inventory, every table and every column. Thousands of lines, loaded on every startup, pushing the agent into the dumb zone.
+
+**The file's job is index plus common sense.** The index points at the detail in `docs/`; the common sense is what the agent must know the moment it starts. Every line is either one or the other — anything else, delete.
+
+| Include | How to write it |
+| --- | --- |
+| What the project is | One sentence |
+| Core architecture | One paragraph plus a link to the diagram. Never rewrite the diagram as prose |
+| Key modules | Small table, one sentence of responsibility each; detailed dependencies stay in the module graph |
+| Key conventions | Hard rules, no rationale. "All REST responses are wrapped in `Result`." "DB columns snake_case, Java fields camelCase" |
+| How to run it | One sentence plus a link to the runbook |
+| Forbidden zones and historical baggage | The soul of a legacy project — the only sections worth real space |
+
+Leave out: full architecture detail, the full interface inventory, the full data model (all three already live in `docs/`), generic coding standards not specific to this project, and background story. The agent does not need the project's origin myth to work.
 
 ## Step 4 — Produce the Audit Report
 
