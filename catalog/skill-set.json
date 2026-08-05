@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-coding-skills",
+  "title": "Agent Coding System",
+  "tagline": "Plan, build, review, and ship software with shared agent memory.",
+  "description": "A coordinated engineering system covering product discovery, architecture, context management, feature delivery, testing, debugging, and frontend work.",
+  "version": "0.1.0",
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "accent": "rust",
+  "sourcePattern": "system/skills-src/{category}/{skill}/SKILL.md",
+  "install": "/plugin install agent-coding-skills@agent-coding-skills",
+  "categories": [
+    {
+      "id": "architecture-design",
+      "label": "Architecture Design",
+      "skills": ["analyze-test-gaps", "codebase-design", "design-agent-architecture", "design-operational-ontology", "domain-modeling", "improve-codebase-architecture", "review-architecture", "review-design-doc", "review-implementation-gaps"]
+    },
+    {
+      "id": "code-quality",
+      "label": "Code Quality",
+      "skills": ["refactor-code", "request-code-review", "review-code-quality", "simplify-code"]
+    },
+    {
+      "id": "context-management",
+      "label": "Context Management",
+      "skills": ["create-readme", "document-codebase", "extract-rules", "index-codebase", "manage-context", "review-agent-instructions", "scaffold-agent-docs", "translate-agent-context"]
+    },
+    {
+      "id": "debugging",
+      "label": "Debugging",
+      "skills": ["diagnosing-bugs", "resolving-merge-conflicts", "triage"]
+    },
+    {
+      "id": "feature-delivery",
+      "label": "Feature Delivery",
+      "skills": ["analyze", "brainstorm-feature", "handoff", "prototype", "spec", "tasks", "tdd"]
+    },
+    {
+      "id": "frontend",
+      "label": "Frontend",
+      "skills": ["frontend-design-antigravity", "frontend-design", "ui-ux-pro-max"]
+    },
+    {
+      "id": "product-ideation",
+      "label": "Product Ideation",
+      "skills": ["analyze-jtbd", "brainstorm", "critique-idea", "design-mvp", "generate-product-ideas", "review-product-strategy", "run-premortem", "validate-product-opportunity", "write-prd", "write-user-story"]
+    },
+    {
+      "id": "research-planning",
+      "label": "Research & Planning",
+      "skills": ["draw-portfolio-dag", "grilling", "research", "wayfinder", "writing-great-skills"]
+    }
+  ]
+}

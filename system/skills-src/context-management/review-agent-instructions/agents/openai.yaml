@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Agent Instructions"
+  short_description: "Audit & restructure CLAUDE.md or AGENTS.md to a canonical skeleton with line ceiling"
+  default_prompt: "Use $review-agent-instructions to audit and restructure CLAUDE.md or AGENTS.md and the docs they reference. Run $extract-rules for rule extraction and $translate-agent-context for cross-runtime mechanism translation."
