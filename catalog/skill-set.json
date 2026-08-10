@@ -11,44 +11,59 @@
   "install": "/plugin install agent-coding-skills@agent-coding-skills",
   "categories": [
     {
-      "id": "architecture-design",
-      "label": "Architecture Design",
-      "skills": ["analyze-test-gaps", "codebase-design", "design-agent-architecture", "design-operational-ontology", "domain-modeling", "improve-codebase-architecture", "review-architecture", "review-design-doc", "review-implementation-gaps"]
+      "id": "product/discovery",
+      "label": "Product · Discovery",
+      "skills": ["brainstorm", "validate-demand", "run-premortem", "ideate-product"]
     },
     {
-      "id": "code-quality",
-      "label": "Code Quality",
-      "skills": ["refactor-code", "request-code-review", "review-code-quality", "simplify-code"]
+      "id": "product/definition",
+      "label": "Product · Definition",
+      "skills": ["shape-solution", "scope-mvp", "prototype", "write-prd"]
     },
     {
-      "id": "context-management",
-      "label": "Context Management",
-      "skills": ["create-readme", "document-codebase", "extract-rules", "index-codebase", "manage-context", "review-agent-instructions", "scaffold-agent-docs", "translate-agent-context"]
+      "id": "design/ux",
+      "label": "Design · UX",
+      "skills": ["design-system-create", "design-implement", "wayfinder", "ui-ux-pro-max"]
     },
     {
-      "id": "debugging",
-      "label": "Debugging",
-      "skills": ["diagnosing-bugs", "resolving-merge-conflicts", "triage"]
+      "id": "design/technical",
+      "label": "Design · Technical",
+      "skills": ["domain-modeling", "codebase-design", "design-agent-architecture", "design-operational-ontology", "improve-codebase-architecture"]
     },
     {
-      "id": "feature-delivery",
-      "label": "Feature Delivery",
-      "skills": ["analyze", "brainstorm-feature", "handoff", "prototype", "spec", "tasks", "tdd"]
+      "id": "engineering/feature",
+      "label": "Engineering · Feature",
+      "skills": ["analyze", "brainstorm-feature", "spec", "tasks", "handoff"]
     },
     {
-      "id": "frontend",
-      "label": "Frontend",
-      "skills": ["frontend-design-antigravity", "frontend-design", "ui-ux-pro-max"]
+      "id": "engineering/frontend",
+      "label": "Engineering · Frontend",
+      "skills": ["frontend-design", "frontend-design-antigravity"]
     },
     {
-      "id": "product-ideation",
-      "label": "Product Ideation",
-      "skills": ["analyze-jtbd", "brainstorm", "critique-idea", "design-mvp", "generate-product-ideas", "review-product-strategy", "run-premortem", "validate-product-opportunity", "write-prd", "write-user-story"]
+      "id": "quality/testing",
+      "label": "Quality · Testing",
+      "skills": ["tdd", "analyze-test-gaps"]
     },
     {
-      "id": "research-planning",
-      "label": "Research & Planning",
-      "skills": ["draw-portfolio-dag", "grilling", "research", "wayfinder", "writing-great-skills"]
+      "id": "quality/review",
+      "label": "Quality · Review",
+      "skills": ["review-architecture", "review-design-doc", "review-implementation-gaps", "review-code-quality", "request-code-review", "refactor-code", "simplify-code"]
+    },
+    {
+      "id": "quality/debugging",
+      "label": "Quality · Debugging",
+      "skills": ["diagnosing-bugs", "triage", "resolving-merge-conflicts"]
+    },
+    {
+      "id": "craft/context",
+      "label": "Craft · Context",
+      "skills": ["manage-context", "index-codebase", "document-codebase", "create-readme", "extract-rules", "scaffold-agent-docs", "translate-agent-context"]
+    },
+    {
+      "id": "craft/meta",
+      "label": "Craft · Meta",
+      "skills": ["research", "grilling", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions"]
     }
   ]
 }

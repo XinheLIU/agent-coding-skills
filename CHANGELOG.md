@@ -4,6 +4,18 @@ Last updated: 2026-08-10
 
 ## Unreleased
 
+### Product skills published to the loader and catalog
+
+Made the eight product skills discoverable. The sources landed in the previous change; this publishes them.
+
+- Added `system/skills/` symlinks for `brainstorm`, `validate-demand`, `run-premortem`, `ideate-product`, `shape-solution`, `scope-mvp`, `prototype`, and `write-prd`. Without these the loader cannot see a skill regardless of its source being present.
+- Rebuilt `catalog/skill-set.json` around the category source tree. Product is now two categories — `product/discovery` (brainstorm, validate-demand, run-premortem, ideate-product) and `product/definition` (shape-solution, scope-mvp, prototype, write-prd) — replacing the flat `product-ideation` category, which still advertised six skills that no longer exist under those names (`analyze-jtbd`, `critique-idea`, `design-mvp`, `generate-product-ideas`, `review-product-strategy`, `validate-product-opportunity`, `write-user-story`).
+- Remaining categories follow the same restructure: `design/ux`, `design/technical`, `engineering/feature`, `engineering/frontend`, `quality/testing`, `quality/review`, `quality/debugging`, `craft/context`, `craft/meta`.
+- Dropped two `design/ux` entries — `interaction-design` and `visual-design-variants` — that resolved to nothing on disk. The design skills own their catalog entries when that work lands.
+
+All 48 advertised skills now resolve to a real path.
+
+
 ### Memory contract — layer boundaries and product intent promotion
 
 Clarified the four-layer memory contract so the Human/Working split is a content rule, not an audience label. Every product skill now declares its layer explicitly, and the PRD moves from the gitignored work root into the tracked Human layer.
