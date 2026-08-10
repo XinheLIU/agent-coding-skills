@@ -1,8 +1,31 @@
 # Changelog
 
-Last updated: 2026-08-05
+Last updated: 2026-08-10
 
 ## Unreleased
+
+### Memory contract — layer boundaries and product intent promotion
+
+Clarified the four-layer memory contract so the Human/Working split is a content rule, not an audience label. Every product skill now declares its layer explicitly, and the PRD moves from the gitignored work root into the tracked Human layer.
+
+**The core change.** The old boundary was "Human = docs for maintainers." That describes a reader, not a content type. The new rule is a question: *if the work root were deleted today, would the project have lost a fact it still needs?* Yes → tracked layer. No → working memory. Promotion flows one way only — Working → Human or Core, never back.
+
+**Product intent is Human-layer.** `write-prd` now owns `<product-docs>/<slug>/prd.md` (default `docs/product/<slug>/prd.md`) instead of `<effort>/prd.md`. The discovery files (`brainstorm.md`, `demand.md`, `solution.md`, `mvp.md`, `premortem.md`) remain working-layer drafts — useful while the effort runs, gone when it ends, with their durable conclusions living in the PRD.
+
+**Two promotion points in the product pipeline.** `validate-demand` returning Green is the first: the core idea (persona, job, struggle, demand type, evidence grade) has earned a place in the tracked layer. `write-prd` runs in early mode at that point — Part 1 filled, later sections marked `Pending — awaiting <skill>`. The second run extends the PRD once scope and risks are settled. Efforts abandoned mid-pipeline still leave a record of what was considered and why.
+
+**Every product skill gets a `Layer / Owns / Promotes` declaration.** Six skills are Working-layer owners; `write-prd` is the Human-layer owner and the pipeline's one promotion step; `ideate-product` is Transient (routes state, writes none).
+
+**`manage-context` gains layer awareness.** Phase A emits a `Product docs:` config line alongside the existing `Work root:` line, making the tracked/disposable split explicit from the first session. Phase B's drift detection adds a layer-misplacement check — a Green `demand.md` with no PRD is a higher-priority finding than a stale path. Phase B's promotion table gains an explicit product-intent row routing to `write-prd`.
+
+**`prototype` decisions classify on write.** Interaction decisions promote to the PRD's Part 3; architectural decisions promote to an ADR via `domain-modeling`. The skill states which kind before handing back.
+
+**Renamed `design-solution` → `shape-solution`** and cleaned up all resulting stale references in the protocol, reference files, and routing tables.
+
+**Design-layer routing arrives ahead of its skills.** The memory config gained a `Design docs:` line (`docs/design/`) and the routing template gained a Design Workflow section applying the same split: the design system and component docs are tracked Human-layer reference material, while HTML variant exploration under `.scratch/<effort>/designs/` is disposable scaffolding that production code supersedes. The design skills themselves are not in this change — only the memory contract they will write against.
+
+**Files changed:** `system/memory/README.md`, `manage-context/SKILL.md`, `manage-context/references/PROTOCOL.md`, all seven product `SKILL.md` files, `product/README.md`, `system/workflows/ideas.md`, `system/workflows/feature-delivery.md`, `system/README.md`, `system/docs/organization-report.md`, `write-prd/references/prd-principles.md`, two reference files carrying the rename.
+
 
 ### Context management
 
