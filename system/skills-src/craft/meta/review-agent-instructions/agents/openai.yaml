@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Agent Instructions"
+  short_description: "Write and maintain CLAUDE.md or AGENTS.md — fold in a lesson, review shape, or wire it to memory"
+  default_prompt: "Use $review-agent-instructions on CLAUDE.md or AGENTS.md. It triages first: post-incident intake for a single lesson, review for a decayed file, or wiring the file back to the memory system. Run $extract-rules for rule extraction and $translate-agent-context for cross-runtime mechanism translation."

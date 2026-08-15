@@ -1,4 +1,0 @@
-interface:
-  display_name: "Review AGENTS.md"
-  short_description: "Audit & restructure AGENTS.md to a canonical 9-section skeleton (parallel to review-claude-md)"
-  default_prompt: "Use $review-agent-md to audit and restructure AGENTS.md and the docs it references — focused on project overview, architecture, modules, and the Agent Surface table. Run $extract-rules for rule extraction and $translate-agent-context for cross-runtime mechanism translation."

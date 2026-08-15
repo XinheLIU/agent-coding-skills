@@ -1,0 +1,6 @@
+# Local copied skill snapshots; never commit them.
+/references/
+
+# Python runtime artifacts.
+__pycache__/
+*.pyc

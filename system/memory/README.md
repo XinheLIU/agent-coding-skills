@@ -61,6 +61,6 @@ Markdown is the semantic source of truth. HTML is a first-class human interface,
 
 ## Where the rules live
 
-The skills that create and reconcile these layers are collected in [`craft/context`](../skills-src/craft/context/README.md). `manage-context` Phase A configures the layers; Phase B is the one entry point responsible for keeping them consistent with each other.
+The skills that create and reconcile these layers are collected in [`craft/context`](../skills-src/craft/context/README.md). `init-context` configures all four layers on first setup; `sync-context` is the one entry point responsible for keeping them consistent after code changes.
 
-The protocol spec — read/write rules, the layer contract, and the ownership registry — travels with its owning skill at [`manage-context/references/PROTOCOL.md`](../skills-src/craft/context/manage-context/references/PROTOCOL.md), so a skill copied out of this repo carries the contract with it.
+The protocol spec — read/write rules, the layer contract, and the ownership registry — travels with its owning skill at [`init-context/references/PROTOCOL.md`](../skills-src/craft/context/setup/init-context/references/PROTOCOL.md), so a skill copied out of this repo carries the contract with it.

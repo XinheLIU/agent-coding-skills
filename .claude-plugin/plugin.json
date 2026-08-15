@@ -1,8 +1,0 @@
-{
-  "name": "agent-coding-skills",
-  "version": "0.1.0",
-  "description": "Composable skills for software architecture, code review, engineering setup, technical design, feature delivery, and code quality — organized as two capability domains (architecture-design + coding) for the full build lifecycle.",
-  "author": { "name": "Xinhe LIU", "url": "https://github.com/XinheLIU" },
-  "homepage": "https://github.com/XinheLIU/agent-coding-skills",
-  "keywords": ["coding", "architecture", "code-review", "refactor", "tdd", "engineering-setup", "frontend", "git", "agent-skills"]
-}

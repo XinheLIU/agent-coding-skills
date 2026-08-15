@@ -58,7 +58,7 @@
     {
       "id": "craft/context",
       "label": "Craft · Context",
-      "skills": ["manage-context", "index-codebase", "document-codebase", "create-readme", "extract-rules", "scaffold-agent-docs", "translate-agent-context"]
+      "skills": ["init-context", "translate-agent-context", "sync-context"]
     },
     {
       "id": "craft/meta",

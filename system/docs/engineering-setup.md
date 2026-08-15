@@ -1,6 +1,6 @@
 # Engineering Setup
 
-Last updated: 2026-08-04
+Last updated: 2026-08-06
 
 **Lifecycle stage 3.** Engineering Setup covers everything needed to make a codebase ready for reliable agent-assisted delivery. Its scope spans three sub-areas:
 
@@ -64,7 +64,7 @@ The prose wiki skills live in [learning-os](https://github.com/XinheLIU/learning
 
 ### [review-agent-instructions](../skills/review-agent-instructions/SKILL.md)
 
-Audit and restructure `CLAUDE.md` or `AGENTS.md` and every file they reference. Detects which file is present and applies the appropriate canonical skeleton: 9-section for `CLAUDE.md` (200-line ceiling); 9-section plus an Agent Surface table for `AGENTS.md` (220-line ceiling). Produces a MECE rewrite and a concrete change list. Triggers: "review CLAUDE.md", "review AGENTS.md", "audit context files", "shrink CLAUDE.md / AGENTS.md", "deduplicate context docs".
+Write and maintain the repository's agent instruction file — `CLAUDE.md` or `AGENTS.md`, whichever is present — and keep it wired to the memory system. Triages before reading: **intake** folds one post-incident lesson into the section that owns it, **review** rewrites a file whose shape has decayed, **wire memory** restores the startup sequence, memory-routing pointer, and Context Files triggers. Judges against five principles (index plus common sense, earned by experience, checkable, alternatives not just prohibitions, room to grow) under a ~200/220-line budget. Triggers: "review CLAUDE.md", "review AGENTS.md", "shrink CLAUDE.md / AGENTS.md", "add this lesson to CLAUDE.md", "the agent keeps ignoring CLAUDE.md".
 
 ### [translate-agent-context](../skills/translate-agent-context/SKILL.md)
 

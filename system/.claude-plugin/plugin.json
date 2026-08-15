@@ -1,0 +1,10 @@
+{
+  "name": "agent-coding-skills",
+  "version": "0.1.0",
+  "description": "58 coding skills coordinated through a shared Markdown and HTML memory protocol.",
+  "author": { "name": "Xinhe LIU", "url": "https://github.com/XinheLIU" },
+  "homepage": "https://github.com/XinheLIU/agent-coding-skills",
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "license": "MIT",
+  "keywords": ["coding", "agent-skills", "shared-memory", "workflow", "planning", "debugging", "testing", "architecture", "tdd", "code-review"]
+}

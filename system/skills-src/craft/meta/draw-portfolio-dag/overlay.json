@@ -1,0 +1,120 @@
+{
+  "_comment": "Manually resolved edges/tags that scan_specs.py cannot infer mechanically (cross-workstream refs, external preconditions). Re-check this file whenever scan_specs.py reports unresolved_dep_count > 0 for a node not yet listed here.",
+  "extra_deps": {
+    "AOM01": [
+      "ASR07"
+    ],
+    "SPR03": [
+      "EST02"
+    ]
+  },
+  "tags": {
+    "MHP02": [
+      "data"
+    ],
+    "MHP07": [
+      "data"
+    ],
+    "MHP08": [
+      "data"
+    ],
+    "MHP10": [
+      "data"
+    ],
+    "EST02": [
+      "data"
+    ],
+    "EST03": [
+      "data"
+    ],
+    "STD02": [
+      "data"
+    ],
+    "STD03": [
+      "deploy"
+    ],
+    "STD04": [
+      "deploy"
+    ],
+    "CPD02": [
+      "data",
+      "deploy"
+    ],
+    "CPD03": [
+      "data"
+    ],
+    "CPD04": [
+      "data"
+    ],
+    "CPD05": [
+      "data",
+      "deploy"
+    ],
+    "CPD06": [
+      "data",
+      "deploy"
+    ],
+    "SPR02": [
+      "data",
+      "deploy"
+    ],
+    "SPR03": [
+      "data",
+      "deploy"
+    ],
+    "SPR06": [
+      "data",
+      "deploy"
+    ],
+    "SPR07": [
+      "data",
+      "deploy"
+    ],
+    "TMR04": [
+      "data",
+      "deploy"
+    ],
+    "TMR05": [
+      "data",
+      "deploy"
+    ],
+    "AOM01": [
+      "data"
+    ],
+    "AOM04": [
+      "data"
+    ],
+    "AOM05": [
+      "deploy"
+    ],
+    "MTU02": [
+      "data"
+    ],
+    "MTU03": [
+      "data"
+    ],
+    "MTU04": [
+      "data",
+      "deploy"
+    ],
+    "MTU05": [
+      "deploy"
+    ],
+    "MTU06": [
+      "data",
+      "deploy"
+    ]
+  },
+  "tag_styles": {
+    "data": {
+      "label": "DATA",
+      "bg": "#5b21b6",
+      "fg": "#fff"
+    },
+    "deploy": {
+      "label": "DEPLOY",
+      "bg": "#b45309",
+      "fg": "#fff"
+    }
+  }
+}

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Rules Extract"
-  short_description: "Extract and runtime-route project rules — static, dynamic, implicit"
-  default_prompt: "Use $extract-rules to discover, classify, and document agent-behavior rules. Auto-detects runtime (Claude / AGENTS.md / multi-runtime) and routes findings to .claude/rules, inline AGENTS.md, or docs/conventions. Run $review-claude-md or $review-agent-md for content rewrites; run $translate-agent-context for cross-runtime mechanism translation."

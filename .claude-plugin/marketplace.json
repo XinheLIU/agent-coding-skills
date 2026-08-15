@@ -1,11 +1,12 @@
 {
   "name": "agent-coding-skills",
+  "description": "A marketplace for the Agent Coding System plugin.",
   "owner": { "name": "Xinhe LIU", "url": "https://github.com/XinheLIU" },
   "plugins": [
     {
       "name": "agent-coding-skills",
-      "source": "./",
-      "description": "Architecture design + code review suite and coding skills (engineering setup, technical design, feature delivery, code quality, frontend, git) — 26 skills and shared sub-agents."
+      "source": "./system",
+      "description": "A 58-skill coding system with shared memory, context management, product ideation, delivery, testing, and debugging workflows."
     }
   ]
 }
