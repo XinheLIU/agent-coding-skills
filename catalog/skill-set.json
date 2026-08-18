@@ -13,17 +13,17 @@
     {
       "id": "product/discovery",
       "label": "Product · Discovery",
-      "skills": ["brainstorm", "validate-demand", "run-premortem", "ideate-product"]
+      "skills": ["brainstorm", "validate-demand", "map-current-product", "run-premortem", "ideate-product"]
     },
     {
       "id": "product/definition",
       "label": "Product · Definition",
-      "skills": ["shape-solution", "scope-mvp", "prototype", "write-prd"]
+      "skills": ["shape-solution", "scope-mvp", "scope-product-increment", "write-prd"]
     },
     {
       "id": "design/ux",
       "label": "Design · UX",
-      "skills": ["design-system-create", "design-implement", "wayfinder", "ui-ux-pro-max"]
+      "skills": ["design-context", "design-system-create", "interaction-design", "visual-design-variants", "design-implement", "prototype"]
     },
     {
       "id": "design/technical",
@@ -34,11 +34,6 @@
       "id": "engineering/feature",
       "label": "Engineering · Feature",
       "skills": ["analyze", "brainstorm-feature", "spec", "tasks", "handoff"]
-    },
-    {
-      "id": "engineering/frontend",
-      "label": "Engineering · Frontend",
-      "skills": ["frontend-design", "frontend-design-antigravity"]
     },
     {
       "id": "quality/testing",
@@ -63,7 +58,7 @@
     {
       "id": "craft/meta",
       "label": "Craft · Meta",
-      "skills": ["research", "grilling", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions"]
+      "skills": ["research", "grilling", "wayfinder", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions"]
     }
   ]
 }

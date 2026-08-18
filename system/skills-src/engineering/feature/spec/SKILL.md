@@ -3,7 +3,7 @@ name: spec
 description: Start a new feature by creating a git worktree, feature branch, and spec.md (user stories, functional requirements, success criteria). Use when the user wants to kick off a new feature from a description. Folds a short clarify Q&A inline to resolve ambiguities.
 ---
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 # /spec — Start a new feature
 
@@ -22,7 +22,7 @@ Do NOT use this skill for bug fixes, refactors, or edits to an existing feature.
 
 - **Required**: a natural-language feature description (user message or `$ARGUMENTS`).
 - **Optional**: the effort PRD — `docs/product/<slug>/prd.md`, found via `state.md` or named by the user. Read Part 1 (user story, requirement list, scope) and Part 3 (five-state specs, edge cases); derive user stories, FRs, and success criteria from them instead of re-deriving, and cite the PRD path in **Input**.
-- **Optional**: design artifacts — resolved `map.md` decisions (`wayfinder`), `design-system/MASTER.md` (`ui-ux-pro-max`), glossary and ADRs (`domain-modeling`), architecture docs. Treat them as constraints and terminology sources; implementation detail they contain still stays out of `spec.md` — it belongs to `plan.md`.
+- **Optional**: design artifacts — resolved `map.md` decisions (`wayfinder`), `docs/design/system.md` and root `DESIGN.md` (the `design/ux` pipeline — see `workflows/design.md`), glossary and ADRs (`domain-modeling`), architecture docs. Treat them as constraints and terminology sources; implementation detail they contain still stays out of `spec.md` — it belongs to `plan.md`.
 - **Implicit**: current working directory must be inside a git repository.
 
 ## Outputs

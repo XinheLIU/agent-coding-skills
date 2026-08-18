@@ -1,12 +1,9 @@
 # Engineering · Frontend
 
-Last updated: 2026-08-09
+Last updated: 2026-08-17
 
-Frontend implementation — turning UX designs into working UI code with consistent component structure and interaction fidelity.
+Frontend implementation is owned by `design/ux/design-implement` — it converts approved visual designs into production component code matching the project's tech stack, with an optional polish pass by external layer-③ skills.
 
-| Skill | Owns |
-| --- | --- |
-| `frontend-design` | Component architecture, design token system, and layout structure for a new UI |
-| `frontend-design-antigravity` | Identify and remove anti-patterns in an existing frontend codebase |
+This category previously vendored two external skill copies (`frontend-design`, `frontend-design-antigravity`). They were removed: this repo keeps only user-authored skills and orchestrations. External frontend design skills are catalogued in `design/ux/README.md` (layer ①) and installed per their own repos — Anthropic's `frontend-design` at [anthropics/skills](https://github.com/anthropics/skills) is the layer-① reference.
 
-These skills handle the engineering side of frontend. The design side (what it should look like) lives in `design/ux/`.
+The design side (what it should look like) lives in `design/ux/`; the end-to-end flow is documented in `workflows/design.md`.

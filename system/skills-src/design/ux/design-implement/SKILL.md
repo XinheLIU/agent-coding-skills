@@ -3,7 +3,7 @@ name: design-implement
 description: "Convert approved design into production code matching the project's tech stack. Extracts design tokens, builds components following stack conventions, ensures accessibility (WCAG AA), generates responsive code. Documents in docs/design/components/."
 ---
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 # Design Implementation
 
@@ -11,14 +11,14 @@ Convert approved design into production code that matches the project's tech sta
 
 ## When to Use
 
-- Design is approved (`.scratch/<effort>/designs/approved.html` exists)
+- Design is approved (`.scratch/<effort>/visual/approved.html` exists)
 - Design system is defined (`docs/design/system.md` exists)
 - Ready to implement actual production code (not exploring options)
 - User asks: "implement this design", "turn this into code", "build the component"
 
 Do NOT use when:
-- No design system exists yet (run `/design-system-create` first)
-- Still exploring options (use `/design-explore-variants`)
+- No design system exists yet (run `/design-context` or `/design-system-create` first)
+- Still exploring options (use `/visual-design-variants`)
 - Design not yet approved (finish variant selection first)
 
 ## Inputs and Handoffs
@@ -68,7 +68,7 @@ If any prerequisite missing:
 - Guide user to run appropriate skill:
   - No approved.html → run `/visual-design-variants`
   - No state-table.md → run `/interaction-design`
-  - No system.md → run `/design-system-create`
+  - No system.md → run `/design-context` (or `/design-system-create` for from-scratch)
 
 ### Step 1: Read Context
 
@@ -437,6 +437,22 @@ export function Hero({
 
 Write the generated files to the target directory.
 
+### Step 4.5: External Polish Pass (optional, layer ③)
+
+If polish/review skills are installed (see `design/ux/README.md` layer ③ — interaction-craft, motion-design, "feel-better", or a11y-review skills), run a review pass over the generated code before documenting it:
+
+- **Interaction craft / motion** — spring vs ease decisions, hover behavior, transition timing
+- **Feel-better** — optical alignment, concentric radii, hit areas, shadow treatment
+- **A11y review** — contrast, focus order, ARIA coverage beyond the built-in gates
+
+**Authority limits for the polish pass:**
+
+- Visual token values come from `docs/design/system.md` — a polish skill may NOT introduce off-system colors/fonts
+- Structure (layout, navigation, state transitions) is locked — anything requiring structural change goes back to `/interaction-design`, not into the code
+- Record every applied fix in the component doc's `## Implementation Notes` (Step 6), one line per fix with the skill that suggested it
+
+If no polish skill is installed, skip silently — the built-in quality gates (Step 7) already enforce the baseline.
+
 ### Step 5: Generate Usage Example
 
 Create a simple example showing how to use the component:
@@ -476,7 +492,7 @@ Last updated: YYYY-MM-DD
 
 ![Component preview](/path/to/screenshot-or-figma-embed)
 
-*Design reference: `.scratch/<effort>/designs/approved.html`*
+*Design reference: `.scratch/<effort>/visual/approved.html`*
 
 ## Usage
 
@@ -570,7 +586,7 @@ Next steps:
 - Token/style files (in styles/ or equivalent)
 
 **Working layer (gitignored, can be archived after implementation):**
-- `.scratch/<effort>/designs/approved.html` — served its purpose once implemented
+- `.scratch/<effort>/visual/approved.html` — served its purpose once implemented
 
 Apply the durability test: component docs YES (they outlive the implementation effort and serve as reference), approved HTML NO (it was scaffolding, the real code supersedes it).
 
@@ -591,7 +607,7 @@ Before finalizing:
 ## Integration Points
 
 **Reads from:**
-- `.scratch/<effort>/designs/approved.html` (approved design - REQUIRED)
+- `.scratch/<effort>/visual/approved.html` (approved design - REQUIRED)
 - `docs/design/system.md` (design system tokens - REQUIRED)
 - Project files (package.json, etc.) for stack detection
 
@@ -601,5 +617,7 @@ Before finalizing:
 - Token files (styles/tokens.css or equivalent)
 
 **Feeds:**
-- Component docs feed `frontend-design` and `spec` (reference for implementation)
+- Component docs feed `spec` (reference for implementation)
 - Tokens feed all future component work (consistent styling)
+
+**External skills (optional):** layer-③ polish skills (interaction craft, motion, feel-better, a11y review) may run a review pass in Step 4.5 — see `design/ux/README.md`. Native quality gates run regardless.

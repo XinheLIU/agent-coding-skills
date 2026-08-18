@@ -1,11 +1,15 @@
 # Ideas Workflow
 
-Last updated: 2026-08-10
+Last updated: 2026-08-18
 
-Use this workflow when the problem or product shape is still uncertain. Each stage drafts in working memory; durable conclusions are promoted to the tracked product docs, and domain memory is updated only when vocabulary or a durable trade-off is resolved.
+Use this workflow when the problem, product shape, or next product increment is still uncertain.
+Each stage drafts in working memory; durable conclusions are promoted to the tracked product
+docs, and domain memory is updated only when vocabulary or a durable trade-off is resolved.
 
 ```text
 WORKING LAYER — <work-root>/<effort>/, git-ignored, dies with the effort
+
+Greenfield lane
 
 discovery/ideas.md              (generate-product-ideas, optional entry)
   → discovery/brainstorm.md     (brainstorm — problem framing + JTBD)
@@ -14,22 +18,39 @@ discovery/ideas.md              (generate-product-ideas, optional entry)
   → discovery/mvp.md            (scope-mvp — scenario x product form x data)
   → discovery/premortem.md      (run-premortem, optional)
 
+Existing-product lane
+
+discovery/current-product.md    (map-current-product — implemented stories + gaps + evidence)
+  → discovery/demand.md         (validate-demand — active-product improvement evidence, when needed)
+  → discovery/increment.md      (scope-product-increment — ADDED / MODIFIED / REMOVED behavior)
+  → discovery/premortem.md      (run-premortem, optional)
+
         │ promote on Green verdict, then again as each stage closes
         ▼
 
 HUMAN LAYER — <product-docs>/<slug>/, git-tracked, outlives the effort
 
-prd.md                          (write-prd — Part 1 at the gate, extended later)
+prd.md                          (write-prd — Part 1 at the gate, extended or delta-updated later)
   → design gate                 (write-prd routes: spec directly, design/ux, design/technical, or brainstorm-feature)
 ```
 
 `ideate-product` is the router over this chain. Invoke it when the entry point is unclear; it reads `state.md`, names the current stage, and delegates. Invoke a stage skill directly when you already know which one you need.
 
-The three questions the chain answers, in order:
+The greenfield chain answers three questions, in order:
 
 1. **Is the demand real?** — `brainstorm` frames the problem and the job; `validate-demand` grades the evidence and kills the idea if it fails.
 2. **What is the solution?** — `shape-solution` expresses it as user stories, because a story names actor, job, and outcome in one testable unit.
 3. **What is the smallest shippable slice?** — `scope-mvp` resolves scenario x product form x data before cutting scope, since each axis constrains the others.
+
+The existing-product lane answers three different questions:
+
+1. **What does the product already do?** — `map-current-product` extracts implemented,
+   in-progress, and planned behavior with evidence paths.
+2. **Is this improvement worth doing?** — `validate-demand` grades active-product evidence when
+   the value is uncertain.
+3. **What behavior changes next?** — `scope-product-increment` writes the
+   `ADDED / MODIFIED / REMOVED` delta with acceptance criteria, edge cases, instrumentation, and
+   explicit out-of-scope.
 
 Start with `generate-product-ideas` only when no candidate has been selected. Skip `run-premortem` for low-stakes efforts; run it when the MVP carries a reputational, migration, or data-integrity risk.
 

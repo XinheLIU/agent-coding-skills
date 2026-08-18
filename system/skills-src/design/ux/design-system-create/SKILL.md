@@ -3,7 +3,7 @@ name: design-system-create
 description: "Create the canonical design system document. Gathers product context, proposes typography/color/layout system grounded in user needs, generates preview, writes docs/design/system.md after approval. Consultative process that ties aesthetic choices to product goals and user constraints."
 ---
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 # Design System Creation
 
@@ -18,7 +18,7 @@ Create the canonical design system that grounds all design work in this project.
 
 Do NOT use when:
 - `docs/design/system.md` already exists and is current (validate and use it)
-- Only exploring variants without defining the system (use `/design-explore-variants`)
+- Only exploring variants without defining the system (use `/visual-design-variants`)
 - Implementing an already-approved design (use `/design-implement`)
 
 ## Inputs and Handoffs
@@ -29,7 +29,7 @@ Do NOT use when:
 - User's stated design direction or preferences
 
 **Downstream:**
-- `docs/design/system.md` → feeds `design-explore-variants` and `design-implement`
+- `docs/design/system.md` → feeds `interaction-design`, `visual-design-variants`, and `design-implement`
 - System preview HTML → user approval gate
 
 ## Workflow
@@ -108,13 +108,9 @@ State the direction in 2-3 sentences with the "why" explicit.
 
 #### 2.2 Typography
 
-Query `ui-ux-pro-max` for font pairing recommendations:
+**External skill dispatch (layer ②, optional):** If a design-knowledge skill is installed (see the catalog in `design/ux/README.md` — layer ② covers font-pairing and palette databases, e.g. UI UX Pro Max class knowledge bases, design-specialist libraries), query it for font pairings matching the product category before proposing. Cite where each recommendation came from. If no such skill is installed, propose from first principles below — that is the default path.
 
-```bash
-python3 /Users/xhl/GitHub/learning-infra/agent-skill-projects/agent-coding-skills/system/skills-src/design/ux/ui-ux-pro-max/scripts/search.py typography --query "<category>" 2>/dev/null
-```
-
-Categories: modern, elegant, playful, professional, minimal, bold, editorial, technical
+**Layer ④ shortcut:** if a ready-made brand spec fits this product type (layer ④ template collections — Awesome Design MD / Awesome Design Skills), offer to adopt it wholesale via `/design-context` instead of composing a system from scratch. Only with user approval.
 
 Choose ONE pairing (heading + body) that matches the aesthetic direction. Provide:
 - Heading font with rationale
@@ -131,13 +127,7 @@ Choose ONE pairing (heading + body) that matches the aesthetic direction. Provid
 
 #### 2.3 Color Palette
 
-Query `ui-ux-pro-max` for palette recommendations:
-
-```bash
-python3 /Users/xhl/GitHub/learning-infra/agent-skill-projects/agent-coding-skills/system/skills-src/design/ux/ui-ux-pro-max/scripts/search.py color --query "<product-type>" 2>/dev/null
-```
-
-Product types: saas, ecommerce, healthcare, fintech, portfolio, editorial, dashboard
+**External skill dispatch (layer ②, optional):** If a design-knowledge skill is installed (see `design/ux/README.md` layer ②), query it for palettes by product type (saas, ecommerce, healthcare, fintech, portfolio, editorial, dashboard) before proposing. Otherwise propose from first principles — that is the default path.
 
 Choose ONE palette. Provide semantic color tokens:
 
@@ -407,7 +397,7 @@ Report what was created:
 - `.scratch/design-system/system-preview.html` — Working layer, preview (can be deleted)
 
 Next steps:
-- Use `/design-explore-variants` to generate design options for specific features
+- Use `/interaction-design` to define user flows and states, then `/visual-design-variants` for visual options on specific features
 - Use `/design-implement` to convert approved designs into production code
 - Design system is now the source of truth; refer to it in all visual work
 
@@ -437,12 +427,14 @@ Before writing `docs/design/system.md`:
 **Reads from:**
 - `docs/product/<slug>/prd.md` Part 1 (persona, platform)
 - `CONTEXT.md` (design principles if any)
-- `ui-ux-pro-max` typography and color catalogs
+- External layer-② knowledge skills, when installed (typography/color catalogs — see `design/ux/README.md`)
 
 **Writes to:**
 - `docs/design/system.md` (Human layer)
 
 **Feeds:**
-- `design-explore-variants` (uses system.md as constraint)
+- `visual-design-variants` (uses system.md as constraint)
 - `design-implement` (uses system.md for tokens/patterns)
-- `spec` Part 3 (references design system for component specs)
+- `spec` (references design system for component specs)
+
+**External skills (optional):** layer-② knowledge skills for typography/palette lookup (Steps 2.2–2.3), layer-④ template catalogs for wholesale adoption via `/design-context` — see `design/ux/README.md`. Native consultative proposal is the fallback.

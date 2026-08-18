@@ -1,8 +1,12 @@
 # System TODO
 
-Last updated: 2026-08-02
+Last updated: 2026-08-17
 
 This list separates adaptation work inherited from Matt’s model from cleanup required by the existing system. Priority reflects workflow correctness and data integrity.
+
+## P0 — Catalog/discovery drift
+
+- [ ] Reconcile `craft/context`: catalog lists `init-context`, `translate-agent-context`, `sync-context`, but the directory on disk contains `maintain/` and `setup/`. Broken discovery symlinks: `manage-context`, `extract-rules`, `scaffold-agent-docs`, `create-readme`, `document-codebase`, `index-codebase`, `translate-agent-context`. Decide which set is canonical and repair both sides.
 
 ## P0 — Shared memory and delivery
 
@@ -36,7 +40,7 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 
 - [ ] Replace runtime-specific calls such as `AskUserQuestion`, `EnterWorktree`, `TaskList`, `TaskUpdate`, `delegate_task`, and hardcoded model names with capability checks and runtime adapters.
 - [ ] Resolve script paths through the plugin/skill root. Current DAG and UI/UX examples assume obsolete working-directory layouts.
-- [ ] Repair `ui-ux-pro-max` documentation: unsupported `--domain prompt`, stale corpus counts, and global Python installation advice.
+- [x] ~~Repair `ui-ux-pro-max` documentation~~ — Done 2026-08-17: the vendored copy was removed instead; layer-② dispatch to external knowledge skills now lives in `design/ux` pipeline skills, catalogued in `design/ux/README.md`.
 - [ ] Decide whether `review-architecture` is a generic reviewer or a data-platform reviewer; remove hardcoded ODS/DWD/APP, Hologres, MinIO, FastAPI, and Compose assumptions or rename it.
 - [ ] Narrow `design-agent-architecture` to authoring; keep review and documentation ownership in their dedicated skills.
 - [ ] Normalize skill descriptions to concise trigger and boundary text.

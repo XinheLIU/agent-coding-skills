@@ -37,9 +37,13 @@ Design the **how users interact** before the **how it looks**. Define informatio
 Read existing artifacts:
 
 ```bash
-# Detect PRD
-if [ -f "docs/prd.md" ]; then
-  echo "PRD found"
+# Detect PRD (canonical location first, legacy flat path as fallback)
+PRD_PATH=$(find docs/product -name "prd.md" -type f 2>/dev/null | head -1)
+if [ -z "$PRD_PATH" ] && [ -f "docs/prd.md" ]; then
+  PRD_PATH="docs/prd.md"
+fi
+if [ -n "$PRD_PATH" ]; then
+  echo "PRD found: $PRD_PATH"
 fi
 
 # Detect existing interaction designs
@@ -75,12 +79,12 @@ mkdir -p "$EFFORT_DIR/interaction/wireframes"
 
 Read from these sources (auto-gather, don't ask if present):
 
-1. **PRD Part 1** (`docs/prd.md` ## Part 1: Problem & Solution)
+1. **PRD Part 1** (`$PRD_PATH` ## Part 1: Problem & Solution)
    - Who: target users, persona
    - What: product type, core value proposition
    - Platform: web app, mobile, dashboard, etc.
 
-2. **PRD Part 3** (`docs/prd.md` ## Part 3: Five-State Blocks)
+2. **PRD Part 3** (`$PRD_PATH` ## Part 3: Five-State Blocks)
    - Existing state definitions (if present)
    - This is what we'll expand/refine
 
@@ -99,6 +103,15 @@ If PRD missing or incomplete, **AskUserQuestion** (single comprehensive question
 > 5. **Edge cases you're worried about?** (slow network, empty data, errors)
 
 Record answers in `$EFFORT_DIR/interaction/context.md`.
+
+### Step 1.5: External Knowledge Pass (optional, layer ②)
+
+If a UX-knowledge skill is installed (see `design/ux/README.md` layer ② — design-guideline databases, design-specialist libraries), query it before filling the state table:
+
+- **State-design guidelines** relevant to the feature list (loading/empty/error patterns for this product type)
+- **Flow patterns** for the identified user tasks (onboarding, CRUD, search/filter, etc.)
+
+Fold what you use into `decisions.md` with a citation line (`Source: <skill name>, <query>`). If no such skill is installed, skip silently — the five-state table below is self-sufficient.
 
 ### Step 2: Define Information Architecture
 
@@ -259,7 +272,7 @@ If PRD exists and Part 3 is incomplete, **AskUserQuestion**:
 > **A)** Update PRD Part 3 with these states (recommended)  
 > **B)** Keep PRD and interaction design separate
 
-If A: Write back to `docs/prd.md` Part 3.
+If A: Write back to `$PRD_PATH` Part 3.
 
 ### Step 4: Map User Journey
 
@@ -613,6 +626,7 @@ Before marking interaction design complete, verify:
 - PRD Part 1 (user context)
 - PRD Part 3 (five-state blocks, if exists)
 - `docs/design/system.md` (constraints, if exists)
+- External layer-② knowledge skills, when installed (state/flow guidelines — see `design/ux/README.md`)
 
 **Writes to (optional):**
 - PRD Part 3 — if user approves sync
@@ -641,4 +655,4 @@ The state definitions MAY be promoted to PRD Part 3 (Human layer) if user approv
 
 ---
 
-**Last updated:** 2026-08-10
+**Last updated:** 2026-08-17

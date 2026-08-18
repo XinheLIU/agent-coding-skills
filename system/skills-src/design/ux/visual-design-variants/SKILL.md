@@ -9,7 +9,7 @@ triggers:
   - design options
 ---
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 # Visual Design Variants
 
@@ -29,7 +29,7 @@ Explore **visual directions** (colors, typography, visual weight) on an already-
 Do NOT use when:
 - No wireframes exist yet (run `/interaction-design` first)
 - Interaction structure needs changes (go back to `/interaction-design`)
-- No design system exists yet (run `/design-system-create` first)
+- No design system exists yet (run `/design-context` or `/design-system-create` first)
 
 ## Inputs and Handoffs
 
@@ -37,10 +37,6 @@ Do NOT use when:
 - `.scratch/<effort>/interaction/wireframes/*.html` (structure baseline - REQUIRED)
 - `.scratch/<effort>/interaction/state-table.md` (all states to visualize - REQUIRED)
 - `docs/design/system.md` (design system tokens - REQUIRED)
-
-**Upstream (OPTIONAL):**
-- `.scratch/<effort>/state.md` (current task context)
-- `.scratch/<effort>/interaction/journey-map.md` (emotional intent)
 
 **Upstream (OPTIONAL):**
 - `.scratch/<effort>/state.md` (current task context)
@@ -82,7 +78,7 @@ fi
 
 # Check design system
 if [ ! -f "docs/design/system.md" ]; then
-  echo "ERROR: No design system found - run /design-system-create first"
+  echo "ERROR: No design system found - run /design-context or /design-system-create first"
   exit 1
 fi
 
@@ -224,6 +220,22 @@ Based on response, propose 3 visual directions:
 > **C)** Show me the wireframe structure first
 
 If C, open wireframe in browser before continuing.
+
+### Step 2.5: External Production Dispatch (optional, layers ①⑥)
+
+The three variants can be **produced by an installed external skill** instead of generated inline (see `design/ux/README.md`):
+
+- **Layer ① taste skills** (anti-slop direction, creative-director prompts) — use to sharpen the three direction strategies defined in Step 2, not to replace them
+- **Layer ⑥ production engines** (HTML-prototype generators, design-to-code services) — use to render higher-fidelity mockups than inline generation produces
+
+**Hard constraints when dispatching — the external output must be reconciled back into this skill's contract:**
+
+1. Variants MUST preserve the locked wireframe structure (Step 1 constraints)
+2. Variants MUST use `docs/design/system.md` tokens (no engine-invented colors/fonts)
+3. Output lands at `$EFFORT_DIR/visual/variants/variant-{a,b,c}.html` with the state switcher (Step 3) intact — copy/rename the engine's output if it writes elsewhere
+4. All 5 states from the state table must be present in each variant
+
+If no external skill is installed, or its output can't satisfy these constraints, generate inline per Step 3 — that is the default path.
 
 ### Step 3: Generate Visual Variants
 
@@ -507,7 +519,8 @@ Before marking visual design complete:
 **Reads from:**
 - `/interaction-design` — wireframes (structure baseline)
 - `/interaction-design` — state-table.md (states to visualize)
-- `/design-system-create` — system.md (visual tokens)
+- `/design-system-create` or `/design-context` — system.md (visual tokens)
+- External layer-① taste skills and layer-⑥ production engines, when installed (optional variant production — see `design/ux/README.md`)
 
 **Feeds into:**
 - `/design-implement` — approved.html (final visual to implement)
@@ -536,211 +549,4 @@ The approved visual design feeds into `/design-implement` which produces the Hum
 
 ---
 
-**Last updated:** 2026-08-10
-
-**Variant C — Dense**: More information visible, compact spacing, efficient scanning
-- Example: Multi-column layout, smaller hero, list-based features
-- Example: Dashboard with many small panels, table-heavy
-
-Adjust these principles based on the page type, but ensure the three are genuinely different approaches, not minor tweaks.
-
-**Generation process:**
-
-For each variant:
-1. Design the HTML structure (semantic markup)
-2. Apply design system tokens literally (copy from system.md)
-3. Implement responsive breakpoints (mobile-first)
-4. Ensure accessibility (WCAG AA, semantic HTML, ARIA labels)
-5. Keep self-contained (inline styles or embedded CSS)
-
-Write to working directory:
-```bash
-mkdir -p .scratch/$(basename $(pwd))/designs/variants
-```
-
-Files:
-- `.scratch/<effort>/designs/variants/variant-a.html`
-- `.scratch/<effort>/designs/variants/variant-b.html`
-- `.scratch/<effort>/designs/variants/variant-c.html`
-
-### Step 3: Present Variants for Comparison
-
-Display all three variants with brief descriptions of their approach:
-
-**Variant A: Balanced**
-- Layout: [brief description]
-- Emphasis: [what stands out]
-- Best for: [type of user/goal]
-
-[Inline render or code block of variant-a.html]
-
----
-
-**Variant B: Focal**
-- Layout: [brief description]
-- Emphasis: [what stands out]
-- Best for: [type of user/goal]
-
-[Inline render or code block of variant-b.html]
-
----
-
-**Variant C: Dense**
-- Layout: [brief description]
-- Emphasis: [what stands out]
-- Best for: [type of user/goal]
-
-[Inline render or code block of variant-c.html]
-
-### Step 4: Collect Feedback
-
-Use AskUserQuestion with structured options:
-
-**Which variant is closest to what you want?**
-
-Options:
-- **A) Variant A (Balanced)** — approve as-is or specify adjustments
-- **B) Variant B (Focal)** — approve as-is or specify adjustments  
-- **C) Variant C (Dense)** — approve as-is or specify adjustments
-- **D) None are right** — describe what's missing or what direction to try
-
-For options A/B/C, include a text field: "Approve as-is or list specific changes (leave blank to approve)"
-
-### Step 5: Iterate or Finalize
-
-**If user approves a variant as-is:**
-- Copy chosen variant to `.scratch/<effort>/designs/approved.html`
-- Write decision rationale to `.scratch/<effort>/designs/decision.md`
-- Go to Step 6
-
-**If user requests adjustments:**
-- Apply the requested changes to the chosen variant
-- Generate 2 new alternatives exploring different approaches to the same goal
-- Present the adjusted variant + 2 new options (total 3 again)
-- Return to Step 4
-- Max 3 iteration rounds; after that, recommend approval of closest option
-
-**If user says "none are right":**
-- Ask for more specific direction: "What's missing or what direction should we explore?"
-- Generate 3 new variants based on that direction
-- Return to Step 3
-- Max 2 full regeneration rounds
-
-### Step 6: Write Decision Record
-
-After approval, document why this design was chosen:
-
-```bash
-cat > .scratch/$(basename $(pwd))/designs/decision.md << 'EOF'
-# Design Decision
-
-Last updated: YYYY-MM-DD
-
-## Chosen Design
-
-Variant: [A/B/C or description]
-File: approved.html
-
-## Rationale
-
-[Why this design was chosen - from user feedback and context]
-
-## Key Characteristics
-
-- Layout approach: [description]
-- Information hierarchy: [what's emphasized]
-- Component choices: [notable decisions]
-- User goal alignment: [how this serves the user]
-
-## Alternatives Considered
-
-- Variant [other]: [why not chosen]
-- Variant [other]: [why not chosen]
-
-## Next Steps
-
-- Use /design-implement to convert to production code
-- Design system tokens in: docs/design/system.md
-EOF
-```
-
-Copy approved variant:
-```bash
-cp .scratch/$(basename $(pwd))/designs/variants/variant-[chosen].html .scratch/$(basename $(pwd))/designs/approved.html
-```
-
-### Step 7: Summary
-
-Report what was created:
-- `.scratch/<effort>/designs/approved.html` — Working layer, approved design ready for implementation
-- `.scratch/<effort>/designs/decision.md` — Working layer, rationale and decision record
-- `.scratch/<effort>/designs/variants/` — Working layer, exploration history (3+ HTML files)
-
-Next steps:
-- Run `/design-implement` to convert approved.html into production code
-- Approved design follows the design system at `docs/design/system.md`
-- Decision rationale captured in decision.md
-
-## Memory Layer Classification
-
-**Working layer (gitignored, disposable after implementation):**
-- `.scratch/<effort>/designs/approved.html` — approved design
-- `.scratch/<effort>/designs/decision.md` — decision record
-- `.scratch/<effort>/designs/variants/*.html` — exploration history
-
-All design exploration artifacts are Working-layer because they're scaffolding toward the final implementation. Once code is shipped, the HTML variants become obsolete — the shipped code is the source of truth.
-
-Apply the durability test: if the work root were deleted, would the project lose a fact it still needs? The design system (system.md) YES, but specific variant HTMLs NO — they were exploration, not the building.
-
-## Quality Gates
-
-Before finalizing:
-- [ ] All variants use design system tokens literally (no arbitrary colors/spacing)
-- [ ] All variants pass WCAG AA contrast checks
-- [ ] All variants are responsive (test at 375px, 768px, 1024px)
-- [ ] Touch targets minimum 44x44px on mobile
-- [ ] Semantic HTML (proper heading hierarchy, landmarks, labels)
-- [ ] Variants are genuinely different approaches (not minor tweaks)
-- [ ] User feedback incorporated accurately
-- [ ] Decision rationale captures "why this one"
-
-## Integration Points
-
-**Reads from:**
-- `docs/design/system.md` (design system - REQUIRED)
-- `.scratch/<effort>/state.md` (task context)
-
-**Writes to:**
-- `.scratch/<effort>/designs/approved.html` (Working layer)
-- `.scratch/<effort>/designs/decision.md` (Working layer)
-- `.scratch/<effort>/designs/variants/*.html` (Working layer)
-
-**Feeds:**
-- `design-implement` (reads approved.html and system.md)
-
-## Variant Generation Guidelines
-
-When creating variants, balance these competing goals:
-
-**Consistency** (across all variants):
-- Same font families, type scale, weights
-- Same color palette and semantic tokens
-- Same spacing scale values
-- Same component patterns (button styles, form treatments)
-- Same accessibility standards
-
-**Differentiation** (between variants):
-- Layout structure (grid vs stack vs sidebar)
-- Visual hierarchy (what dominates vs supports)
-- Content density (generous whitespace vs information-rich)
-- Component emphasis (large hero vs small header)
-- Information flow (top-down vs scattered vs focal)
-
-**Never vary** (anti-patterns):
-- Don't introduce colors outside the design system
-- Don't use different fonts or type scales between variants
-- Don't violate accessibility standards to create distinction
-- Don't sacrifice mobile usability for desktop drama
-- Don't add gratuitous decoration or "AI slop" patterns
-
-Good variants feel like they're from the same design system but serve different user modes or goals.
+**Last updated:** 2026-08-17

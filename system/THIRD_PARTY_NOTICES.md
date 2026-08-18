@@ -1,6 +1,19 @@
 # Third-Party Notices
 
-Last updated: 2026-08-03
+Last updated: 2026-08-18
+
+## Reference clones (study material only)
+
+Two upstream references are cloned under [`references/`](../references/) for study: [`obra/superpowers`](https://github.com/obra/superpowers) (MIT) and [`Fission-AI/OpenSpec`](https://github.com/Fission-AI/OpenSpec) (MIT). Their pinned commits are recorded in [`references/README.md`](../references/README.md). These entries record the provenance of the study corpus — the same status as the gstack and Matt Pocock snapshots.
+
+Before this release, the `brainstorm` skill already cited the `superpowers` `brainstorming` Socratic pattern (see `product/discovery/brainstorm/SKILL.md`). The existing-product lane now adapts OpenSpec's brownfield-first and delta-spec principles in `map-current-product` and `scope-product-increment`.
+
+## PM-Skills
+
+The existing-product lane adapts selected principles from [`product-on-purpose/pm-skills`](https://github.com/product-on-purpose/pm-skills), licensed under Apache-2.0. The local study copy is under [`references/pm-skills/`](../references/pm-skills/), with license text at [`references/pm-skills/LICENSE`](../references/pm-skills/LICENSE).
+
+- `map-current-product` adapts `deliver-user-stories` for persona/action/benefit story shape and story testability.
+- `scope-product-increment` adapts `deliver-acceptance-criteria`, `deliver-edge-cases`, `measure-instrumentation-spec`, and `iterate-refinement-notes` for acceptance criteria, recovery-path coverage, analytics contracts, and refinement notes.
 
 ## Matt Pocock skills
 
@@ -47,4 +60,9 @@ The prose wiki capability (`llm-wiki-init`, `llm-wiki-ingest`, `llm-wiki-lint`) 
 
 `generate-product-ideas` adapts the constraint-driven generation approach from the skills-manager `ideation` skill by SHL0MS, declared MIT-licensed in its skill metadata.
 
-`validate-demand` and `scope-mvp` adapt product reasoning from gstack `office-hours` and `plan-ceo-review` version 1.58.5.0. gstack is MIT-licensed, copyright (c) 2026 Garry Tan. The adaptations remove gstack-specific runtime behavior and integrate the shared memory protocol.
+`validate-demand` and `scope-mvp` adapt product reasoning from gstack `office-hours` and `plan-ceo-review` version 1.58.5.0. `scope-product-increment` additionally adapts `plan-ceo-review` scope postures and explicit opt-in for scope changes. gstack is MIT-licensed, copyright (c) 2026 Garry Tan. The adaptations remove gstack-specific runtime behavior and integrate the shared memory protocol.
+
+## OpenSpec adaptations
+
+`map-current-product` and `scope-product-increment` adapt brownfield-first exploration and
+`ADDED / MODIFIED / REMOVED` behavior-delta language from [`Fission-AI/OpenSpec`](https://github.com/Fission-AI/OpenSpec), licensed under the MIT License. No OpenSpec CLI code or runtime dependency is included.

@@ -1,17 +1,17 @@
 ---
 name: prototype
-description: Build throwaway code to answer one design question. Use when conversation cannot settle how behavior should work or what an interface should look like. Generates multiple variants (logic harness with state transitions, or radically different UI layouts) for user comparison. Credit to Matt Pocock's engineering workflow.
+description: Build throwaway code to answer one design question. Use when conversation cannot settle how behavior should work or what an interface should look like.
 ---
 
 # Prototype
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 
 ## Credit
 
-This skill adapts the prototype workflow from [Matt Pocock's engineering skills](../../references/matt-pocock/skills/engineering/prototype/). Core principles: throwaway from day one, generate multiple variants for comparison, capture the decision and archive the code.
+This skill adapts the prototype workflow from [Matt Pocock's engineering skills](../../references/matt-pocock/skills/engineering/prototype/). Core principles: throwaway from day one, generate multiple variants for comparison, capture the decision and archive the code. See `references/LOGIC.md` and `references/UI.md` for branch-specific detail.
 
 ## Pick a branch
 
@@ -128,4 +128,9 @@ The prototype code is deliberately disposable; the decision it bought is not. Th
 
 If routing is absent, work in conversation only and recommend `manage-context` before persisting.
 
-**Next step:** control returns to the stage that raised the question — `scope-mvp` during scoping, the design skill during design. `state.md` already points there.
+## What This Skill Does NOT Do
+
+- **Does not design the system** — it answers one question, not the architecture
+- **Does not write production code** — it produces throwaway variants, not shippable features
+- **Does not validate demand** — it tests a design hypothesis, not a market hypothesis
+- **Does not scope the MVP** — it resolves a design question, not a feature list

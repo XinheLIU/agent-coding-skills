@@ -1,26 +1,27 @@
 ---
 name: run-premortem
-description: >
-  Risk and Validation tool. Stress-tests the plan before building. Runs a structured
-  pre-mortem analysis on any project or idea. Assumes the project has already completely
-  failed 6 months from today, then works backward to identify root causes, score risks, and
-  generate concrete prevention strategies. Outputs a Markdown "Survival Manual" report. Use
-  when a user describes an idea, project, or plan and wants to stress-test it, identify
-  failure modes, or asks for a "pre-mortem", "risk analysis", "what could go wrong", or
-  "devil's advocate" review.
+description: Stress-test a plan by assuming it has already failed. Use when the user wants a pre-mortem, risk analysis, "what could go wrong" review, or devil's-advocate pass on any project or idea.
 ---
 
 # Pre-Mortem Analysis
 
-Last updated: 2026-08-03
+Last updated: 2026-08-17
 
 Run a 5-phase "project autopsy" starting from an assumed total failure, then produce a
 structured Markdown report.
 
 ## Shared Memory Contract
 
-Act as the owner of `<effort>/discovery/premortem.md`. Read `docs/agents/memory.md`, the active `state.md`, `discovery/mvp.md` (scope axes, P0 list, Not-To-Do list), and
-`discovery/demand.md` (demand type and evidence grade) when present. Write risks, evidence, scores, prevention actions, and monitoring signals without duplicating the scope. Update `state.md` with the artifact pointer and `write-prd` as the next transition.
+```text
+Layer:    working — the risk analysis behind the plan
+Owns:     <work-root>/<effort>/discovery/premortem.md
+Promotes: edge cases, NFRs → PRD Part 3, via write-prd
+```
+
+Read `docs/agents/memory.md`, the active `state.md`, `discovery/mvp.md` (scope axes, P0 list,
+Not-To-Do list), and `discovery/demand.md` (demand type and evidence grade) when present. Write
+risks, evidence, scores, prevention actions, and monitoring signals without duplicating the
+scope. Update `state.md` with the artifact pointer.
 
 See `references/report-template.md` for the exact output format.
 
@@ -99,6 +100,9 @@ Write the final report in Markdown following the template in `references/report-
 
 Save to `<effort>/discovery/premortem.md`. Confirm the file path to the user when done.
 
----
+## What This Skill Does NOT Do
 
-**Next step:** Run `/write-prd` to consolidate all product thinking into an AI-executable PRD.
+- **Does not scope the MVP** — it stress-tests a plan, it does not create one
+- **Does not validate demand** — it assumes failure, it does not grade evidence
+- **Does not write the PRD** — it produces risks and mitigations, not the spec
+- **Does not design the solution** — it finds what could go wrong, not what to build

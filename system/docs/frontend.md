@@ -1,6 +1,8 @@
 # Frontend Design
 
-Last updated: 2026-08-02
+Last updated: 2026-08-17
+
+> **Orientation:** This is a comparison of *external* frontend design skills — none are vendored in this repo. The internal UX pipeline that consumes them lives in `skills-src/design/ux/` (catalog: `skills-src/design/ux/README.md`, workflow: `workflows/design.md`). In pipeline terms: Taste and Frontend Design are layer-① direction tools, UI/UX Pro Max is a layer-② knowledge base, Impeccable is a layer-③ method/workflow engine.
 
 ## Frontend Design Skills
 

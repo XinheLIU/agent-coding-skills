@@ -1,8 +1,25 @@
 # Changelog
 
-Last updated: 2026-08-10
+Last updated: 2026-08-18
 
 ## Unreleased
+
+### Existing-product product lane
+
+Added an explicit product workflow for existing codebases and active-product improvements.
+
+- Added `map-current-product`, which owns `discovery/current-product.md` and extracts
+  product-facing roles, flows, implemented user stories, in-progress/planned behavior, gaps, and
+  source evidence from an existing codebase.
+- Added `scope-product-increment`, which owns `discovery/increment.md` and scopes
+  existing-product improvements as `ADDED / MODIFIED / REMOVED` behavior with P0/P1/out-of-scope,
+  acceptance criteria, edge cases, instrumentation, success metrics, and refinement notes.
+- Updated product routing so codebase user-story requests go to `map-current-product`,
+  active-product improvements baseline before scoping, greenfield MVPs stay on `scope-mvp`, and
+  architecture-only refactors route outside product.
+- Added PRD delta mode so `write-prd` preserves existing edits while appending update-log entries
+  and applying accepted product increments.
+- Published the two skills through `system/skills/` symlinks and `catalog/skill-set.json`.
 
 ### Product skills published to the loader and catalog
 

@@ -1,26 +1,15 @@
 ---
 name: shape-solution
-description: >
-  Stage 2 solution shaping. Works for both greenfield ideas and existing codebases.
-  Turns a validated demand — or a codebase — into a concrete solution shape: a 3D Persona,
-  a 4-Act Narrative, a 4-Stage User Journey, and the scenarios the solution must cover.
-  Rates complexity first (Simple → Markdown output; Complex → Mermaid diagrams + optional
-  HTML demo). When a codebase is present, explores it to extract implemented user stories,
-  in-progress features, and planned work before conducting any interview. Trigger on:
-  "user story", "story thinking", "user journey", "persona", "who is my user",
-  "write user stories", "turn these features into a story", "shape the solution",
-  "design the solution", "how should this work", "what does this codebase do",
-  "document user stories from code", "what's already built", "/shape-solution",
-  "/design-solution" (former name), or any request to understand who a product
-  is for and why they care.
+description: Turn a validated demand or current-product baseline into a concrete solution shape with user stories, personas, and scenarios. Use when the user asks for personas, user journeys, scenarios, or how a product/feature should work; for user stories derived directly from existing code, use map-current-product first.
 ---
 
 # Shape Solution
 
-Last updated: 2026-08-10
+Last updated: 2026-08-18
 
-Three narrative outputs plus the scenarios they imply — for both new ideas and existing codebases.
-One purpose: make the user real enough that every design tradeoff has a human answer.
+Three narrative outputs plus the scenarios they imply — for new ideas and already-mapped
+existing products. One purpose: make the user real enough that every design tradeoff has a
+human answer.
 
 This is stage 2 of product ideation — **Solution Shaping**. Stage 1 established that the job is real;
 this stage decides what the solution looks like from the user's side. The user story is the key
@@ -46,13 +35,15 @@ Promotes: user stories, first-use moment → PRD Parts 1 and 3, via write-prd
 ```
 
 Read `docs/agents/memory.md`, the active `state.md`, and `discovery/brainstorm.md` plus
-`discovery/demand.md` when present. Also read `<product-docs>/<slug>/prd.md` when it exists —
-the demand gate may have already promoted the persona and job into it, in which case that is the
-authoritative statement and this artifact elaborates on it rather than restating it.
+`discovery/demand.md` when present. For existing-product work, read
+`discovery/current-product.md`; if a codebase is present but that baseline is missing, route to
+`map-current-product` first instead of exploring the code here. Also read
+`<product-docs>/<slug>/prd.md` when it exists — the demand gate may have already promoted the
+persona and job into it, in which case that is the authoritative statement and this artifact
+elaborates on it rather than restating it.
 
 Preserve the upstream demand type and verdict; write only the persona, narrative, journey,
-scenarios, and resulting design implications. Update `state.md` with the artifact pointer and
-`scope-mvp` as the next transition.
+scenarios, and resulting design implications. Update `state.md` with the artifact pointer.
 
 The user stories are the durable output here. They outlive this effort because they define what
 the product does for whom — but their tracked home is the PRD, not this file. Write them once
@@ -67,7 +58,8 @@ demand is the expensive mistake this pipeline exists to prevent.
 | Input type | Signals | Entry point |
 | --- | --- | --- |
 | **Upstream artifacts present** | `brainstorm.md` and `demand.md` exist | Harvest them → Phase 0B |
-| **Existing codebase** | Repo path, project dir, or "what does this app do?" | Phase 0C → Phase 0B |
+| **Existing product baseline** | `current-product.md` exists | Read it → Phase 0C → Phase 0B |
+| **Existing codebase with no baseline** | Repo path, project dir, or "what does this app do?" | Stop and route to `map-current-product` |
 | **Vague idea** | "I want to build X for Y" | Missing all three dimensions → Phase 0B → Phase 1 |
 | **Feature list** | Itemized features, no user context | Have the "what", missing Who + Fear → Phase 0B → Phase 1 |
 | **Partial context** | PRD with some user description or scenarios | Assess gaps → Phase 0B → ask only what is missing |
@@ -91,7 +83,7 @@ Complexity determines output depth. Rate before generating anything.
 
 **Signals of a Complex situation:**
 
-- Existing codebase with multiple modules, layers, or services
+- Existing-product baseline with multiple modules, layers, or services
 - Two or more distinct user roles with different permissions or journeys
 - Five or more user flows, especially where they interact or branch
 - Multiple integrated systems (auth + data storage + external APIs + notifications)
@@ -109,60 +101,23 @@ When in doubt, start Simple and promote to Complex only if the narrative require
 diagram for a to-do app is noise; missing one for a multi-role SaaS is a gap.
 
 ---
-## Phase 0C — Codebase Exploration
+## Phase 0C — Current Product Baseline
 
-*Run only when a codebase is present. Skip for greenfield ideas.*
+*Run only when `current-product.md` exists. Skip for greenfield ideas.*
 
-The goal is to extract three things from the code: what is already working, what is partially
-built, and what is only planned. User stories derived from code are grounded in reality; they
-prevent re-interviewing for things already decided.
+Use `map-current-product`'s artifact as the source of truth for implemented stories,
+in-progress behavior, planned work, and gaps. Do not re-read the whole codebase here unless a
+specific evidence pointer is ambiguous.
 
-### Exploration Protocol
+Extract only what shaping needs:
 
-**Step 1 — Read the product description.**
-Check `README.md`, `CLAUDE.md`, `AGENTS.md`, and any top-level `docs/` in order. Extract:
-the product's stated purpose, target user, and key capabilities.
+- primary and secondary personas already visible in the product
+- implemented user stories that anchor the narrative
+- in-progress or planned behavior that affects the primary scenario
+- gaps that change the user's journey or first-use moment
 
-**Step 2 — Map the directory structure.**
-List the top two levels of the tree. Identify: entry points (main, app, index, server),
-API/route layer, data model layer, UI layer, and test coverage.
-
-**Step 3 — Read the route and API layer.**
-Find route definitions (Express routes, FastAPI endpoints, Django URLs, Next.js pages/app dir, etc.).
-Each route is a feature: read its handler to understand what it does, what it validates, and what
-it returns. This is the most direct source of implemented user stories.
-
-**Step 4 — Read the data model layer.**
-Find model definitions (ORM models, database schemas, Pydantic models, TypeScript interfaces).
-Each entity is something a user creates, reads, updates, or deletes. Name them explicitly.
-
-**Step 5 — Scan for planned work.**
-Search for: `TODO`, `FIXME`, `HACK`, `PLANNED`, `stub`, `not_implemented`,
-`raise NotImplementedError`, placeholder comments, and empty function bodies with `pass` or `{}`.
-Also check `CHANGELOG.md`, `ROADMAP.md`, and open issues if accessible. These are features that
-exist in intent but not in behavior.
-
-**Step 6 — Synthesize the feature inventory.**
-
-Produce a three-tier list before generating any narrative:
-
-```
-Implemented features (working, tested, or wired end-to-end)
-  - [feature description inferred from code]
-
-In-progress features (route exists but handler is stub / UI exists but not wired)
-  - [feature description + where the gap is]
-
-Planned features (mentioned in README/ROADMAP/TODO but no code yet)
-  - [feature description + where the intent lives]
-```
-
-**Step 7 — Extract user stories.**
-For each implemented feature write: "As [inferred persona], I can [action from route/UI],
-so that [inferred outcome]." Mark stories that differ per persona separately.
-
-Flag integration gaps: an API endpoint without a UI, a UI without a backend handler, a data
-model field that no route reads or writes.
+If the baseline is stale or lacks evidence paths, route back to `map-current-product` instead
+of patching it here.
 
 ---
 ## Phase 1 — Diagnose Persona Gaps
@@ -173,7 +128,7 @@ and the emotional stakes.
 
 | Dimension | Already answered upstream by |
 | --- | --- |
-| **Who** (surface) | JTBD Pillar 1 user context; validation Q1 zone and beachhead segment; codebase auth roles or user model fields |
+| **Who** (surface) | JTBD Pillar 1 user context; validation Q1 zone and beachhead segment; `current-product.md` roles or inferred personas |
 | **What** (behavior) | JTBD Current Pain; validation status-quo evidence; existing features reveal what users currently can do |
 | **Fear** (motivation) | JTBD Task Trilogy emotional/social layers; validation 5-Whys terminus |
 
@@ -263,7 +218,7 @@ Mark the **primary scenario** — the one the MVP must serve. Secondary scenario
 
 When complexity is Complex, also state for the primary scenario: which personas participate,
 which existing features already serve it, and which features are still needed (referencing
-the Phase 0C inventory by name).
+`current-product.md` by name).
 
 ### Story Prompt
 
@@ -299,7 +254,7 @@ Include only systems that are real and named. Don't invent integrations.
 ### Mermaid: Feature Status Map
 
 Show what is implemented, in-progress, and planned. Use subgraphs or node styles to distinguish
-status. Derive this directly from the Phase 0C feature inventory.
+status. Derive this directly from `current-product.md`.
 
 ```mermaid
 graph LR
@@ -318,8 +273,8 @@ graph LR
     F3 --> F4
 ```
 
-Omit this diagram when there is no existing codebase. For greenfield complex systems, use a
-feature dependency map instead — which features must ship before others can.
+Omit this diagram when there is no existing-product baseline. For greenfield complex systems,
+use a feature dependency map instead — which features must ship before others can.
 
 ### Mermaid: Primary User Journey
 
@@ -376,7 +331,7 @@ Check every output before presenting. If anything fails, revise it.
 
 | Element | Must pass | Common failure to catch |
 | --- | --- | --- |
-| **Codebase inventory** | Three-tier list (implemented / in-progress / planned) is present | Jumping to narrative without reading the code |
+| **Current product baseline** | Three-tier list (implemented / in-progress / planned) is present when existing-product work is in scope | Jumping to narrative without reading `current-product.md` |
 | **Multiple personas** | Each has a 3D card; narrative shows where journeys diverge | All personas collapsed into one generic user |
 | **Diagrams** | Every diagram adds signal not already present in prose | Diagram is a prettier version of an existing table |
 | **System context** | All real external dependencies are named | Internal modules drawn as if they are external systems |
@@ -434,7 +389,7 @@ After the Story Prompt, add:
 
 ```markdown
 ## Feature Inventory
-**Implemented:** [working features, one per line]
+**Implemented:** [working features from `current-product.md`, one per line]
 **In Progress:** [partial features + where the gap is]
 **Planned:** [roadmap items + where the intent lives]
 
@@ -461,12 +416,12 @@ After the Story Prompt, add:
 
 ---
 
-Persist to `<work-root>/<effort>/discovery/solution.md`. Next, run `/scope-mvp` to resolve product form and
-data availability, then scope the smallest experiment around this user and job.
+Persist to `<work-root>/<effort>/discovery/solution.md`.
 
+## What This Skill Does NOT Do
 
-
-
-
-
-
+- **Does not validate demand** — it shapes a solution for a demand already judged real
+- **Does not map an existing codebase** — `map-current-product` owns source-backed current behavior
+- **Does not scope the MVP** — it produces stories and scenarios, not a feature triage
+- **Does not write the PRD** — it drafts the solution, not the consolidated spec
+- **Does not build prototypes** — it produces narratives and diagrams, not code

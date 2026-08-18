@@ -1,19 +1,11 @@
 ---
 name: scope-mvp
-description: >
-  Turn a validated solution into a scoped MVP. Resolves the three scope axes — scenario ×
-  product form × data availability — then triages features into P0 (build now), P1/P2 (not
-  yet), and Not-To-Do (never for this MVP), anchored to one falsifiable core assumption.
-  Includes an ambition review: challenges whether the scope is the right bet, not just a
-  complete one. Use when the user asks to scope an MVP, prioritize features, decide what to
-  build first, choose a product form, plan a validation sprint, think bigger, cut scope, or
-  review product strategy. Reads the demand classification and primary scenario from earlier
-  discovery artifacts rather than re-deriving them.
+description: Triage a greenfield or new-product MVP into disciplined first-slice scope anchored to one falsifiable assumption. Use when the user asks to scope an MVP, prioritize features for a new product, decide what to build first, cut scope, or plan a validation sprint; for existing-product improvements, use scope-product-increment.
 ---
 
 # Scope MVP
 
-Last updated: 2026-08-10
+Last updated: 2026-08-18
 
 Transform a validated solution into a disciplined MVP scope. The output is a triage — what to
 build, what to defer, what never to build — anchored to a single falsifiable assumption and
@@ -25,8 +17,9 @@ full triage framework.
 ## Boundary
 
 Scope, not implementation. Do not review architecture, code quality, security, observability,
-or deployment — those belong to the technical design and review skills. Do not re-derive the
-demand type or the primary scenario; those are owned upstream.
+or deployment. Do not re-derive the demand type or the primary scenario; those are owned upstream.
+For active-product improvements, route to `scope-product-increment` instead of forcing an MVP
+shape onto existing behavior.
 
 ## Shared Memory Contract
 
@@ -43,18 +36,16 @@ for the primary scenario, user stories, and first-use moment. Read
 
 Preserve the owned demand classification, persona, and journey. Write only axis resolution,
 scope, validation assumptions, exclusions, ambition review, and success measures. Update
-`state.md` with the artifact pointer and `run-premortem` as the default next transition, or
-`prototype` when an unresolved design question blocks scoping.
+`state.md` with the artifact pointer.
 
 The Not-To-Do list is the most durable thing this skill produces and the easiest to lose. It
 answers a question that recurs for years — *why doesn't this product do X?* — and the answer is
-worthless if it dies with the work root. Recommend `/write-prd` once scope is locked, so the
-requirement list, the in/out-of-scope split, and the Not-To-Do list reach the tracked layer. The
-axis reasoning and the ambition review can stay here; the commitments cannot.
+worthless if it dies with the work root. Promote the requirement list, the in/out-of-scope
+split, and the Not-To-Do list to the tracked layer. The axis reasoning and the ambition review
+can stay here; the commitments cannot.
 
 If `discovery/demand.md` records evidence grade D (assumption only), stop and say so: scoping
-an MVP for unvalidated demand produces a precise answer to the wrong question. Route back to
-`/validate-demand`.
+an MVP for unvalidated demand produces a precise answer to the wrong question.
 
 ---
 
@@ -101,11 +92,6 @@ Run every capability through the filter (full decision table in
 3. **Does a user need it in the first 30 seconds?** → P0 confirmed or demote to P1
 
 **Guard rail:** more than 5 P0 items means the core assumption is still too broad. Narrow it.
-
-**Prototype loop:** when any step surfaces a design question conversation can't settle — how a
-state transition should work, what a layout should look like — route to `/prototype`. It builds
-throwaway variants, records the decision in `prototypes/<slug>/decision.md`, and returns
-control here; resume at the step that raised the question. Loop as often as questions emerge.
 
 ### Step 4: Build the Not-To-Do list
 
@@ -224,9 +210,13 @@ Evidence that would change this: ...
 - "I'd use it if it had X, Y, Z" is polite rejection, not validation.
 - A P0 that depends on data you cannot obtain is a wish, not a scope.
 
-**Next step:** `/run-premortem` to stress-test the scope. Return here if the premortem surfaces
-a scope change. Route to `/prototype` first when an unresolved design question would make the
-P0 triage a guess.
+## What This Skill Does NOT Do
+
+- **Does not validate demand** — it scopes a solution for demand already judged real
+- **Does not design the solution** — it triages features against stories already written
+- **Does not scope existing-product increments** — `scope-product-increment` owns behavior deltas against current product behavior
+- **Does not write the PRD** — it produces the scope, not the consolidated spec
+- **Does not stress-test the plan** — it defines the scope, not the failure modes
 
 ## Source adaptation
 

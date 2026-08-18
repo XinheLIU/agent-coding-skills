@@ -1,19 +1,11 @@
 ---
 name: write-prd
-description: >
-  Synthesis and Specification tool. Consolidates outputs from any prior skills (brainstorm,
-  validate-demand, shape-solution, scope-mvp, run-premortem) into an AI-executable
-  product-requirements document and maps each to PRD sections. Uses Markdown + Mermaid format
-  and stores product intent in the tracked product-docs layer, not the disposable work root.
-  Can run early to record the core idea once demand is validated, then be extended as later
-  stages close. Triggers: "write a PRD", "generate PRD",
-  "/write-prd", "consolidate product requirements", or "create product requirements". Use
-  `spec` instead when the user wants a technical feature specification.
+description: Consolidate discovery artifacts into an AI-executable product requirements document, or update an existing PRD from a scoped product increment. Use when the user asks to write a PRD, generate product requirements, consolidate product thinking into a spec, append an update, or extend an existing PRD without regenerating it.
 ---
 
 # PRD Writer
 
-Last updated: 2026-08-10
+Last updated: 2026-08-18
 
 Consolidate outputs from any prior toolkit skills into a single, AI-executable Product Requirements
 Document (PRD). This skill maps what each prior skill already established to the correct PRD section,
@@ -29,11 +21,15 @@ Promotes: this skill is itself the promotion step for the product pipeline
 
 This is the only product skill that writes into a tracked layer. Every upstream discovery artifact is a draft under the work root; this skill is where their durable conclusions become project truth. If the work root were deleted the moment this skill finished, the project would still know what it is building and why.
 
-Read `docs/agents/memory.md` for the product-docs home and work root, the active `state.md`, and every completed artifact under `<effort>/discovery/` plus any `<effort>/prototypes/*/decision.md`. Synthesize by linking or condensing; do not silently reclassify or rescope facts owned upstream.
+Read `docs/agents/memory.md` for the product-docs home and work root, the active `state.md`,
+and every completed artifact under `<effort>/discovery/` plus any
+`<effort>/prototypes/*/decision.md`. For existing-product work, read
+`discovery/current-product.md` and `discovery/increment.md` before editing the PRD. Synthesize
+by linking or condensing; do not silently reclassify or rescope facts owned upstream.
 
 Resolve `<slug>` from the effort slug so the PRD traces back to the discovery that produced it. If `docs/agents/memory.md` records no product-docs home, write to `docs/product/<slug>/prd.md` and say so; if there is no memory routing at all, work in conversation and recommend `manage-context` before persisting.
 
-Update `state.md` with the PRD pointer and the next transition from the design gate below — `spec` when only implementation choices remain, a `design/ux` or `design/technical` skill when the experience or system shape is still open, or `brainstorm-feature` when only the implementation approach needs exploration.
+Update `state.md` with the PRD pointer.
 
 See `references/prd-principles.md` for the full PRD framework, phasing guide, and worked examples.
 
@@ -45,11 +41,14 @@ The PRD is one document with a version history, not a one-shot artifact written 
 | --- | --- | --- |
 | `validate-demand` returns Green | Part 0, Part 1 core problem triple and user story | Parts 2–4 marked `Pending — awaiting <skill>` |
 | `scope-mvp` | Part 1 requirement list, scope boundaries, Not-To-Do | Parts 3–4 pending |
+| `scope-product-increment` | Update Log, behavior delta, requirement changes, acceptance criteria, instrumentation, out-of-scope | Unchanged sections preserved |
 | `run-premortem` | Part 3 edge cases and NFRs, Part 4 | — |
 
 Running early is the recommended path: it puts the core idea in a tracked layer at the moment it stops being speculation, instead of leaving it in a disposable directory until the pipeline finishes. Efforts abandoned mid-pipeline still leave behind a record of what was considered and why it stopped.
 
-When extending an existing PRD, bump the version, add an Update Log row naming the stage that closed, and preserve user edits. Never regenerate from scratch over a PRD someone has edited. A section marked `Pending` is honest; a section silently overwritten is not.
+When extending an existing PRD, bump the version, add an Update Log row naming the stage that
+closed, and preserve user edits. Never regenerate from scratch over a PRD someone has edited. A
+section marked `Pending` is honest; a section silently overwritten is not.
 
 ---
 
@@ -63,7 +62,10 @@ Accept explicit document paths via `--doc <path>` / `-d <path>`. Multiple flags 
 
 If no flags are provided, resolve inputs from `state.md` and the configured discovery directory before scanning the current conversation.
 
-Check whether `<product-docs>/<slug>/prd.md` already exists. If it does, this is an extension — read it first and work out which parts are still `Pending`.
+Check whether `<product-docs>/<slug>/prd.md` already exists. If it does, this is an extension
+or delta update — read it first and work out which parts are still `Pending`, which sections
+are user-edited, and whether `discovery/increment.md` supplies an existing-product behavior
+delta.
 
 ---
 
@@ -76,8 +78,10 @@ to the corresponding PRD section:
 |---|---|
 | brainstorm | Part 1 — Job statement, struggling moment, forces, usage scenario |
 | validate-demand | Part 1 — User persona, core pain point, demand type (Painkiller/Reward/Vitamin), evidence grade |
+| map-current-product | Part 1 / Part 2 context — current users, implemented stories, current flows, and source-backed gaps |
 | shape-solution | Part 1 and Part 3 — User stories, first-use moment, interaction flows (5-state coverage per feature) |
 | scope-mvp | Part 1 — Scope axes (scenario × form × data), requirement list (P0/P1), Not-To-Do list |
+| scope-product-increment | Update Log and changed sections — ADDED/MODIFIED/REMOVED behavior, P0/P1/out-of-scope, acceptance criteria, edge cases, instrumentation, success metrics |
 | run-premortem | Part 3 — Edge cases, NFRs (derived from vaccine actions and monitoring signals) |
 | prototype | Part 3 — Interaction decisions settled by throwaway variants |
 
@@ -86,6 +90,25 @@ re-derive the persona; do not re-scope features.
 
 An architectural decision in a `decision.md` is not PRD material — route it to an ADR via
 `domain-modeling` and link it from Part 2.
+
+## Existing PRD Delta Mode
+
+Use delta mode when a PRD already exists and `discovery/increment.md` is present. The goal is to
+extend the document, not regenerate it.
+
+1. Read the existing PRD first and preserve user-edited prose unless it directly conflicts with
+   the accepted increment.
+2. Append an Update Log row with the new version, date, source artifact, and a one-line summary.
+3. Apply `ADDED / MODIFIED / REMOVED` behavior to the smallest matching PRD sections:
+   Scope, Requirement List, Part 2 flows, Part 3 feature states, Edge Cases, Analytics, and
+   Out-of-Scope.
+4. Keep unaffected sections byte-for-byte where practical. If a section must be rewritten, state
+   which upstream delta required it.
+5. If the increment contradicts the current PRD or baseline, stop and ask whether the PRD or the
+   increment is authoritative.
+
+`current-product.md` explains current behavior. `increment.md` owns the change. This skill only
+promotes the accepted delta into the tracked PRD.
 
 ---
 
@@ -265,6 +288,7 @@ Before saving a complete PRD, verify all four moats are present:
 - [ ] Edge cases documented (minimum 3 distinct scenarios)
 - [ ] Non-functional requirements defined (performance, compatibility, analytics)
 - [ ] Out-of-Scope list present (minimum 2 items explicitly excluded)
+- [ ] For delta mode, Update Log row added and unaffected PRD edits preserved
 
 If any moat is missing, complete it before saving.
 
@@ -281,8 +305,8 @@ The PRD fixes *what* to build. When *how it looks* or *how the system is shaped*
 
 | Open question after the PRD | Route to |
 | --- | --- |
-| Part 3 five-state specs are thin because layout, information hierarchy, or the visual system is undecided — or the effort is frontend-heavy with no design system | `design/ux/ui-ux-pro-max` |
-| The destination is known but the route is foggy — multiple interdependent decisions, larger than one session | `design/ux/wayfinder` |
+| Part 3 five-state specs are thin because layout, information hierarchy, or the visual system is undecided — or the effort is frontend-heavy with no design system | `design/ux/design-context` (then the UX pipeline — see `workflows/design.md`) |
+| The destination is known but the route is foggy — multiple interdependent decisions, larger than one session | `craft/meta/wayfinder` |
 | PRD terms have no agreed meaning, or a hard-to-reverse trade-off needs an ADR | `design/technical/domain-modeling` |
 | The feature strains existing module boundaries, or it is unclear where behavior belongs | `design/technical/codebase-design` |
 | The product is an agent system | `design/technical/design-agent-architecture` |
@@ -292,7 +316,7 @@ The PRD fixes *what* to build. When *how it looks* or *how the system is shaped*
 
 **Skip test** — skip design entirely when all three hold: the Part 2 flowchart and Part 3 five-state blocks are complete; vocabulary is settled (glossary exists or terms are unambiguous); the change fits the existing architecture. What remains then is implementation choices, which `plan` owns.
 
-More than one row may apply — UX and technical design can both run. UX output additionally feeds `engineering/frontend`. A design question that the criteria and conversation cannot settle goes to `/prototype`: throwaway variants, decision recorded in `prototypes/<slug>/decision.md`, control returns to the skill that raised it.
+More than one row may apply — UX and technical design can both run. UX output additionally feeds frontend implementation via `design/ux/design-implement` and `spec`. A design question that the criteria and conversation cannot settle goes to `prototype`: throwaway variants, decision recorded in `prototypes/<slug>/decision.md`, control returns to the skill that raised it.
 
 ---
 
@@ -304,6 +328,11 @@ More than one row may apply — UX and technical design can both run. UX output 
 
 Confirm the saved file path and layer to the user when done. The path should be inside the tracked `docs/product/` tree, not under the work root.
 
----
+## What This Skill Does NOT Do
 
-**Next step:** route through the Design Gate above. `/spec` directly when design is settled.
+- **Does not discover the problem** — it consolidates what discovery already established
+- **Does not validate demand** — it promotes the verdict, it does not grade evidence
+- **Does not design the solution** — it records the solution shape, not invent it
+- **Does not scope the MVP** — it maps the scope, not triage features
+- **Does not scope active-product increments** — it promotes `increment.md`, not create it
+- **Does not build the product** — it specifies what to build, not how to build it

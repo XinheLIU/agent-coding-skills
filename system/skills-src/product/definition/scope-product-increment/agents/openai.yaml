@@ -1,0 +1,3 @@
+interface:
+  display_name: "Scope Product Increment"
+  short_description: "Scope an existing-product increment"

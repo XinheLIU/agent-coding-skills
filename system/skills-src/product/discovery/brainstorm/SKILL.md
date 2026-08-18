@@ -1,24 +1,17 @@
 ---
 name: brainstorm
-description: >
-  Transforms an ambiguous idea into a Jobs-to-be-Done brief through Socratic dialogue.
-  Explores who the user is, what job they hire the product for, how they solve it today,
-  and what constrains any solution. Use when the user shares a vague idea, asks "what should
-  I build", wants to explore a concept, or needs requirements discovery. Stops before feature
-  scoping. Credit to Jesse Hattabaugh's superpowers brainstorming skill for the Socratic
-  conversation pattern.
+description: Turn an ambiguous idea into a Jobs-to-be-Done brief through Socratic dialogue. Use when the user shares a vague idea, asks "what should I build", wants to explore a concept, or needs requirements discovery.
 ---
 
 # Brainstorm
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
 Turn an ambiguous idea into a Jobs-to-be-Done brief through natural Socratic conversation.
 Ask questions one at a time, understand the context, and build a clear picture before
 proposing anything.
 
-This is stage 1 of product ideation — **发现需求**. It establishes what the job is.
-`validate-demand` then decides whether the evidence supports pursuing it.
+This is stage 1 of product ideation — **Demand Discovery**. It establishes what the job is.
 
 ## Credit
 
@@ -34,12 +27,10 @@ Promotes: persona, job, struggle → PRD Part 1, via write-prd
 
 Read `docs/agents/memory.md`, the active `state.md`, relevant core and human memory, and
 `discovery/ideas.md` when present. Write the resolved job, struggle, moment, outcomes,
-constraints, assumptions, and open questions once. Update `state.md` with the artifact pointer
-and `validate-demand` as the next transition.
+constraints, assumptions, and open questions once. Update `state.md` with the artifact pointer.
 
 The brief is disposable; the understanding in it is not. The job statement, the persona, and the
-struggle become project truth when `write-prd` promotes them into the tracked product docs —
-which happens as soon as `validate-demand` returns Green, not at the end of the pipeline. Write
+struggle become project truth when promoted into the tracked product docs. Write
 here as the drafting surface, and do not treat this file as the permanent home of the core idea.
 
 If routing is absent, work in conversation only and recommend `manage-context` before persisting.
@@ -82,7 +73,7 @@ Once you understand the idea, present the JTBD brief conversationally:
 
 Keep sections short. A few sentences if straightforward, a paragraph if nuanced. Scale to complexity.
 
-**No feature scoping here.** P0/P1/Not-To-Do belongs to `scope-mvp`. Feature ideas raised during conversation go into Open Questions.
+**No feature scoping here.** Feature ideas raised during conversation go into Open Questions.
 
 Ask the user if the brief looks right. Revise if needed.
 
@@ -98,27 +89,14 @@ Any failure returns to Phase 1 to sharpen the focus.
 
 Once the brief passes, produce a short summary: what is confirmed, what still needs validation, and the next step.
 
-Persist to `<work-root>/<effort>/discovery/brainstorm.md` and update `state.md` to point at `validate-demand` as the next transition.
-
-## Pipeline Integration
-
-- No candidate idea yet → `/generate-product-ideas` first
-- External uncertainty → `/research`, then return here
-- A question needing runnable evidence → `/prototype`, then return here
-- Unsure where you are in the workflow → `/ideate-product` routes for you
-
-Do not duplicate work another skill has already done when its output is present.
-
-## Anti-Pattern: "This Is Too Simple To Need Discovery"
-
-Every product idea goes through this, even "simple" ones. A todo list, a single utility, a config change — all of them. "Simple" ideas are where unexamined assumptions cause the most wasted work. The brief can be short (a few paragraphs for truly simple projects), but you MUST produce it.
+Persist to `<work-root>/<effort>/discovery/brainstorm.md` and update `state.md` with the artifact pointer.
 
 ## What This Skill Does NOT Do
 
-- **Does not generate ideas** — use `generate-product-ideas` for that
-- **Does not validate demand** — use `validate-demand` for go/no-go decisions
-- **Does not scope features** — use `scope-mvp` for P0/P1 triage
-- **Does not design the solution** — use `shape-solution` for that
-- **Does not build prototypes** — use `prototype` when a design question needs throwaway code
+- **Does not generate ideas** — it clarifies an existing one
+- **Does not validate demand** — it frames the problem, not the evidence
+- **Does not scope features** — it stops before P0/P1 triage
+- **Does not design the solution** — it answers "what is the job", not "what is the product"
+- **Does not build prototypes** — it produces a brief, not code
 
 This skill answers one question: **What is the job?** Everything else comes after.

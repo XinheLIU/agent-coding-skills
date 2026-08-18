@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-08-10
+Last updated: 2026-08-18
 
 This directory is the plugin and product. Its skills share a repository memory system: setup declares the paths and protocols once, then idea, delivery, testing, debugging, review, and documentation skills coordinate through those artifacts.
 
@@ -27,7 +27,7 @@ The protocol makes ownership explicit: each fact has one canonical Markdown home
 
 | Path | Contents |
 | --- | --- |
-| [`skills-src/`](skills-src/) | 58 skill source packages grouped into eight browsable categories |
+| [`skills-src/`](skills-src/) | Skill source packages grouped into browsable categories |
 | [`skills/`](skills/) | Flat symlinks into `skills-src/` for one-level loader discovery |
 | [`memory/`](memory/) | Layer definitions, read/write protocol, ownership registry |
 | [`workflows/`](workflows/) | Ideas, feature delivery, testing, debugging |
@@ -53,8 +53,8 @@ Setup defaults working memory to `.scratch/<effort>/` in the Matt-style local tr
 
 ## Workflow entry points
 
-- [Ideas](workflows/ideas.md): product discovery and scoping, with research/prototype/wayfinder detours.
-- [Design](workflows/design.md): design system creation → variant exploration → production implementation.
+- [Ideas](workflows/ideas.md): greenfield product discovery plus existing-product baselines and increments, with research/prototype/wayfinder detours.
+- [Design](workflows/design.md): design context (DESIGN.md / system.md) → interaction design → visual variants → production implementation, orchestrating external design skills.
 - [Feature delivery](workflows/feature-delivery.md): specification → plan → dependency tickets → implementation → review.
 - [Testing](workflows/testing.md): public seams → TDD → checks → test-gap audit.
 - [Debugging](workflows/debugging.md): red-capable reproduction → evidence → regression test → fix.

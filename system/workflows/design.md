@@ -1,38 +1,53 @@
 # Design Workflow
 
-Last updated: 2026-08-10
+Last updated: 2026-08-17
 
-This workflow transforms design ideas into implemented components through **interaction design → visual design → implementation**, separating user flows from visual aesthetics.
+This workflow transforms product intent into implemented components through **design context → interaction design → visual design → implementation**. The pipeline skills stay thin — routing, approval gates, and artifact conventions — and dispatch heavy design work to installed external skills from the six-layer catalog (`skills-src/design/ux/README.md`).
 
 ## Overview
 
 ```
-User idea → interaction design → visual design → implement code → shipped component
-            (user flows, states)  (visual polish)  (production)
-            ↓                      ↓                ↓
-            Working layer          Working layer    Project + Human docs
+PRD Part 1/3 → design context → interaction design → visual design → implement code → shipped component
+               (⑤ tokens)        (③ flows, states)    (①③⑥ visuals)   (⑥+③ production)
+               ↓                  ↓                     ↓                 ↓
+               Human layer        Working layer         Working layer     Project + Human docs
 ```
 
-**Key principle:** Interaction structure (what/where/when) is designed before visual treatment (colors/fonts/polish).
+**Key principles:**
 
-## The Four Skills
+1. **Interaction before visuals** — structure (what/where/when) is designed and locked before color/typography/polish.
+2. **One canonical token source** — `docs/design/system.md` is the only file downstream skills read for visual values; `/design-context` decides what feeds it.
+3. **External skills carry heavy work** — each stage checks the catalog for an installed capability (taste, knowledge, method, templates, DESIGN.md, production) and dispatches; the native workflow is always the fallback.
 
-### 0. `/design-system-create` — Foundation (Optional but Recommended)
+## The Five Skills
 
-**Purpose**: Establish the canonical design system (typography, colors, spacing).
+### 0. `/design-context` — Token Source (ENTRY POINT)
 
-**When**: Starting a project, no design system exists, or needs formalization.
+**Purpose**: Decide where design tokens come from and produce the canonical `docs/design/system.md`.
+
+**When**: Starting design work; a `DESIGN.md` exists but nothing consumes it; you have a reference site/brand to import.
 
 **Process**:
-- Gathers product context (persona, platform from PRD Part 1)
-- Proposes typography, color palette, spacing, layout principles
-- Validates accessibility (WCAG AA contrast)
-- Writes `docs/design/system.md` (Human layer, git-tracked)
+- Detects `DESIGN.md` (root), existing `docs/design/system.md`, PRD Part 1
+- Branches: adopt existing DESIGN.md → extract from a reference site (⑤ extractors) → adopt a ready-made brand spec (④ catalogs) → or hand off to `/design-system-create` for from-scratch creation
+- Resolves token authority conflicts (default: DESIGN.md wins visual values; system.md keeps component foundations)
+- Writes `docs/design/system.md` after approval
 
-**Outputs**:
-- `docs/design/system.md` — canonical design system
+**Outputs**: `docs/design/system.md` (Human layer, git-tracked)
 
-**Handoff**: Design system feeds both interaction and visual design.
+**External dispatch**: layers ⑤ (DESIGN.md lifecycle + extractors) and ④ (template catalogs). Never modifies `DESIGN.md` at root — that's an input, owned by external lifecycle tools.
+
+---
+
+### 0b. `/design-system-create` — From-Scratch Fallback
+
+**Purpose**: Consultatively create `docs/design/system.md` when there is no DESIGN.md and no reference to import.
+
+**When**: Called directly, or via `/design-context` Step 3 when the user picks the native path.
+
+**Process**: gathers product context (PRD Part 1) → proposes typography/color/spacing/layout with rationale → optional layer-② knowledge lookup for font pairings and palettes → preview HTML → approval → writes `docs/design/system.md`.
+
+**Outputs**: `docs/design/system.md` (Human layer); `.scratch/design-system/system-preview.html` (Working, disposable)
 
 ---
 
@@ -40,89 +55,90 @@ User idea → interaction design → visual design → implement code → shippe
 
 **Purpose**: Define HOW users interact before HOW it looks. Structure over style.
 
-**When**: Starting a new feature, unclear user flows, before any visual work.
+**When**: New feature with unclear flows; PRD Part 3 five-state blocks are thin.
 
 **Process**:
-- Reads PRD Part 1 (user context) and Part 3 (five-state blocks if exists)
-- Designs information architecture (what user sees first/second/third)
-- Fills **interaction state table** (LOADING/EMPTY/ERROR/SUCCESS/PARTIAL for every feature)
-- Maps user journey with emotional arc
-- Generates **low-fidelity wireframes** (gray boxes, no colors/fonts)
-- Documents responsive and accessibility requirements
-- Identifies unresolved interaction decisions
+- Reads PRD Part 1 (`docs/product/<slug>/prd.md`) and Part 3
+- Designs information architecture (what the user sees first/second/third)
+- Fills the **interaction state table** — LOADING/EMPTY/ERROR/SUCCESS/PARTIAL for every feature (mandatory, no gaps)
+- Maps user journeys with emotional arc
+- Generates **low-fidelity wireframes** (gray boxes, NO colors/fonts)
+- Documents responsive + accessibility requirements; surfaces unresolved decisions
 
-**Outputs** (Working layer):
-- `.scratch/<effort>/interaction/wireframes/*.html` — structure baseline
-- `.scratch/<effort>/interaction/state-table.md` — five-state coverage (CORE)
-- `.scratch/<effort>/interaction/journey-map.md` — user journey
-- `.scratch/<effort>/interaction/decisions.md` — interaction rationale
-- `.scratch/<effort>/interaction/responsive-a11y.md` — specs
+**Outputs** (Working layer): `.scratch/<effort>/interaction/{wireframes/,state-table.md,journey-map.md,decisions.md,responsive-a11y.md}`
 
-**Critical constraint**: Wireframes have NO visual styling — only structure.
+**Critical constraint**: Wireframes have no visual styling — only structure. Structure locks at approval.
 
-**Handoff**: Wireframes + state table feed visual design. Structure is locked after approval.
+**External dispatch**: optional layer-② knowledge pass for state-design and flow-pattern guidelines, cited in `decisions.md`. The five-state table itself is always native.
 
 ---
 
 ### 2. `/visual-design-variants` — Visual Exploration
 
-**Purpose**: Explore visual directions (colors, typography, visual weight) on the locked interaction structure.
+**Purpose**: Explore visual directions on the locked interaction structure.
 
-**When**: After interaction design approved, design system exists.
+**When**: After interaction design is approved and `docs/design/system.md` exists.
 
 **Process**:
-- **Requires wireframes** from `/interaction-design` (MANDATORY)
-- Reads design system tokens
-- Generates 3 visual variants with **SAME structure, DIFFERENT visuals**:
-  - Different color saturation
-  - Different font personalities
-  - Different visual weight distribution
-  - Different decorative elements
-- Collects feedback, iterates
-- Writes approved visual design
+- **Requires** `interaction/wireframes/`, `interaction/state-table.md`, and `docs/design/system.md` (hard prerequisites)
+- Defines 3 genuinely different visual directions (anti-convergence rule)
+- Generates 3 variant HTMLs — same structure, different visual treatment — each showing all 5 states with a state switcher
+- Iterates (max 3 rounds) to an approved variant
 
-**Outputs** (Working layer):
-- `.scratch/<effort>/visual/variants/*.html` — 3 visual options
-- `.scratch/<effort>/visual/approved.html` — selected design (CORE)
-- `.scratch/<effort>/visual/decision.md` — visual rationale
+**Outputs** (Working layer): `.scratch/<effort>/visual/{variants/variant-{a,b,c}.html,approved.html,decision.md,constraints.md}`
 
-**Critical constraint**: CANNOT change button positions, navigation hierarchy, or state transitions. Only visual properties vary.
+**Critical constraint**: CANNOT change button positions, navigation hierarchy, or state transitions — only visual properties vary.
 
-**Handoff**: Approved visual design feeds implementation.
+**External dispatch**: layer-① taste skills sharpen direction strategies; layer-⑥ production engines may render the variant HTMLs. Reconciliation contract: locked structure preserved, system.md tokens only, output lands at `visual/variants/variant-{a,b,c}.html` with the state switcher intact.
 
 ---
 
 ### 3. `/design-implement` — Production Code
 
-**Purpose**: Convert approved visual design into production code matching tech stack.
+**Purpose**: Convert the approved visual design into production code matching the project's tech stack.
 
-**When**: Visual design approved, ready to build components.
+**When**: `visual/approved.html` exists and the user is ready to build.
 
 **Process**:
-- Reads approved.html + state-table.md + design system
-- Detects tech stack (React/Vue/Svelte/HTML, CSS approach)
-- Generates semantic, accessible, responsive code
-- **Implements all 5 states** from state table
-- Documents component
+- Reads `visual/approved.html` + `interaction/state-table.md` + `docs/design/system.md`
+- Detects tech stack (React/Vue/Svelte/HTML × Tailwind/CSS-in-JS/…)
+- Extracts design tokens into stack-appropriate format
+- Generates semantic, accessible, responsive component code implementing **all 5 states**
+- Documents the component
 
-**Outputs**:
-- Component code in project source directory (project-tracked)
-- `docs/design/components/<name>.md` — component docs (Human layer)
+**Outputs**: component code in project source (project-tracked); `docs/design/components/<name>.md` (Human layer)
 
-**Handoff**: Component ready for use.
+**External dispatch**: optional layer-③ polish pass (interaction craft, motion, feel-better, a11y review) over generated code — within token authority; structural changes route back to `/interaction-design`. Applied fixes are recorded in the component doc.
+
+## External Orchestration
+
+The six-layer model (full catalog: `skills-src/design/ux/README.md`) maps to pipeline stages:
+
+| Layer | What it provides | Consumed by | When absent |
+|:---:|---|---|---|
+| ① Taste / Judgment | Aesthetic direction, anti-slop stance | `visual-design-variants` Step 2.5 | Directions proposed inline |
+| ② Design Knowledge | Font/palette/guideline databases | `design-system-create` Steps 2.2–2.3, `interaction-design` Step 1.5 | Proposed from first principles |
+| ③ Method / Workflow | Design workflows, polish, motion, redesign | `design-implement` Step 4.5 (polish); redesign tools run before re-entering the pipeline | Built-in quality gates |
+| ④ Templates & References | Ready-made brand specs | `design-context` Step 2 | Create from scratch |
+| ⑤ Design Context | DESIGN.md format, extractors, lifecycle | `design-context` Steps 1–3 | Native `design-system-create` path |
+| ⑥ Production Environments | High-fidelity mockup/demo engines | `visual-design-variants` Step 2.5 | Inline HTML generation |
+
+Every dispatch follows the same contract: **the pipeline skill owns the artifacts; the external skill is a producer whose output is reconciled into the canonical paths.** Skills name layers and capabilities, never hardcoded vendors — the README catalog is the detailed reference.
 
 ## Memory Layers
 
 | Artifact | Layer | Tracked | Lifetime | Why |
 |----------|-------|---------|----------|-----|
-| `docs/design/system.md` | Human | Yes | Project | Design system outlives features |
+| `DESIGN.md` (root) | Human (external owner) | Yes | Project | Design context source; written by lifecycle tools, read by pipeline |
+| `docs/design/system.md` | Human | Yes | Project | Canonical design system outlives features |
 | `docs/design/components/*.md` | Human | Yes | Project | Component docs are reference |
 | `.scratch/<effort>/interaction/*` | Working | No | Effort | Exploration, disposable after implementation |
 | `.scratch/<effort>/visual/*` | Working | No | Effort | Exploration, disposable after implementation |
 | Component source code | Project | Per project | Project | Production code |
 
-**Promotion path**: 
-- PRD Part 3 ← state-table.md (optional, if user approves sync)
+**Promotion path**:
+- PRD Part 3 ← `state-table.md` (optional, if user approves sync in `/interaction-design`)
+- `docs/design/system.md` ← DESIGN.md merge or from-scratch creation
 - Component docs (Human layer) ← implementation
 - Production code ← approved visual design
 
@@ -130,140 +146,99 @@ User idea → interaction design → visual design → implement code → shippe
 
 ### Pattern 1: Complete Flow (New Feature)
 
-Starting with unclear flows and no visual work done.
-
 ```
-1. /design-system-create (if no system exists)
-   → Output: docs/design/system.md
-
-2. /interaction-design
-   → Input: PRD Part 1 + Part 3
-   → Output: wireframes + state-table.md
-   → Decision gate: user approves interaction structure
-
-3. /visual-design-variants  
-   → Input: wireframes (REQUIRED) + state-table.md + system.md
-   → Output: approved.html
-   → Decision gate: user approves visual direction
-
-4. /design-implement
-   → Input: approved.html + state-table.md + system.md
-   → Output: Component code + docs/design/components/<name>.md
+1. /design-context              → docs/design/system.md (adopt / extract / create)
+2. /interaction-design          → wireframes + state-table.md → APPROVAL GATE
+3. /visual-design-variants      → visual/approved.html → APPROVAL GATE
+4. /design-implement            → component code + docs/design/components/<name>.md
 ```
 
-**Time**: ~1-2 hours (interaction takes longest, visual and implementation faster)
+**Time**: ~1-2 hours (interaction takes longest).
 
 ### Pattern 2: Visual Iteration Only
 
-Interaction structure is correct, just need different visual treatment.
+Interaction structure is correct; need a different visual treatment.
 
 ```
-1. /visual-design-variants (reads existing wireframes)
-   → Input: wireframes (already exist) + system.md
-   → Output: new approved.html
-
-2. /design-implement
-   → Output: New component code
+1. /visual-design-variants  (reads existing wireframes + system.md) → new approved.html
+2. /design-implement        → new component code
 ```
 
-**Time**: ~30 minutes
+**Time**: ~30 minutes.
 
 ### Pattern 3: Interaction Revision
 
-Visual is wrong because interaction structure needs changes.
+Visual is wrong because the structure is wrong.
 
 ```
-1. /interaction-design (revise existing)
-   → Update wireframes and state-table.md
-   → Decision gate: user approves new structure
-
-2. /visual-design-variants (regenerate on new structure)
-   → Generate new variants on revised wireframes
-
+1. /interaction-design (revise)         → updated wireframes + state table → APPROVAL GATE
+2. /visual-design-variants (regenerate) → new variants on revised structure
 3. /design-implement
 ```
 
-**Time**: ~1 hour
+**Time**: ~1 hour.
 
 ### Pattern 4: Quick Implementation (Design Already Approved)
 
-HTML mockup provided, just need production code.
+HTML mockup in hand, need production code.
 
 ```
-1. Place HTML in .scratch/<effort>/visual/approved.html
-2. Create state-table.md manually or extract from mockup
+1. Place HTML at .scratch/<effort>/visual/approved.html
+2. Create interaction/state-table.md manually or extract from the mockup
 3. /design-implement
 ```
 
-**Time**: <30 minutes
+**Time**: <30 minutes.
 
-## Key Differentiators from Previous Version
+### Pattern 5: Redesign Existing UI
 
-### What Changed
+```
+1. External layer-③ redesign tool (audit / redesign / polish — see README catalog)
+   runs against the existing UI, OUTSIDE this pipeline
+2. Re-enter at /visual-design-variants if structure is kept,
+   or /interaction-design if flows change
+3. /design-implement
+```
 
-**Before:**
-- `design-explore-variants` generated layouts + visuals together
-- No explicit interaction design phase
-- State coverage optional, often skipped
-- Structure and visuals changed simultaneously
+### Pattern 6: Reference-Driven New Project
 
-**After:**
-- **Interaction design first** — wireframes with NO visual styling
-- **Five-state table MANDATORY** — every feature × 5 states
-- **Visual design locked to structure** — can't move buttons/nav
-- **Clear handoff** — interaction → visual → implementation
+"Make it look like Linear."
 
-### Why This Matters
-
-1. **Can reuse interaction** — same wireframe, multiple visual explorations
-2. **State coverage enforced** — loading/empty/error never forgotten
-3. **Faster iteration** — visual tweaks don't require rethinking flows
-4. **Clearer responsibilities** — interaction designer ≠ visual designer
-5. **PRD integration** — Part 3 (five-state blocks) ↔ state-table.md sync
+```
+1. /design-context  → extract (⑤) or adopt (④) the brand spec → docs/design/system.md
+2-4. as Pattern 1
+```
 
 ## Integration Points
 
-### Upstream (Design reads from)
+### Upstream (design reads from)
 
-**Product definition:**
-- `docs/product/<slug>/prd.md` Part 1 (persona, platform, product type)
-- `docs/product/<slug>/prd.md` Part 3 (five-state blocks — optional seed)
-
-**Project constraints:**
-- `CONTEXT.md` (design principles or constraints if any)
-
-**Task context:**
+- `docs/product/<slug>/prd.md` Part 1 (persona, platform, product type) and Part 3 (five-state seed)
+- `DESIGN.md` at project root (layer-⑤ design context, when present)
+- `CONTEXT.md` (binding design principles or constraints)
 - `.scratch/<effort>/state.md` (what feature is being built)
 
-### Downstream (Design feeds)
+Entry gate: the Design Gate in `product/definition/write-prd` routes here when the PRD leaves experience or structure open.
 
-**Implementation:**
-- `frontend-design` skill (reads design system and component docs)
-- `spec` skill Part 3 (references design system for component specs)
+### Downstream (design feeds)
 
-**Product:**
-- PRD Part 3 ← state-table.md (optional promotion if user approves)
-
-**Testing:**
-- `test-component` skill (accessibility and visual regression tests)
+- `engineering/feature/spec` — reads `docs/design/system.md` and `DESIGN.md` as design constraints
+- `docs/product/<slug>/prd.md` Part 3 ← optional state-table sync
+- Testing skills ← component docs carry the accessibility contract
 
 ## Skill Boundaries
 
-| Decision Type | Skill | Artifact |
-|--------------|-------|----------|
+| Decision type | Owner skill | Artifact |
+|---|---|---|
+| Where tokens come from (DESIGN.md vs scratch) | design-context | system.md provenance |
+| What font/color/radius values are | design-context / design-system-create | system.md |
 | User sees what first | interaction-design | architecture.md, wireframe |
 | Button goes where | interaction-design | wireframe layout |
 | Click triggers what | interaction-design | state table, journey map |
-| Loading shows what | interaction-design | state table (LOADING column) |
-| Empty state warmth | interaction-design | state table (EMPTY column) |
-| Error feedback location | interaction-design | state table (ERROR column) |
-| Mobile nav collapses how | interaction-design | responsive-a11y.md |
-| Keyboard navigation | interaction-design | responsive-a11y.md |
-| What color to use | visual-design-variants | approved.html |
-| What font to use | design-system-create | system.md |
-| Border radius size | visual-design-variants | approved.html |
-| Shadow depth | visual-design-variants | approved.html |
-| Button visual style | visual-design-variants | approved.html (structure locked) |
+| Loading/empty/error content | interaction-design | state table |
+| Mobile nav pattern, keyboard nav | interaction-design | responsive-a11y.md |
+| Which visual personality wins | visual-design-variants | approved.html |
+| Component API, code structure | design-implement | component code + docs |
 
 ## Quality Standards
 
@@ -273,29 +248,26 @@ All design skills enforce:
 - Text contrast: 4.5:1 for normal, 3:1 for large (≥18pt)
 - Touch targets: 44x44px minimum
 - Semantic HTML: proper heading hierarchy, landmarks
-- Keyboard navigation: focusable elements, visible focus rings
+- Keyboard navigation: focusable elements, visible focus rings (3px outline)
 - ARIA: labels for icon-only buttons
 - Form labels: explicit `<label for="...">`, not placeholder-only
 
 ### Five-State Coverage
-- **LOADING**: Skeleton UI matching success layout
-- **EMPTY**: Warm message + primary action (not just "No data")
-- **ERROR**: Specific message + recovery action
-- **SUCCESS**: Full data display
-- **PARTIAL**: Mixed state or degraded mode
+- **LOADING**: skeleton UI matching success layout (never a bare spinner)
+- **EMPTY**: warm message + primary action
+- **ERROR**: specific message + recovery action
+- **SUCCESS**: full data display
+- **PARTIAL**: mixed state or degraded mode, clearly indicated
 
 ### Responsive Design
 - Mobile-first breakpoints: 640px, 768px, 1024px, 1280px
-- No horizontal scroll
-- Touch-friendly spacing
+- No horizontal scroll; touch-friendly spacing
 
 ### Design System Adherence
 - Use design tokens literally (no arbitrary values)
-- Follow component foundations
+- External production engines must reconcile into system.md tokens — engine-invented values are rejected
 
 ## Hard Rules (Enforced)
-
-From G-Stack's proven standards:
 
 ### Font Blacklist
 **Never use**: Papyrus, Comic Sans, Lobster, Impact, Jokerman
@@ -305,7 +277,7 @@ From G-Stack's proven standards:
 
 ### Color Discipline
 - ONE decisive accent color (not three equal-weight)
-- Surface colors: 2-3 levels only (not long tonal ramp)
+- Surface colors: 2-3 levels only
 
 ### Anti-Patterns (AI Slop)
 - Purple gradients on white
@@ -313,419 +285,22 @@ From G-Stack's proven standards:
 - Decorative blobs
 - Three-column grid by default
 
-## Relationship to ui-ux-pro-max
-
-The existing `ui-ux-pro-max` skill is a **knowledge base** queried during design:
-
-**What it provides:**
-- 67 styles catalog
-- 96 color palettes by product type
-- 57 font pairings
-- 99 UX guidelines (8 priority tiers)
-- 25 chart types
-- Stack-specific guidance (13 frameworks)
-
-**How new skills use it:**
-
-1. **interaction-design** queries for:
-   - UX guidelines (state design, flow patterns)
-   - Chart types (data visualization interactions)
-
-2. **design-system-create** queries for:
-   - Font pairings
-   - Color palettes by product type
-   - Style directions
-
-3. **design-implement** enforces:
-   - Priority 1-4 rules (accessibility, touch, performance)
-   - Pre-delivery checklist
-
-**Search interface:**
-```bash
-python3 system/skills-src/design/ux/ui-ux-pro-max/scripts/search.py [domain] --query "[terms]"
-```
-
-## Comparison to G-Stack
-
-### Preserved
-- ✓ Consultative approach (not form wizards)
-- ✓ Multi-variant exploration with feedback loop
-- ✓ Clear handoffs between phases
-- ✓ Accessibility-first (WCAG gates)
-- ✓ Five-state coverage (loading/empty/error/success/partial)
-- ✓ Design hard rules (font blacklist, contrast, touch targets)
-
-### Adapted
-- ✓ **Interaction ↔ Visual separation** (G-Stack's `plan-design-review` split)
-- ✓ **Mandatory state table** (G-Stack's Pass 2)
-- ✓ **User journey mapping** (G-Stack's Pass 3)
-- ✓ **Wireframe-first** (G-Stack's office-hours wireframe pattern)
-
-### Simplified
-- No taste-profile.json (cross-session memory)
-- No browse/design binaries (standard tools only)
-- No Pretext-native layout
-- No 10-category design review (basic quality in implement)
-- Three-phase flow instead of four separate skills
-
-**Result**: G-Stack's interaction-first methodology + simpler tooling + memory-protocol aligned.
-
 ## Troubleshooting
 
-**"No wireframes found"**
-→ Run `/interaction-design` first to define user flows and structure
+**"No wireframes found"** → Run `/interaction-design` first.
 
-**"No design system found"**
-→ Run `/design-system-create` first to establish typography, colors, spacing
+**"No design system found"** → Run `/design-context` (or `/design-system-create` for from-scratch).
 
-**"No approved visual design found"**
-→ Run `/visual-design-variants` after interaction design is approved
+**"No approved visual design found"** → Run `/visual-design-variants` after interaction design is approved; it writes `visual/approved.html`.
 
-**"Visual design changes button positions"**
-→ That's an interaction change — go back to `/interaction-design` to revise structure
+**"Visual design changes button positions"** → That's an interaction change — go back to `/interaction-design`.
 
-**"State table incomplete"**
-→ `/interaction-design` enforces five-state coverage — every feature must define all 5 states
+**"State table incomplete"** → `/interaction-design` enforces five-state coverage; every feature defines all 5 states.
 
-**"Need different aesthetic"**
-→ Update system.md first (re-run `/design-system-create`), then regenerate visual variants
+**"Need different aesthetic"** → Update `docs/design/system.md` first (re-run `/design-context` to re-sync from DESIGN.md, or `/design-system-create` to re-propose), then regenerate visual variants.
 
-**"PRD Part 3 out of sync with state table"**
-→ `/interaction-design` offers to sync — run it in update mode or manually copy states
+**"External skill output doesn't match system tokens"** → The reconciliation contract was violated — regenerate inline (the native fallback) rather than accepting off-system values.
 
-## Examples
+**"PRD Part 3 out of sync with state table"** → `/interaction-design` offers to sync — run it in update mode.
 
-See test projects in `.scratch/design-workflow-tests/` (if created) for worked examples.
-
----
-
-**Key workflow summary:**
-1. Define flows (interaction-design) → wireframes + state table
-2. Explore visuals (visual-design-variants) → approved.html
-3. Implement (design-implement) → production code + docs
-
-### 1. `/design-system-create` — Foundation
-
-**Purpose**: Establish the canonical design system that grounds all visual work.
-
-**When**: Starting a project, no design system exists, or existing system needs formalization.
-
-**Process**:
-- Gathers product context (persona, platform from PRD Part 1)
-- Proposes typography, color palette, spacing, layout principles
-- Validates accessibility (WCAG AA contrast)
-- Generates preview HTML for approval
-- Writes `docs/design/system.md` (Human layer, git-tracked)
-
-**Outputs**:
-- `docs/design/system.md` — canonical design system
-- `.scratch/design-system/system-preview.html` — approval preview (disposable)
-
-**Handoff**: Design system feeds both variant exploration and implementation.
-
-### 2. `/design-explore-variants` — Options
-
-**Purpose**: Generate multiple design directions, collect feedback, iterate to approval.
-
-**When**: Design system exists, specific feature/page needs layout, want to see options.
-
-**Process**:
-- Reads design system tokens (typography, colors, spacing)
-- Generates 3 variants with different layout approaches:
-  - Balanced: standard hierarchy, even emphasis
-  - Focal: one element dominates
-  - Dense: information-rich, compact
-- Collects structured feedback via AskUserQuestion
-- Iterates based on adjustments (max 3 rounds)
-- Writes approved design and decision rationale
-
-**Outputs**:
-- `.scratch/<effort>/designs/approved.html` — selected design (Working layer)
-- `.scratch/<effort>/designs/decision.md` — why this was chosen (Working layer)
-- `.scratch/<effort>/designs/variants/*.html` — exploration history (Working layer)
-
-**Handoff**: Approved design feeds implementation.
-
-### 3. `/design-implement` — Production Code
-
-**Purpose**: Convert approved design into production code matching the project's tech stack.
-
-**When**: Design approved, ready to build real components.
-
-**Process**:
-- Reads approved.html and design system
-- Detects tech stack (React/Vue/Svelte/HTML, CSS approach)
-- Extracts design tokens into stack-appropriate format
-- Generates semantic, accessible, responsive component code
-- Creates usage example
-- Documents component with API, accessibility notes, design mappings
-
-**Outputs**:
-- Component code in project source directory (project-tracked)
-- Design tokens file if needed (styles/tokens.css or equivalent)
-- `docs/design/components/<name>.md` — component docs (Human layer, git-tracked)
-
-**Handoff**: Component ready for use, docs feed spec and frontend-design skills.
-
-## Memory Layers
-
-The design workflow follows the durability test: *if the work root were deleted, would the project lose a fact it still needs?*
-
-| Artifact | Layer | Tracked | Lifetime | Why |
-|----------|-------|---------|----------|-----|
-| `docs/design/system.md` | Human | Yes | Project | Design system outlives any single feature |
-| `docs/design/components/*.md` | Human | Yes | Project | Component docs are reference material |
-| `.scratch/<effort>/designs/approved.html` | Working | No | Effort | Scaffolding; real code supersedes it |
-| `.scratch/<effort>/designs/variants/*.html` | Working | No | Effort | Exploration history, disposable after selection |
-| `.scratch/<effort>/designs/decision.md` | Working | No | Effort | Decision context, disposable after implementation |
-| Component source code | Project | Per project | Project | Production code, tracked by project rules |
-
-**Promotion path**: Exploration (Working) → Approved design (Working) → Implemented code (Project source) + Docs (Human layer)
-
-## Workflow Patterns
-
-### Pattern 1: New Project Design
-
-Starting from scratch with no design work done yet.
-
-```
-1. /design-system-create
-   → Input: PRD Part 1, user preferences
-   → Output: docs/design/system.md
-
-2. /design-explore-variants  
-   → Input: docs/design/system.md, feature description
-   → Output: .scratch/<effort>/designs/approved.html
-
-3. /design-implement
-   → Input: approved.html, system.md
-   → Output: Component code + docs/design/components/<name>.md
-```
-
-**Time**: ~1-2 sessions (system creation takes longest, variants and implementation are faster)
-
-### Pattern 2: Existing Design System
-
-Design system already exists, just need to design and implement a new feature.
-
-```
-1. /design-explore-variants (skip design-system-create)
-   → Input: docs/design/system.md (existing), feature description
-   → Output: .scratch/<effort>/designs/approved.html
-
-2. /design-implement
-   → Input: approved.html, system.md
-   → Output: Component code + docs/design/components/<name>.md
-```
-
-**Time**: ~1 session
-
-### Pattern 3: Quick Implementation
-
-Design already approved (HTML mockup provided), just need production code.
-
-```
-1. Place approved design in .scratch/<effort>/designs/approved.html manually
-
-2. /design-implement (skip exploration)
-   → Input: approved.html, system.md
-   → Output: Component code + docs/design/components/<name>.md
-```
-
-**Time**: <1 hour
-
-### Pattern 4: System Update
-
-Existing design system needs updates (new components, token changes).
-
-```
-1. /design-system-create with update flag
-   → Input: existing docs/design/system.md, requested changes
-   → Output: updated docs/design/system.md
-
-2. Update affected components if token changes impact them
-```
-
-**Time**: Varies by scope
-
-## Integration Points
-
-### Upstream (Design reads from)
-
-**Product definition:**
-- `docs/product/<slug>/prd.md` Part 1 (persona, platform, product type)
-- Informs aesthetic direction, platform constraints, user needs
-
-**Project constraints:**
-- `CONTEXT.md` (design principles or constraints if any)
-- Binding rules that design must respect
-
-**Task context:**
-- `.scratch/<effort>/state.md` (what feature is being built)
-- Guides variant generation focus
-
-### Downstream (Design feeds)
-
-**Implementation:**
-- `frontend-design` skill (reads design system and component docs)
-- `spec` skill Part 3 (references design system for component specs)
-
-**Testing:**
-- `test-component` skill (accessibility and visual regression tests)
-
-**Reference:**
-- All visual work refers to `docs/design/system.md` as source of truth
-
-## Quality Standards
-
-All design skills enforce these standards:
-
-### Accessibility (WCAG AA)
-- Text contrast: 4.5:1 for normal text, 3:1 for large text (≥18pt)
-- Touch targets: 44x44px minimum on mobile
-- Semantic HTML: proper heading hierarchy, landmarks, labels
-- Keyboard navigation: focusable elements, visible focus rings (3px outline)
-- ARIA: labels for icon-only buttons, descriptions where needed
-- Form labels: explicit `<label for="...">`, not placeholder-only
-
-### Responsive Design
-- Mobile-first breakpoints: 640px (sm), 768px (md), 1024px (lg), 1280px (xl)
-- Flexible layouts: flex/grid with relative units
-- No horizontal scroll on any screen size
-- Touch-friendly on mobile (spacing, target sizes)
-
-### Design System Adherence
-- Use design tokens literally (no arbitrary colors/spacing)
-- Follow component foundations from system.md
-- Respect established patterns
-
-### Code Quality
-- Semantic markup (header, nav, main, section, article, footer)
-- Match tech stack conventions (file naming, folder structure)
-- Self-documenting component APIs
-- Sensible defaults for optional props
-
-## Hard Rules (Enforced)
-
-These are non-negotiable gates from G-Stack's proven design standards:
-
-### Font Blacklist
-**Never use**: Papyrus, Comic Sans, Lobster, Impact, Jokerman
-
-These fonts signal unprofessional design and are rejected automatically.
-
-### Generic Font Caution
-**Requires justification**: Inter, Roboto, Poppins, system-ui
-
-These are overused. If proposing one of these, must state why it's the right choice for this specific product (e.g., "system-ui for internal tool performance" is valid; "Inter because it's popular" is not).
-
-### Color Discipline
-- ONE decisive accent color (not three equal-weight brand colors)
-- Surface colors: 2-3 levels only (page, raised, overlay) — not a long tonal ramp
-- All text/background pairs validated before writing system.md
-
-### Anti-Patterns (AI Slop)
-Avoid generic AI design patterns:
-- Purple gradients on white background
-- Centered everything with no hierarchy
-- Decorative geometric blobs
-- Three-column grid by default
-- Stock "hero with form on right" layout (unless genuinely appropriate)
-
-## Skill Discovery
-
-Skills are symlinked for flat discovery:
-
-```bash
-# From system/skills/ (flat discovery layer)
-ls -la skills/ | grep design
-lrwxr-xr-x  design-system-create -> ../skills-src/design/ux/design-system-create
-lrwxr-xr-x  design-explore-variants -> ../skills-src/design/ux/design-explore-variants
-lrwxr-xr-x  design-implement -> ../skills-src/design/ux/design-implement
-```
-
-Invoke with:
-- `/agent-coding-skills:design-system-create`
-- `/agent-coding-skills:design-explore-variants`
-- `/agent-coding-skills:design-implement`
-
-Or use short names if skill discovery is configured.
-
-## Relationship to ui-ux-pro-max
-
-The existing `ui-ux-pro-max` skill becomes a **reference resource** rather than a workflow skill:
-
-**What ui-ux-pro-max provides:**
-- 67 styles catalog (glassmorphism, brutalism, minimalism, etc.)
-- 96 color palettes by product type
-- 57 font pairings with personality matching
-- 99 UX guidelines in 8 priority categories
-- 25 chart types with library recommendations
-- Stack-specific guidance (13 frameworks)
-
-**How the new skills use it:**
-
-1. **design-system-create** queries it for:
-   - Font pairing recommendations (typography search)
-   - Color palette suggestions (color search by product type)
-   - Style direction (style search by category)
-
-2. **design-implement** enforces its:
-   - Priority 1-4 rules (accessibility, touch, performance, layout)
-   - Pre-delivery checklist (no emoji icons, cursor-pointer, contrast)
-
-3. **All skills** follow its:
-   - WCAG AA standards
-   - Touch target minimums
-   - Responsive breakpoints
-
-**Search interface:**
-```bash
-python3 system/skills-src/design/ux/ui-ux-pro-max/scripts/search.py [domain] --query "[terms]"
-```
-
-Domains: product, style, typography, color, landing, chart, ux, react, web
-
-## Comparison to G-Stack
-
-What we preserved:
-- ✓ Consultative design system creation (not a form wizard)
-- ✓ Multi-variant exploration with feedback loop
-- ✓ Clear handoff: system → variants → implementation
-- ✓ Accessibility-first (WCAG gates, semantic HTML)
-- ✓ Design hard rules (font blacklist, contrast, touch targets)
-- ✓ Durability principle (system outlives effort, exploration doesn't)
-
-What we simplified:
-- No taste-profile.json (cross-session preference memory)
-- No browse/design binaries (works with standard tools only)
-- No Pretext-native layout (standard CSS is simpler)
-- No 10-category design review (basic quality in design-implement)
-- No GStack-specific telemetry/routing
-- Three skills instead of four (consultation + shotgun combined concept)
-
-**Result**: Same workflow clarity, simpler tooling, memory-protocol aligned.
-
-## Troubleshooting
-
-**"No design system found"**
-→ Run `/design-system-create` first to establish typography, colors, spacing
-
-**"No approved design found"**
-→ Run `/design-explore-variants` to generate and select a design
-
-**"Component already exists"**
-→ Choose different name or explicitly state you want to overwrite
-
-**"Can't detect tech stack"**
-→ Manually specify stack in design-implement (e.g., "React with Tailwind")
-
-**"Design doesn't match system"**
-→ Variants should use system tokens; if they don't, that's a bug — report it
-
-**"Need different aesthetic"**
-→ Update system.md first (re-run design-system-create with update flag), then regenerate variants
-
-## Examples
-
-See test projects in `.scratch/design-workflow-tests/` (if created) for worked examples.
+**"A design question can't be settled in conversation"** → Route to `prototype`: throwaway variants, decision recorded in `prototypes/<slug>/decision.md`, control returns to the skill that raised it.
