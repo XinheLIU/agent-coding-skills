@@ -1,0 +1,1 @@
+../../init-context/references/canonical-doc-layout.md

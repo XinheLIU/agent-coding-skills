@@ -1,0 +1,16 @@
+{
+  "name": "context-management",
+  "version": "0.1.0",
+  "description": "Initialize, synchronize, and translate shared agent context across runtimes.",
+  "author": { "name": "Xinhe LIU" },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Context Management",
+    "shortDescription": "Shared project context skills.",
+    "longDescription": "Initialize, synchronize, and translate shared agent context across runtimes.",
+    "developerName": "Xinhe LIU",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me manage this project's context."
+  }
+}

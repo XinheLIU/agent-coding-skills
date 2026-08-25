@@ -1,0 +1,10 @@
+{
+  "name": "@xinheliu/pi-context-management",
+  "version": "0.1.0",
+  "description": "Initialize, synchronize, and translate shared agent context across runtimes.",
+  "keywords": ["pi-package", "agent-skills", "context-management"],
+  "license": "MIT",
+  "pi": {
+    "skills": ["./skills"]
+  }
+}
