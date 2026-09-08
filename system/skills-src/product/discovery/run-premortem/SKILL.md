@@ -1,42 +1,41 @@
 ---
 name: run-premortem
 description: Stress-test a plan by assuming it has already failed. Use when the user wants a pre-mortem, risk analysis, "what could go wrong" review, or devil's-advocate pass on any project or idea.
+disable-model-invocation: true
 ---
 
 # Pre-Mortem Analysis
 
-Last updated: 2026-08-17
+Last updated: 2026-09-08
 
 Run a 5-phase "project autopsy" starting from an assumed total failure, then produce a
-structured Markdown report.
+risk analysis that enriches shared HTML product memory.
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+
 ```text
-Layer:    working — the risk analysis behind the plan
-Owns:     <work-root>/<effort>/discovery/premortem.md
-Promotes: edge cases, NFRs → PRD Part 3, via write-prd
+Layer:       working
+Contributes: risks, mitigations, constraints, monitoring metrics, linked gaps, assumptions, questions
+Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
+Promotes:    accepted mitigations, edge cases, NFRs and monitoring decisions → product.html, via write-prd
 ```
 
-Read `docs/agents/memory.md`, the active `state.md`, `discovery/mvp.md` (scope axes, P0 list,
-Not-To-Do list), and `discovery/demand.md` (demand type and evidence grade) when present. Write
-risks, evidence, scores, prevention actions, and monitoring signals without duplicating the
-scope. Update `state.md` with the artifact pointer.
+Read the supplied plan or existing scope, relevant demand evidence, capabilities, gaps, and risks. Enrich existing failure scenarios before adding new ones. Hypothetical failures and quotes are exercises, never observed evidence.
 
-See `references/report-template.md` for the exact output format.
-
----
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Phase 1: Set the Gravestone Scene
 
-Jump forward to **6 months from today**. The project has completely collapsed. Internalize all of these as facts before proceeding:
+Jump forward to **6 months from today**. The project has completely collapsed. Use the following as hypothetical prompts for the exercise, adapting them to the actual plan:
 
 - **Data**: Daily active users (DAU) ≈ 0. The GitHub commit history has not been touched in 3 months.
 - **Feedback**: The few users who tried it said *"I don't get how to use this"* or *"It's too slow."*
 - **Personal state**: The developer has lost all motivation to even open the project folder. Talking about it feels like a chore.
 - **Regression**: The developer is back to using Excel, sticky notes, or whatever manual tool the project was meant to replace. Six months of effort were effectively wasted.
 
-Do not soften this. Do not say "might" or "could." Treat the failure as historical fact.
+Write the narrative vividly in the past tense, but label the entire scene and invented quotes as hypothetical. Never attach them as observed evidence or use them to downgrade demand evidence.
 
 ---
 
@@ -61,6 +60,12 @@ Cover at least 7 of these dimensions:
 | Distribution | How does nobody ever find this? |
 | Monetization | Why does this never make money? |
 | Scope | How does feature creep kill it? |
+| Mission / Coherence | How does the product ship its P0 wedge yet fail its mission — features that never cohere into one product, wedge success that never extends? |
+
+For the Mission / Coherence dimension, read any candidate or confirmed `vision` record in
+`overview` (and the claims it links) as input. If none exists, record its absence as a
+finding — do not invent a vision to stress-test. A coherence failure scenario is still
+hypothetical: it never confirms or rejects the vision, and never downgrades demand evidence.
 
 Be specific, not generic. "The value prop is unclear" is weak. "Users open it once, can't figure out how to import their existing notes, and never return" is strong.
 
@@ -94,11 +99,19 @@ Examples of the required format:
 
 ---
 
-## Phase 5: Output the Report
+## Phase 5: Enrich shared risks
 
-Write the final report in Markdown following the template in `references/report-template.md`, with a refreshed `Last updated: YYYY-MM-DD` near the top.
+Read [the report mapping](references/report-template.md). Update risk, metric, constraint, assumption, and question records in `discovery.html`. Match existing failure scenarios by affected capability, trigger, and consequence before adding one. Attach risk scores and mitigation proposals; link shared scope and gaps instead of copying them.
 
-Save to `<effort>/discovery/premortem.md`. Confirm the file path to the user when done.
+A proposed pivot or scope cut stays a proposal. Record user-authorized changes with their basis and route to the appropriate scope skill to reconcile the delta; do not silently rewrite scope or close a gap. Update `state.md` with changed anchors and report the HTML path.
+
+### Verify memory records
+
+- Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
+- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Local `#anchor` links resolve; unrelated records and IDs are preserved.
+- `Last updated` dates are current on changed records and the document.
+- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do
 

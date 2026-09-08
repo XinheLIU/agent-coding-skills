@@ -1,67 +1,50 @@
 # Ideas Workflow
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
-Use this workflow when the problem, product shape, or next product increment is still uncertain.
-Each stage drafts in working memory; durable conclusions are promoted to the tracked product
-docs, and domain memory is updated only when vocabulary or a durable trade-off is resolved.
+Use this workflow when the problem, product shape, or next increment is uncertain. Product skills enrich shared records rather than passing separate reports down a fixed file chain. Read [the product memory contract](../skills-src/craft/context/init-context/references/product-memory.md) for identity, authority, enrichment, promotion, and legacy inputs.
 
 ```text
-WORKING LAYER — <work-root>/<effort>/, git-ignored, dies with the effort
+Greenfield: brainstorm → validate-demand → shape-solution → scope-mvp
+Existing:  map-current-product → validate-demand (when value is disputed)
+                              → scope-product-increment
+Either:    run-premortem (when useful) → write-prd → design gate → engineering
 
-Greenfield lane
+Every analysis enriches relevant records in:
+  <work-root>/<effort>/discovery.html
 
-discovery/ideas.md              (generate-product-ideas, optional entry)
-  → discovery/brainstorm.md     (brainstorm — problem framing + JTBD)
-  → discovery/demand.md         (validate-demand — evidence + demand type + go/no-go)
-  → discovery/solution.md       (shape-solution — user stories as the unit of solution)
-  → discovery/mvp.md            (scope-mvp — scenario x product form x data)
-  → discovery/premortem.md      (run-premortem, optional)
-
-Existing-product lane
-
-discovery/current-product.md    (map-current-product — implemented stories + gaps + evidence)
-  → discovery/demand.md         (validate-demand — active-product improvement evidence, when needed)
-  → discovery/increment.md      (scope-product-increment — ADDED / MODIFIED / REMOVED behavior)
-  → discovery/premortem.md      (run-premortem, optional)
-
-        │ promote on Green verdict, then again as each stage closes
-        ▼
-
-HUMAN LAYER — <product-docs>/<slug>/, git-tracked, outlives the effort
-
-prd.md                          (write-prd — Part 1 at the gate, extended or delta-updated later)
-  → design gate                 (write-prd routes: spec directly, design/ux, design/technical, or brainstorm-feature)
+Accepted conclusions promote early and incrementally to:
+  <product-docs>/<product-slug>/product.html#prd
 ```
 
-`ideate-product` is the router over this chain. Invoke it when the entry point is unclear; it reads `state.md`, names the current stage, and delegates. Invoke a stage skill directly when you already know which one you need.
+The arrows express reasoning dependencies, not mandatory prior skill executions. Any skill can start from supplied context and create partial memory or enrich existing records. A missing file does not establish a missing answer; evidence and decision quality determine readiness. `ideate-product` diagnoses the earliest unresolved question from the relevant records and routes there.
 
-The greenfield chain answers three questions, in order:
+## Greenfield questions
 
-1. **Is the demand real?** — `brainstorm` frames the problem and the job; `validate-demand` grades the evidence and kills the idea if it fails.
-2. **What is the solution?** — `shape-solution` expresses it as user stories, because a story names actor, job, and outcome in one testable unit.
-3. **What is the smallest shippable slice?** — `scope-mvp` resolves scenario x product form x data before cutting scope, since each axis constrains the others.
+1. **Is the problem real?** `brainstorm` frames the user, job, struggle, and desired outcome; `validate-demand` grades evidence and assesses the claim.
+2. **What could solve it?** `shape-solution` enriches personas, proposed capabilities, journeys, and scenarios without replacing observed facts.
+3. **What ships first?** `scope-mvp` resolves scenario × form × data, selected capabilities, exclusions, and the validation assumption.
 
-The existing-product lane answers three different questions:
+## Existing-product questions
 
-1. **What does the product already do?** — `map-current-product` extracts implemented,
-   in-progress, and planned behavior with evidence paths.
-2. **Is this improvement worth doing?** — `validate-demand` grades active-product evidence when
-   the value is uncertain.
-3. **What behavior changes next?** — `scope-product-increment` writes the
-   `ADDED / MODIFIED / REMOVED` delta with acceptance criteria, edge cases, instrumentation, and
-   explicit out-of-scope.
+1. **What exists?** `map-current-product` enriches source-backed current capabilities, gaps, and questions, with inspected coverage and exclusions.
+2. **Does the improvement matter?** `validate-demand` adds user evidence and a scoped assessment when value is uncertain.
+3. **What changes?** `scope-product-increment` links ADDED / MODIFIED / REMOVED behavior, acceptance, instrumentation, and scope decisions to the affected capabilities and gaps.
 
-Start with `generate-product-ideas` only when no candidate has been selected. Skip `run-premortem` for low-stakes efforts; run it when the MVP carries a reputational, migration, or data-integrity risk.
+Every stage can raise or answer relevant shared questions and enrich existing gaps with evidence. Match records by subject and context. Keep current behavior, proposed remedies, accepted commitments, and risk hypotheses distinct. An accepted remedy does not close a gap; verified behavior does. If a premise changes, mark materially dependent conclusions for review rather than silently recomputing them.
 
-`domain-modeling`, `research`, and `prototype` support any stage. Use `wayfinder` instead of forcing a linear brief when the route is larger than one session; it remains outside the product-ideation category.
+`run-premortem` enriches shared risks and mitigation proposals for either lane. It can stress-test a supplied plan standalone. Its Mission / Coherence dimension grills whether the P0 wedge ever adds up to the product's mission, reading any vision record. It does not turn hypothetical failure into evidence or silently cut scope. `domain-modeling`, `research`, and `prototype` support any stage; link their evidence or decisions to the relevant product records. Use `wayfinder` when the unresolved route spans sessions.
 
-Each skill owns one artifact, reads upstream artifacts through `state.md`, and records its downstream transition there. The PRD is product intent, not the implementation spec. The feature-delivery workflow owns the technical handoff; the optional design phase between them is routed by the `write-prd` Design Gate.
+## The vision thread
 
-## Why the PRD sits in a different layer
+Demand verdicts are per-claim; the whole-product mission is tracked as a `vision` record in `overview`, inferred until the user confirms it. On the existing-product lane, `map-current-product` synthesizes candidates from implemented story clusters. On the greenfield lane, `validate-demand` may synthesize one from multiple validated claims or a user-stated mission, and `scope-mvp` persists its ambition-review ideal as a candidate when none exists. `run-premortem` stress-tests coherence against it; `write-prd` promotes only user-confirmed visions to `product.html`, linking the open confirmation question otherwise. A vision authorizes no scope and validates no demand.
 
-Every discovery artifact above is a draft: useful while the effort runs, disposable after it ends. The PRD is not. It answers what the product is for and why it exists — questions that stay open for as long as the code does — so it lives in the tracked product docs rather than the git-ignored work root.
+## Durable intent and the PRD
 
-Run `write-prd` twice rather than once. The first run happens the moment `validate-demand` returns Green: it writes Part 1 and marks the rest `Pending`, putting the validated core idea somewhere permanent while it is fresh. The second extends it once scope and risks are settled. An effort abandoned in between still leaves a record of what was considered and why it stopped, instead of a deleted directory.
+Run `write-prd` as soon as Green demand establishes durable intent, then again as decisions settle. It reconciles accepted records into `product.html`, preserves essential evidence and rationale, and replaces working conclusions with links. The PRD is a human reading index over those records, not a second independently maintained document. Unresolved questions identify exactly what remains unready.
 
-The test for anything else you are tempted to persist: if the work root were deleted today, would the project have lost a fact it still needs? Yes means it belongs in the PRD or an ADR. No means it did its job in working memory.
+Incremental efforts reuse the existing product identity. Resolve both paths from configuration and `state.md`, preserving canonical legacy product documents until an authorized migration is complete. Update state with affected anchors and the next action after each transition.
+
+The design gate in `write-prd` routes to UX, technical design, feature brainstorming, or directly to `spec`. Downstream readers follow the configured product path and accepted capability/scope records, including any blocking questions. Implementation plans stay in working memory.
+
+Before closing an effort, verify that durable intent remains understandable and its essential links resolve without the effort directory. Serialize shared-file writes and preserve unrelated records throughout.

@@ -1,11 +1,12 @@
 ---
 name: brainstorm
 description: Turn an ambiguous idea into a Jobs-to-be-Done brief through Socratic dialogue. Use when the user shares a vague idea, asks "what should I build", wants to explore a concept, or needs requirements discovery.
+disable-model-invocation: true
 ---
 
 # Brainstorm
 
-Last updated: 2026-08-17
+Last updated: 2026-09-08
 
 Turn an ambiguous idea into a Jobs-to-be-Done brief through natural Socratic conversation.
 Ask questions one at a time, understand the context, and build a clear picture before
@@ -19,21 +20,18 @@ This skill adapts the Socratic conversation pattern from [Jesse Hattabaugh's sup
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+
 ```text
-Layer:    working — a draft of the problem, not yet project truth
-Owns:     <work-root>/<effort>/discovery/brainstorm.md
-Promotes: persona, job, struggle → PRD Part 1, via write-prd
+Layer:       working
+Contributes: personas, problems, outcomes, constraints, assumptions, questions
+Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
+Promotes:    persona, job, struggle → product.html, via write-prd
 ```
 
-Read `docs/agents/memory.md`, the active `state.md`, relevant core and human memory, and
-`discovery/ideas.md` when present. Write the resolved job, struggle, moment, outcomes,
-constraints, assumptions, and open questions once. Update `state.md` with the artifact pointer.
+Read existing users/problems, demand findings, relevant capabilities, and any selected idea. Enrich the same persona and problem records; keep feature suggestions proposed and link their unresolved questions.
 
-The brief is disposable; the understanding in it is not. The job statement, the persona, and the
-struggle become project truth when promoted into the tracked product docs. Write
-here as the drafting surface, and do not treat this file as the permanent home of the core idea.
-
-If routing is absent, work in conversation only and recommend `manage-context` before persisting.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Process
 
@@ -64,7 +62,7 @@ Push once when an answer stays generic, but don't interrogate. This is collabora
 Once you understand the idea, present the JTBD brief conversationally:
 
 - **User & Context** — who they are, what situation triggers the need
-- **Job to Be Done** — what they're trying to accomplish (functional / emotional / social dimensions)
+- **Job to Be Done** — what they're trying to accomplish (functional / emotional / social dimensions). Mark each stated need's layer and inferred/confirmed status per `references/need-layers.md`.
 - **Current Struggle** — how they solve it today and where it breaks
 - **Success Outcome** — what changes when this works
 - **Constraints** — technical, organizational, or environmental limits
@@ -73,7 +71,7 @@ Once you understand the idea, present the JTBD brief conversationally:
 
 Keep sections short. A few sentences if straightforward, a paragraph if nuanced. Scale to complexity.
 
-**No feature scoping here.** Feature ideas raised during conversation go into Open Questions.
+**No feature scoping here.** Keep feature ideas as proposed capability records linked to the problem and a decision question; an idea is not itself an unanswered question.
 
 Ask the user if the brief looks right. Revise if needed.
 
@@ -89,7 +87,15 @@ Any failure returns to Phase 1 to sharpen the focus.
 
 Once the brief passes, produce a short summary: what is confirmed, what still needs validation, and the next step.
 
-Persist to `<work-root>/<effort>/discovery/brainstorm.md` and update `state.md` with the artifact pointer.
+Enrich the shared records in `discovery.html`: users/problems for the brief, risks/measures for constraints and outcomes, and questions/assumptions for what remains unresolved. Link existing records rather than repeating them in a separate brief. Update `state.md` with the relevant anchors.
+
+### Verify memory records
+
+- Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
+- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Local `#anchor` links resolve; unrelated records and IDs are preserved.
+- `Last updated` dates are current on changed records and the document.
+- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do
 

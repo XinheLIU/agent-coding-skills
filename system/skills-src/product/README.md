@@ -1,10 +1,10 @@
 # Product
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
-From raw idea or existing codebase to a PRD an engineer can build against. Nine skills form two
-lanes: greenfield product creation and existing-product improvement. This README is the complete
-map — the skill directories carry no READMEs of their own.
+From raw idea or existing codebase to durable product intent an engineer can build against. Nine skills contribute to one shared product model through two lanes: greenfield creation and existing-product improvement.
+
+Read [the product memory contract](../craft/context/init-context/references/product-memory.md) for the record schema and update rules. The source contract lives with context initialization; each product skill exposes the same file through a local `references/product-memory.md` symlink so packaged copies can materialize it without separate maintained versions. The shared need-layering framework (surface / deep / fundamental needs, vision synthesis, module fit) lives canonically at [`discovery/validate-demand/references/need-layers.md`](discovery/validate-demand/references/need-layers.md) and is symlinked into the skills that apply it.
 
 ## The lanes
 
@@ -32,7 +32,7 @@ flowchart LR
 `validate-demand` is the kill switch when demand or improvement value is disputed: a Red verdict
 here is the cheapest possible outcome. It is also the first promotion point — a Green verdict is
 where the core idea earns its place in the tracked product docs, via an early `write-prd` run.
-`write-prd` is then the exit: it consolidates every artifact into the document
+`write-prd` is then the exit: it consolidates accepted shared knowledge into the product document
 `engineering/feature/spec` consumes — directly, or through the optional `design/` phase when the
 PRD leaves experience or structure open (see the Design Gate in `write-prd`).
 
@@ -64,7 +64,7 @@ stories from an existing codebase with no prior discovery.
 **`brainstorm`** — turns an ambiguous idea into a Jobs-to-be-Done brief through Socratic
 dialogue: who the user is, what job they hire the product for, how they solve it today,
 and what constrains any solution. Asks questions one at a time, keeps it conversational,
-and stops before feature scoping. Owns `discovery/brainstorm.md`. **Credit: adapted from
+and stops before feature scoping. Enriches shared personas, problems, constraints, assumptions, and questions. **Credit: adapted from
 [Jesse Hattabaugh's superpowers brainstorming skill](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md)
 for the Socratic conversation pattern.**
 
@@ -74,60 +74,62 @@ choose you), classifies the demand as painkiller / reward / vitamin, slices to a
 segment, and issues a traffic-light verdict with three concrete next steps. Green promotes the
 core idea via an early `write-prd` run and then proceeds to `shape-solution` for greenfield
 work, or `scope-product-increment` for active-product improvements; Red stops the effort or
-sends it back to `brainstorm`, promoting nothing. Owns `discovery/demand.md`.
+sends it back to `brainstorm`, promoting nothing. Enriches scoped demand assessments and evidence, including existing gaps and questions.
 
 For active-product improvements, it grades support tickets, analytics, usage funnels, churn,
 lost-deal notes, stakeholder evidence, and observed sessions before an increment is scoped.
 
+The verdict is per-claim. When multiple validated claims accumulate for one product, or the
+user states a larger mission, it synthesizes a candidate `vision` record (greenfield Vision
+Synthesis rules in `references/need-layers.md`) — inferred, linked to its claims, and paired
+with an open confirmation question. It never confirms the vision or lets a Green stand in for
+whole-product validation.
+
 **`map-current-product`** — the existing-product baseline. Reads product docs and code to
-extract product-facing roles, routes/flows, implemented user stories, in-progress work, planned
-work, gaps, and source evidence. It does not scope future changes; it gives
+extract product-facing roles, routes/flows, implemented user stories with layered needs
+(surface / deep / fundamental), candidate product visions synthesized from the story set and
+confirmed with the user in one consolidated message, module need-fit and vision-resilience
+verdicts, in-progress work, planned work, gaps, and source evidence. It does not scope future
+changes; it gives
 `scope-product-increment`, `shape-solution`, and `write-prd` a reliable picture of what exists
-today. Owns `discovery/current-product.md`. **Credit: adapts PM-Skills user-story discipline,
+today. Enriches source-backed current capabilities, journeys, gaps, questions, and coverage. **Credit: adapts PM-Skills user-story discipline,
 OpenSpec brownfield-first exploration, and the prior `shape-solution` codebase inventory into a
-standalone artifact.**
+standalone analysis.**
 
 **`run-premortem`** — assumes the project has already failed 6 months out, then works
-backward to root causes, scored risks, and prevention strategies. Lives in `discovery/`
+backward to root causes, scored risks, and prevention strategies. Its Mission / Coherence
+dimension reads any vision record and asks how the product could ship its wedge yet fail its
+mission. Lives in `discovery/`
 but runs late in the pipeline: it reads the MVP scope and demand evidence, so it is most
 effective after `scope-mvp` and immediately before `write-prd`. Also works standalone on
-any plan. Owns `discovery/premortem.md`.
+any plan. Enriches shared risks, mitigation proposals, assumptions, and monitoring measures.
 
 **`ideate-product`** — the router. Diagnoses which question is actually open across the
 greenfield and existing-product lanes by reading the effort state and existing artifacts, then
-routes to the owning skill. It performs no analysis and owns no artifact.
+routes to the owning skill. It performs no analysis and owns no artifact; readiness comes from relevant evidence, decisions, and unresolved questions, not file existence.
 
 ### Definition (`definition/`) — what exactly are we building?
 
 **`shape-solution`** — turns a validated demand or current-product baseline into a concrete
 solution shape: a 3D Persona, a 4-Act Narrative, a 4-Stage User Journey, and the scenarios the
-solution must cover. Output depth adapts to complexity — Markdown for simple ideas, Mermaid
-diagrams and optional HTML demos for complex systems. It consumes `current-product.md` when
-existing-product behavior matters instead of re-reading the whole codebase. Owns
-`discovery/solution.md`.
+solution must cover. Output depth adapts to complexity within shared HTML; complex systems may need diagrams and illustrative demos. It enriches existing personas, desired capabilities, journeys, gaps, and questions while preserving observed behavior.
 
 **`scope-mvp`** — resolves the three scope axes (scenario × product form × data
 availability), then triages features into P0 (build now), P1/P2 (not yet), and Not-To-Do
 (never for this MVP), anchored to one falsifiable core assumption. Includes an ambition
-review that challenges whether the scope is the right bet, not just a complete one. It stays
-greenfield/MVP-focused; existing-product iteration routes to `scope-product-increment`. Owns
-`discovery/mvp.md`.
+review that challenges whether the scope is the right bet, not just a complete one — reading
+the product's vision record as the 12-month ideal, or persisting its own ideal as a candidate
+vision when none exists. It stays
+greenfield/MVP-focused; existing-product iteration routes to `scope-product-increment`. Enriches shared scope decisions, capability priorities, assumptions, and measures.
 
 **`scope-product-increment`** — scopes active-product improvement as an explicit
-`ADDED / MODIFIED / REMOVED` behavior delta against `current-product.md` or the PRD. It records
+`ADDED / MODIFIED / REMOVED` behavior delta against source-backed current capabilities or accepted product intent. It records
 P0/P1/out-of-scope, acceptance criteria, edge cases and recovery, instrumentation, success
-metrics, and refinement notes. Owns `discovery/increment.md`. **Credit: adapts PM-Skills
+metrics, and refinement notes. Enriches capability deltas, acceptance, scope decisions, questions, and measures. **Credit: adapts PM-Skills
 acceptance criteria, edge-case, instrumentation, and refinement-note patterns; OpenSpec delta
 language; and gstack scope postures with explicit opt-in for scope changes.**
 
-**`write-prd`** — the synthesizer, and the pipeline's one promotion step. Consolidates
-completed artifacts into a single AI-executable PRD, mapping each upstream output to its PRD
-section and asking only for what is genuinely missing. It links or condenses; it never
-silently reclassifies facts owned upstream. Owns `<product-docs>/<slug>/prd.md` — the only
-product artifact in a tracked layer. Runs early (Part 1 only) once demand is validated, then
-extends as later stages close. In delta mode, it preserves an existing PRD and applies a scoped
-product increment through an Update Log entry and minimal section edits. Use `spec` instead
-when you want a technical feature specification.
+**`write-prd`** — consolidates durable product knowledge in `<product-docs>/<product-slug>/product.html`. Its PRD reading index links canonical records instead of maintaining a separate summary document. It promotes accepted conclusions with necessary rationale and evidence, preserves IDs and user edits, and replaces working conclusions with pointers. A user-confirmed vision promotes to `overview`; an inferred candidate stays working with its confirmation question linked. Run early after Green demand, then again as scope settles or an increment is accepted. It can also consolidate explicit standalone inputs without inventing missing validation or scope.
 
 ## Handoff to design
 
@@ -152,64 +154,49 @@ entry point is `design/technical/`.
 
 Both branches may run for the same effort. See `design/README.md` for the full routing table.
 
-## Two layers, one boundary
+## Shared knowledge, two lifetimes
 
-The pipeline writes into two layers, and the split is the thing to understand before using
-any of these skills.
-
-| | Working layer | Human layer |
+| Document | Holds | Lifetime |
 | --- | --- | --- |
-| Answers | *How is this effort going?* | *What are we building, and why?* |
-| Holds | Discovery drafts, evidence trails, prototype records | The PRD |
-| Path | `<work-root>/<effort>/` — default `.scratch/` | `<product-docs>/<slug>/` — default `docs/product/` |
-| Git | Ignored | Tracked |
-| Lifetime | Dies with the effort | Outlives it |
+| `<work-root>/<effort>/discovery.html` | Findings, proposals, assessments, evidence, and unresolved analysis | Working; ignored and compacted when the effort ends |
+| `<product-docs>/<product-slug>/product.html` | Durable product understanding, accepted intent, necessary evidence, and PRD reading index | Human; tracked and shared across increments |
 
-Seven of the nine skills write only to the working layer. Their output is a draft — genuinely
-useful while the effort runs, and genuinely disposable after. `write-prd` is where their durable
-conclusions cross into the tracked layer; `ideate-product` writes nothing.
+`state.md` points to the relevant records and maps the effort to its product. Increments reuse the product identity. Existing Markdown product documents remain readable and canonical until an authorized migration reconciles their content and updates routing; do not create a competing HTML copy.
 
-The test for which layer something belongs in: **if the work root were deleted today, would
-the project have lost a fact it still needs?** A demand verdict, a persona, a Not-To-Do list —
-yes, those must survive. The 5-Whys chain that produced the verdict, the three personas
-considered and rejected, the axis-coherence check — no. Those did their job.
+HTML is the semantic source for these two documents. Skill instructions and engineering task state retain their existing formats. There is no Markdown or hidden JSON twin. Native headings, tables, `<details>`, stable IDs, and links serve both human reading and targeted agent edits.
 
-This is why `write-prd` is recommended right after the demand gate rather than only at the
-end. The moment `validate-demand` returns Green, the project has a validated reason to exist,
-and that reason should not live in a directory that `rm -rf` reclaims. Efforts abandoned
-mid-pipeline still leave a record of what was considered and why it stopped.
+## How skills enrich the same model
 
-## How they work together
+Navigation groups cover users/problems, capabilities/journeys, gaps/opportunities, questions/assumptions, evidence, scope/decisions, and risks/measures. Groups are not exclusive skill territories. Records use stable subject IDs, such as `capability-export`, `gap-export-feedback`, or `question-export-channel`.
 
-Every skill follows the same shared-memory contract, which is what makes the pipeline
-composable. Each declares its layer, the one artifact it owns, and what it promotes:
+Every product skill can contribute relevant observations, evidence, gaps, and questions. Specialized methods determine assessment authority: demand validation grades demand; scope skills assess commitments; premortem assesses risks; PRD consolidation promotes accepted intent. No contributor silently overrides another assessment or a user decision.
 
-1. **One skill, one artifact.** Each skill writes exactly one file and never edits an
-   upstream one — if a brief is wrong, it names the conflict and recommends re-running the
-   owning skill.
-2. **Read before write.** Each skill reads `docs/agents/memory.md`, the active `state.md`,
-   the PRD when one exists, and the upstream artifacts it depends on, so nothing is
-   re-derived or re-asked.
-3. **Promotion is one-way.** Facts move from the working layer up to the PRD or an ADR,
-   never back down. The working artifact keeps a link, not a second copy.
-4. **Explicit handoff.** After writing, each skill updates `state.md` with its artifact
-   pointer, so any later session can resume exactly where the effort stopped.
-5. **Graceful degradation.** If memory routing is absent, skills work in conversation only
-   and recommend `manage-context` before persisting.
+For example:
 
-The artifact chain, in execution order:
+| Run | Shared contribution |
+| --- | --- |
+| Map current product | Creates a gap: export completion is invisible; records inspected web routes and code evidence |
+| Validate demand | Adds support evidence of repeated retries to that same gap; assesses importance for the affected users |
+| Shape solution | Links a proposed notification and an unanswered channel question |
+| Scope increment | Adds the authorized in-app notification decision and acceptance criteria; email stays deferred |
+| Premortem | Adds a linked lost-notification risk and recovery proposal |
+| Write PRD | Promotes accepted intent and essential evidence, leaving working pointers |
 
-| # | Skill | Artifact | Layer | Promotes |
-| --- | --- | --- | --- | --- |
-| 1 | `brainstorm` | `discovery/brainstorm.md` | working | Persona, job, struggle |
-| 2 | `validate-demand` | `discovery/demand.md` | working | Demand type, grade, verdict |
-| 2B | `map-current-product` | `discovery/current-product.md` | working | Implemented stories, gaps, evidence |
-| 3 | `shape-solution` | `discovery/solution.md` | working | User stories, first-use moment |
-| 4A | `scope-mvp` | `discovery/mvp.md` | working | Requirements, scope, Not-To-Do |
-| 4B | `scope-product-increment` | `discovery/increment.md` | working | Behavior delta, acceptance, instrumentation |
-| 5 | `run-premortem` | `discovery/premortem.md` | working | Edge cases, NFRs |
-| 6 | `write-prd` | `<product-docs>/<slug>/prd.md` | **human** | — *(is the promotion)* |
-| — | `ideate-product` | none (router) | — | — |
+The gap stays open until observed implementation resolves it. A deferred feature is not disproved demand, an inferred persona is not an observed user, and a hypothetical risk is not incident evidence.
+
+Standalone runs create only the useful partial records they can establish. Later skills match subjects before enriching them; reruns do not multiply records. Questions retain answers and evidence when resolved. A changed premise marks materially dependent conclusions for review. Record inspected coverage so missing content is not mistaken for absent behavior.
+
+Shared files require serialized writes: concurrent analysis may prepare patches, but one coordinator applies them against current records. Tags provide identity, not locking.
+
+## Promotion and handoff
+
+Apply the durability test: if deleting the effort would lose needed product intent or rationale, promote it. `write-prd` moves or reconciles accepted conclusions into durable records, preserves essential evidence there, verifies links, then replaces working conclusions with pointers. No necessary durable link may depend on a disposable effort file.
+
+The PRD is a reading order over these records: document info → problem/goals → solution overview → detailed requirements → launch. Partial readiness is expressed through specific open questions and their blocking effects. Design and engineering consume the configured product path and relevant anchors; they do not require a particular prior skill to have run.
+
+## Behavioral checks
+
+[Shared-memory regression scenarios](evals/shared-memory.json) cover standalone partial analysis, repeated enrichment, context-sensitive identity, changed premises, durable promotion, legacy migration, and stale patches. They define behavioral acceptance cases for isolated skill evaluations; they are not an automated runner.
 
 ## Credit
 

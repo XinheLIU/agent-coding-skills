@@ -1,11 +1,12 @@
 ---
 name: validate-demand
 description: Grade the evidence behind a product claim and issue a go/no-go verdict. Use when the user asks to validate an idea, critique a concept, check product-market fit, validate an active-product improvement, or decide whether something is worth building.
+disable-model-invocation: true
 ---
 
 # Validate Demand
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
 Decide whether a product idea has real demand behind it, and say so plainly.
 
@@ -17,34 +18,22 @@ Be direct. A clear Red that redirects a month of work is worth more than a hedge
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+
 ```text
-Layer:    working — the evidence trail behind the verdict
-Owns:     <work-root>/<effort>/discovery/demand.md
-Promotes: demand type, evidence grade, verdict → PRD Part 1, via write-prd
+Layer:       working
+Contributes: demand assessments, claim evidence, persona refinements, gaps, assumptions, questions
+Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
+Promotes:    scoped demand verdict, evidence grade, persona and job → product.html, via write-prd
 ```
 
-Read `docs/agents/memory.md`, the active `state.md`, `discovery/brainstorm.md`, and
-`discovery/current-product.md` when present. Write the graded evidence, zones, demand type,
-slicing, verdict, unsupported assumptions, and next validation action once. Update `state.md`
-with the artifact pointer.
+Read the target problem and actor, existing demand assessments, relevant current behavior, and evidence. Add support or contradictions to existing records; distinguish a code observation from evidence of user demand.
 
-Reference the upstream brief rather than restating it. Do not edit `brainstorm.md`; when the brief is
-wrong, name the conflict and recommend re-running `brainstorm`.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
-### This gate is the first promotion point
+### First promotion point
 
-A Green verdict is the moment the core idea stops being speculation. Promote it now,
-before designing a solution, so the persona, job, and demand verdict land in the tracked product
-docs while they are fresh.
-
-The reason is durability, not ceremony. Up to this point everything lives under a git-ignored
-work root — deleting it costs nothing. After this point the project has a validated reason to
-exist, and that reason should not be one directory removal away from gone.
-
-On Yellow or Red, promote nothing. Record the verdict and what would have to be true to revisit
-it, and leave it in working memory. A killed or parked idea's value is the record of why.
-
-If routing is absent, work in conversation only and recommend `manage-context` before persisting.
+On Green, route to `write-prd` to preserve the validated claim, persona, job, and supporting evidence before continuing. On Yellow or Red, retain the assessment and the evidence needed to revisit it in working memory. If a new assessment challenges already accepted intent, record a linked review finding for that intent in discovery and state; do not erase or demote it.
 
 ## Invocation
 
@@ -52,8 +41,7 @@ If routing is absent, work in conversation only and recommend `manage-context` b
 /validate-demand [idea or path] [--stage pre-product|active-users|paying|internal]
 ```
 
-Input resolution: positional argument or path → the claim; else `discovery/brainstorm.md`; else
-`discovery/ideas.md`; else ask what should be validated. Infer `--stage` from context when unset.
+Input resolution: positional argument or path → the claim; else shared problem and persona records; else a supplied candidate idea; else ask what should be validated. Infer `--stage` from context when unset.
 
 ## Behavioral Flow
 
@@ -68,7 +56,7 @@ when an answer stays generic.
 
 For active products, prefer evidence that reflects real use: support tickets, analytics,
 usage funnels, churn or lost-deal notes, stakeholder reports, customer-success notes, observed
-sessions, sales/support transcripts, and production behavior recorded in `current-product.md`.
+sessions, sales/support transcripts, and production behavior recorded in current capability records.
 Treat internal stakeholder urgency as evidence of business priority, not proof of user pain,
 unless it is tied to observed user behavior or operational cost.
 
@@ -85,7 +73,7 @@ Scale and diagnostic detail: `references/framework.md`.
 Assign 🟢 / 🟡 / 🔴 to each, citing the evidence level supporting it:
 
 - **Q1 Who is the user?** — specific enough to phone and pitch in 10 seconds?
-- **Q2 Where is the pain?** — torture or want? Run the 5-Whys until the chain terminates at a noun (a fear, a loss, an identity), not a verb.
+- **Q2 Where is the pain?** — torture or want? Run the 5-Whys until the chain terminates at a noun (a fear, a loss, an identity), not a verb — this is the descent from surface to fundamental need (`references/need-layers.md`); record which layer the terminus reached.
 - **Q3 Why choose you?** — a named competitor gap, or the 3× Rule met with real numbers. Red by default; silence here is a finding.
 
 A zone cannot be Green on level 4 or 5 evidence. Cap it at Yellow and say why.
@@ -95,7 +83,7 @@ A zone cannot be Green on level 4 or 5 evidence. Cap it at Yellow and say why.
 Painkiller / Reward / Vitamin, via: *what happens if the user goes without this for 6 months?*
 Then compute the Pain Score (Frequency × Severity, max 25).
 
-This skill owns the classification. Downstream skills cite it and never reassign it.
+This skill produces the scoped classification. Other skills cite it and can attach contrary evidence or request reassessment; they never silently reassign it.
 
 ### 4. Slice
 
@@ -109,6 +97,11 @@ carries far stronger evidence.
 
 The verdict is the **lowest zone across the three questions**. One Red makes it Red.
 
+The verdict is per-claim: it grades this specific claim, actor, and scenario. It does not
+validate the whole-product vision or mission — several Green wedges do not add up to a
+validated product. Record the unvalidated mission as a linked open question or assumption,
+never as a byproduct of a Green.
+
 | Verdict | Meaning | Route |
 | --- | --- | --- |
 | 🟢 Green | All three Green, none resting on assumption | Promote the core idea, then design the solution |
@@ -121,49 +114,33 @@ Promotion is not downstream work — it records what this gate already establish
 offered only on Green. On Yellow the idea has not earned a place in the tracked layer yet; the
 evidence gap is the work. Do not use the PRD as a way around the gate.
 
-### 6. Write the artifact
+### 6. Enrich shared memory
 
-Persist to `<work-root>/<effort>/discovery/demand.md`:
+Create or update the demand assessment for this specific claim, actor, and scenario. Include the verdict and reason, Three Soul Question zones with supporting evidence levels, demand type, Pain Score, beachhead, and day-in-the-life assessment. Link shared personas/problems instead of copying them. Record the layered chain on the problem record — surface ask, deep motivation, fundamental terminus — preserving its identity.
 
-```markdown
-# Demand Validation: [Name]
+Attach claim-level evidence to existing subjects. Enrich existing gaps with evidence of importance; put unsupported assumptions and the cheapest tests in shared assumption/question records. Answer an existing question when the assessment establishes its answer, with its basis. A gap remains open until its own resolution condition is met.
 
-Last updated: [YYYY-MM-DD]
+Record three concrete next validation actions linked to the weakest claims. Each must be executable this week and raise a specific claim's evidence level; "do more research" is not an action. Write HTML records in `discovery.html`, not a separate demand report.
 
-## Verdict
-[🟢 / 🟡 / 🔴] — [one sentence]
+When the effort holds multiple validated claims for the same product, or the user states a
+larger mission, synthesize or enrich a candidate `vision` record in `overview` using the
+Vision Synthesis method in `references/need-layers.md` (greenfield rules apply when no
+implemented stories exist). Mark it inferred, link the claims that imply it, and pair it
+with an open question for user confirmation. The vision stays an inference; only the user
+confirms it, and it validates no demand.
 
-## Evidence Summary
-| Claim | Level | Basis |
-| --- | --- | --- |
+### Verify memory records
 
-## Three Soul Questions
-| Question | Zone | Finding | Evidence level |
-| --- | --- | --- | --- |
-
-## Demand Type
-[Painkiller / Reward / Vitamin] · Pain Score [F × S = N] · [commercial implication]
-
-## Slicing
-**Beachhead**: [segment, and why]
-**Day in the life**: [trigger → friction → moment → first interaction → outcome]
-
-## Unsupported Assumptions
-| Assumption | Current level | Cheapest test to raise it |
-| --- | --- | --- |
-
-## Next Validation Action
-1. [Concrete, this week, names who to talk to or what to observe]
-2. …
-3. …
-```
-
-Every next step must be executable this week and must raise a specific claim's evidence level.
-"Do more research" is not a next step.
+- Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
+- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Local `#anchor` links resolve; unrelated records and IDs are preserved.
+- `Last updated` dates are current on changed records and the document.
+- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do
 
 - **Does not frame the problem** — it grades a claim, it does not discover one
+- **Does not confirm a vision** — it may synthesize a candidate as inference; only the user confirms it
 - **Does not design the solution** — it says whether to proceed, not what to build
 - **Does not scope the MVP** — it issues a verdict, not a feature list
 - **Does not scope active-product increments** — `scope-product-increment` owns the behavior delta

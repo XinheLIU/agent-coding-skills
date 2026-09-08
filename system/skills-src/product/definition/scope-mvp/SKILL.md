@@ -1,11 +1,12 @@
 ---
 name: scope-mvp
 description: Triage a greenfield or new-product MVP into disciplined first-slice scope anchored to one falsifiable assumption. Use when the user asks to scope an MVP, prioritize features for a new product, decide what to build first, cut scope, or plan a validation sprint; for existing-product improvements, use scope-product-increment.
+disable-model-invocation: true
 ---
 
 # Scope MVP
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
 Transform a validated solution into a disciplined MVP scope. The output is a triage — what to
 build, what to defer, what never to build — anchored to a single falsifiable assumption and
@@ -23,31 +24,20 @@ shape onto existing behavior.
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+
 ```text
-Layer:    working — the triage and the reasoning behind it
-Owns:     <work-root>/<effort>/discovery/mvp.md
-Promotes: requirement list, scope boundaries, Not-To-Do list → PRD Part 1, via write-prd
+Layer:       working
+Contributes: scope decisions, capability priorities, validation assumptions, exclusions, metrics, questions
+Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
+Promotes:    accepted scope, rationale, exclusions, success measures → product.html, via write-prd
 ```
 
-Read `docs/agents/memory.md`, the active `state.md`, and the upstream artifacts —
-`discovery/demand.md` for the demand classification and evidence grade, `discovery/solution.md`
-for the primary scenario, user stories, and first-use moment. Read
-`<product-docs>/<slug>/prd.md` when it exists, and triage against the stories recorded there.
+Read demand assessments, scenarios, capabilities, constraints, risks, and accepted scope. Resolve scope axes and link selected capability IDs; do not rewrite their current behavior or demand grade.
 
-Preserve the owned demand classification, persona, and journey. Write only axis resolution,
-scope, validation assumptions, exclusions, ambition review, and success measures. Update
-`state.md` with the artifact pointer.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
-The Not-To-Do list is the most durable thing this skill produces and the easiest to lose. It
-answers a question that recurs for years — *why doesn't this product do X?* — and the answer is
-worthless if it dies with the work root. Promote the requirement list, the in/out-of-scope
-split, and the Not-To-Do list to the tracked layer. The axis reasoning and the ambition review
-can stay here; the commitments cannot.
-
-If `discovery/demand.md` records evidence grade D (assumption only), stop and say so: scoping
-an MVP for unvalidated demand produces a precise answer to the wrong question.
-
----
+If demand evidence is assumption-only, disputed, Yellow, or Red, record the blocking claim and route to `validate-demand` before treating scope as a validated commitment. If the user already authorized an exploratory scope, keep it proposed and preserve the unresolved validation question. Absence of an earlier skill file alone is not a blocker.
 
 ## Workflow
 
@@ -59,7 +49,7 @@ Identify the single riskiest bet. If the user hasn't stated it, derive it:
 > **[our solution]** to **[key action]** because it is **[specific advantage]** than their
 > current way of doing things."
 
-Reference the demand classification from `discovery/demand.md` — do not reclassify. If the
+Reference the demand classification from demand assessment records — do not reclassify. If the
 input is ambiguous, confirm the assumption with the user before continuing. A fuzzy assumption
 produces a fuzzy MVP.
 
@@ -69,8 +59,8 @@ Before any feature triage, locate the MVP in scope space. Read `references/axes.
 selection tables and coherence checks.
 
 1. **Scenario** — read the primary scenario and its five properties from
-   `discovery/solution.md`. Name the binding constraint (the property that rules out the most
-   options). Do not re-derive the scenario; if `solution.md` lacks the properties, send it back.
+   proposed capability and journey records. Name the binding constraint (the property that rules out the most
+   options). Reuse established scenario properties. If a necessary property is unknown, resolve that question from supplied context or with the user; route to `shape-solution` only when solution shaping is needed.
 2. **Product form** — choose the cheapest form that can produce the first-use moment. Apply the
    Wizard of Oz test: if a human could do this manually for the first 10 users, that is the form.
 3. **Data** — list every element the core promise depends on and grade each A–D. Any grade C or
@@ -110,6 +100,12 @@ Map the trajectory:
 CURRENT USER EXPERIENCE → PROPOSED MVP → 12-MONTH IDEAL
 ```
 
+Read an existing candidate or confirmed `vision` record in `overview` as the 12-month ideal
+when one exists — reference it, do not reclassify or confirm it. When none exists, persist the
+ideal this step constructs as a candidate `vision` record (inferred, linked to the claims and
+scope that imply it) instead of leaving it as ephemeral prose; the Vision Synthesis rules in
+`references/need-layers.md` govern what it may rest on.
+
 State whether this MVP creates a path toward the ideal or a local optimum that will have to be
 thrown away. Then select one posture from the evidence — ask the user only when their intent
 doesn't already make it clear:
@@ -144,61 +140,27 @@ metrics to avoid explicitly.
 
 ---
 
-## Output Format
+## Output: enrich shared scope
 
-Write to `<work-root>/<effort>/discovery/mvp.md`:
+Write HTML records in `discovery.html`:
 
-```markdown
-# MVP Scope: [Product Name]
+- Link the core validation assumption to the existing problem and demand assessment; do not copy or regrade demand.
+- Record the scenario × form × data resolution and binding constraint as a scope decision linked to the primary scenario.
+- Link P0/P1/P2 and Not-To-Do decisions to capability IDs, including rationale and revisit triggers. Keep current implementation status separate from priority and commitment.
+- Record the ambition review and accepted/rejected/deferred alternatives with the user's decision basis. Proposed changes remain proposed until authorized.
+- Persist the ambition review's 12-month ideal as a candidate `vision` record when no vision record exists (see Step 5); link it, never confirm it.
+- Add validation-sprint actions and success metrics linked to the assumption they test, with thresholds when established.
+- Enrich existing questions, assumptions, risks, and gaps rather than appending another "Open Questions / Risks" copy. Selecting a remedy does not close the original gap.
 
-Last updated: [YYYY-MM-DD]
+Preserve capability descriptions, unrelated scope, and accepted constraints. Update `state.md` with the records changed and unresolved blockers.
 
-## Core Assumption
-> [Filled template]
+### Verify memory records
 
-Demand type: [from discovery/demand.md] · Evidence grade: [A/B/C]
-
-## Scope Axes
-For **[primary scenario]**, delivered as a **[form]**, using **[data at grade X]**.
-
-| Axis | Resolution | Why |
-| --- | --- | --- |
-| Scenario | ... | Binding constraint: ... |
-| Form | ... | Cheapest form producing the first-use moment |
-| Data | ... | Grades: ... · Substitutes: ... |
-
-## What We're Building (P0)
-| Feature | Why it's P0 |
-| --- | --- |
-
-## What We're NOT Building Yet (P1/P2)
-| Feature | When to revisit |
-| --- | --- |
-
-## What We're NEVER Building for This MVP
-- ...
-
-## Ambition Review
-Trajectory: [current] → [MVP] → [12-month ideal]
-Posture: [Hold / Reduce / Selective expand / Expand]
-
-| Proposal | Decision | Reason |
-| --- | --- | --- |
-
-Evidence that would change this: ...
-
-## 4-Week Validation Sprint
-- **Week 1–4:** ...
-
-## Success Metrics (Not Vanity)
-- Metric: [what it proves]
-- ~~Vanity metric to avoid~~
-
-## Open Questions / Risks
-- ...
-```
-
----
+- Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
+- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Local `#anchor` links resolve; unrelated records and IDs are preserved.
+- `Last updated` dates are current on changed records and the document.
+- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## Key Principles
 

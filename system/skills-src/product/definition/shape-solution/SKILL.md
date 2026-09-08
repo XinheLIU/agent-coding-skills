@@ -1,11 +1,12 @@
 ---
 name: shape-solution
 description: Turn a validated demand or current-product baseline into a concrete solution shape with user stories, personas, and scenarios. Use when the user asks for personas, user journeys, scenarios, or how a product/feature should work; for user stories derived directly from existing code, use map-current-product first.
+disable-model-invocation: true
 ---
 
 # Shape Solution
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
 Three narrative outputs plus the scenarios they imply — for new ideas and already-mapped
 existing products. One purpose: make the user real enough that every design tradeoff has a
@@ -20,46 +21,36 @@ artifact, because it is what makes scope decisions arguable instead of arbitrary
 3. **4-Stage Journey** — discovery → first use → core habit → long-term dependency
 4. **Scenarios** — the concrete situations the solution must cover
 
-**Output depth is adaptive.** A simple idea or feature produces a Markdown document. A complex
-codebase or multi-persona system produces Mermaid diagrams and optionally an HTML demonstration.
+**Output depth is adaptive.** Both simple and complex work enrich shared HTML records. Complex
+codebases or multi-persona systems may need diagrams and an optional illustrative HTML demo.
 Don't produce more than the situation calls for.
 
 Full framework detail, examples, and failure modes: [references/framework.md](references/framework.md)
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+
 ```text
-Layer:    working — the solution shape while it is still being worked out
-Owns:     <work-root>/<effort>/discovery/solution.md
-Promotes: user stories, first-use moment → PRD Parts 1 and 3, via write-prd
+Layer:       working
+Contributes: desired capabilities, stories, journeys, personas, scenarios, gaps, questions, constraints
+Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
+Promotes:    accepted stories, scenarios, first-use moment, constraints → product.html, via write-prd
 ```
 
-Read `docs/agents/memory.md`, the active `state.md`, and `discovery/brainstorm.md` plus
-`discovery/demand.md` when present. For existing-product work, read
-`discovery/current-product.md`; if a codebase is present but that baseline is missing, route to
-`map-current-product` first instead of exploring the code here. Also read
-`<product-docs>/<slug>/prd.md` when it exists — the demand gate may have already promoted the
-persona and job into it, in which case that is the authoritative statement and this artifact
-elaborates on it rather than restating it.
+Read users/problems, demand assessments, current capabilities and coverage, gaps, and accepted decisions. Enrich shared personas and capabilities with proposed behavior and scenarios; reuse established answers.
 
-Preserve the upstream demand type and verdict; write only the persona, narrative, journey,
-scenarios, and resulting design implications. Update `state.md` with the artifact pointer.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
-The user stories are the durable output here. They outlive this effort because they define what
-the product does for whom — but their tracked home is the PRD, not this file. Write them once
-here; `write-prd` promotes them.
+If a relevant demand assessment is Yellow, Red, disputed, or assumption-only, name the unresolved claim and route to `validate-demand` before treating the solution as validated. A user-authorized exploratory solution can proceed as a proposal with that uncertainty explicit. Do not infer a passed demand gate from document existence.
 
-If `demand.md` shows Yellow or Red, say so and stop. Designing a solution for unvalidated
-demand is the expensive mistake this pipeline exists to prevent.
-
----
 ## Phase 0A — Triage the Input
 
 | Input type | Signals | Entry point |
 | --- | --- | --- |
-| **Upstream artifacts present** | `brainstorm.md` and `demand.md` exist | Harvest them → Phase 0B |
-| **Existing product baseline** | `current-product.md` exists | Read it → Phase 0C → Phase 0B |
-| **Existing codebase with no baseline** | Repo path, project dir, or "what does this app do?" | Stop and route to `map-current-product` |
+| **Upstream artifacts present** | problem and persona records and demand assessment records exist | Harvest them → Phase 0B |
+| **Existing product baseline** | current capability records exist | Read it → Phase 0C → Phase 0B |
+| **Existing behavior needs assessment** | Required behavior lacks source evidence, or the user asks what the app does | Route that assessment to `map-current-product`; reuse any supplied baseline |
 | **Vague idea** | "I want to build X for Y" | Missing all three dimensions → Phase 0B → Phase 1 |
 | **Feature list** | Itemized features, no user context | Have the "what", missing Who + Fear → Phase 0B → Phase 1 |
 | **Partial context** | PRD with some user description or scenarios | Assess gaps → Phase 0B → ask only what is missing |
@@ -94,8 +85,8 @@ Complexity determines output depth. Rate before generating anything.
 
 | Rating | Output |
 | --- | --- |
-| **Simple** | Standard Markdown: persona, narrative, journey, scenarios, story prompt |
-| **Complex** | Markdown + at least one Mermaid diagram; optionally a self-contained HTML demo for UI-heavy features |
+| **Simple** | Semantic HTML records: persona, narrative, journey, scenarios, story prompt |
+| **Complex** | The same records with relevant diagrams; optionally an illustrative HTML demo for UI-heavy features |
 
 When in doubt, start Simple and promote to Complex only if the narrative requires it. A
 diagram for a to-do app is noise; missing one for a multi-role SaaS is a gap.
@@ -103,9 +94,9 @@ diagram for a to-do app is noise; missing one for a multi-role SaaS is a gap.
 ---
 ## Phase 0C — Current Product Baseline
 
-*Run only when `current-product.md` exists. Skip for greenfield ideas.*
+*Run only when current capability records exist. Skip for greenfield ideas.*
 
-Use `map-current-product`'s artifact as the source of truth for implemented stories,
+Use source-backed current capability records for implemented stories,
 in-progress behavior, planned work, and gaps. Do not re-read the whole codebase here unless a
 specific evidence pointer is ambiguous.
 
@@ -113,24 +104,24 @@ Extract only what shaping needs:
 
 - primary and secondary personas already visible in the product
 - implemented user stories that anchor the narrative
+- candidate or confirmed vision records and the deep needs behind implemented stories — the solution shape must serve the deep need, not re-serve the surface ask
 - in-progress or planned behavior that affects the primary scenario
 - gaps that change the user's journey or first-use moment
 
-If the baseline is stale or lacks evidence paths, route back to `map-current-product` instead
-of patching it here.
+If a needed baseline claim is stale or lacks evidence, record that question and route the relevant inspection to `map-current-product`. Enrich linked gaps and proposed journeys within this skill; do not overwrite unsupported current-behavior claims.
 
 ---
 ## Phase 1 — Diagnose Persona Gaps
 
-**Read the upstream artifacts first** (brainstorm, demand, or codebase exploration output).
-They have already established the specific user, the current workaround, the trigger moment,
-and the emotional stakes.
+**Read shared records and supplied context first.** Reuse established user context, workaround, trigger, and emotional stakes. Mark inferred narrative detail rather than treating it as observed persona evidence.
 
 | Dimension | Already answered upstream by |
 | --- | --- |
-| **Who** (surface) | JTBD Pillar 1 user context; validation Q1 zone and beachhead segment; `current-product.md` roles or inferred personas |
-| **What** (behavior) | JTBD Current Pain; validation status-quo evidence; existing features reveal what users currently can do |
-| **Fear** (motivation) | JTBD Task Trilogy emotional/social layers; validation 5-Whys terminus |
+| **Who** (surface) | JTBD Pillar 1 user context; validation Q1 zone and beachhead segment; current capability records roles or inferred personas |
+| **What** (behavior) | JTBD Current Pain; validation status-quo evidence; existing features reveal what users currently can do; deep-layer entries on problem records from `map-current-product` |
+| **Fear** (motivation) | JTBD Task Trilogy emotional/social layers; validation 5-Whys terminus; fundamental-layer entries on problem records and vision records from `map-current-product` |
+
+Layer definitions: `references/need-layers.md`.
 
 Do not re-ask what an upstream artifact or codebase exploration already answers.
 
@@ -218,7 +209,7 @@ Mark the **primary scenario** — the one the MVP must serve. Secondary scenario
 
 When complexity is Complex, also state for the primary scenario: which personas participate,
 which existing features already serve it, and which features are still needed (referencing
-`current-product.md` by name).
+current capability records by name).
 
 ### Story Prompt
 
@@ -254,7 +245,7 @@ Include only systems that are real and named. Don't invent integrations.
 ### Mermaid: Feature Status Map
 
 Show what is implemented, in-progress, and planned. Use subgraphs or node styles to distinguish
-status. Derive this directly from `current-product.md`.
+status. Derive this directly from current capability records.
 
 ```mermaid
 graph LR
@@ -331,92 +322,38 @@ Check every output before presenting. If anything fails, revise it.
 
 | Element | Must pass | Common failure to catch |
 | --- | --- | --- |
-| **Current product baseline** | Three-tier list (implemented / in-progress / planned) is present when existing-product work is in scope | Jumping to narrative without reading `current-product.md` |
+| **Current product baseline** | Three-tier list (implemented / in-progress / planned) is present when existing-product work is in scope | Jumping to narrative without reading current capability records |
 | **Multiple personas** | Each has a 3D card; narrative shows where journeys diverge | All personas collapsed into one generic user |
 | **Diagrams** | Every diagram adds signal not already present in prose | Diagram is a prettier version of an existing table |
 | **System context** | All real external dependencies are named | Internal modules drawn as if they are external systems |
 | **Feature status** | Implemented vs. planned are clearly distinguished | All features shown as equal, regardless of build status |
 | **Architecture constraints** | Stated explicitly as scenario constraints | Multi-tenancy or compliance mentioned once then forgotten |
-| **Gap identification** | At least one integration gap or missing flow is named | Clean inventory that implies the product is further along than it is |
+| **Gap assessment** | Relevant journeys assessed; existing gaps enriched or "no gap found within assessed coverage" recorded with evidence | Inventing a gap to satisfy a quota, or implying unassessed flows work |
 | **HTML demo** | Self-contained, labeled, primary scenario only | Contains placeholder data or external script tags |
 
 If any element feels generic — it probably is. Flag it and offer a sharper version.
 
 ---
-## Output Format
+## Output: enrich the product model
 
-### Simple output
+Persist HTML records in `discovery.html`. The Simple/Complex distinction controls analysis depth, not file format.
 
-```markdown
-Last updated: [YYYY-MM-DD]
+- Enrich shared personas with job context, current workaround, and supported fears; label inferred characterization. Do not replace validated persona facts with fictional narrative details.
+- Link the four-act narrative to its persona and problem. Keep it as an illustrative journey narrative; do not duplicate their canonical definitions.
+- Enrich capabilities with proposed actor/action/outcome stories and five-state interaction coverage where established. Preserve observed current behavior separately.
+- Update primary and secondary journey/scenario records with discovery, first use, core process, long-term value, frequency, session length, participants, connectivity, attention, and the resulting constraints. Reuse scenario IDs when the context matches.
+- Match and enrich gaps or open questions exposed by missing flows and integrations. If evidence shows no gap, record the assessed coverage without inventing one.
+- For complex work, attach system context, feature-status and journey diagrams to the relevant records, linking current capability evidence. Add distinct personas only when their context differs.
 
-## Persona: [Name]
-**Who:** [Exact job title, tech comfort, device/setting]
-**Current Hack:** [Specific tool + where it fails]
-**Fear:** [Named consequence — who finds out, what they lose]
+The narrative and story prompt remain usable human presentations, but point to shared facts. Any optional HTML demo is an illustrative prototype linked from the relevant journey, not a second product-memory document. Update `state.md` with affected record anchors.
 
-## The Story
-**Act 1 — Status Quo:** [Routine, workaround in action, no drama]
-**Act 2 — Breaking Point:** [Specific event where the hack fails publicly]
-**Act 3 — Intervention:** [One named action + time contrast]
-**Act 4 — New Reality:** ["I'm now the person who…" — identity shift]
+### Verify memory records
 
-## User Journey
-**Discovery:** [Trigger + core skepticism + what overcomes it]
-**First Use:** [One action + immediate value + "Aha!" moment]
-**Core Process:** [Repeated trigger + anti-fatigue mechanism]
-**Long-Term Value:** [Identity moment + design implication]
-
-## Scenarios
-**Primary:** [Trigger, who is present, where, what they have at hand, what "done" means]
-| Property | Value |
-| --- | --- |
-| Frequency | |
-| Session length | |
-| Participants | |
-| Connectivity | |
-| Attention | |
-
-**Secondary:** [Briefly — context, not scope]
-
-## Story Prompt
-> "[Complete paragraph — no placeholders]"
-```
-
-### Complex output (extends Simple)
-
-After the Story Prompt, add:
-
-```markdown
-## Feature Inventory
-**Implemented:** [working features from `current-product.md`, one per line]
-**In Progress:** [partial features + where the gap is]
-**Planned:** [roadmap items + where the intent lives]
-
-## Diagrams
-
-### System Context
-[Mermaid diagram]
-
-### Feature Status Map
-[Mermaid diagram — only when codebase is present; otherwise feature dependency map]
-
-### Primary User Journey
-[Mermaid diagram]
-
-## Additional Personas
-[Repeat 3D Persona card + journey delta for each secondary persona]
-
-## Architecture Constraints
-[List constraints that bound the scenarios — auth model, multi-tenancy, compliance, rate limits]
-
-## Design Demo
-[Self-contained HTML — only for UI-heavy products; omit for CLI/API/background services]
-```
-
----
-
-Persist to `<work-root>/<effort>/discovery/solution.md`.
+- Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
+- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Local `#anchor` links resolve; unrelated records and IDs are preserved.
+- `Last updated` dates are current on changed records and the document.
+- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do
 

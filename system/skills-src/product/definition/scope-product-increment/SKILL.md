@@ -1,31 +1,37 @@
 ---
 name: scope-product-increment
 description: Scope a user-visible improvement to an existing product. Use when the user asks to improve, iterate, refine, modify, or extend an existing app/product/feature; convert current-product gaps into a next increment; or define ADDED/MODIFIED/REMOVED behavior, acceptance criteria, edge cases, instrumentation, and success metrics for active-product work.
+disable-model-invocation: true
 ---
 
 # Scope Product Increment
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
 Turn an existing-product improvement into a behavior delta the team can build and measure. The output says what changes for users, what stays out of scope, how done will be tested, and what evidence will prove the increment worked.
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+
 ```text
-Layer:    working — the behavior delta for this product increment
-Owns:     <work-root>/<effort>/discovery/increment.md
-Promotes: behavior delta, acceptance criteria, edge cases, instrumentation, metrics, out-of-scope → PRD via write-prd
+Layer:       working
+Contributes: behavior deltas, scope decisions, acceptance criteria, edge cases, metrics, questions
+Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
+Promotes:    accepted behavior changes, acceptance criteria, exclusions and measurement → product.html, via write-prd
 ```
 
-Read `docs/agents/memory.md`, the active `state.md`, `<product-docs>/<slug>/prd.md` when present, and upstream artifacts in this order: `discovery/current-product.md`, `discovery/demand.md`, `discovery/solution.md`, then `discovery/mvp.md` if it exists.
+Read current capabilities and their evidence/coverage, accepted product intent, demand assessments, proposed solutions, and existing scope. Enrich the affected records with an explicit delta and linked scope decisions.
 
-If `current-product.md` is missing and the request references an existing codebase or app, run or route to `map-current-product` first. A delta without a baseline is guesswork.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Boundary
 
 Scope user-visible behavior. Do not review architecture, refactor internals, or write implementation tasks. If the request has no user outcome, route to `design/technical/codebase-design`, `design/technical/improve-codebase-architecture`, or `engineering/feature/spec` as appropriate.
 
 `scope-mvp` owns greenfield first-slice scoping. This skill owns active-product increments.
+
+Before defining a delta, require evidence of the affected current behavior. Reuse supplied or shared baseline evidence; if it is missing, route the relevant inspection to `map-current-product`. When improvement value is disputed, preserve that question and route to `validate-demand` before claiming the change is validated. Baseline module need-fit verdicts and vision-resilience notes from `map-current-product` are direct input: an under-serving module is a candidate for MODIFIED behavior; a serves-no-real-need module is a candidate for REMOVED.
 
 ## Workflow
 
@@ -36,6 +42,8 @@ State the existing behavior, the user pain or opportunity, and the target outcom
 ```text
 For [user/role], improve [current behavior] so [target outcome], measured by [signal].
 ```
+
+Check the target outcome against the problem's deep need and any vision record, not only the surface ask — an increment that serves the ask but not the motivation is precise and wrong. Layers: `references/need-layers.md`.
 
 Use active-product evidence when available: support tickets, analytics, usage funnels, churn/lost-deal notes, stakeholder reports, sales/support transcripts, customer interviews, or observed sessions. Mark unsupported assumptions explicitly.
 
@@ -62,7 +70,7 @@ Use OpenSpec-style change language against current behavior:
 | MODIFIED | Existing behavior whose outcome, rule, copy, permission, or flow changes |
 | REMOVED | Existing user-visible behavior that will no longer happen |
 
-Each row must cite the baseline evidence from `current-product.md` or the PRD.
+Each row must cite the baseline evidence from current capability records or the PRD.
 
 ### 4. Triage P0/P1/out-of-scope
 
@@ -80,70 +88,26 @@ Start from analytics questions, then define events. Include event name, trigger,
 
 Capture decisions, open questions, blocked stories, and follow-up owners. If an answer changes scope, revise the delta before writing the artifact.
 
-## Output Format
+## Output: enrich the existing product
 
-Persist to `<work-root>/<effort>/discovery/increment.md`:
+Write HTML records in `discovery.html`; link to durable records where the subject already has a canonical home.
 
-```markdown
-# Product Increment Scope: [Increment Name]
+- Target outcome: actor, affected current behavior, desired outcome, the need layer the outcome serves, evidence, assumptions, and success signal.
+- Scope decision: posture and authorized accepted/rejected/deferred alternatives; P0/P1/out-of-scope links with rationale and revisit conditions.
+- Behavior delta: ADDED / MODIFIED / REMOVED against named capability IDs and source evidence, with proposed new behavior separate from current observation.
+- Acceptance: Given/When/Then criteria for each P0 behavior, including relevant failure, recovery, permission, empty/stale state, repeated action, dependency, and boundary cases.
+- Measurement: analytics questions, event trigger/properties/privacy/QA, success thresholds, and guardrails linked to the outcomes they test.
+- Refinement: enrich shared decisions, questions, assumptions, risks, and blockers. Link a remedy to its gap; leave the gap open until implementation is evidenced.
 
-Last updated: [YYYY-MM-DD]
+Do not create a second capability inventory or overwrite unrelated decisions. Preserve unanswered questions with their blocking effect and next resolver. Update `state.md` with changed anchors.
 
-## Target Outcome
-For [user/role], improve [current behavior] so [target outcome], measured by [signal].
+### Verify memory records
 
-Evidence: [support ticket / analytics / stakeholder / code / PRD references]
-Assumptions: [explicit unsupported claims]
-
-## Scope Posture
-Posture: [Hold / Reduce / Selective expansion / Expand]
-Decision: [what was accepted, rejected, or deferred]
-
-## Behavior Delta
-| Type | Behavior | Current evidence | New expected behavior |
-| --- | --- | --- | --- |
-| ADDED / MODIFIED / REMOVED | ... | ... | ... |
-
-## P0
-| Behavior | Why it is P0 | Acceptance coverage |
-| --- | --- | --- |
-
-## P1
-| Behavior | Trigger to revisit |
-| --- | --- |
-
-## Out of Scope
-- [Explicit exclusion and reason]
-
-## Acceptance Criteria
-### [P0 behavior]
-- GIVEN [state], WHEN [action], THEN [observable result].
-
-## Edge Cases and Recovery
-| Scenario | Expected handling | Priority |
-| --- | --- | --- |
-
-## Instrumentation
-Analytics questions:
-- [Question this increment must answer]
-
-| Event | Trigger | Properties | Privacy/PII | QA check |
-| --- | --- | --- | --- | --- |
-
-## Success Metrics
-| Metric | Threshold | Proves | Guardrail? |
-| --- | --- | --- | --- |
-
-## Refinement Notes
-### Decisions
-- ...
-
-### Open Questions
-- ...
-
-### Blockers
-- ...
-```
+- Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
+- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Local `#anchor` links resolve; unrelated records and IDs are preserved.
+- `Last updated` dates are current on changed records and the document.
+- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## Quality Bar
 

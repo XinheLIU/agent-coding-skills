@@ -1,303 +1,89 @@
 ---
 name: write-prd
-description: Consolidate discovery artifacts into an AI-executable product requirements document, or update an existing PRD from a scoped product increment. Use when the user asks to write a PRD, generate product requirements, consolidate product thinking into a spec, append an update, or extend an existing PRD without regenerating it.
+description: Consolidate shared product knowledge into a durable HTML product document with a PRD reading view, or reconcile an accepted increment into it. Use when the user asks to write a PRD, preserve validated product intent, consolidate requirements, or update an existing PRD without regenerating it.
+disable-model-invocation: true
 ---
 
 # PRD Writer
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
-Consolidate outputs from any prior toolkit skills into a single, AI-executable Product Requirements
-Document (PRD). This skill maps what each prior skill already established to the correct PRD section,
-asks only for what is genuinely missing, then generates the full document in one pass.
+Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.
 
 ## Shared Memory Contract
 
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy migration. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
+
 ```text
-Layer:    human — product intent survives the effort that produced it
-Owns:     <product-docs>/<slug>/prd.md   (default docs/product/<slug>/prd.md)
-Promotes: this skill is itself the promotion step for the product pipeline
+Layer:       human — product intent survives the effort
+Contributes: coherent durable product records and a PRD reading index
+Writes:      <product-docs>/<product-slug>/product.html
+Coordinates: promotion pointers in discovery.html and state.md
+Promotes:    accepted intent, decisions, necessary evidence and rationale
 ```
 
-This is the only product skill that writes into a tracked layer. Every upstream discovery artifact is a draft under the work root; this skill is where their durable conclusions become project truth. If the work root were deleted the moment this skill finished, the project would still know what it is building and why.
+Resolve the product through user paths, `docs/agents/memory.md`, and active `state.md`. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.
 
-Read `docs/agents/memory.md` for the product-docs home and work root, the active `state.md`,
-and every completed artifact under `<effort>/discovery/` plus any
-`<effort>/prototypes/*/decision.md`. For existing-product work, read
-`discovery/current-product.md` and `discovery/increment.md` before editing the PRD. Synthesize
-by linking or condensing; do not silently reclassify or rescope facts owned upstream.
+## Read and assess
 
-Resolve `<slug>` from the effort slug so the PRD traces back to the discovery that produced it. If `docs/agents/memory.md` records no product-docs home, write to `docs/product/<slug>/prd.md` and say so; if there is no memory routing at all, work in conversation and recommend `manage-context` before persisting.
+Accept explicit `--doc <path>` / `-d <path>` inputs, including legacy documents. Without flags, follow state pointers to durable product records and relevant working records. Read prototype decisions when they settle a product question; architectural rationale belongs in an ADR and is linked from product memory.
 
-Update `state.md` with the PRD pointer.
+Use established answers regardless of the producing skill. A standalone run can consolidate explicit requirements, evidence, and user decisions without requiring earlier skill files. Missing facts remain questions; supplied requirements do not imply validated demand or accepted scope beyond the user's authorization.
 
-See `references/prd-principles.md` for the full PRD framework, phasing guide, and worked examples.
+| Knowledge | PRD use |
+| --- | --- |
+| Personas, problems, demand assessments | Product purpose, who benefits, why it matters, strength of supporting evidence |
+| Vision records | Product identity and purpose framing in Part 0/1; user-confirmed visions promote to `overview`, inferred candidates stay working with their open question linked |
+| Current capability evidence | Context for the change, with observed behavior distinct from intended behavior |
+| Proposed capabilities and journeys | Desired outcomes, scenarios, flows, and interaction states |
+| Accepted scope and deltas | Included/excluded requirements, priorities, acceptance, and rationale |
+| Risks, constraints, measures | Edge cases, mitigation decisions, NFRs, instrumentation, success thresholds |
+| Decisions and unresolved questions | Decision basis, remaining blockers, launch and design handoffs |
 
-## Maturity: run early, extend later
+Check for conflicting claims, duplicate subjects, and conclusions marked `needs review`. Reconcile by evidence and recorded authority, not recency. An accepted decision remains recorded while its applicability is disputed; do not silently rewrite it. Do not grade demand, rescope features, invent solution behavior, or accept a mitigation proposal just because it appears in a premortem.
 
-The PRD is one document with a version history, not a one-shot artifact written at the end of discovery. It can be created as soon as the demand gate passes and extended as later stages close.
+Ask only for unknown information needed for the current result. Product title, platform, timeline, stakeholders, and NFRs may already be answered anywhere in shared memory or the supplied context. Never ask again solely because no particular skill owns the field. Consolidate blocking questions in one user message; continue independent consolidation and record the remaining unknowns with their blocking effects.
 
-| Run after | Fills | Leaves |
-| --- | --- | --- |
-| `validate-demand` returns Green | Part 0, Part 1 core problem triple and user story | Parts 2–4 marked `Pending — awaiting <skill>` |
-| `scope-mvp` | Part 1 requirement list, scope boundaries, Not-To-Do | Parts 3–4 pending |
-| `scope-product-increment` | Update Log, behavior delta, requirement changes, acceptance criteria, instrumentation, out-of-scope | Unchanged sections preserved |
-| `run-premortem` | Part 3 edge cases and NFRs, Part 4 | — |
+## Promote and reconcile
 
-Running early is the recommended path: it puts the core idea in a tracked layer at the moment it stops being speculation, instead of leaving it in a disposable directory until the pipeline finishes. Efforts abandoned mid-pipeline still leave behind a record of what was considered and why it stopped.
+1. Identify accepted or otherwise established durable conclusions. On Green demand, preserve the core problem, persona, job, verdict, and necessary evidence early; solution and scope can remain unresolved. Later runs extend those same records.
+2. Match existing durable records by product, actor, outcome, surface, and scenario. Preserve their IDs and user-authored content. New records retain their working IDs unless a collision requires an explicit mapping and link repair.
+3. For an accepted increment, apply ADDED / MODIFIED / REMOVED to the relevant intended behavior and scope only. Preserve current observation, unrelated requirements, and rejected alternatives with lasting rationale. A removed behavior remains identifiable for references; record that the intent was superseded instead of reusing its ID.
+4. Bring the minimum supporting rationale and evidence into durable storage, or link stable sources. Necessary evidence must not depend on an effort directory scheduled for deletion. Keep raw code inventories and execution narratives in working memory.
+5. Build or update the PRD reading index over the canonical records. Add a dated change note with affected record links and the decision/source basis. Do not duplicate normative requirements into the index or a separate PRD file.
+6. Verify durable content and links before replacing promoted working conclusions with pointers. Repair cross-record links, record any amendment-to-canonical ID mapping, then update `state.md`. Do not erase evidence or unresolved analysis that the active effort still needs.
 
-When extending an existing PRD, bump the version, add an Update Log row naming the stage that
-closed, and preserve user edits. Never regenerate from scratch over a PRD someone has edited. A
-section marked `Pending` is honest; a section silently overwritten is not.
+Promotion does not change a claim's evidence strength. A proposed commitment remains proposed; an open question stays open until answered. A **user-confirmed** vision promotes into `product.html` `overview` with its ID, confirmation date, and links preserved; an **inferred** candidate vision stays in working memory and the PRD links its open confirmation question instead. Never invent a vision or upgrade one by promotion. If a relevant premise changes, mark affected conclusions for review and route the unresolved assessment to the appropriate skill.
 
----
+## HTML output and PRD reading order
 
-## Parse Input
+The only durable product output is `product.html`, structured by shared concepts from the contract. Keep existing styling. Add a `<nav id="prd" aria-label="PRD reading order">` linking to actual records or shared sections in this order:
 
-Accept explicit document paths via `--doc <path>` / `-d <path>`. Multiple flags are allowed:
+| Reading part | Content to establish or link |
+| --- | --- |
+| Part 0 — Document info | Product identity, product vision (confirmed, or candidate with its open question linked), stage/readiness, version if used, update date, stakeholders, change notes |
+| Part 1 — Problem and goals | Persona, usage scenario, pain, job, demand evidence, user outcomes, requirements index, scope and exclusions |
+| Part 2 — Solution overview | Relevant current context, desired business flow, information architecture, linked journeys and capabilities |
+| Part 3 — Detailed solution | Per-capability acceptance and initial/trigger/success/error/empty states where relevant; edge/recovery behavior, constraints, NFRs, analytics |
+| Part 4 — Launch | Milestone decisions, target dates when known, success thresholds, monitoring, remaining launch blockers |
 
-```
-/write-prd --doc .scratch/my-effort/discovery/solution.md --doc .scratch/my-effort/discovery/mvp.md
-```
+The Part labels provide a familiar reading order, not additional copies of records. A requirement index links capability and scope IDs with brief labels; the full requirement and its acceptance live once. Render tables, lists, and diagrams inside their relevant records. Use semantic HTML and inline CSS; diagrams have adjacent textual meaning and do not require JavaScript to understand the requirements.
 
-If no flags are provided, resolve inputs from `state.md` and the configured discovery directory before scanning the current conversation.
+For partial or early runs, show which questions prevent a part from being ready and link to them. Do not fill unknown fields with fictional answers or mark the whole document complete because every section exists. Do not add arbitrary edge cases, exclusions, dates, stakeholders, or thresholds to satisfy a template.
 
-Check whether `<product-docs>/<slug>/prd.md` already exists. If it does, this is an extension
-or delta update — read it first and work out which parts are still `Pending`, which sections
-are user-edited, and whether `discovery/increment.md` supplies an existing-product behavior
-delta.
+## Verification and handoff
 
----
+Before saving or reporting readiness:
 
-## Context Mapping
+- Confirm problem, persona, and outcomes are specific; demand strength and commitment are accurately represented.
+- Check intended behavior, scope/exclusions, flows, relevant edge and recovery cases, and necessary NFRs against the actual effort. Record missing answers as questions with blocking effects.
+- Ensure accepted increments trace to affected capabilities and evidence; preserve unrelated records and user edits.
+- Verify unique IDs and resolving file/anchor links, including promotion pointers. No essential durable link may rely on disposable discovery.
+- Verify every record `<article>` carries a closed-list `data-kind` (see the contract's kind table) and sits inside one of the shared sections. Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
+- Check a repeated consolidation would enrich the same records rather than create duplicates. Check HTML facts remain readable without JavaScript.
+- Update the document's visible date and changed record dates. Update `state.md` with the durable path, affected anchors, unresolved blockers, and the next action.
 
-Do not re-ask for information already established by a prior step. Map existing context directly
-to the corresponding PRD section:
-
-| Prior Output | Maps to PRD Section |
-|---|---|
-| brainstorm | Part 1 — Job statement, struggling moment, forces, usage scenario |
-| validate-demand | Part 1 — User persona, core pain point, demand type (Painkiller/Reward/Vitamin), evidence grade |
-| map-current-product | Part 1 / Part 2 context — current users, implemented stories, current flows, and source-backed gaps |
-| shape-solution | Part 1 and Part 3 — User stories, first-use moment, interaction flows (5-state coverage per feature) |
-| scope-mvp | Part 1 — Scope axes (scenario × form × data), requirement list (P0/P1), Not-To-Do list |
-| scope-product-increment | Update Log and changed sections — ADDED/MODIFIED/REMOVED behavior, P0/P1/out-of-scope, acceptance criteria, edge cases, instrumentation, success metrics |
-| run-premortem | Part 3 — Edge cases, NFRs (derived from vaccine actions and monitoring signals) |
-| prototype | Part 3 — Interaction decisions settled by throwaway variants |
-
-If a prior step's output is present, use it directly. Do not reclassify demand type; do not
-re-derive the persona; do not re-scope features.
-
-An architectural decision in a `decision.md` is not PRD material — route it to an ADR via
-`domain-modeling` and link it from Part 2.
-
-## Existing PRD Delta Mode
-
-Use delta mode when a PRD already exists and `discovery/increment.md` is present. The goal is to
-extend the document, not regenerate it.
-
-1. Read the existing PRD first and preserve user-edited prose unless it directly conflicts with
-   the accepted increment.
-2. Append an Update Log row with the new version, date, source artifact, and a one-line summary.
-3. Apply `ADDED / MODIFIED / REMOVED` behavior to the smallest matching PRD sections:
-   Scope, Requirement List, Part 2 flows, Part 3 feature states, Edge Cases, Analytics, and
-   Out-of-Scope.
-4. Keep unaffected sections byte-for-byte where practical. If a section must be rewritten, state
-   which upstream delta required it.
-5. If the increment contradicts the current PRD or baseline, stop and ask whether the PRD or the
-   increment is authoritative.
-
-`current-product.md` explains current behavior. `increment.md` owns the change. This skill only
-promotes the accepted delta into the tracked PRD.
-
----
-
-## Gap Assessment
-
-Before generating, identify what is genuinely unknown. Ask **only** for:
-
-| Gap | Ask when |
-|---|---|
-| Product name / working title | Not evident from any prior output |
-| Target platform | Not resolved by the product-form axis in `scope-mvp` |
-| Launch timeline | Always — no prior step owns this |
-| Key stakeholders | Always — no prior step owns this |
-| Performance / compatibility requirements | Not present in pre-mortem vaccine actions |
-
-Consolidate all gap questions into one user message using the runtime's normal input mechanism. Do not ask questions one at a time.
-
----
-
-## Workflow
-
-Generate the PRD in three phases. Unless the user explicitly requests phased review, run all three
-phases in a single pass and output the complete document.
-
-**Phase 1 — Draft (Part 0 + Part 1)**
-Establish document metadata and the requirement background: who the product is for, what problem it
-solves, why it exists. Draw from brainstorm, validate-demand, shape-solution, and scope-mvp outputs.
-
-**Phase 2 — Mid-Draft (Part 2)**
-Generate the core business flowchart using Mermaid and the information architecture. This is the
-structural skeleton of the solution before detailing interactions.
-
-**Phase 3 — Final (Part 3 + Part 4)**
-Produce the detailed interaction specifications (5-state per feature), edge cases, non-functional
-requirements, and the launch plan milestone table.
-
----
-
-## Output Format
-
-Generate the complete PRD using this template. Every section must be filled — no placeholders,
-no "TBD" in the final output unless the user has explicitly said a value is unknown.
-
-The exception is an early run: when a stage has not yet closed, write
-`*Pending — awaiting `<skill>`.*` under its heading instead of inventing content. This marks
-the section as a known gap rather than an oversight, and tells the next session which skill
-fills it.
-
-````markdown
-# PRD: [Product Name]
-
-## Part 0 — Document Info
-
-| Field | Value |
-|-------|-------|
-| Version | 0.1.0 |
-| Stage | Draft |
-| Stakeholders | [Names or roles] |
-| Last Updated | [YYYY-MM-DD] |
-
-### Update Log
-
-| Version | Status | Changes |
-|---------|--------|---------|
-| 0.1.0 | Draft | Initial generation |
-
----
-
-## Part 1 — Requirement Background & Goals
-
-### Project Overview
-
-[1–2 specific sentences: who it's for, what it does, and the level of complexity to expect.]
-
-### Core Problem Triple
-
-- **User Persona:** [A specific person in a specific situation — not a demographic category]
-- **Usage Scenario:** [When, where, and under what pressure the user reaches for this product]
-- **Core Pain Point:** [What is broken or missing about the existing solution]
-
-### User Story
-
-> As a [role], I want to [perform a task] so that [I achieve a specific value].
-
-### Scope
-
-**In-Scope (this phase):**
-- [Feature or function 1]
-- [Feature or function 2]
-
-**Out-of-Scope (explicitly not building):**
-- [Item 1 — brief reason]
-- [Item 2 — brief reason]
-
-### Requirement List
-
-| ID | Module | Description | Priority | Status |
-|----|--------|-------------|----------|--------|
-| R1 | [Module] | [What this requirement covers] | P0 | Pending |
-| R2 | [Module] | [What this requirement covers] | P0 | Pending |
-| R3 | [Module] | [What this requirement covers] | P1 | Pending |
-
----
-
-## Part 2 — Solution Overview
-
-### Core Business Flowchart
-
-```mermaid
-flowchart TD
-    A[User opens app] --> B{Has existing data?}
-    B -->|Yes| C[Show list view]
-    B -->|No| D[Show empty state with CTA]
-    C --> E[User selects item]
-    D --> F[User creates first item]
-    E --> G[Detail view]
-    F --> G
-```
-
-### Information Architecture
-
-- **[Page / Module]:** [Key components and their hierarchy]
-- **[Page / Module]:** [Key components and their hierarchy]
-
----
-
-## Part 3 — Detailed Solution
-
-### [Feature / Page Name]
-
-**Initial state:** [How this view looks when the user first opens it]
-**Trigger action:** [User input — tap, click, type, swipe — that initiates the flow]
-**Success state:** [What the UI shows after a successful action]
-**Error state:** [What feedback is shown on failure, and what guidance is offered]
-**Empty state:** [What is shown when there is no data — copy, illustration, CTA]
-
-*(Repeat this block for each P0 feature)*
-
----
-
-### Edge Cases
-
-| Scenario | Handling |
-|----------|----------|
-| Rapid double-click / double-tap | 0.5s debounce on submit button |
-| Network error during save | Toast: "Network error — changes not saved. Retry?" |
-| Session timeout mid-flow | Preserve draft locally; prompt re-authentication |
-| [Scenario from pre-mortem] | [Prevention action from vaccine plan] |
-
-### Non-Functional Requirements
-
-- **Performance:** [e.g., First Meaningful Paint < 2s on a mid-range device]
-- **Compatibility:** [e.g., Chrome, Safari, Firefox — latest 2 major versions each]
-- **Analytics:** [e.g., Track task completion rate, session length, error rate per flow]
-- **Accessibility:** [e.g., WCAG 2.1 AA — keyboard navigation, screen reader support]
-
----
-
-## Part 4 — Launch Plan
-
-| Milestone | Description | Target Date |
-|-----------|-------------|-------------|
-| Requirements review | PRD finalized and approved by stakeholders | [Date] |
-| UI/UX design | Wireframes reviewed; visual design approved | [Date] |
-| Development | All P0 features built and unit-tested | [Date] |
-| Internal QA | Edge cases validated; NFRs benchmarked | [Date] |
-| Launch | MVP shipped to first users | [Date] |
-````
-
----
-
-## Quality Bar — Four Moats
-
-Before saving a complete PRD, verify all four moats are present:
-
-- [ ] Core business flowchart present (valid Mermaid block)
-- [ ] Edge cases documented (minimum 3 distinct scenarios)
-- [ ] Non-functional requirements defined (performance, compatibility, analytics)
-- [ ] Out-of-Scope list present (minimum 2 items explicitly excluded)
-- [ ] For delta mode, Update Log row added and unaffected PRD edits preserved
-
-If any moat is missing, complete it before saving.
-
-On an early run, the moats belonging to unclosed stages are marked `Pending` rather than
-filled. Part 1 has its own bar and must always be complete: a named persona in a situation, a
-specific pain point, and one user story. Those are the facts being promoted — a PRD whose Part
-1 is vague has promoted nothing.
-
----
+Report the HTML path and the conclusions promoted, amended, or still unresolved. A PRD can be useful and durable while design or launch questions remain open.
 
 ## Design Gate (optional)
 
@@ -320,19 +106,9 @@ More than one row may apply — UX and technical design can both run. UX output 
 
 ---
 
-## Tool Coordination
+## Boundaries
 
-- **Read** — Parse configured memory, explicit `--doc` inputs, and prior skill outputs. If the PRD already exists, read it before writing.
-- **User input** — Gather all gaps in one message before generating; never ask mid-generation
-- **Write** — Save the completed PRD to `<product-docs>/<slug>/prd.md`
-
-Confirm the saved file path and layer to the user when done. The path should be inside the tracked `docs/product/` tree, not under the work root.
-
-## What This Skill Does NOT Do
-
-- **Does not discover the problem** — it consolidates what discovery already established
-- **Does not validate demand** — it promotes the verdict, it does not grade evidence
-- **Does not design the solution** — it records the solution shape, not invent it
-- **Does not scope the MVP** — it maps the scope, not triage features
-- **Does not scope active-product increments** — it promotes `increment.md`, not create it
-- **Does not build the product** — it specifies what to build, not how to build it
+- Consolidates the problem, demand assessment, solution, and scope; does not invent or silently reclassify them.
+- Can add shared questions and resolve them from supplied evidence or user answers within this task.
+- Preserves accepted intent and essential rationale; implementation plans remain working memory.
+- Produces product requirements and a design/engineering handoff, not implementation code.
