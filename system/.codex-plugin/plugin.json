@@ -1,0 +1,16 @@
+{
+  "name": "agent-coding-skills",
+  "version": "0.1.0",
+  "description": "Coding skills coordinated through a shared repository memory protocol.",
+  "author": { "name": "Xinhe LIU" },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Coding Skills",
+    "shortDescription": "Shared coding-agent skills.",
+    "longDescription": "Coding skills coordinated through a shared repository memory protocol.",
+    "developerName": "Xinhe LIU",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Help me use the agent coding skills."
+  }
+}

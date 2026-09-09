@@ -137,6 +137,14 @@ Added an explicit product workflow for existing codebases and active-product imp
   and applying accepted product increments.
 - Published the two skills through `system/skills/` symlinks and `catalog/skill-set.json`.
 
+### Plugin manifests for Claude Code and Codex
+
+- `system/.claude-plugin/plugin.json` now declares `skills` and `commands` directories
+  explicitly so the loader finds them without inference.
+- Added `system/.codex-plugin/plugin.json` — a Codex plugin manifest pointing at the same
+  `system/skills/` tree, so the one source ships to both hosts.
+- `.gitignore` excludes `.DS_Store` and the local `.claude/` session config.
+
 ### Product skills published to the loader and catalog
 
 Made the eight product skills discoverable. The sources landed in the previous change; this publishes them.

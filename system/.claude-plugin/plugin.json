@@ -6,5 +6,7 @@
   "homepage": "https://github.com/XinheLIU/agent-coding-skills",
   "repository": "https://github.com/XinheLIU/agent-coding-skills",
   "license": "MIT",
+  "skills": "./skills/",
+  "commands": "./commands/",
   "keywords": ["coding", "agent-skills", "shared-memory", "workflow", "planning", "debugging", "testing", "architecture", "tdd", "code-review"]
 }

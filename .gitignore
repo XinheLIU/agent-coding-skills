@@ -4,3 +4,9 @@
 # Python runtime artifacts.
 __pycache__/
 *.pyc
+
+# macOS junk
+.DS_Store
+
+# Local Claude session config
+/.claude/
