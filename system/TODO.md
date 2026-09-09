@@ -1,12 +1,12 @@
 # System TODO
 
-Last updated: 2026-08-17
+Last updated: 2026-09-08
 
 This list separates adaptation work inherited from Matt’s model from cleanup required by the existing system. Priority reflects workflow correctness and data integrity.
 
 ## P0 — Catalog/discovery drift
 
-- [ ] Reconcile `craft/context`: catalog lists `init-context`, `translate-agent-context`, `sync-context`, but the directory on disk contains `maintain/` and `setup/`. Broken discovery symlinks: `manage-context`, `extract-rules`, `scaffold-agent-docs`, `create-readme`, `document-codebase`, `index-codebase`, `translate-agent-context`. Decide which set is canonical and repair both sides.
+- [x] ~~Reconcile `craft/context` discovery~~ — Done 2026-08-25: `init-context`, `sync-context`, and `translate-agent-context` are the canonical loader entries; obsolete links to removed skills were deleted, and Claude/Codex/Pi manifests now expose the same skill tree.
 
 ## P0 — Shared memory and delivery
 
@@ -22,7 +22,7 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 - [ ] Merge tracer-bullet and expand-contract rules from `to-tickets` into `tasks`.
 - [ ] Merge `implement` into the delivery executor: claim one frontier issue, use TDD, run project checks, review, update shared state, and never commit automatically.
 - [ ] Reconcile TDD contracts: keep behavior-level red/green slices at agreed public seams; decide whether refactoring occurs inside each cycle or in the review phase.
-- [ ] Add Standards and Spec as separate axes in `review-code-quality`; preserve separate findings and avoid creating a third overlapping reviewer.
+- [x] ~~Add Standards and Spec as separate axes in `review-code-quality`~~ — Done 2026-09-08: findings are axis-tagged and reported separately; the Spec axis runs as an inline spec-fidelity pass reusing gap-analysis statuses, so no third overlapping reviewer was created.
 - [ ] Connect `wayfinder` ticket creation and completion directly to the roadmap renderer.
 - [ ] Add tracker-specific GitHub, GitLab, and local-Markdown templates to `manage-context` (Phase A).
 - [ ] Add deterministic HTML generation templates for architecture reviews while keeping Markdown canonical.
@@ -30,9 +30,10 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 
 ## P0 — Existing skill correctness
 
-- [ ] Remove or redesign `request-code-review`: it calls unavailable `delegate_task`, stashes for baseline measurement, stages everything, auto-fixes, and commits without explicit authority.
+- [x] ~~Remove or redesign `request-code-review`~~ — Done 2026-09-08: removed; its pre-commit triggers and static security greps were folded into `review-code-quality`, and its auto-fix/auto-commit behavior was dropped by design.
 - [ ] Fix `document-codebase` stale names (`review-Codex-md`, `.Codex/rules`), duplicated AGENTS/CLAUDE wording, project-specific residue, and README ownership overlap.
-- [ ] Fix `analyze-test-gaps`: it promises four artifacts but defines three; unify its critical-path location with `document-codebase`.
+- [x] ~~Fix `analyze-test-gaps` artifact-count contradiction~~ — Done 2026-09-08: description and Output Contract now say three artifacts across four steps.
+- [ ] Unify the `analyze-test-gaps` critical-path location with `document-codebase`.
 - [ ] Correct the retained `tdd-builder` agent’s nonexistent spec “Step 3.5” reference.
 - [ ] Make `create-readme` the sole root-README author; `document-codebase` should delegate or exclude that output.
 

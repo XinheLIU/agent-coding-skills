@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Last updated: 2026-08-18
+Last updated: 2026-09-09
 
 ## Reference clones (study material only)
 
@@ -23,6 +23,8 @@ The adapted skills listed in [the organization report](docs/organization-report.
 - Revision `ed37663cc5fbef691ddfecd080dff42f7e7e350d`: the other 17 audited skills.
 
 The locally copied `references/matt-pocock/skills/engineering/README.md` is a repository-local index and is not represented as upstream source.
+
+The product-lane shared-understanding protocol (`product/discovery/validate-demand/references/shared-understanding.md`) adapts two Matt Pocock mechanics: from `grilling`, the shared-understanding contract — do not act until the user confirms a shared understanding, provide a recommended answer with each question, and look up facts from the environment while putting decisions to the user; from `to-tickets` step 4 ("Quiz the user"), the batched numbered-question-and-iterate pattern. The protocol deliberately inverts `grilling`'s one-question-at-a-time rule in favor of blocks of 4–5 questions per message. The `brainstorm` skill's superpowers-derived Socratic flow carries the same deliberate one-at-a-time → block substitution, noted in its Credit section.
 
 ```text
 MIT License
@@ -54,7 +56,7 @@ Existing skill packages may contain their own licenses or metadata. Their proven
 
 The prose wiki capability (`llm-wiki-init`, `llm-wiki-ingest`, `llm-wiki-lint`) now lives in [learning-os](https://github.com/XinheLIU/learning-os). Those skills adapt the LLM Wiki discipline from Andrej Karpathy's LLM Wiki approach (MIT). This system routes to them rather than maintaining a local copy.
 
-`index-codebase` wraps the external indexers documented in [`skills-src/context-management/index-codebase/references/external-tools.md`](skills-src/context-management/index-codebase/references/external-tools.md) without vendoring their code: [`codemap`](https://github.com/JordanCoin/codemap), [`codegraph`](https://github.com/colbymchenry/codegraph), `graphify` (published as `graphifyy`), and [`GitNexus`](https://github.com/abhigyanpatwari/GitNexus). Each remains under its own upstream license and is invoked as an installed tool.
+`init-context` documents and invokes the external indexers listed in [`references/index-tools/external-tools.md`](skills-src/craft/context/init-context/references/index-tools/external-tools.md) without vendoring their code: [`codemap`](https://github.com/JordanCoin/codemap), [`codegraph`](https://github.com/colbymchenry/codegraph), `graphify` (published as `graphifyy`), and [`GitNexus`](https://github.com/abhigyanpatwari/GitNexus). Each remains under its own upstream license and is invoked as an installed tool.
 
 ## Product-ideation adaptations
 

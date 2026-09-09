@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-08-18
+Last updated: 2026-09-08
 
 This directory is the plugin and product. Its skills share a repository memory system: setup declares the paths and protocols once, then idea, delivery, testing, debugging, review, and documentation skills coordinate through those artifacts.
 
@@ -17,11 +17,13 @@ flowchart LR
     P --> WORK[working memory<br/>state + specs + issues + evidence]
     WORK -->|promote what settles| HUMAN
     WORK -->|promote trade-offs| CORE
-    WORK --> MD[Markdown state]
+    WORK --> PRODUCT[shared product HTML records]
+    PRODUCT -->|promote| HUMAN
+    WORK --> MD[engineering Markdown state]
     MD --> HTML[generated HTML views]
 ```
 
-The protocol makes ownership explicit: each fact has one canonical Markdown home; skills follow pointers instead of copying state; HTML is regenerated after source changes. Promotion runs one way — a settled decision moves out of the disposable work root into a tracked layer, leaving a link behind rather than a copy.
+The protocol makes ownership explicit: each fact has one canonical home; skills follow pointers instead of copying state. Product skills enrich shared HTML records directly; engineering task HTML remains generated from Markdown. Promotion runs one way — a settled decision moves out of the disposable work root into a tracked layer, leaving a link behind rather than a copy.
 
 ## Structure
 
@@ -34,7 +36,8 @@ The protocol makes ownership explicit: each fact has one canonical Markdown home
 | [`commands/`](commands/) | Setup and Git commands |
 | [`agents/`](agents/) | Shared explorer, reviewer, and delivery agents |
 | [`docs/`](docs/) | Human guides and organization report |
-| [`.claude-plugin/`](.claude-plugin/) | Plugin manifest |
+| [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin manifest |
+| [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest |
 
 ## Memory layers
 
@@ -47,7 +50,7 @@ The protocol makes ownership explicit: each fact has one canonical Markdown home
 
 A layer is defined by the question its artifacts answer, not by who reads them. The boundary that matters in practice: **working memory is scaffolding, the Human and Core layers are the building.** Before writing persistent state, apply the durability test — *if the work root were deleted today, would the project have lost a fact it still needs?* If yes, it belongs in a tracked layer. Facts are promoted upward only, never demoted.
 
-This is why product intent (`docs/product/<slug>/prd.md`) is Human-layer while a feature spec is Working-layer: the PRD states what the product is for and stays true after the effort closes; the spec states how one increment gets built, and the shipped code supersedes it.
+This is why product intent (`docs/product/<product-slug>/product.html`) is Human-layer while a feature spec is Working-layer: the PRD states what the product is for and stays true after the effort closes; the spec states how one increment gets built, and the shipped code supersedes it.
 
 Setup defaults working memory to `.scratch/<effort>/` in the Matt-style local tracker model, while preserving established roots such as `specs/`.
 
@@ -59,7 +62,7 @@ Setup defaults working memory to `.scratch/<effort>/` in the Matt-style local tr
 - [Testing](workflows/testing.md): public seams → TDD → checks → test-gap audit.
 - [Debugging](workflows/debugging.md): red-capable reproduction → evidence → regression test → fix.
 
-`manage-context` sets up and reconciles memory state. `handoff` carries pointers into a fresh session. `domain-modeling` owns the shared glossary and ADRs.
+`init-context` sets up memory state and `sync-context` reconciles it. `handoff` carries pointers into a fresh session. `domain-modeling` owns the shared glossary and ADRs.
 
 ## Setup
 

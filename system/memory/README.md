@@ -1,6 +1,6 @@
 # Shared Memory System
 
-Last updated: 2026-08-10
+Last updated: 2026-09-08
 
 Skills in this system coordinate through repository artifacts rather than private session state. The setup command records the repository-specific paths in `docs/agents/memory.md`; every memory-aware skill reads that file before choosing inputs or outputs.
 
@@ -49,18 +49,20 @@ Three promotion points are built into the workflows:
 
 | Trigger | Promotes | To |
 | --- | --- | --- |
-| Demand gate returns Green (`validate-demand`) | Persona, job, struggle, demand type, evidence grade | `<product-docs>/<slug>/prd.md` Part 1, via `write-prd` |
+| Demand gate returns Green (`validate-demand`) | Persona, job, struggle, demand type, evidence grade | `<product-docs>/<product-slug>/product.html` problem/demand records, via `write-prd` |
 | Scope is locked (`scope-mvp` → `write-prd`) | Requirement list, in/out-of-scope, Not-To-Do, interaction specs, NFRs | The same PRD, extended |
 | A prototype settles an architectural question | The decision and its rationale | An ADR, via `domain-modeling` |
 
-Everything else is promoted by `manage-context` Phase B, which detects settled decisions still sitting in working memory and routes them to their owner.
+Everything else is promoted by `sync-context` full mode, which detects settled decisions still sitting in working memory and routes them to their owner.
 
 ## Source and view
 
-Markdown is the semantic source of truth. HTML is a first-class human interface, but it must be reproducible from Markdown and declared inputs. Browser-local state may store layout preferences only; task status, decisions, and dependencies remain in Markdown.
+The artifact contract declares its semantic source. Engineering task status, decisions, and dependencies remain in Markdown; their HTML views are reproducible from declared inputs. Product memory uses authoritative `discovery.html` and `product.html`, with shared addressable records and no Markdown twin. Browser-local state stores presentation preferences only.
+
+Product skills enrich shared subjects—personas, capabilities, gaps, questions, evidence, decisions, and risks—rather than owning separate files or sections. See [the product memory contract](../skills-src/craft/context/init-context/references/product-memory.md) for identity, contribution authority, migration, and promotion.
 
 ## Where the rules live
 
 The skills that create and reconcile these layers are collected in [`craft/context`](../skills-src/craft/context/README.md). `init-context` configures all four layers on first setup; `sync-context` is the one entry point responsible for keeping them consistent after code changes.
 
-The protocol spec — read/write rules, the layer contract, and the ownership registry — travels with its owning skill at [`init-context/references/PROTOCOL.md`](../skills-src/craft/context/setup/init-context/references/PROTOCOL.md), so a skill copied out of this repo carries the contract with it.
+The protocol spec — read/write rules, the layer contract, and the ownership registry — travels with its owning skill at [`init-context/references/PROTOCOL.md`](../skills-src/craft/context/init-context/references/PROTOCOL.md), so a skill copied out of this repo carries the contract with it.

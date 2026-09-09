@@ -1,6 +1,6 @@
 # Organization Report
 
-Last updated: 2026-08-04
+Last updated: 2026-09-08
 
 ## Chosen structure
 
@@ -39,7 +39,7 @@ The product also contains 26 canonical shared agents after removing one stale du
 | `to-tickets` | Assigned for merge into `tasks` |
 | `implement` | Assigned for merge into the delivery/TDD executor |
 | Matt `tdd` | Assigned for merge into existing `tdd` |
-| Matt `code-review` | Assigned for merge into `review-code-quality` |
+| Matt `code-review` | Merged into `review-code-quality` (two-axis Standards/Spec) 2026-09-08 |
 | `grill-me` | Omitted as a redundant wrapper around `grilling` |
 | `teach` | Omitted as outside the coding-system boundary; its Markdown/HTML lesson pattern informed the memory design |
 
@@ -51,13 +51,12 @@ No files under `references/` were edited or promoted unchanged.
 docs/agents/memory.md             repository-specific routing
 CONTEXT.md + docs/adr/            core domain memory
 README.md + docs/                 human memory
-docs/product/<slug>/prd.md        human memory — product intent, tracked
+docs/product/<product-slug>/product.html  human memory — durable records + PRD index, tracked
 docs/wiki/                        optional code-map wiki
 <work-root>/<effort>/             working memory, git-ignored
   state.md
   progress.md
-  discovery/ideas.md -> brainstorm.md -> demand.md -> solution.md
-  discovery/mvp.md -> premortem.md
+  discovery.html — shared product findings, scope, questions, risks, and evidence
   brief.md / map.md / spec.md / plan.md
   issues/NN-*.md
   research/ prototypes/ handoffs/
@@ -65,7 +64,7 @@ docs/wiki/                        optional code-map wiki
   roadmap.md -> roadmap.html
 ```
 
-Markdown owns meaning and status. HTML owns presentation and interaction only.
+Product HTML records own product meaning, evidence, and decision state. Engineering task Markdown remains authoritative for its generated HTML views. The artifact contract distinguishes semantic sources from presentation.
 
 ## Consolidation decisions
 

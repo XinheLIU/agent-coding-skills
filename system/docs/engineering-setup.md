@@ -1,6 +1,6 @@
 # Engineering Setup
 
-Last updated: 2026-08-06
+Last updated: 2026-08-25
 
 **Lifecycle stage 3.** Engineering Setup covers everything needed to make a codebase ready for reliable agent-assisted delivery. Its scope spans three sub-areas:
 
@@ -18,7 +18,7 @@ In agentic coding, **context is the bottleneck**. Too little context leads to ha
 
 ## The Core Framework
 
-Context lives in **three durable layers**, each with a different lifetime and a different author. The full model, including git-tracking policy and how `AGENTS.md` discovers the code index, is documented in the [`context-management`](../skills-src/context-management/README.md) category README.
+Context lives in **four layers**, each with a different lifetime and a different author. The full model, including git-tracking policy and how `AGENTS.md` discovers the code index, is documented in the [`craft/context`](../skills-src/craft/context/README.md) category README.
 
 | Layer | Question | Lives in | Git | Author |
 | --- | --- | --- | --- | --- |
@@ -26,7 +26,7 @@ Context lives in **three durable layers**, each with a different lifetime and a 
 | **Wiki** | "Where is X, and what connects to it?" | `docs/wiki/`, `.codemap/`, `graphify/` | Tracked by default | Tools |
 | **Working** | "What am I doing, and where did I leave off?" | `.scratch/<effort>/` | Ignored | The active workflow |
 
-`manage-context` Phase B is the single entry point responsible for reconciling the three when they drift.
+`sync-context` full mode is the single entry point responsible for reconciling the layers when they drift.
 
 Within the Human layer, ownership splits further by **content type** and **runtime**:
 
@@ -40,23 +40,23 @@ Within the Human layer, ownership splits further by **content type** and **runti
 
 ## Skills
 
-### [manage-context](../skills/manage-context/SKILL.md)
+### [init-context](../skills/init-context/SKILL.md)
 
-The entry point and orchestrator for the whole collection. Reads `docs/agents/memory.md` and auto-selects a phase.
+The one-time setup entry point for the whole collection. Writes `docs/agents/memory.md` and initializes the configured memory layers.
 
-**Phase A (setup)** — runs when routing is absent. Configures the shared memory layers, work root, issue tracker, and optional wiki; writes `docs/agents/memory.md`; bootstraps the Working layer (init script, `state.md` as the resume entry point, append-only `progress.md`, cold-start sequence in `AGENTS.md`); then routes to `scaffold-agent-docs`, `create-readme`, `extract-rules`, `document-codebase`, and `index-codebase` for whatever is still missing.
+**Phase A (setup)** — runs when routing is absent. Configures the shared memory layers, work root, issue tracker, and optional wiki; writes `docs/agents/memory.md`; and bootstraps the Working layer. Broader documentation, rule extraction, and indexing are separate capabilities.
 
-**Phase B (sync)** — runs when routing exists. Detects drift across Human docs, Wiki index, and Working memory; makes narrow factual corrections directly; and invokes the owning skill for structural work — `scaffold-agent-docs` (update mode) for Human-layer structure, `document-codebase` (targeted-doc) for stale content, `review-agent-instructions` for oversized context files, `create-readme` for a stale README, `extract-rules` for undocumented conventions, `index-codebase` for a stale wiki index. Distinguishes drift (fix the doc) from a constraint violation (fix the code).
+**Phase B (sync)** — runs when routing exists. Detects drift across Human docs, Wiki index, and Working memory, then makes narrow factual corrections or reports structural work for the owning capability. Distinguishes drift (fix the doc) from a constraint violation (fix the code).
 
-Protocol spec at [`manage-context/references/PROTOCOL.md`](../skills/manage-context/references/PROTOCOL.md). Triggers: "set up context management", "the docs are stale", "sync the context", run after a merge or before a handoff.
+Protocol spec at [`init-context/references/PROTOCOL.md`](../skills/init-context/references/PROTOCOL.md). Triggers: "set up context management", "the docs are stale", "sync the context", run after a merge or before a handoff.
 
-### [scaffold-agent-docs](../skills/scaffold-agent-docs/SKILL.md)
+### Documentation and indexing capabilities
 
-Owns the core `AGENTS.md` + `docs/` structure. Mode A (init): create `AGENTS.md` as a short index under 200 lines, plus `docs/ARCHITECTURE.md`, `CONVENTIONS.md`, `TECH_DECISIONS.md`, `QUALITY.md`, and `exec-plans/` from templates, then fill from the code — verifying every relationship claim with a grep. Mode B (update): audit existing Human-layer docs, verify claims against live code, classify each doc, apply structural repairs, and flag content gaps for `manage-context` Phase B to delegate. Templates live at [`scaffold-agent-docs/references/templates/`](../skills/scaffold-agent-docs/references/templates/README.md); canonical layout reference at [`scaffold-agent-docs/references/canonical-doc-layout.md`](../skills/scaffold-agent-docs/references/canonical-doc-layout.md). Triggers: "add agent support to this project", "create AGENTS.md", "set up agent docs", "audit and repair the docs".
+Documentation-tree scaffolding is separate from this small context set. `init-context` initializes routing and `sync-context` reports drift without claiming ownership of project documentation.
 
-### [index-codebase](../skills/index-codebase/SKILL.md)
+### Code indexing
 
-Own the Wiki layer. Chooses among `codemap` (fastest, default), `codegraph` (SQLite index, auto-syncs), `graphify` (multimodal corpora), and `GitNexus` (multi-repo, browser UI), builds the index, sets the git policy, and writes the query pointer into `AGENTS.md` so the agent actually uses it. Tool comparison in the reference it ships at [`index-codebase/references/external-tools.md`](../skills/index-codebase/references/external-tools.md). Triggers: "index the codebase", "set up a code map", "the agent keeps grepping".
+Code indexing is also separate. The context set records the configured index location and checks whether it has drifted.
 
 ### llm-wiki-init · llm-wiki-ingest · llm-wiki-lint (learning-os)
 
@@ -68,17 +68,17 @@ Write and maintain the repository's agent instruction file — `CLAUDE.md` or `A
 
 ### [translate-agent-context](../skills/translate-agent-context/SKILL.md)
 
-Cross-runtime parity. Ports Claude-specific surfaces (`.claude/rules/`, slash commands, hooks, `.claude/skills/`, orchestrator subagents) into agent-agnostic equivalents Codex / OpenCode / Cursor can consume. Owns the orchestrator decomposition 4-strategy menu and shared `skills/` symlink layout. Triggers: "port Claude setup to Codex", "sync Claude and AGENTS.md", "translate slash commands", "set up cross-runtime parity".
+Cross-runtime parity. Preserves behavior while translating instructions, skills, commands, hooks, roles, and context between any agent runtimes or host applications. Classifies each target by its actual discovery, tool, delegation, persistence, permission, enforcement, and timing capabilities before choosing a native binding. Triggers: "port agent setup", "sync runtime instructions", "translate slash commands", "make these skills work in another agent", "set up cross-runtime parity".
 
-### [extract-rules](../skills/extract-rules/SKILL.md)
+### Rule extraction
 
 Discover, classify, and runtime-route agent-behavior rules. Auto-detects runtime (Claude / AGENTS.md-only / multi-runtime) and writes static rules to `.claude/rules/*.md`, inline AGENTS.md, or `docs/conventions/*.md`; dynamic per-task patterns to `docs/spec.md` Workflow Norms; implicit conventions stay inline + indexed. Triggers: "extract project rules", "create spec.md", "find hidden conventions", "set up rules in AGENTS.md".
 
-### [document-codebase](../skills/document-codebase/SKILL.md)
+### Technical documentation
 
 Author technical docs — READMEs, C4 architecture diagrams (Mermaid), API references, configuration docs. Scales deliverables to project complexity. Always audits and proposes a diff before writing. Triggers: "write README", "document architecture", "create C4 diagram".
 
-### [create-readme](../skills/create-readme/SKILL.md)
+### README authoring
 
 Create or revamp a project's `README.md`. Audits the codebase first, tiers the README to project size (minimal / standard / full), drafts from a [Best-README-Template](https://github.com/othneildrew/Best-README-Template)-based blueprint, and self-checks against a zero-context-reader checklist. Triggers: "create a README", "write a README", "revamp the README".
 
