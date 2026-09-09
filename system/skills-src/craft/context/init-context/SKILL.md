@@ -5,7 +5,7 @@ description: Initialize shared agent context when docs/agents/memory.md is absen
 
 # Init Context
 
-Last updated: 2026-08-25
+Last updated: 2026-09-08
 
 Set up the three-layer memory contract once. Read [`references/PROTOCOL.md`](references/PROTOCOL.md) before proposing writes.
 
@@ -32,6 +32,8 @@ Reuse settled choices. Resolve only these missing values:
 - **Work root:** preserve an established location; otherwise `.scratch/`.
 - **Issue tracker:** preserve the repository's tracker; otherwise GitHub when the remote proves it, local Markdown when it does not.
 - **Active effort:** explicit user selection, current branch mapping, or a documented repository rule.
+- **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](references/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
+- **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](references/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `design-context` migrates it — not an incidental setup action.
 - **Domain memory:** one root `CONTEXT.md` by default; use a context map only when distinct bounded contexts already exist.
 - **Code index:** disabled by default; offer it only when repository scale makes repeated source search materially expensive.
 
@@ -68,7 +70,7 @@ Load [`references/canonical-doc-layout.md`](references/canonical-doc-layout.md).
 
 - terminology and bounded-context language -> `CONTEXT.md` or `CONTEXT-MAP.md`
 - settled, durable trade-offs -> `docs/adr/NNNN-<slug>.md`
-- product intent -> `docs/product/<slug>/prd.md`
+- product intent -> the configured durable product document (new default `docs/product/<product-slug>/product.html`)
 
 Use [`references/CONTEXT-FORMAT.md`](references/CONTEXT-FORMAT.md) and [`references/ADR-FORMAT.md`](references/ADR-FORMAT.md) only when that branch is earned. Preserve unique rationale and leave pointers where a fact moved.
 

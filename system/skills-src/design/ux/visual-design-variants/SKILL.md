@@ -1,15 +1,9 @@
 ---
 name: visual-design-variants
-description: "Explore visual directions (color, typography, spacing) on top of established interaction structure. Requires wireframes from /interaction-design. Generates 3 variants with SAME structure but different visual treatments."
-category: Design · Visual
-triggers:
-  - visual design
-  - design variants
-  - explore visuals
-  - design options
+description: "Explore three genuinely different visual directions — color, typography, weight — on interaction structure that is already locked. Requires locked wireframe sections in docs/design/prototype.html plus DESIGN.md; cannot move buttons, navigation, or state transitions. The approved direction merges into the canonical prototype as its styled section. Use to compare visual options or design variants before committing to one."
 ---
 
-Last updated: 2026-08-17
+Last updated: 2026-09-09
 
 # Visual Design Variants
 
@@ -17,111 +11,96 @@ Explore **visual directions** (colors, typography, visual weight) on an already-
 
 ## Critical Constraint
 
-**This skill CANNOT change interaction structure.** Button positions, navigation hierarchy, state transitions, and user flows are locked by the wireframe from `/interaction-design`. Only visual properties vary.
+**This skill CANNOT change interaction structure.** Button positions, navigation hierarchy, state transitions, and user flows are locked in the prototype section by `/interaction-design` (`data-structure="locked"`). Only visual properties vary.
 
 ## When to Use
 
-- After `/interaction-design` has defined wireframes and state table
-- Design system exists (`docs/design/system.md`) 
+- After `/interaction-design` has locked wireframe sections in `docs/design/prototype.html`
+- Design authority exists (`DESIGN.md` at project root)
 - User wants to see visual options before committing
 - Exploring visual hierarchy without changing interaction structure
 
 Do NOT use when:
-- No wireframes exist yet (run `/interaction-design` first)
+- No locked wireframe sections exist yet (run `/interaction-design` first)
 - Interaction structure needs changes (go back to `/interaction-design`)
-- No design system exists yet (run `/design-context` or `/design-system-create` first)
+- No design authority exists yet (run `/design-context` or `/design-system-create` first)
 
 ## Inputs and Handoffs
 
 **Upstream (REQUIRED):**
-- `.scratch/<effort>/interaction/wireframes/*.html` (structure baseline - REQUIRED)
-- `.scratch/<effort>/interaction/state-table.md` (all states to visualize - REQUIRED)
-- `docs/design/system.md` (design system tokens - REQUIRED)
+- `docs/design/prototype.html` — sections with `data-structure="locked"` at `wireframe` fidelity (structure baseline + all five state blocks)
+- `DESIGN.md` at project root (visual tokens; legacy `docs/design/system.md` readable until migrated)
 
 **Upstream (OPTIONAL):**
-- `.scratch/<effort>/state.md` (current task context)
-- `.scratch/<effort>/interaction/journey-map.md` (emotional intent)
+- `<work-root>/<effort>/interaction/journey-map.md` (emotional intent)
+- `<work-root>/<effort>/interaction/state-table.md` (state semantics behind the rendered blocks)
 
 **Downstream:**
-- `.scratch/<effort>/visual/variants/variant-a.html` → visual option A
-- `.scratch/<effort>/visual/variants/variant-b.html` → visual option B
-- `.scratch/<effort>/visual/variants/variant-c.html` → visual option C
-- `.scratch/<effort>/visual/approved.html` → chosen variant (feeds `design-implement`)
-- `.scratch/<effort>/visual/decision.md` → rationale for chosen visual direction
+- Working exploration in `<work-root>/<effort>/visual/`: `variants/variant-{a,b,c}.html`, `decision.md`, `constraints.md`
+- On approval: the winning treatment merges into the surface's section in `docs/design/prototype.html`, `wireframe → styled` (feeds `design-implement`)
 
 ## Workflow
 
 ### Step 0: Verify Prerequisites
 
-Check all required inputs exist:
+Resolve the product document from explicit user paths, `docs/agents/memory.md`, and active `state.md`. New product memory uses `product.html#prd`; follow its persona, capability, scope, and question links. Legacy `prd.md` remains readable when canonical. Do not pick the first file found across products.
+
+Resolve the work root from the same `docs/agents/memory.md`; with none configured, or no such file, it is `.scratch/`. Then check all required inputs exist:
 
 ```bash
-# Find effort directory
-EFFORT_DIR=$(find .scratch -maxdepth 1 -type d -name "[0-9]*-*" 2>/dev/null | sort -r | head -1)
+WORK_ROOT=<the path resolved above>
 
-if [ -z "$EFFORT_DIR" ]; then
-  echo "ERROR: No effort directory found"
+# Effort directory for working exploration (create one if none is active)
+EFFORT_DIR=$(find "$WORK_ROOT" -maxdepth 1 -type d -name "[0-9]*-*" 2>/dev/null | sort -r | head -1)
+
+# Check the canonical prototype
+if [ ! -f docs/design/prototype.html ]; then
+  echo "ERROR: No canonical prototype - run /interaction-design first"
   exit 1
 fi
 
-# Check wireframes
-if [ ! -d "$EFFORT_DIR/interaction/wireframes" ]; then
-  echo "ERROR: No wireframes found - run /interaction-design first"
+# Check design authority
+if [ ! -f DESIGN.md ] && [ ! -f docs/design/system.md ]; then
+  echo "ERROR: No design authority - run /design-context or /design-system-create first"
   exit 1
 fi
 
-# Check state table
-if [ ! -f "$EFFORT_DIR/interaction/state-table.md" ]; then
-  echo "ERROR: No state table found - run /interaction-design first"
-  exit 1
-fi
-
-# Check design system
-if [ ! -f "docs/design/system.md" ]; then
-  echo "ERROR: No design system found - run /design-context or /design-system-create first"
-  exit 1
-fi
-
-echo "Prerequisites verified:"
-echo "- Wireframes: $(ls -1 $EFFORT_DIR/interaction/wireframes/*.html 2>/dev/null | wc -l) files"
-echo "- State table: found"
-echo "- Design system: found"
+echo "Prerequisites verified"
 ```
+
+Then read the prototype and verify the target surfaces are ready: each section this effort styles must carry `data-structure="locked"`. A section still `open` goes back to `/interaction-design`. Note the in-scope `data-surface` slugs and confirm all five `data-state` blocks are present in each.
 
 If any check fails, **STOP** and report what's missing with the correct skill to run.
 
 ### Step 1: Read Interaction Structure
 
-Load the wireframes and understand the locked structure:
+Load the locked sections and understand the locked structure:
 
 ```bash
-# Read all wireframes
-for wf in $EFFORT_DIR/interaction/wireframes/*.html; do
-  echo "=== $(basename $wf) ==="
-  cat "$wf"
-done
+# Read the canonical prototype (locked sections + state blocks)
+cat docs/design/prototype.html
 
-# Read state table
-cat $EFFORT_DIR/interaction/state-table.md
+# Read design authority
+cat DESIGN.md 2>/dev/null || cat docs/design/system.md
 
-# Read design system
-cat docs/design/system.md
+# Optional working context from the interaction effort
+cat $EFFORT_DIR/interaction/state-table.md 2>/dev/null
 ```
 
 **Extract and document:**
 
-1. **Structural elements from wireframes** (these CANNOT change):
+1. **Structural elements from the locked sections** (these CANNOT change):
    - Header layout (logo position, nav structure, actions)
    - Main content zones (sidebar yes/no, columns, sections)
    - Component placement (where buttons/forms/data appears)
    - Footer structure
    - Mobile layout differences (if specified)
 
-2. **States to visualize** (from state table):
-   - All 5 states × N features = M total states to design
+2. **States to visualize** (from the sections' `data-state` blocks):
+   - All 5 states × N surfaces = M total states to design
    - Note which states need visual attention (empty/error especially)
 
-3. **Design tokens available** (from design system):
+3. **Design tokens available** (from `DESIGN.md` frontmatter):
    - Typography: font families, size scale, weights
    - Colors: primary, accent, neutral scale, semantic colors
    - Spacing: base unit, scale
@@ -132,7 +111,7 @@ Write structural constraints to `$EFFORT_DIR/visual/constraints.md`:
 ```markdown
 ## Visual Design Constraints
 
-### Locked Structure (from wireframes)
+### Locked Structure (from the canonical prototype)
 
 **Cannot change:**
 - [List all structural elements - header layout, main zones, component positions]
@@ -150,11 +129,11 @@ Write structural constraints to `$EFFORT_DIR/visual/constraints.md`:
 
 ### States to Design
 
-[List from state table]
-- Feature A: LOADING, EMPTY, ERROR, SUCCESS, PARTIAL
-- Feature B: ...
+[List from the sections' state blocks]
+- Surface A: LOADING, EMPTY, ERROR, SUCCESS, PARTIAL
+- Surface B: ...
 
-### Design System Tokens
+### Design Tokens (DESIGN.md)
 
 [Extract key tokens]
 - Fonts: [list]
@@ -186,7 +165,7 @@ Based on response, propose 3 visual directions:
 - Visual weight: [Which elements feel heaviest]
 - Decorative approach: [Minimal shadows / Bold borders / Gradient accents / etc]
 
-**Example adjustments on wireframe structure:**
+**Example adjustments on the locked structure:**
 - Primary CTA: [Bold color, large size, heavy weight]
 - Secondary content: [Lighter color, smaller size]
 - Backgrounds: [Flat / Subtle gradient / Pattern]
@@ -217,34 +196,47 @@ Based on response, propose 3 visual directions:
 > **Options:**
 > **A)** Generate these 3 variants  
 > **B)** Adjust directions — [specify which and how]  
-> **C)** Show me the wireframe structure first
+> **C)** Show me the locked structure first
 
-If C, open wireframe in browser before continuing.
+If C, open the prototype section in browser before continuing.
 
-### Step 2.5: External Production Dispatch (optional, layers ①⑥)
+### Step 2.5: External Production (optional)
 
-The three variants can be **produced by an installed external skill** instead of generated inline (see `design/ux/README.md`):
+Read `<work-root>/<effort>/design/capabilities.md`. If it carries `① taste` and `⑥ production` rows, follow their decisions and continue at Step 3.
 
-- **Layer ① taste skills** (anti-slop direction, creative-director prompts) — use to sharpen the three direction strategies defined in Step 2, not to replace them
-- **Layer ⑥ production engines** (HTML-prototype generators, design-to-code services) — use to render higher-fidelity mockups than inline generation produces
+Otherwise scan the skills available in this session for either:
 
-**Hard constraints when dispatching — the external output must be reconciled back into this skill's contract:**
+- **① taste** — a skill that argues for or vetoes a design direction and produces no palette, template, or code as its own artifact. It sharpens the three direction strategies from Step 2; it never chooses among them.
+- **⑥ production** — a skill that renders high-fidelity mockups, prototypes, or decks from a brief that is already settled. It decides nothing.
 
-1. Variants MUST preserve the locked wireframe structure (Step 1 constraints)
-2. Variants MUST use `docs/design/system.md` tokens (no engine-invented colors/fonts)
-3. Output lands at `$EFFORT_DIR/visual/variants/variant-{a,b,c}.html` with the state switcher (Step 3) intact — copy/rename the engine's output if it writes elsewhere
-4. All 5 states from the state table must be present in each variant
+Append one row per slot recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. With `none` for both, continue at Step 3 — the default path.
 
-If no external skill is installed, or its output can't satisfy these constraints, generate inline per Step 3 — that is the default path.
+With something found, name it and what it would change, then **AskUserQuestion**:
+
+> A [taste / production] capability is available: **[name]** — it would [what it changes, one clause].
+>
+> **A)** Generate the variants inline per Step 3 (Recommended)
+> **B)** Use **[name]**, reconciled into this skill's contract below
+
+Whatever produces them, the output must satisfy this skill's contract:
+
+1. The locked section structure survives intact (Step 1 constraints).
+2. Every visual value traces to `DESIGN.md` — no invented colors or fonts.
+3. Files land at `$EFFORT_DIR/visual/variants/variant-{a,b,c}.html` with the Step 3 state switcher present. Copy or rename if the tool writes elsewhere.
+4. All five states from the locked section appear in each variant.
+
+If the output cannot meet these four, generate inline per Step 3 — the default path.
+
+Done when `capabilities.md` carries `① taste` and `⑥ production` rows and three variants exist at the canonical paths.
 
 ### Step 3: Generate Visual Variants
 
 For each direction (A, B, C), generate full HTML that:
 
-1. **Preserves exact structure** from wireframe
+1. **Preserves exact structure** from the locked section
 2. **Applies visual treatment** per direction strategy
-3. **Shows all states** from state table
-4. **Uses design system tokens**
+3. **Shows all states** from the section's state blocks
+4. **Uses DESIGN.md tokens**
 
 **Generation process per variant:**
 
@@ -256,9 +248,9 @@ For each direction (A, B, C), generate full HTML that:
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Visual Variant [A/B/C] — [Feature Name]</title>
 <style>
-/* Design system tokens */
+/* Design tokens */
 :root {
-  /* Extract from docs/design/system.md */
+  /* Extract from DESIGN.md frontmatter */
   --font-display: [from system];
   --font-body: [from system];
   --color-primary: [from system];
@@ -271,8 +263,8 @@ For each direction (A, B, C), generate full HTML that:
   /* etc */
 }
 
-/* Base structure from wireframe (LOCKED) */
-[Copy exact layout structure from wireframe]
+/* Base structure from the locked section (LOCKED) */
+[Copy exact layout structure from the prototype section]
 
 /* Visual treatment (VARIABLE per direction) */
 .primary-cta {
@@ -293,7 +285,7 @@ For each direction (A, B, C), generate full HTML that:
 
 <!-- State: SUCCESS (default view) -->
 <div class="state-success">
-  [Full implementation preserving wireframe structure]
+  [Full implementation preserving the locked structure]
 </div>
 
 <!-- State: LOADING -->
@@ -378,7 +370,8 @@ open $EFFORT_DIR/visual/variants/variant-c.html
 Based on feedback:
 
 **If A (approve one):**
-- Copy chosen variant to `$EFFORT_DIR/visual/approved.html`
+- Merge the chosen treatment into the surface's section in `docs/design/prototype.html`: apply the winning CSS through the shared `:root` token block plus section-scoped rules, keep the section's markup, markers, and state blocks intact, set `data-fidelity="styled"` and `data-updated`
+- Structure markers are untouched — the section stays `locked`
 - Document decision (next step)
 - Done
 
@@ -393,7 +386,7 @@ Based on feedback:
 - Identify which visual elements from which variants
 - Create new variant combining them **while preserving structure**
 - Present hybrid for approval
-- If approved, that becomes approved.html
+- If approved, merge it as in A
 
 **If D (none work):**
 - **AskUserQuestion**: "What's missing visually?" or "What feeling isn't captured?"
@@ -434,13 +427,13 @@ Once variant approved, write decision rationale:
 ### Implementation Notes
 
 **For `/design-implement`:**
-- This visual design is ready to convert to production code
+- The styled section in the canonical prototype is ready to convert to production code
 - All 5 states are defined and approved
-- Structure matches wireframe (no interaction changes)
-- Design system tokens were followed
+- Structure is unchanged (section stayed locked)
+- DESIGN.md tokens were followed
 
 **Files:**
-- Approved visual: `$EFFORT_DIR/visual/approved.html`
+- Canonical: `docs/design/prototype.html` — section `[data-surface]` now at styled fidelity
 - Source variants: `$EFFORT_DIR/visual/variants/*.html`
 ```
 
@@ -456,22 +449,22 @@ Write to `$EFFORT_DIR/visual/decision.md`.
 **Artifacts Created:**
 - ✅ Visual constraints documented (`visual/constraints.md`)
 - ✅ 3 visual variants generated (`visual/variants/`)
-- ✅ Approved visual design (`visual/approved.html`)
+- ✅ Approved treatment merged into `docs/design/prototype.html` (section at styled fidelity)
 - ✅ Decision rationale (`visual/decision.md`)
 
 **Structure Preservation:**
-- ✅ Interaction structure from wireframes maintained
-- ✅ All 5 states from state table visualized
-- ✅ Design system tokens applied
+- ✅ Locked section structure maintained
+- ✅ All 5 state blocks styled
+- ✅ DESIGN.md tokens applied
 
 **Ready for Next Step:**
-This visual design is ready to feed into `/design-implement`.
-The approved.html shows the final visual treatment on the locked interaction structure. Implementation will convert this to production code.
+The styled section in the canonical prototype is ready for `/design-implement`.
+Implementation will convert it to production code.
 
 **Files to reference in next step:**
-- `$EFFORT_DIR/visual/approved.html` (approved visual design)
-- `$EFFORT_DIR/interaction/state-table.md` (state definitions)
-- `docs/design/system.md` (design tokens)
+- `docs/design/prototype.html` (styled section — the what)
+- `DESIGN.md` (design tokens — the how)
+- `$EFFORT_DIR/interaction/state-table.md` (state semantics, while the effort lives)
 ```
 
 **AskUserQuestion** for next step:
@@ -489,14 +482,15 @@ The approved.html shows the final visual treatment on the locked interaction str
 
 Before marking visual design complete:
 
-- [ ] All 3 variants share exact structure from wireframe
-- [ ] All 5 states visualized in approved variant
-- [ ] Design system tokens used (not arbitrary values)
+- [ ] All 3 variants share exact structure from the locked section
+- [ ] All 5 states styled in the merged section
+- [ ] DESIGN.md tokens used (not arbitrary values)
 - [ ] Visual directions genuinely differ (not just color swaps)
-- [ ] Approved variant matches interaction intent from journey map
+- [ ] Merged section matches interaction intent from journey map
 - [ ] State switcher works (user can preview all states)
-- [ ] Mobile responsive if wireframe specified mobile behavior
+- [ ] Mobile responsive if the section specified mobile behavior
 - [ ] Accessibility contrast meets WCAG AA (check with browser tools)
+- [ ] Section markers intact: still locked, fidelity styled, data-updated current
 
 ## Common Pitfalls
 
@@ -504,49 +498,61 @@ Before marking visual design complete:
 - Change button positions or navigation hierarchy — that's interaction structure
 - Generate variants with different layouts — structure is locked
 - Skip empty/error states — all 5 states must be visualized
-- Use colors outside the design system
+- Use colors outside DESIGN.md
 - Make all 3 variants look similar — they need visual contrast
 
 **Do:**
-- Reference the wireframe continuously to maintain structure
+- Reference the locked section continuously to maintain structure
 - Use state switcher to verify all 5 states work
-- Apply design system tokens consistently
+- Apply DESIGN.md tokens consistently
 - Make visual differences bold enough to compare
 - Document why the chosen direction works better
 
 ## Integration with Other Skills
 
 **Reads from:**
-- `/interaction-design` — wireframes (structure baseline)
-- `/interaction-design` — state-table.md (states to visualize)
-- `/design-system-create` or `/design-context` — system.md (visual tokens)
-- External layer-① taste skills and layer-⑥ production engines, when installed (optional variant production — see `design/ux/README.md`)
+- `docs/design/prototype.html` — locked wireframe sections (structure baseline + states)
+- `DESIGN.md` — visual tokens (via `/design-context` or `/design-system-create`)
 
 **Feeds into:**
-- `/design-implement` — approved.html (final visual to implement)
+- `/design-implement` — the styled section (final visual to implement)
 
 **Cannot be used without:**
-- Wireframes must exist first
-- Design system must exist first
+- Locked sections must exist first
+- Design authority must exist first
 
 ## Files Created
 
 ```
-.scratch/<timestamp>-<effort>/
+docs/design/prototype.html   # Section updated in place: wireframe → styled (CORE DELIVERABLE)
+
+<work-root>/<effort>/
   visual/
-    constraints.md         # Structural constraints from wireframe
-    variants/              # 3 visual directions
+    constraints.md         # Structural constraints from the locked section
+    variants/              # 3 visual directions (working exploration)
       variant-a.html
       variant-b.html
       variant-c.html
-    approved.html          # Chosen variant (CORE DELIVERABLE)
     decision.md            # Visual decision rationale
 ```
 
-All files stay in Working layer (`.scratch/`) — they're exploration artifacts.
+## Shared Memory Contract
 
-The approved visual design feeds into `/design-implement` which produces the Human layer docs and production code.
+Full contract: [references/design-memory.md](references/design-memory.md).
 
----
+```text
+Triad role:  WHAT (visuals) — raises locked sections from wireframe to styled fidelity
+Layer:       human (the merged section) + working (variants and rationale)
+Owns:        <work-root>/<effort>/visual/; the fidelity transition of in-scope prototype sections
+Contributes: <work-root>/<effort>/design/capabilities.md — the `① taste` and `⑥ production` rows only
+Coordinates: state.md — records the approved direction, the data-surface anchors, and the next stage
+Promotes:    none beyond the merge — the styled section plus DESIGN.md are the durable record
+```
 
-**Last updated:** 2026-08-17
+Resolve the work root and active effort as in Step 0.
+
+`Promotes: none` beyond the merge is deliberate. This skill picks among directions that `DESIGN.md` already permits; it does not create token authority. If choosing a variant reveals that the authority itself is wrong — a token missing, an accent that cannot carry the hierarchy — that is a change to `DESIGN.md` and routes back to `/design-context`, not a local override.
+
+Durability test: the losing variants no — they were the argument. The winning treatment yes — it merges into the canonical section. `decision.md` explains a choice the merged section cannot show, so keep it until the component ships and its rationale is folded into the component doc.
+
+**Update `state.md` at the approval gate** — approved direction, the styled `data-surface` anchors, next stage `/design-implement`.

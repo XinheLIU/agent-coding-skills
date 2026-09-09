@@ -1,13 +1,13 @@
 ---
 name: design-system-create
-description: "Create the canonical design system document. Gathers product context, proposes typography/color/layout system grounded in user needs, generates preview, writes docs/design/system.md after approval. Consultative process that ties aesthetic choices to product goals and user constraints."
+description: "Build design authority from scratch when there is nothing to adopt — no DESIGN.md, no reference brand. Proposes typography, color, and layout tied to the product's persona and constraints, previews it, and writes a root DESIGN.md on approval. Use when asked to create a design system or define visual style; if a reference or DESIGN.md exists, run /design-context instead."
 ---
 
-Last updated: 2026-08-17
+Last updated: 2026-09-09
 
 # Design System Creation
 
-Create the canonical design system that grounds all design work in this project.
+Create the canonical design authority that grounds all design work in this project: `DESIGN.md` at the project root — the **how** of the shared design triad ([references/design-memory.md](references/design-memory.md)).
 
 ## When to Use
 
@@ -17,37 +17,50 @@ Create the canonical design system that grounds all design work in this project.
 - User asks: "create a design system", "define visual style", "what should this look like"
 
 Do NOT use when:
-- `docs/design/system.md` already exists and is current (validate and use it)
+- `DESIGN.md` already exists and is current (validate and use it; `/design-context` re-syncs it)
 - Only exploring variants without defining the system (use `/visual-design-variants`)
 - Implementing an already-approved design (use `/design-implement`)
 
 ## Inputs and Handoffs
 
 **Upstream:**
-- `docs/product/<slug>/prd.md` Part 1 (persona, platform, product type)
+- the configured product document (`product.html#prd`, or a canonical legacy PRD) Part 1 (persona, platform, product type)
 - `CONTEXT.md` (design principles or constraints if any)
 - User's stated design direction or preferences
 
 **Downstream:**
-- `docs/design/system.md` → feeds `interaction-design`, `visual-design-variants`, and `design-implement`
+- `DESIGN.md` at project root → feeds `interaction-design`, `visual-design-variants`, and `design-implement`
 - System preview HTML → user approval gate
 
 ## Workflow
 
-### Step 0: Check for Existing Design System
+### Step 0: Check for Existing Design Authority
+
+Resolve the work root before writing anything. Read `docs/agents/memory.md` and use the work root it configures; when it configures none, or the file is absent, the work root is `.scratch/`. Then find the active effort:
 
 ```bash
-if [ -f docs/design/system.md ]; then
-  echo "EXISTING_DESIGN_SYSTEM: yes"
-  cat docs/design/system.md
+WORK_ROOT=<the path resolved above>
+EFFORT=$(basename "$(find "$WORK_ROOT" -maxdepth 1 -type d -name '[0-9]*-*' 2>/dev/null | sort -r | head -1)")
+```
+
+This skill does not require an active effort — with no effort directory, write the preview to `$WORK_ROOT/design/` instead.
+
+```bash
+if [ -f DESIGN.md ]; then
+  echo "EXISTING_DESIGN_AUTHORITY: yes"
+  cat DESIGN.md
+elif [ -f docs/design/system.md ]; then
+  echo "LEGACY_SYSTEM_MD: yes — route to /design-context to migrate"
 else
-  echo "EXISTING_DESIGN_SYSTEM: no"
+  echo "EXISTING_DESIGN_AUTHORITY: no"
 fi
 ```
 
-If `EXISTING_DESIGN_SYSTEM: yes`:
+A legacy `docs/design/system.md` with no `DESIGN.md` is a migration, not a creation — hand off to `/design-context` Step 1.
+
+If `EXISTING_DESIGN_AUTHORITY: yes`:
 - Read the file and summarize its current state
-- Ask: "This project has a design system at docs/design/system.md. Do you want to: (A) Validate and use it, (B) Update it, or (C) Replace it?"
+- Ask: "This project has design authority at DESIGN.md. Do you want to: (A) Validate and use it, (B) Update it, or (C) Replace it?"
 - If A: STOP. No changes needed.
 - If B: Continue to Step 1 but pre-fill from existing
 - If C: Continue to Step 1 as if creating fresh
@@ -58,10 +71,7 @@ Read existing context sources first, then fill gaps with one comprehensive quest
 
 **Auto-gather from:**
 
-1. PRD Part 1 if it exists:
-```bash
-find docs/product -name "prd.md" -type f | head -1 | xargs cat 2>/dev/null || echo "NO_PRD"
-```
+1. Resolve the active product document from explicit user paths, `docs/agents/memory.md`, and `state.md`. Read its persona/problem and platform records through the PRD reading index; use a legacy PRD if it remains canonical. Do not select the first product found on disk.
 Extract: persona (who), platform (web/mobile/desktop), product type (SaaS/marketing/dashboard/etc.)
 
 2. CONTEXT.md if it exists:
@@ -94,6 +104,19 @@ Do NOT ask these as separate questions. Present all in one AskUserQuestion with:
 
 Generate a complete design system grounded in the product context. This is a consultative process — propose with rationale, not a form.
 
+Read `<work-root>/<effort>/design/capabilities.md` — or `<work-root>/design/capabilities.md` with no active effort. If it carries a `② knowledge — type/color` row, follow that row's decision through 2.2 and 2.3.
+
+Otherwise scan the skills available in this session for one that answers "what are the valid options" from a catalog of font pairings or palettes, without picking one for you. Append one row recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. With `none`, propose from first principles — the default path.
+
+With something found, name it and what it would change, then **AskUserQuestion**:
+
+> A design-knowledge reference is available: **[name]** — it would [what it changes, one clause].
+>
+> **A)** Propose typography and palette from first principles (Recommended)
+> **B)** Consult **[name]** for pairings and palettes suited to this product type
+
+The row decides for both 2.2 and 2.3; do not ask twice.
+
 #### 2.1 Aesthetic Direction
 
 Tie the aesthetic to product goals and user needs. Examples:
@@ -108,9 +131,9 @@ State the direction in 2-3 sentences with the "why" explicit.
 
 #### 2.2 Typography
 
-**External skill dispatch (layer ②, optional):** If a design-knowledge skill is installed (see the catalog in `design/ux/README.md` — layer ② covers font-pairing and palette databases, e.g. UI UX Pro Max class knowledge bases, design-specialist libraries), query it for font pairings matching the product category before proposing. Cite where each recommendation came from. If no such skill is installed, propose from first principles below — that is the default path.
+When the `② knowledge — type/color` row says to consult a reference, look up pairings that suit this product category and cite what came from where. Otherwise propose from first principles below — the default path.
 
-**Layer ④ shortcut:** if a ready-made brand spec fits this product type (layer ④ template collections — Awesome Design MD / Awesome Design Skills), offer to adopt it wholesale via `/design-context` instead of composing a system from scratch. Only with user approval.
+**Shortcut worth offering:** if a published spec already fits this product type closely, adopting it wholesale via `/design-context` beats composing one from scratch. Offer it; proceed only on approval.
 
 Choose ONE pairing (heading + body) that matches the aesthetic direction. Provide:
 - Heading font with rationale
@@ -127,7 +150,7 @@ Choose ONE pairing (heading + body) that matches the aesthetic direction. Provid
 
 #### 2.3 Color Palette
 
-**External skill dispatch (layer ②, optional):** If a design-knowledge skill is installed (see `design/ux/README.md` layer ②), query it for palettes by product type (saas, ecommerce, healthcare, fintech, portfolio, editorial, dashboard) before proposing. Otherwise propose from first principles — that is the default path.
+When that same row says to consult a reference, look up the palette for the product type (saas, ecommerce, healthcare, fintech, portfolio, editorial, dashboard). Otherwise propose from first principles — the default path.
 
 Choose ONE palette. Provide semantic color tokens:
 
@@ -206,7 +229,7 @@ State these as principles, not code.
 Create a simple preview showing the design system elements. This is Working-layer (disposable after approval), so write to:
 
 ```bash
-mkdir -p .scratch/design-system/
+mkdir -p "$WORK_ROOT/$EFFORT/design"
 ```
 
 Generate `system-preview.html` with:
@@ -232,19 +255,49 @@ Show the design system proposal:
 Then display the preview HTML inline so the user can see it rendered.
 
 Use AskUserQuestion with options:
-- A) Approve this design system (write to docs/design/system.md)
+- A) Approve this design system (write DESIGN.md at the project root)
 - B) Adjust [specific element] — specify what to change
 - C) Start over with different direction
 
 If B: Make the requested changes and present again (max 3 iterations)
 If C: Return to Step 1 with new direction
 
-### Step 5: Write Design System Document
+### Step 5: Write DESIGN.md
 
-After approval, write to `docs/design/system.md`:
+After approval, write `DESIGN.md` at the project root. Machine-readable tokens go in YAML frontmatter; judgment stays in prose. This is the shape external ⑤ lifecycle tools maintain, so the native path and the tool path produce the same file.
 
 ```markdown
-# Design System
+---
+colors:
+  surface-page: "#FFFFFF"
+  surface-raised: "#F9FAFB"
+  surface-overlay: "#FFFFFF"
+  text-primary: "#111827"
+  text-secondary: "#6B7280"
+  text-tertiary: "#9CA3AF"
+  accent: "#3B82F6"
+  accent-hover: "#2563EB"
+  accent-active: "#1D4ED8"
+  success: "#10B981"
+  warning: "#F59E0B"
+  error: "#EF4444"
+  info: "#3B82F6"
+  border-default: "#E5E7EB"
+  border-subtle: "#F3F4F6"
+typography:
+  font-heading: "'[Font]', [fallbacks]"
+  font-body: "'[Font]', [fallbacks]"
+  scale-base: 16px
+  scale-ratio: 1.25
+spacing: [4, 8, 12, 16, 24, 32, 48, 64]
+radius:
+  sm: 6px
+  md: 10px
+  lg: 20px
+  full: 9999px
+---
+
+# Design Authority
 
 Last updated: YYYY-MM-DD
 
@@ -265,7 +318,7 @@ Last updated: YYYY-MM-DD
 ```
 
 ### Type Scale
-Base: 16px, Scale: 1.25
+Base and ratio per frontmatter.
 
 | Element | Size | Weight | Line Height |
 |---------|------|--------|-------------|
@@ -278,58 +331,11 @@ Base: 16px, Scale: 1.25
 
 ## Color Palette
 
-### Light Mode
-
-**Surfaces:**
-```css
---surface-page: #FFFFFF;
---surface-raised: #F9FAFB;
---surface-overlay: #FFFFFF;
-```
-
-**Text:**
-```css
---text-primary: #111827;    /* Contrast: 15.3:1 ✓ */
---text-secondary: #6B7280;  /* Contrast: 4.6:1 ✓ */
---text-tertiary: #9CA3AF;   /* Contrast: 3.2:1 (large text only) */
-```
-
-**Accent:**
-```css
---accent: #3B82F6;          /* Contrast: 4.5:1 on white ✓ */
---accent-hover: #2563EB;
---accent-active: #1D4ED8;
-```
-
-**Semantic:**
-```css
---success: #10B981;
---warning: #F59E0B;
---error: #EF4444;
---info: #3B82F6;
-```
-
-**Borders:**
-```css
---border-default: #E5E7EB;
---border-subtle: #F3F4F6;
-```
-
-### Dark Mode
-[Same structure, dark variants]
+Token values live in the frontmatter — one source, no duplication in prose. Record here only the judgment: contrast validations (`--text-primary` on `--surface-page`: 15.3:1 ✓), what each accent state is for, and dark-mode variants when defined.
 
 ## Spacing Scale
 
-```css
---space-1: 0.25rem;  /* 4px */
---space-2: 0.5rem;   /* 8px */
---space-3: 0.75rem;  /* 12px */
---space-4: 1rem;     /* 16px */
---space-6: 1.5rem;   /* 24px */
---space-8: 2rem;     /* 32px */
---space-12: 3rem;    /* 48px */
---space-16: 4rem;    /* 64px */
-```
+Values per frontmatter `spacing`. Record here only usage guidance (component padding uses 24/32; section rhythm uses 48/64).
 
 ## Layout
 
@@ -340,12 +346,7 @@ Base: 16px, Scale: 1.25
 
 ## Border Radius
 
-```css
---radius-sm: 6px;     /* inputs, tags */
---radius-md: 10px;    /* cards, buttons */
---radius-lg: 20px;    /* feature panels */
---radius-full: 9999px; /* pills, avatars */
-```
+Values per frontmatter `radius`: sm for inputs and tags, md for cards and buttons, lg for feature panels, full for pills and avatars.
 
 ## Component Foundations
 
@@ -380,40 +381,46 @@ Base: 16px, Scale: 1.25
 
 ## References
 
-- Product context: docs/product/[slug]/prd.md Part 1
+- Tokens created from scratch via design-system-create, YYYY-MM-DD
+- Product context: configured product document persona/problem records
 - Component specs: docs/design/components/
 ```
 
-Confirm `docs/design/` directory exists, create if needed:
-
-```bash
-mkdir -p docs/design
-```
+If `docs/design/prototype.html` exists, re-sync its `:root` token block from the new frontmatter (see `/design-context` Step 4).
 
 ### Step 6: Summary
 
 Report what was created:
-- `docs/design/system.md` — Human layer, git-tracked canonical design system
-- `.scratch/design-system/system-preview.html` — Working layer, preview (can be deleted)
+- `DESIGN.md` — Human layer, git-tracked canonical design authority (the triad's **how**)
+- `<work-root>/<effort>/design/system-preview.html` — Working layer, preview (can be deleted)
 
 Next steps:
-- Use `/interaction-design` to define user flows and states, then `/visual-design-variants` for visual options on specific features
+- Use `/interaction-design` to define structure and states in the canonical prototype, then `/visual-design-variants` for visual options
 - Use `/design-implement` to convert approved designs into production code
-- Design system is now the source of truth; refer to it in all visual work
+- DESIGN.md is now the source of truth; refer to it in all visual work
 
-## Memory Layer Classification
+## Shared Memory Contract
 
-**Human layer (git-tracked, outlives effort):**
-- `docs/design/system.md` — canonical design system
+Full contract: [references/design-memory.md](references/design-memory.md).
 
-**Working layer (gitignored, disposable):**
-- `.scratch/design-system/system-preview.html` — approval preview
+```text
+Triad role:  HOW — from-scratch path for the canonical DESIGN.md
+Layer:       human — design authority outlives every effort that uses it
+Owns:        DESIGN.md at the project root (as /design-context's delegate)
+Contributes: <work-root>/<effort>/design/capabilities.md — the `② knowledge — type/color` row only
+Coordinates: state.md — records that design authority now exists and names the next stage
+Promotes:    aesthetic rationale that constrains the build → an ADR, via domain-modeling
+```
 
-Apply the durability test: if the work root were deleted, would the project lose a fact it still needs? Design system YES (Human layer), preview NO (Working layer).
+Resolve the work root and active effort from `docs/agents/memory.md`, defaulting to `.scratch/`. The approval preview is a working artifact at `<work-root>/<effort>/design/system-preview.html` and dies with the effort.
+
+Durability test: `DESIGN.md` yes — every later component reads it. The preview no; once the authority is written, the authority is the answer.
+
+Most aesthetic choices are settled by `DESIGN.md` itself and promote nowhere. The exception is a choice that constrains engineering — a type scale that forces a layout system, a token structure that dictates how theming works. Route that rationale to an ADR; leave taste in `DESIGN.md`.
 
 ## Quality Gates
 
-Before writing `docs/design/system.md`:
+Before writing `DESIGN.md`:
 - [ ] All text/background pairs validated against WCAG AA
 - [ ] Font choices avoid blacklist (no Papyrus, Comic Sans, Lobster, Impact, Jokerman)
 - [ ] Generic fonts (Inter, Roboto, Poppins) have strong justification stated
@@ -421,20 +428,21 @@ Before writing `docs/design/system.md`:
 - [ ] Touch targets confirmed 44x44px minimum
 - [ ] ONE decisive accent color (not three equal-weight brand colors)
 - [ ] Rationale ties aesthetic to product/user needs (not arbitrary choices)
+- [ ] Frontmatter tokens and prose sections both present; provenance line in `## References`
 
 ## Integration Points
 
 **Reads from:**
-- `docs/product/<slug>/prd.md` Part 1 (persona, platform)
+- the configured product document (`product.html#prd`, or a canonical legacy PRD) Part 1 (persona, platform)
 - `CONTEXT.md` (design principles if any)
-- External layer-② knowledge skills, when installed (typography/color catalogs — see `design/ux/README.md`)
 
 **Writes to:**
-- `docs/design/system.md` (Human layer)
+- `DESIGN.md` at project root (Human layer)
+- `docs/design/prototype.html` `:root` token block (sync only, when a prototype exists)
 
 **Feeds:**
-- `visual-design-variants` (uses system.md as constraint)
-- `design-implement` (uses system.md for tokens/patterns)
-- `spec` (references design system for component specs)
+- `visual-design-variants` (uses DESIGN.md as constraint)
+- `design-implement` (uses DESIGN.md for tokens/patterns)
+- `spec` (references design authority for component specs)
 
-**External skills (optional):** layer-② knowledge skills for typography/palette lookup (Steps 2.2–2.3), layer-④ template catalogs for wholesale adoption via `/design-context` — see `design/ux/README.md`. Native consultative proposal is the fallback.
+**When a reference exists instead:** `/design-context` imports it rather than proposing from scratch. This skill is the no-reference path.

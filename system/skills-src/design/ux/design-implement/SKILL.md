@@ -1,9 +1,9 @@
 ---
 name: design-implement
-description: "Convert approved design into production code matching the project's tech stack. Extracts design tokens, builds components following stack conventions, ensures accessibility (WCAG AA), generates responsive code. Documents in docs/design/components/."
+description: "Turn an approved visual design into production code in the project's own stack and conventions, with design tokens wired up, WCAG AA met, and the component documented in docs/design/components/. Requires a styled section in docs/design/prototype.html and DESIGN.md. Use to implement or build a design that is already settled, not to explore one."
 ---
 
-Last updated: 2026-08-17
+Last updated: 2026-09-09
 
 # Design Implementation
 
@@ -11,94 +11,92 @@ Convert approved design into production code that matches the project's tech sta
 
 ## When to Use
 
-- Design is approved (`.scratch/<effort>/visual/approved.html` exists)
-- Design system is defined (`docs/design/system.md` exists)
+- Design is approved (a `styled`, `locked` section exists in `docs/design/prototype.html`)
+- Design authority is defined (`DESIGN.md` at project root)
 - Ready to implement actual production code (not exploring options)
 - User asks: "implement this design", "turn this into code", "build the component"
 
 Do NOT use when:
-- No design system exists yet (run `/design-context` or `/design-system-create` first)
+- No design authority exists yet (run `/design-context` or `/design-system-create` first)
 - Still exploring options (use `/visual-design-variants`)
-- Design not yet approved (finish variant selection first)
+- The target section is still at `wireframe` fidelity (finish variant selection first)
 
 ## Inputs and Handoffs
 
 **Upstream:**
-- `.scratch/<effort>/visual/approved.html` (approved visual design - REQUIRED)
-- `.scratch/<effort>/interaction/state-table.md` (state definitions - REQUIRED)
-- `docs/design/system.md` (design system for tokens/patterns - REQUIRED)
+- `docs/design/prototype.html` — the target section at `styled` fidelity, `data-structure="locked"`, all five state blocks (REQUIRED)
+- `DESIGN.md` at project root (tokens/patterns — REQUIRED; legacy `docs/design/system.md` readable until migrated)
+- `<work-root>/<effort>/interaction/state-table.md` (state semantics, when the effort is still live)
 - Project tech stack (auto-detected)
 
 **Downstream:**
 - Production component code in project's source directory
 - `docs/design/components/<name>.md` (Human layer component documentation)
+- The prototype section marked `data-fidelity="implemented"` with `data-component` / `data-component-doc` pointers
 
 ## Workflow
 
 ### Step 0: Verify Prerequisites
 
+Resolve the product document from explicit user paths, `docs/agents/memory.md`, and active `state.md`. New product memory uses `product.html#prd`; follow its persona, capability, scope, and question links. Legacy `prd.md` remains readable when canonical. Do not pick the first file found across products.
+
+Resolve the work root from the same `docs/agents/memory.md`; with none configured, or no such file, it is `.scratch/`.
+
 ```bash
-# Find effort directory
-EFFORT_DIR=$(find .scratch -maxdepth 1 -type d -name "[0-9]*-*" 2>/dev/null | sort -r | head -1)
+WORK_ROOT=<the path resolved above>
 
-# Check for approved visual design
-if [ -f "$EFFORT_DIR/visual/approved.html" ]; then
-  echo "APPROVED_DESIGN: found"
+# Effort directory (optional working context)
+EFFORT_DIR=$(find "$WORK_ROOT" -maxdepth 1 -type d -name "[0-9]*-*" 2>/dev/null | sort -r | head -1)
+
+# Check for the canonical prototype
+if [ -f docs/design/prototype.html ]; then
+  echo "PROTOTYPE: found"
 else
-  echo "APPROVED_DESIGN: missing"
+  echo "PROTOTYPE: missing"
 fi
 
-# Check for state table
-if [ -f "$EFFORT_DIR/interaction/state-table.md" ]; then
-  echo "STATE_TABLE: found"
+# Check for design authority
+if [ -f DESIGN.md ] || [ -f docs/design/system.md ]; then
+  echo "DESIGN_AUTHORITY: found"
 else
-  echo "STATE_TABLE: missing"
-fi
-
-# Check for design system
-if [ -f docs/design/system.md ]; then
-  echo "DESIGN_SYSTEM: found"
-else
-  echo "DESIGN_SYSTEM: missing"
+  echo "DESIGN_AUTHORITY: missing"
 fi
 ```
+
+Then read the prototype and verify the target section: it must carry `data-fidelity="styled"` and `data-structure="locked"` with all five state blocks. 
 
 If any prerequisite missing:
 - STOP and report which is missing
 - Guide user to run appropriate skill:
-  - No approved.html → run `/visual-design-variants`
-  - No state-table.md → run `/interaction-design`
-  - No system.md → run `/design-context` (or `/design-system-create` for from-scratch)
+  - No prototype or section still at wireframe fidelity → run `/visual-design-variants`
+  - No section for this surface at all → run `/interaction-design`
+  - No design authority → run `/design-context` (or `/design-system-create` for from-scratch)
 
 ### Step 1: Read Context
 
 **Load design inputs:**
 
-1. Approved visual design:
+1. The styled section of the canonical prototype:
 ```bash
-cat $EFFORT_DIR/visual/approved.html
+cat docs/design/prototype.html
 ```
 
-2. Interaction state table:
+2. Design authority:
 ```bash
-cat $EFFORT_DIR/interaction/state-table.md
+cat DESIGN.md 2>/dev/null || cat docs/design/system.md
 ```
 
-3. Design system:
+3. Working context, when the effort is still live:
 ```bash
-cat docs/design/system.md
-```
-
-4. Decision rationale (if exists):
-```bash
+cat $EFFORT_DIR/interaction/state-table.md 2>/dev/null || echo "NO_STATE_TABLE (read state semantics from the section's data-state blocks)"
 cat $EFFORT_DIR/visual/decision.md 2>/dev/null || echo "NO_DECISION"
 cat $EFFORT_DIR/interaction/decisions.md 2>/dev/null || echo "NO_INTERACTION_DECISIONS"
 ```
 
 **Extract key information:**
-- **Visual design:** HTML structure, CSS rules, component patterns
-- **State table:** All 5 states per feature (LOADING/EMPTY/ERROR/SUCCESS/PARTIAL)
-- **Design system:** Tokens (colors, fonts, spacing), component foundations
+- **Styled section:** HTML structure, CSS rules, component patterns, the `data-capability` link back to the why
+- **State blocks:** All 5 states rendered in the section (LOADING/EMPTY/ERROR/SUCCESS/PARTIAL)
+- **Design authority:** Tokens (colors, fonts, spacing), component foundations
 - **Decisions:** Rationale for design choices (informs implementation comments)
 
 ### Step 2: Detect Tech Stack
@@ -156,7 +154,7 @@ Package manager: npm
 
 ### Step 3: Extract Design Tokens
 
-From `docs/design/system.md`, extract tokens into stack-appropriate format.
+From `DESIGN.md` frontmatter, extract tokens into stack-appropriate format.
 
 **For CSS/Tailwind projects**, generate `styles/design-tokens.css`:
 ```css
@@ -278,11 +276,11 @@ Ask where to write tokens if location is ambiguous:
 
 ### Step 4: Generate Component Code
 
-Analyze the approved.html structure and generate production components.
+Analyze the styled section's structure and generate production components.
 
 **Ask for component details:**
 
-Present what you found in approved.html (main elements, structure) and ask:
+Present what you found in the styled section (main elements, structure) and ask:
 
 **What component(s) should I create?**
 - Component name(s): e.g., "Hero", "FeatureCard", "ProductDashboard"
@@ -291,7 +289,7 @@ Present what you found in approved.html (main elements, structure) and ask:
 
 **Generation principles:**
 
-1. **Extract semantic structure** from approved.html
+1. **Extract semantic structure** from the styled section
 2. **Apply tech stack conventions:**
    - React: Functional components with TypeScript, props interface
    - Vue: SFCs with script setup and scoped styles
@@ -437,21 +435,32 @@ export function Hero({
 
 Write the generated files to the target directory.
 
-### Step 4.5: External Polish Pass (optional, layer ③)
+### Step 4.5: Polish Pass (optional)
 
-If polish/review skills are installed (see `design/ux/README.md` layer ③ — interaction-craft, motion-design, "feel-better", or a11y-review skills), run a review pass over the generated code before documenting it:
+Read `<work-root>/<effort>/design/capabilities.md`. If it carries a `③ method` row, follow that row's decision and continue at Step 5.
 
-- **Interaction craft / motion** — spring vs ease decisions, hover behavior, transition timing
-- **Feel-better** — optical alignment, concentric radii, hit areas, shadow treatment
-- **A11y review** — contrast, focus order, ARIA coverage beyond the built-in gates
+Otherwise scan the skills available in this session for one whose stated job is a named pass over UI code that already exists:
 
-**Authority limits for the polish pass:**
+- **Craft and motion** — spring versus ease, hover behavior, transition timing
+- **Optical refinement** — alignment, concentric radii, hit areas, shadow treatment
+- **Accessibility** — contrast, focus order, ARIA coverage beyond the built-in gates
 
-- Visual token values come from `docs/design/system.md` — a polish skill may NOT introduce off-system colors/fonts
-- Structure (layout, navigation, state transitions) is locked — anything requiring structural change goes back to `/interaction-design`, not into the code
-- Record every applied fix in the component doc's `## Implementation Notes` (Step 6), one line per fix with the skill that suggested it
+Append one row to `capabilities.md` recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. With `none`, continue at Step 5 — the Step 7 quality gates already enforce the baseline.
 
-If no polish skill is installed, skip silently — the built-in quality gates (Step 7) already enforce the baseline.
+With something found, name it and what it would change, then **AskUserQuestion**:
+
+> A polish capability is available: **[name]** — it would [what it changes, one clause].
+>
+> **A)** Skip it — the Step 7 quality gates already enforce the baseline (Recommended)
+> **B)** Run it over the generated code before documenting
+
+Three limits bound what a polish pass may change:
+
+1. Visual values come from `DESIGN.md`. A polish pass may not introduce off-system colors or fonts.
+2. Structure is locked. Anything requiring a layout, navigation, or state-transition change routes back to `/interaction-design` — it does not go into the code here.
+3. Every applied fix gets one line in the component doc's `## Implementation Notes` (Step 6), naming what changed and why.
+
+Done when `capabilities.md` carries a `③ method` row and the pass either ran within the three limits or was declined.
 
 ### Step 5: Generate Usage Example
 
@@ -490,9 +499,9 @@ Last updated: YYYY-MM-DD
 
 ## Preview
 
-![Component preview](/path/to/screenshot-or-figma-embed)
+![Component preview](/path/to/screenshot)
 
-*Design reference: `.scratch/<effort>/visual/approved.html`*
+*Design reference: `docs/design/prototype.html` section `[data-surface]`*
 
 ## Usage
 
@@ -524,7 +533,7 @@ Last updated: YYYY-MM-DD
 
 ## Design System Mappings
 
-Uses tokens from `docs/design/system.md`:
+Uses tokens from `DESIGN.md`:
 
 - **Typography**: `--font-heading` (title), `--font-body` (subtitle)
 - **Colors**: `--text-primary` (title), `--text-secondary` (subtitle), `--accent` (CTA)
@@ -554,6 +563,8 @@ Confirm directory exists:
 mkdir -p docs/design/components
 ```
 
+**Mark the prototype section implemented.** Update the section in `docs/design/prototype.html`: `data-fidelity="implemented"`, `data-component="<source-path>"`, `data-component-doc="docs/design/components/<name>.md"`, `data-updated`. Content stays as the approved design — the section is now canonical intent; the shipped code is canonical behavior. If implementation deviated from the section (a spacing fix, a responsive compromise), reconcile: fold the deviation back into the section if it is the better design, or note it as drift in the component doc. Never leave the divergence unstated.
+
 ### Step 7: Summary
 
 Report what was created:
@@ -569,26 +580,36 @@ Report what was created:
 **Memory classification:**
 - Component code → Project source (tracked by project's git rules)
 - Component docs → Human layer (git-tracked, outlives effort)
-- Approved HTML → Working layer (can be archived or deleted after implementation)
+- Prototype section → Human layer, marked implemented with component pointers
+- Working exploration (variants, drafts) → Working layer (can be archived or deleted after implementation)
 
 Next steps:
 - Component is ready to use in the project
 - Refer to component docs for API and usage examples
-- Design system remains source of truth for tokens at `docs/design/system.md`
+- DESIGN.md remains source of truth for tokens; the prototype section for design intent
 
-## Memory Layer Classification
+## Shared Memory Contract
 
-**Human layer (git-tracked, outlives effort):**
-- `docs/design/components/<name>.md` — component documentation
+Full contract: [references/design-memory.md](references/design-memory.md).
 
-**Project source (git-tracked per project conventions):**
-- Component code files (in src/components or equivalent)
-- Token/style files (in styles/ or equivalent)
+```text
+Triad role:  WHAT (implemented) — ships the styled section as code and marks it implemented
+Layer:       human (component docs + prototype section markers) + project source (code)
+Owns:        docs/design/components/<name>.md; the implemented transition of in-scope prototype sections
+Contributes: <work-root>/<effort>/design/capabilities.md — the `③ method` row only
+Coordinates: state.md — records the component as shipped and closes the design stage
+Promotes:    reusable component conventions → docs/conventions, via sync-context
+```
 
-**Working layer (gitignored, can be archived after implementation):**
-- `.scratch/<effort>/visual/approved.html` — served its purpose once implemented
+Resolve the work root and active effort as in Step 0. The component code follows the project's own git rules; this skill does not decide those.
 
-Apply the durability test: component docs YES (they outlive the implementation effort and serve as reference), approved HTML NO (it was scaffolding, the real code supersedes it).
+Durability test: the component doc yes — it carries the API, the states, and the reasons behind implementation choices that the code cannot show. The prototype section yes — it stays canonical intent, now with pointers to the code that realizes it. The working variants no; the merged section superseded them at approval.
+
+After shipping, the shipped component is canonical **behavior** and the section canonical **intent**; when they diverge later, report the divergence — regenerate the section from the component for small drift, reopen it through the pipeline for deliberate redesign.
+
+A convention discovered while building — how this codebase handles compound components, where token overrides are permitted, what the focus-ring pattern is — binds the next contributor and does not belong in one component's doc. Route it to `docs/conventions` via `sync-context`.
+
+**Update `state.md` when the component lands** — component path, doc path, the implemented `data-surface` anchor, design stage complete. This is the pipeline's last stage, so the pointer closes it rather than naming a successor.
 
 ## Quality Gates
 
@@ -607,17 +628,18 @@ Before finalizing:
 ## Integration Points
 
 **Reads from:**
-- `.scratch/<effort>/visual/approved.html` (approved design - REQUIRED)
-- `docs/design/system.md` (design system tokens - REQUIRED)
+- `docs/design/prototype.html` (styled section — REQUIRED)
+- `DESIGN.md` (design tokens — REQUIRED)
 - Project files (package.json, etc.) for stack detection
 
 **Writes to:**
 - Project source directory (component code)
 - `docs/design/components/<name>.md` (Human layer documentation)
+- `docs/design/prototype.html` (section markers: implemented + component pointers)
 - Token files (styles/tokens.css or equivalent)
 
 **Feeds:**
 - Component docs feed `spec` (reference for implementation)
 - Tokens feed all future component work (consistent styling)
 
-**External skills (optional):** layer-③ polish skills (interaction craft, motion, feel-better, a11y review) may run a review pass in Step 4.5 — see `design/ux/README.md`. Native quality gates run regardless.
+**Optional polish pass:** an external craft, motion, or accessibility reviewer may run in Step 4.5 within the three limits stated there. The native quality gates run either way.

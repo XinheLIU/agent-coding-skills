@@ -1,129 +1,134 @@
 ---
 name: design-context
-description: "Establish the project's design context before any UX work. Detects or creates a DESIGN.md (Google's open format), imports brand specs from reference sites or template catalogs, resolves token authority, and writes docs/design/system.md — the single source of truth every downstream design skill reads. Entry point of the design/ux pipeline."
+description: "Establish or refresh this project's design authority — the root DESIGN.md that answers HOW the product looks. Adopt an existing DESIGN.md, import from a reference site or brand, fold in a legacy docs/design/system.md, or route to from-scratch creation. Run before any other UX skill; they all read DESIGN.md. Use when no design authority exists, when system.md needs migrating, or when DESIGN.md has drifted from its source."
 ---
 
-Last updated: 2026-08-17
+Last updated: 2026-09-09
 
 # Design Context
 
-Establish the design context every other UX skill depends on: a canonical `docs/design/system.md`, optionally backed by a `DESIGN.md` at the project root.
+Establish the design authority every other UX skill depends on: a canonical `DESIGN.md` at the project root.
 
-This skill makes the layer-⑤ ecosystem (Google's [DESIGN.md format](https://github.com/google-labs-code/design.md) and its tooling) executable inside the pipeline. It owns one question: **where do design tokens come from for this project?** See `design/ux/README.md` for the full external-tool catalog this skill dispatches to.
+Shared design understanding is a triad — `product.html` is **why**, `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** ([references/design-memory.md](references/design-memory.md)). This skill owns the **how**. It resolves design authority from whatever exists — a `DESIGN.md` already at the root, a reference site or brand, a legacy `docs/design/system.md`, or nothing — and leaves one canonical `DESIGN.md` behind. It does not design; it decides authority.
 
 ## When to Use
 
-- Starting design work and no `docs/design/system.md` exists yet
-- A `DESIGN.md` exists at the project root but nothing consumes it
-- You have a reference site or brand ("make it look like Linear") and want it converted into project design tokens
-- An existing system.md may have drifted from an updated DESIGN.md
+- Starting design work and no `DESIGN.md` exists at the project root
+- A legacy `docs/design/system.md` exists and has not been folded into `DESIGN.md`
+- You have a reference site or brand ("make it look like X") and want it converted into design authority
+- An existing DESIGN.md may have drifted from its source, or an external ⑤ tool updated it and the prototype's tokens need re-syncing
 
 Do NOT use when:
 
-- `docs/design/system.md` exists and is current — downstream skills read it directly; re-run only to re-sync from a changed DESIGN.md
+- `DESIGN.md` exists and is current — downstream skills read it directly; re-run only to re-sync or migrate
 - You want to design user flows or screens — that's `/interaction-design`, which runs after this
 - Only generating visual options on an existing structure — that's `/visual-design-variants`
 
 ## Inputs and Handoffs
 
 **Upstream (all optional — skill decides from what exists):**
-- `DESIGN.md` at project root (Google format, YAML frontmatter tokens + prose rationale)
-- `docs/design/system.md` (existing system, possibly stale)
-- `docs/product/<slug>/prd.md` Part 1 (persona, platform, product type)
+- `DESIGN.md` at project root (YAML frontmatter tokens + prose rationale)
+- `docs/design/system.md` (legacy token source, if never migrated)
+- the configured product document (`product.html#prd`, or a canonical legacy PRD) — the **why**: persona, platform, product type
 - A user-supplied reference (site URL, brand name, screenshot) if offered in conversation
 
 **Downstream:**
-- `docs/design/system.md` (Human layer, git-tracked) → feeds `/interaction-design`, `/visual-design-variants`, `/design-implement`, and `spec`
-- The `DESIGN.md` at root is **read, never written** by this skill — it is an input like the PRD. External lifecycle tools (e.g. Oh My Design) own its creation when the user chooses that path.
+- `DESIGN.md` at project root (Human layer, git-tracked) — the canonical **how**; feeds `/interaction-design`, `/visual-design-variants`, `/design-implement`, `spec`, and the `:root` token block of `docs/design/prototype.html`
+- When an external ⑤ tool owns the DESIGN.md lifecycle (accepted in `capabilities.md`), this skill routes writes through it and reconciles the result; the file is canonical either way.
 
 ## Workflow
 
 ### Step 0: Detect Context State
 
+Resolve the product document from explicit user paths, `docs/agents/memory.md`, and active `state.md`. New product memory uses `product.html#prd`; follow its persona, capability, scope, and question links. Legacy `prd.md` remains readable when canonical. Do not pick the first file found across products. Read HTML source records directly, preserving evidence/commitment distinctions. When no product document exists at all, the why can be inferred from the repo via `map-current-product`; offer it before designing against guesses.
+
 ```bash
-# The three possible sources of design truth
+# The possible sources of design truth
 [ -f DESIGN.md ] && echo "DESIGN_MD: found" || echo "DESIGN_MD: missing"
-[ -f docs/design/system.md ] && echo "SYSTEM_MD: found" || echo "SYSTEM_MD: missing"
-PRD_PATH=$(find docs/product -name "prd.md" -type f 2>/dev/null | head -1)
-[ -n "$PRD_PATH" ] && echo "PRD: $PRD_PATH" || echo "PRD: missing"
+[ -f docs/design/system.md ] && echo "LEGACY_SYSTEM_MD: found" || echo "LEGACY_SYSTEM_MD: missing"
+[ -f docs/design/prototype.html ] && echo "PROTOTYPE: found" || echo "PROTOTYPE: missing"
 ```
 
 Branch on the result:
 
 | State | Route |
 |---|---|
-| DESIGN.md found | → Step 1 (adopt + merge) |
-| No DESIGN.md, user has a reference site/brand | → Step 2 (extract or adopt ④) |
-| No DESIGN.md, no reference | → Step 3 (create from scratch) |
-| system.md found and no DESIGN.md and no new reference | Validate and STOP — nothing to do; report that downstream skills can proceed |
+| DESIGN.md found, current, no legacy system.md | Validate and STOP — report that downstream skills can proceed; re-sync the prototype token block if stale (Step 4) |
+| DESIGN.md found, legacy system.md also present | → Step 1 (adopt + fold the legacy file in) |
+| No DESIGN.md, legacy system.md present | → Step 1 (migrate: system.md content becomes the DESIGN.md draft) |
+| No DESIGN.md, user has a reference site/brand | → Step 2 (import from the reference) |
+| No DESIGN.md, no legacy file, no reference | → Step 3 (create from scratch) |
 
-### Step 1: Adopt Existing DESIGN.md
+### Step 1: Adopt, Migrate, and Merge
 
-1. Read the `DESIGN.md`. If a DESIGN.md linter or lifecycle skill is installed (layer ⑤, e.g. Oh My Design), run its validation; otherwise sanity-check manually: does it have YAML frontmatter with `colors` / `typography` / `spacing`, plus prose sections?
-2. Extract the token set: colors, typography, spacing, radius, motion, principles.
-3. If `docs/design/system.md` exists, diff the token values and surface every conflict.
+1. Read whichever authority files exist. A `DESIGN.md` carries YAML frontmatter with `colors` / `typography` / `spacing`, plus prose sections; a legacy `system.md` carries the same facts in Markdown sections. If the project has a validator for the format, run it.
+2. Extract the token set from each: colors, typography, spacing, radius, motion, principles, component foundations.
+3. Diff the token values across sources and surface every conflict.
 
 **AskUserQuestion** when conflicts exist:
 
-> DESIGN.md and docs/design/system.md disagree on these tokens:
+> DESIGN.md and the legacy docs/design/system.md disagree on these tokens:
 > - [token]: DESIGN.md says [X], system.md says [Y]
 >
-> **A)** DESIGN.md wins for visual tokens; system.md keeps component foundations and rationale (Recommended)
-> **B)** system.md wins — treat DESIGN.md as advisory only
+> **A)** DESIGN.md wins for visual tokens; keep system.md's component foundations and rationale in the merged prose (Recommended)
+> **B)** system.md wins — its values overwrite the DESIGN.md frontmatter
 > **C)** Review each conflict one by one
 
-Default rule when the user has no preference: **DESIGN.md is authoritative for visual token values** (colors, fonts, spacing numbers, radii); **system.md remains authoritative for component foundations** (button variants, form patterns, card rules) and prose rationale.
+Default rule when the user has no preference: **existing DESIGN.md frontmatter is authoritative for visual token values** (colors, fonts, spacing numbers, radii); **legacy system.md content survives as prose** (component foundations, aesthetic rationale) inside the merged DESIGN.md.
 
 → Continue at Step 4.
 
-### Step 2: Acquire a DESIGN.md from a Reference
+### Step 2: Acquire Design Authority from a Reference
 
-The user has a reference — a site they like, a known brand, or a screenshot. Offer acquisition routes by what's installed (see `design/ux/README.md` layers ④⑤):
+Read `<work-root>/<effort>/design/capabilities.md`. If it carries `④ templates` and `⑤ design context` rows, follow their decisions. Otherwise scan the skills available in this session for either:
 
-**Extraction (⑤) — reference URL → DESIGN.md:**
-- Deterministic token extraction (e.g. BrandMD) → spec-valid DESIGN.md, best when the reference's CSS is the truth
-- Vision-based extraction (e.g. DesignPull) → captures visual intent, imagery style, do/don't rules, best when the feel matters more than the hex codes
-- Manual capture (e.g. TypeUI Chrome extension) → user drives, agent consumes the output
+- **④ templates** — a skill that ships finished design systems or brand specs to adopt wholesale. It carries no process and makes no judgment.
+- **⑤ design context** — a skill that creates, extracts, or maintains a root `DESIGN.md` as a durable file across sessions.
 
-**Ready-made (④) — catalog → DESIGN.md:**
-- Template catalogs (e.g. Awesome Design MD, Awesome Design Skills) ship DESIGN.md files for known products (Linear, Stripe, …) — find the closest brand, copy it in, adapt
+Append one row per slot recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. A found capability is named with what it would change and offered against the native path below; it is never used without asking.
+
+The user has a reference — a site they like, a known brand, or a screenshot. Three ways to turn it into a `DESIGN.md`, differing in what they are faithful to:
+
+| Method | Faithful to | Best when |
+|---|---|---|
+| Read the live site's CSS | Their exact token values | The reference's stylesheet is the truth you want |
+| Read the rendered design | Their visual intent — imagery, density, do/don't rules | The feel matters more than the hex codes |
+| Adopt a published spec | Whatever the spec's author captured | A close-enough brand already has one written |
 
 **AskUserQuestion:**
 
 > You referenced [site/brand]. How should I turn it into design context?
 >
-> **A)** Extract tokens from the live site (deterministic) — best fidelity to their CSS
-> **B)** Extract visual intent (vision-based) — best fidelity to their feel
-> **C)** Adopt a ready-made spec from a template catalog — fastest, if a close brand exists
-> **D)** Skip acquisition — create from scratch instead (→ Step 3)
+> **A)** Extract exact tokens from the live site — best fidelity to their CSS
+> **B)** Extract visual intent from the rendered design — best fidelity to their feel
+> **C)** Adopt a published spec for a close brand — fastest, when one exists
+> **D)** Skip the import — create from scratch instead (→ Step 3)
 
-Run the chosen external skill (per its own install/invoke convention), then place the result at `DESIGN.md` in the project root and continue at Step 1 (adopt + merge).
-
-If no extraction/adoption skill is installed: report which capability is missing, link the README catalog entry, and offer Step 3 as the fallback.
+Carry out the chosen method, draft the result as `DESIGN.md` content, and continue at Step 1 (adopt + merge with anything already present). Use a capability recorded in `capabilities.md` for the chosen method only when the user accepted it; otherwise do the extraction directly from the fetched page. When neither is possible, say so and offer Step 3.
 
 ### Step 3: No Reference — Create from Scratch
 
 **AskUserQuestion:**
 
-> No DESIGN.md or reference to import. How should the design system be created?
+> No DESIGN.md or reference to import. How should design authority be created?
 >
 > **A)** Run `/design-system-create` — consultative from-scratch creation, native to this repo (Recommended)
-> **B)** Initialize a DESIGN.md lifecycle tool (layer ⑤, e.g. Oh My Design `omd:init`) — external skill owns DESIGN.md creation and persistence, then I merge it (requires that skill installed)
+> **B)** Initialize a root `DESIGN.md` with the `⑤ design context` capability recorded in `capabilities.md`, when one was found — it owns the file, this skill reconciles the result
 > **C)** Cancel — I'll provide a reference or DESIGN.md myself
 
-If A: invoke `/design-system-create`. When it completes, its output `docs/design/system.md` IS this skill's output — skip to Step 5.
-If B: run the external lifecycle skill, then continue at Step 1.
+If A: invoke `/design-system-create`. When it completes, its output `DESIGN.md` IS this skill's output — skip to Step 5.
+If B: run that tool, then continue at Step 1.
 
-### Step 4: Write Canonical system.md
+### Step 4: Write Canonical DESIGN.md
 
-Merge the resolved tokens into the system.md structure (the full template lives in `/design-system-create` Step 5 — use the same sections: Aesthetic Direction, Typography, Color Palette, Spacing Scale, Layout, Border Radius, Component Foundations, Accessibility, References).
+Merge the resolved authority into the DESIGN.md shape: YAML frontmatter carrying the machine-readable tokens, prose carrying the judgment (the full section template lives in `/design-system-create` Step 5 — Aesthetic Direction, Typography, Color Palette, Spacing Scale, Layout, Border Radius, Component Foundations, Accessibility, References).
 
 Merge rules:
 
-- **Visual tokens** (colors, type, spacing, radius) ← from DESIGN.md (or adopted ④ spec), translated into the system.md token naming (`--surface-page`, `--text-primary`, `--accent`, …)
-- **Component foundations** ← keep from existing system.md if present; otherwise write minimal defaults and mark them `<!-- TODO: refine on first component -->`
-- **Rationale** ← pull the DESIGN.md prose principles into `## Aesthetic Direction`; note the source
-- **Provenance** ← add a `## References` line: `Tokens imported from DESIGN.md (<source>, <date>)`
+- **Frontmatter tokens** (colors, type, spacing, radius, motion) ← the winning source per Step 1, in the shared token naming (`--surface-page`, `--text-primary`, `--accent`, …)
+- **Component foundations** ← keep from existing prose if present; otherwise write minimal defaults and mark them `<!-- TODO: refine on first component -->`
+- **Rationale** ← keep or write `## Aesthetic Direction` prose; note the source
+- **Provenance** ← a `## References` line: `Tokens from <source>, <date>` (mandatory)
 
 Validate before writing:
 
@@ -133,72 +138,83 @@ Validate before writing:
 
 Show the merged result, then **AskUserQuestion**:
 
-> Merged design system ready. Conflicts resolved: [N]. Source: [DESIGN.md / catalog / extraction].
+> Merged design authority ready. Conflicts resolved: [N]. Source: [existing DESIGN.md / legacy system.md / extraction / catalog].
 >
-> **A)** Approve — write docs/design/system.md
+> **A)** Approve — write DESIGN.md at the project root
 > **B)** Adjust [specific token] first
-> **C)** Discard — keep existing system.md unchanged
+> **C)** Discard — keep the existing files unchanged
 
-Write on approval:
+Write on approval. When an accepted ⑤ tool owns the DESIGN.md lifecycle, route the write through it and verify the result matches the approved merge. Then:
 
-```bash
-mkdir -p docs/design
-```
+1. **Retire the legacy file.** If `docs/design/system.md` was folded in, replace its body with a one-line pointer: `Superseded by /DESIGN.md (<date>). Kept for link stability.` Do not delete it; downstream links may still resolve through it.
+2. **Re-sync the prototype.** If `docs/design/prototype.html` exists, regenerate its `:root` token block from the new frontmatter and update the provenance comment. Report any styled section whose rendered values no longer match — that is drift to fix through the pipeline, not silently.
 
 ### Step 5: Summary and Handoff
 
 Report:
 
-- **Design context source:** [existing DESIGN.md / extracted from <url> / adopted from <catalog> / created from scratch via /design-system-create]
-- **Canonical output:** `docs/design/system.md` (Human layer)
-- **Token authority:** [DESIGN.md visual tokens + system.md component patterns | system.md only]
+- **Design authority source:** [existing DESIGN.md / migrated from system.md / extracted from <url> / adopted from <catalog> / created via /design-system-create]
+- **Canonical output:** `DESIGN.md` at project root (Human layer) — the triad's **how**
+- **Legacy migration:** [system.md folded in and pointered / none present]
+- **Prototype token sync:** [re-synced / no prototype yet]
 - **Unresolved conflicts:** [none / list]
 
 **AskUserQuestion** for next step:
 
-> Design context established.
+> Design authority established.
 >
-> **A)** Run `/interaction-design` — define user flows and states on this system (Recommended for new features)
-> **B)** Run `/visual-design-variants` — interaction structure already exists, go straight to visuals
+> **A)** Run `/interaction-design` — define structure and states in the canonical prototype (Recommended for new features)
+> **B)** Run `/visual-design-variants` — structure already locked, go straight to visuals
 > **C)** Done — I'll continue manually
 
-## Memory Layer Classification
+## Shared Memory Contract
 
-**Human layer (git-tracked, outlives effort):**
-- `docs/design/system.md` — canonical design system, written or updated by this skill
+Full contract: [references/design-memory.md](references/design-memory.md).
 
-**External input (git-tracked by project convention, owned elsewhere):**
-- `DESIGN.md` at project root — read by this skill, written by external lifecycle tools or the user
+```text
+Triad role:  HOW — this skill owns the canonical DESIGN.md at the project root
+Layer:       human — design authority outlives the effort
+Owns:        DESIGN.md (directly, or reconciled through an accepted ⑤ lifecycle tool)
+Maintains:   the :root token block of docs/design/prototype.html (sync only, never sections)
+Retires:     docs/design/system.md — folded into DESIGN.md, left as a pointer
+Contributes: <work-root>/<effort>/design/capabilities.md — the `④ templates` and `⑤ design context` rows only
+Coordinates: state.md — records the authority source and the next design stage
+Promotes:    a contested token-authority decision → an ADR, via domain-modeling
+```
 
-**Working layer:** none — this skill produces no scratch artifacts. Extraction intermediates live wherever the external tool puts them.
+Resolve the work root and the active effort from `docs/agents/memory.md`, defaulting to `.scratch/` when nothing is configured. The only working artifact this skill writes is its two rows in `capabilities.md`; extraction intermediates stay wherever the tool that produced them put them.
 
-Durability test: if the work root were deleted, would the project lose a fact it needs? system.md YES (Human layer). A downloaded template's intermediate files NO.
+Durability test: if the work root were deleted, would the project lose a fact it still needs? `DESIGN.md` yes — it is the only record of which tokens won and why. A downloaded template's intermediates no.
+
+Which design authority won is a decision someone would otherwise re-litigate, so it promotes. Record provenance in `## References` on the way through (Step 4), and when the choice was contested — an imported brand overriding a hand-built system, say — route the rationale to an ADR rather than leaving it in the conversation.
 
 ## Quality Gates
 
-Before writing `docs/design/system.md`:
+Before writing `DESIGN.md`:
 
 - [ ] Token source is recorded in `## References` (provenance is mandatory)
-- [ ] Conflicts between DESIGN.md and existing system.md were surfaced, not silently overwritten
+- [ ] Conflicts between sources were surfaced, not silently overwritten
 - [ ] WCAG AA contrast validated for all text/background pairs
 - [ ] ONE decisive accent color; 2–3 surface levels
-- [ ] DESIGN.md at root was NOT modified by this skill
-- [ ] Component foundations present (from existing system.md or TODO-marked defaults)
+- [ ] Frontmatter tokens and prose sections both present (tokens without rationale is half an authority)
+- [ ] Legacy `system.md`, if present, was folded in and pointered — not left as a second authority
+- [ ] Prototype `:root` block re-synced when a prototype exists
 
 ## Integration Points
 
 **Reads from:**
-- `DESIGN.md` (project root, layer-⑤ format)
-- `docs/design/system.md` (existing system, for merge/validation)
-- `docs/product/<slug>/prd.md` Part 1 (product context when creating from scratch)
+- `DESIGN.md` (project root, when present)
+- `docs/design/system.md` (legacy, for migration)
+- the configured product document — the why (product context when creating from scratch)
 
 **Writes to:**
-- `docs/design/system.md` (Human layer)
+- `DESIGN.md` at project root (Human layer)
+- `docs/design/prototype.html` `:root` token block (sync only)
 
 **Feeds:**
-- `/interaction-design` (structure design reads system.md constraints)
-- `/visual-design-variants` (variant generation applies system.md tokens)
-- `/design-implement` (production code uses system.md tokens)
+- `/interaction-design` (reads DESIGN.md constraints)
+- `/visual-design-variants` (applies DESIGN.md tokens)
+- `/design-implement` (production code uses DESIGN.md tokens)
 - `spec` (design constraints cited as input)
 
-**External skills (optional):** layer ⑤ DESIGN.md lifecycle and extractors, layer ④ template catalogs — dispatched per `design/ux/README.md`. When none are installed, the from-scratch native path (`/design-system-create`) is the fallback and nothing is blocked.
+**When no import tool is available:** the from-scratch path (`/design-system-create`) is the fallback and nothing is blocked.

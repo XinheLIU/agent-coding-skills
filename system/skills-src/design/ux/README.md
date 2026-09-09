@@ -1,33 +1,71 @@
-# UI/UX External Skills — Reference Guide
+# Design · UX
 
-Last updated: 2026-08-17
+Last updated: 2026-09-09
 
-## Why this file exists
+How the UX design system in this repo is designed: the internal pipeline of stage skills, the six-layer model of external capabilities they dispatch to, and the contract between the two. For the detailed external-tool catalog — every tool, comparison tables, and workflow recipes — see [`external-skills.md`](external-skills.md). For step-by-step procedures, see [`workflows/design.md`](../../../workflows/design.md).
 
-UI/UX work in this repo relies primarily on **external skill ecosystems** — not internal skills authored here. This guide maps those external systems: what each one is for, how to invoke it, and which combination fits a given task.
+## What this phase owns
 
-The landscape splits into six distinct layers. Confusing them leads to using a polish tool when you needed a direction tool, or a knowledge DB when you needed a production environment.
+UX design turns PRD intent into implemented components. Shared design understanding is a **triad** (contract: `craft/context/init-context/references/design-memory.md`, symlinked into each skill's `references/`):
 
-## How this catalog is wired in
+| Question | Document | Holds |
+| --- | --- | --- |
+| **Why** | `product.html` (product docs) | Personas, capabilities, journeys — owned by product skills; inferable from the repo via `map-current-product` |
+| **How** | `DESIGN.md` (project root) | Design authority: tokens in YAML frontmatter + prose rationale |
+| **What** | `docs/design/prototype.html` | The canonical prototype: per-surface sections, five switchable states, fidelity and lock markers |
 
-The five internal pipeline skills are **stage orchestrators** — they own the artifacts (file paths, approval gates, memory layers) and dispatch heavy work to the external tools catalogued here. Full pipeline doc: [`workflows/design.md`](../../../workflows/design.md).
+The internal skills are **thin stage orchestrators**: they own the triad transitions (approval gates, fidelity markers, memory layers), run the stage workflow, and dispatch heavy design work — taste, knowledge lookups, visual production, polish — to whatever external tools are installed. Every stage has a native fallback, so the pipeline is complete with zero external tools installed and strictly better with them.
 
-A sixth skill, `prototype`, sits alongside the pipeline as a shared utility. It answers one design question with throwaway code when conversation cannot settle it — logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question.
+## The internal pipeline
 
-| Layer | Consumed by | Dispatch point |
-|:---:|---|---|
-| ① Taste / Judgment | `/visual-design-variants` | Step 2.5 — sharpen direction strategies |
-| ② Design Knowledge | `/design-system-create`, `/interaction-design` | Steps 2.2–2.3 (font/palette lookup), Step 1.5 (UX guidelines) |
-| ③ Method / Workflow | `/design-implement` + standalone redesign | Step 4.5 polish pass; redesign tools run before re-entering the pipeline |
-| ④ Templates & References | `/design-context` | Step 2 — adopt a ready-made brand spec |
-| ⑤ Design Context (DESIGN.md) | `/design-context` | Steps 1–3 — adopt, extract, or initialize |
-| ⑥ Production Environments | `/visual-design-variants` | Step 2.5 — high-fidelity variant production |
+```mermaid
+flowchart LR
+    PRD(["product/write-prd — design gate · WHY"]) --> DC{design-context}
 
-Every dispatch has a native fallback: when nothing from a layer is installed, the stage runs its built-in workflow and nothing blocks. The contract external output must satisfy: **pipeline skills own canonical paths and `docs/design/system.md` token authority** — engine output is reconciled into those, never accepted raw.
+    subgraph TOK["Design authority — the HOW"]
+        DC -->|DESIGN.md exists| ADOPT[adopt + merge]
+        DC -->|reference site / brand| EXTRACT[extract or adopt template]
+        DC -->|nothing to adopt| DSC[design-system-create]
+        ADOPT --> AUTH[("DESIGN.md")]
+        EXTRACT --> AUTH
+        DSC --> AUTH
+    end
 
----
+    subgraph PROTOHTML["Canonical prototype — the WHAT"]
+        IXD[interaction-design] -->|locks structure| SEC[("docs/design/prototype.html")]
+        VDV[visual-design-variants] -->|merges styled| SEC
+        IMPL[design-implement] -->|marks implemented| SEC
+    end
 
-## The Six Layers
+    AUTH --> IXD
+    IXD -->|structure locked| VDV
+    VDV -->|styled section| IMPL
+    IMPL --> OUT(["engineering/frontend · feature/spec"])
+
+    AUTH -.->|tokens| VDV & IMPL
+    PROTO[prototype] -.->|one question, control returns| IXD & VDV
+```
+
+Solid edges are the sequence; dashed edges are reads and returns, not stages. Every stage has a hard prerequisite, so entry is at the earliest unsettled stage — not necessarily `design-context`.
+
+| Skill | Purpose | Entered when | Inputs → Outputs | Gate |
+| --- | --- | --- | --- | --- |
+| `design-context` | Decide where design authority comes from | No `DESIGN.md` yet, a legacy `system.md` to migrate, or a reference site/brand to import | PRD Part 1, existing sources → root `DESIGN.md` | Approval before write |
+| `design-system-create` | From-scratch fallback when there is nothing to adopt | Called directly, or via `design-context` when the user picks the native path | PRD Part 1 → root `DESIGN.md` + preview HTML | Approval before write |
+| `interaction-design` | Define HOW users interact before HOW it looks | New feature with unclear flows; thin PRD Part 3 | PRD Parts 1+3 → wireframe sections in `prototype.html` (locked at approval) + working exploration in `<work-root>/<effort>/interaction/` | Structure locks at approval |
+| `visual-design-variants` | Explore 3 genuinely different visual directions on locked structure | Locked wireframe sections exist, `DESIGN.md` exists | Locked sections + `DESIGN.md` → variant HTMLs (working), winner merged into the section (`wireframe → styled`) | Approved variant merges |
+| `design-implement` | Convert the styled section into production code | A `styled` locked section exists | Styled section + `DESIGN.md` → component source + `docs/design/components/<name>.md` + section marked `implemented` | Review pass before done |
+
+Two hard sequencing rules, both machine-checkable in the prototype:
+
+1. **Interaction before visuals** — structure (what/where/when) is designed and locked (`data-structure="locked"`) before color, typography, or polish. `visual-design-variants` may not move buttons, navigation, or state transitions; a structural change reopens the section through `interaction-design`.
+2. **One canonical token source** — root `DESIGN.md` is the only how downstream skills read for visual values. `design-context` decides what feeds it (adopt, extract, migrate, or create) and keeps the prototype's `:root` token block in sync.
+
+Memory layers: `<work-root>/<effort>/` artifacts are Working layer (untracked, disposable after implementation); the work root is configured in `docs/agents/memory.md` and defaults to `.scratch/`. The triad documents and `docs/design/components/*.md` are Human layer (git-tracked, outlive features). Legacy `docs/design/system.md` files remain readable until `design-context` folds them into `DESIGN.md`. Full table, with promotion targets, in `workflows/design.md`.
+
+## The six-layer external model
+
+External UI/UX tools cluster into six capability layers. The pipeline consumes them *by layer* — a stage asks for "a layer-① taste pass", never for a named vendor — so tools can be installed, swapped, or absent without touching skill logic.
 
 ```mermaid
 flowchart TD
@@ -48,380 +86,50 @@ flowchart TD
     style L6 fill:#eaf7fb,stroke:#17a589
 ```
 
-Most failures come from skipping layers (jumping to ⑥ without ①–③) or conflating layers (using a ④ tool when you need ③).
+Most external-tool failures come from skipping layers (jumping to ⑥ without ①–③) or conflating them (using a ④ template when you need a ③ method).
 
----
+## Dispatch contract
 
-## Quick Decision Table
+A stage recognizes a capability **by what a skill's own description claims as its main artifact** — never by a vendor name, which a distributed skill cannot look up. Each stage probes only the slots it consumes, at the point it consumes them, and the native workflow is always the fallback.
 
-| Layer | What you need | Recommended tools |
-|:---:|---|---|
-| ① | Design direction — vague brief, need aesthetic stance | [frontend-design], [Taste], [StyleSeed], [Huashu] |
-| ① | 0→1 landing page / marketing site | [frontend-design], [Taste], [Hallmark], [UI UX Pro Max] |
-| ③ | 0→1 SaaS / dashboard / agent console | [Interface Design], [StyleSeed], [UI UX Pro Max] |
-| ⑥ | Fast clickable prototype / demo | [Huashu], [Open Design], [Google Stitch] |
-| ③⑥ | See 3–5 real visual directions at once | [Huashu], [StyleSeed], [Open Design], [Google Stitch] |
-| ③⑥ | Mobile app UI | [Mobile App UI Design], [Huashu], [Open Design] |
-| ⑥ | Slides / infographic / video | [Huashu], [Open Design], [StyleSeed] |
-| ③ | Existing UI is ugly — redesign it | [Impeccable], [Hallmark], [Refactoring UI] |
-| ③ | UI is at 80%, needs to feel professional | [Emil Kowalski], [Make Interfaces Feel Better] |
-| ③ | Animation looks AI-generated | [Emil Kowalski], [Design Motion Principles] |
-| ①③ | Avoid purple gradients / three-card layouts | [Taste], [Hallmark], [Impeccable], [StyleSeed] |
-| ⑤ | Build a persistent design system | [DESIGN.md], [Interface Design], [StyleSeed] |
-| ⑤ | Extract a design system from a reference site | [BrandMD], [DesignPull], [TypeUI Extractor] |
-| ④⑤ | Get a ready-made brand design spec | [Awesome Design MD], [Oh My Design] |
-| ⑤ | Create / maintain / apply DESIGN.md | [Oh My Design], [Google DESIGN.md] |
-| ④⑤ | DESIGN.md + agent execution rules together | [Awesome Design Skills] |
-| ② | Simulate a full design team (UX research, critique) | [Naksha Studio], [Design With Claude] |
-| ⑥ | GUI workspace, not pure CLI | [Open Design], [Google Stitch] |
+| Layer | Capability slot | Recognize it by | Consumed by | Dispatch point | Fallback |
+|:---:|---|---|---|---|---|
+| ① | Taste / judgment | Argues for or vetoes a direction; produces no palette, template, or code as its own artifact | `visual-design-variants` | Step 2.5 — sharpen direction strategies | Directions proposed inline |
+| ② | Knowledge — type/color | Answers "what are the valid options" from a catalog of font pairings or palettes; never picks one | `design-system-create` | Step 2 — decided once, applied at 2.2 and 2.3 | Proposed from first principles |
+| ② | Knowledge — UX guidelines | Same, for state-design and flow patterns by product type | `interaction-design` | Step 1.5 — prior art for the state table | The five-state table |
+| ③ | Method / workflow | Owns a named repeatable pass over work that already exists — audit, redesign, polish, motion, a11y | `design-implement` + standalone redesign | Step 4.5 polish pass; redesign tools run before re-entering the pipeline | Built-in quality gates |
+| ④ | Templates & references | Ships finished design systems or brand specs to adopt wholesale; carries no process, makes no judgment | `design-context` | Step 2 — adopt a ready-made brand spec | Create from scratch |
+| ⑤ | Design context (DESIGN.md) | Creates, extracts, or maintains a root `DESIGN.md` as a durable file across sessions | `design-context` | Steps 1–3 — adopt, extract, or initialize | Native `design-system-create` path |
+| ⑥ | Production environments | Renders high-fidelity mockups, prototypes, or decks from a settled brief; decides nothing | `visual-design-variants` | Step 2.5 — high-fidelity variant production | Inline HTML generation |
 
-[frontend-design]: https://github.com/anthropics/skillshttps://github.com/anthropics/claude-code/tree/main/plugins/frontend-design
-[Taste]: https://github.com/Leonxlnx/taste-skill
-[StyleSeed]: https://github.com/bitjaru/styleseed
-[Huashu]: https://github.com/alchaincyf/huashu-design
-[Hallmark]: https://github.com/nutlope/hallmark
-[UI UX Pro Max]: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
-[Interface Design]: https://github.com/Dammyjay93/interface-design
-[Open Design]: https://github.com/nexu-io/open-design
-[Google Stitch]: https://github.com/google-labs-code/stitch-skills
-[Mobile App UI Design]: https://github.com/ceorkm/mobile-app-ui-design
-[Impeccable]: https://github.com/pbakaus/impeccable
-[Refactoring UI]: https://github.com/LovroPodobnik/refactoring-ui-skill
-[Emil Kowalski]: https://github.com/emilkowalski/skills
-[Make Interfaces Feel Better]: https://github.com/jakubkrehel/make-interfaces-feel-better
-[Design Motion Principles]: https://github.com/kylezantos/design-motion-principles
-[DESIGN.md]: https://github.com/google-labs-code/design.md
-[BrandMD]: https://github.com/yuvrajangadsingh/brandmd
-[DesignPull]: https://github.com/hasi98/designpull
-[TypeUI Extractor]: https://github.com/bergside/design-md-chrome
-[Awesome Design MD]: https://github.com/VoltAgent/awesome-design-md
-[Oh My Design]: https://github.com/kwakseongjae/oh-my-design
-[Awesome Design Skills]: https://github.com/bergside/awesome-design-skills
-[Naksha Studio]: https://github.com/Adityaraj0421/design-studio
-[Design With Claude]: https://github.com/imsaif/design-with-claude
+When a candidate matches two slots, place it by its main artifact: a stance is ①, a lookup is ②, a workflow is ③, a finished spec is ④, a `DESIGN.md` lifecycle is ⑤, a rendered surface is ⑥.
 
----
+### The capability record
 
-## Tool Catalog
+Each probe appends one row to `<work-root>/<effort>/design/capabilities.md` — Working layer, dies with the effort, co-located with `system-preview.html`. With no active effort it is `<work-root>/design/capabilities.md`.
 
-### Layer ①  Taste & Judgment
-
-#### [`frontend-design`](https://github.com/anthropics/claude-code/tree/main/plugins/frontend-design) — Anthropic
-**What:** Creative Director system prompt. Establishes aesthetic direction before writing any code — product, user, page task, visual direction, then opinionated choices on typography, palette, layout. Explicitly requires one defensible aesthetic risk per session.
-**Not:** a template library, a DESIGN.md manager, a style database.
-**Best for:** Any new UI where direction is undefined.
-**Invoke:** install via Claude Code plugins
-
----
-
-#### [`Taste Skill`](https://github.com/Leonxlnx/taste-skill)
-**What:** Anti-slop judgment layer. Prevents AI from producing boring/generic/templated frontend. Works as a macroesthetic constraint + anti-pattern list + preflight checklist.
-**Not:** a design system generator, a template library, a DESIGN.md manager.
-**Best for:** Landing pages, portfolios, creative web, marketing pages, redesigns.
-**Invoke:** `@taste-skill` or install SKILL.md
-
----
-
-#### [`Refactoring UI Skill`](https://github.com/LovroPodobnik/refactoring-ui-skill)
-**What:** Adam Wathan's *Refactoring UI* tactical rules as an agent skill. Targets hierarchy, spacing, typography, color, depth, borders, layout.
-**Not:** creative direction, visual template library.
-**Best for:** "Why does this page look like an engineer built it?" — structural correction, not aesthetic reimagining.
-**Invoke:** install SKILL.md; also see [gnurio/refactoring-ui-plugin](https://github.com/gnurio/refactoring-ui-plugin) for a 10-skill review split
-
----
-
-### Layer ②  Design Knowledge
-
-#### [`UI UX Pro Max`](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
-**What:** Design intelligence / knowledge retrieval skill. Database of 84 styles, color palettes, font pairings, product types, UX guidelines, chart types, icons across 22+ stacks. Query it to look up valid choices or generate a design system.
-**Outputs:** `design-system/MASTER.md` + per-page override files.
-**Best for:** Any UI where you need to look up a credible style/palette/typography decision fast.
-**Invoke:** install per its repo instructions (external skill, not vendored here); `/design-system-create` dispatches to layer-② skills like this one when installed
-
----
-
-#### [`Design With Claude (dwic)`](https://github.com/imsaif/design-with-claude)
-**What:** Library of 45+ design specialist skills (UX research, UX strategy, critique, accessibility, interaction, design systems, product design). Answers "what does a real design team do beyond drawing UI?"
-**Not:** a visual style skill or template generator.
-**Best for:** UX research, strategy, critique, accessibility review, interaction design.
-**Invoke:** `@dwic` or install individual skills
-
----
-
-### Layer ③  Design Method / Workflow
-
-#### [`Hallmark`](https://github.com/nutlope/hallmark)
-**What:** Anti-slop design workflow with 21 built-in themes. Supports four operations: `build`, `audit`, `redesign`, `study`. The `study <url>` command extracts macrostructure + typography + color anchor and can output a portable `design.md`.
-**Best for:** 0→1 creative sites; reference site → new design via "design DNA" extraction.
-**Invoke:** `hallmark build / audit / redesign / study`
-
----
-
-#### [`StyleSeed`](https://github.com/bitjaru/styleseed)
-**What:** 22+ skill design method engine. Covers: setup, reference compilation, creative direction, page, component, pattern, motion, tokens, review, scoring, a11y, verify, restyle. Uses `STYLESEED.md` (not DESIGN.md) to lock skin, key color, font, radius, motion and prevent design drift across sessions.
-**Best for:** Projects needing a repeatable method from direction → system → verified implementation. Has named brand recipes (enterprise-workbench, editorial, commerce, brutalist-lite, etc.) that change structure and morphology, not just CSS.
-**Invoke:** `styleseed setup`, `styleseed reference`, `styleseed build`, `styleseed score`, `styleseed verify`
-
----
-
-#### [`Interface Design`](https://github.com/Dammyjay93/interface-design)
-**What:** Product UI / design engineering skill. Explicitly scoped to dashboards, admin, SaaS, settings, data interfaces, interactive tools — not marketing pages.
-**Key feature:** Design memory — persists UI decisions (radius, spacing, color system) so subsequent screens stay consistent.
-**Best for:** Agent consoles, CRMs, internal tools, analytics dashboards.
-**Invoke:** install SKILL.md; design memory is maintained per-project
-
----
-
-#### [`Impeccable`](https://github.com/pbakaus/impeccable)
-**What:** Design critic + fixer with 23 commands. Covers design, redesign, critique, audit, polish, animate, colorize, extract. Runs deterministic anti-pattern detectors. Can extract reusable patterns/tokens from existing implementation into a design system.
-**Best for:** Existing UI that needs systematic improvement (0.7 → 1.0). Also good for 0→1 when paired with an audit pass.
-**Commands:** `/impeccable audit`, `/impeccable polish`, `/impeccable bolder`, `/impeccable extract`, and 19 more
-
----
-
-#### [`Naksha Studio`](https://github.com/Adityaraj0421/design-studio)
-**What:** Virtual design team — simulates Design Director, UX Researcher, UI Designer, Design System, Accessibility, Critic, Prototype specialist roles.
-**Best for:** Discovery, UX strategy, multi-perspective critique, iterative design process simulation.
-
----
-
-### Layer ③ (Specialist)  Polish & Motion
-
-#### [`Emil Kowalski Skills`](https://github.com/emilkowalski/skills)
-**What:** Design engineering / interaction craft. From Emil's experience at Vercel and Linear. Skills: `emil-design-eng`, `animate`, `review-animations`, `improve-animations`, `apple-design`.
-**Best for:** Spring vs ease decisions, gesture behavior, component animation, interaction craft. The `apple-design` skill specifically covers springs, swipe, sheets, momentum, translucent materials, reduced motion.
-**Not for:** 0→1 design direction, color palettes, DESIGN.md.
-
----
-
-#### [`Make Interfaces Feel Better`](https://github.com/jakubkrehel/make-interfaces-feel-better)
-**What:** Last 10% polish skill. Covers animation, typography, icons, hover states, optical alignment, concentric radius, shadow, hit areas.
-**Best for:** "This is at 80 points — why doesn't it feel like a professional product?"
-**Not for:** 0→1 design, design systems, templates.
-
----
-
-#### [`Design Motion Principles`](https://github.com/kylezantos/design-motion-principles)
-**What:** Dedicated motion design skill. Supports build and audit modes. Runs motion-gap analysis (detects state transitions that should animate but don't). Flags AI motion anti-patterns: hover-scale everywhere, stagger spam, pulsing indicators, purposeless animation.
-**Best for:** Demo motion polish, product motion audit, existing UI animation review.
-
----
-
-#### [`Mobile App UI Design`](https://github.com/ceorkm/mobile-app-ui-design)
-**What:** Mobile-specific skill. Covers onboarding, home, finance, meditation, wallet, fitness, navigation patterns, mobile typography, spacing, shadows, mobile interactions.
-**Structure:** `SKILL.md` + `references/industry-conventions.md`
-**Best for:** Any mobile app UI, 0→1 or redesign.
-
----
-
-### Layer ④  Templates & References
-
-#### [`Awesome Design MD`](https://github.com/VoltAgent/awesome-design-md)
-**What:** Curated collection of DESIGN.md files extracted from known products (Linear, Stripe, etc.). Drop one in your project, and the agent designs to that brand's spec.
-**Use:** Find a reference brand → copy its DESIGN.md into project root → agent reads it.
-
----
-
-#### [`Awesome Design Skills`](https://github.com/bergside/awesome-design-skills)
-**What:** Registry of 67+ design systems, each providing both a `SKILL.md` (how the agent should implement) and a `DESIGN.md` (what the design should look like). Embodies the correct two-layer separation.
-
-```
-DESIGN.md  → what should it look like? (visual intent, tokens, rationale)
-SKILL.md   → how should the agent work? (component rules, a11y, quality gates)
+```markdown
+| Slot | Found | Decision | By |
+|---|---|---|---|
+| ① taste | none | native — directions proposed inline | visual-design-variants |
+| ③ method | <name> | accepted — polish pass, limits 1–3 applied | design-implement |
 ```
 
----
+The row is what makes an optional step checkable: "skip silently" is not a done condition, "the `③ method` row exists and reads `none`" is. Rows are disjoint — a skill writes only the slots it consumes and never edits another's — so there is no contention and no owner. Each stage declares it `Contributes:`, per the contributor mode in `init-context/references/PROTOCOL.md`. A row that contradicts what you observe is reported to the user, not overwritten; refresh one only when the user says a skill was installed or removed.
 
-### Layer ⑤  Design Context (DESIGN.md Ecosystem)
+The reconciliation rules, enforced by every stage:
 
-#### [Google `DESIGN.md`](https://github.com/google-labs-code/design.md) — the format spec · [spec](https://github.com/google-labs-code/design.md/blob/main/docs/spec.md)
-**What:** Open format specification for agent-readable design systems. YAML frontmatter = machine-readable tokens; prose = human-readable rationale.
-**This is a format, not a skill.** Analogous to `AGENTS.md` for software engineering.
-
-```yaml
----
-colors:
-typography:
-spacing:
----
-# Visual identity
-## Principles
-## Components
-## Usage
-```
-
----
-
-#### [`Oh My Design`](https://github.com/kwakseongjae/oh-my-design)
-**What:** DESIGN.md operating system / full lifecycle workflow. Includes: skills, specialist agents, hooks, 440+ quality-graded company references, doctor, memory/preferences, audit, anti-slop, review.
-**Lifecycle:** `omd:init` → create DESIGN.md → design screens → DESIGN.md persists → next session reads same design → corrections saved.
-**Best for:** Any project needing consistent design across multiple sessions.
-
----
-
-#### [`BrandMD`](https://github.com/yuvrajangadsingh/brandmd)
-**What:** Website → DESIGN.md extractor. Deterministic CSS/spec extraction, output validated against Google's DESIGN.md linter.
-**Use:** `brandmd https://stripe.com` → get a spec-valid DESIGN.md.
-**Best for:** "I found a site I like — make the agent design to that spec."
-**vs DesignPull:** deterministic/spec-valid extraction (tokens + CSS); DesignPull adds vision + design intent.
-
----
-
-#### [`DesignPull`](https://github.com/hasi98/designpull)
-**What:** Website → DESIGN.md extractor using vision model + full-page screenshot + CSS tokens. Captures layout, imagery style, brand voice, visual intent, do/don't rules — not just hex codes.
-**vs BrandMD:** richer intent extraction; less deterministic.
-
----
-
-#### [`TypeUI DESIGN.md Extractor`](https://github.com/bergside/design-md-chrome) — Chrome extension
-**What:** Open a website → extract CSS/style → output DESIGN.md or SKILL.md.
-**Use:** Reference capture tool, not a design skill.
-
----
-
-### Layer ⑥  Production Environments
-
-#### [`Huashu Design`](https://github.com/alchaincyf/huashu-design)
-**What:** HTML-native design production tool. Directly produces: clickable App/Web prototypes, HTML slides, editable PPTX, animations, MP4/GIF, infographics, PDF/PNG/SVG, design variants. Has actual template assets (60 HTML-native styles: 20 web / 20 PPT / 20 infographic) and starter components.
-**Key workflow:** brief → 3 real HTML visual directions → you pick → implementation continues.
-**Uses `brand-spec.md`** (not DESIGN.md) for brand persistence.
-
----
-
-#### [`Open Design`](https://github.com/nexu-io/open-design)
-**What:** Complete local-first AI design workspace. Works with Claude Code, Codex, Cursor, OpenCode as the design engine. Supports: Home/Brief → Plugins/Skills → Brand Reference → Design System → Studio → Prototype/Mobile/Deck/Image/Video.
-**Outputs:** HTML, prototype, dashboards, slides, images, video, PDF, PPTX, MP4.
-**Best for:** When you want a GUI workspace experience, not pure CLI.
-
----
-
-#### [`Google Stitch Skills`](https://github.com/google-labs-code/stitch-skills)
-**What:** Google's official Stitch agent skill suite. Integrates with Stitch MCP → Google Stitch AI design generation. Supports design exploration, screen generation, variants, design → code, multi-screen, DESIGN.md workflow.
-**Stack:** Coding Agent ↔ Stitch Skills ↔ Stitch MCP ↔ Google Stitch
-**SDK:** [google-labs-code/stitch-sdk](https://github.com/google-labs-code/stitch-sdk)
-
----
-
-## Workflow Recipes
-
-### 0→1 Landing Page
-
-```mermaid
-flowchart LR
-    A["① frontend-design / Taste\nlock aesthetic direction"]
-    B["② UI UX Pro Max\ncredible palette + typography"]
-    C["③ Hallmark build\nanti-slop gates + theme"]
-    D["③ Make Interfaces Feel Better\nfinal polish pass"]
-    A --> B --> C --> D
-
-    style A fill:#f5e6ff,stroke:#9b59b6
-    style B fill:#e8f4fd,stroke:#3498db
-    style C fill:#e8f8f5,stroke:#1abc9c
-    style D fill:#e8f8f5,stroke:#1abc9c
-```
-
-### 0→1 SaaS / Dashboard / Agent Console
-
-```mermaid
-flowchart LR
-    A["③ Interface Design\nproduct UI direction\n+ design memory init"]
-    B["③ StyleSeed setup\ncompile grammar\nwrite STYLESEED.md"]
-    C["② UI UX Pro Max\ndashboard patterns + charts"]
-    D["③ Emil Kowalski\ninteraction craft pass"]
-    A --> B --> C --> D
-
-    style A fill:#e8f8f5,stroke:#1abc9c
-    style B fill:#e8f8f5,stroke:#1abc9c
-    style C fill:#e8f4fd,stroke:#3498db
-    style D fill:#e8f8f5,stroke:#1abc9c
-```
-
-### Redesign Existing UI
-
-```mermaid
-flowchart LR
-    A["③ Impeccable audit\nanti-pattern detection"]
-    B["③ Hallmark study url\nextract design DNA"]
-    C["① Refactoring UI\nfix hierarchy / spacing / color"]
-    D["③ Impeccable polish\nfinal correction pass"]
-    A --> B --> C --> D
-
-    style A fill:#e8f8f5,stroke:#1abc9c
-    style B fill:#e8f8f5,stroke:#1abc9c
-    style C fill:#f5e6ff,stroke:#9b59b6
-    style D fill:#e8f8f5,stroke:#1abc9c
-```
-
-### Polish Pass (80 → 95)
-
-```mermaid
-flowchart LR
-    A["③ Emil Kowalski\ninteraction craft\nanimation decisions"]
-    B["③ Make Interfaces Feel Better\noptical alignment\nconcentric radius, hit areas"]
-    C["③ Design Motion Principles\nmotion audit\nremove AI patterns"]
-    A --> B --> C
-
-    style A fill:#e8f8f5,stroke:#1abc9c
-    style B fill:#e8f8f5,stroke:#1abc9c
-    style C fill:#e8f8f5,stroke:#1abc9c
-```
-
-### Set Up DESIGN.md for a New Project
-
-```mermaid
-flowchart TD
-    Q{Starting point?}
-    Q -->|from scratch| A["⑤ Oh My Design\nomd:init → DESIGN.md\n→ apply → persist"]
-    Q -->|reference site| B{Extraction mode?}
-    B -->|spec-valid tokens| C["⑤ BrandMD url\n→ spec-valid DESIGN.md"]
-    B -->|visual intent| D["⑤ DesignPull url\n→ vision-based DESIGN.md"]
-    C --> E["⑤ Oh My Design\naudit + maintain"]
-    D --> E
-    Q -->|known brand| F["④ Awesome Design MD\nfind Linear / Stripe DESIGN.md\n→ drop in project root"]
-
-    style A fill:#fdf2f8,stroke:#e91e8c
-    style C fill:#fdf2f8,stroke:#e91e8c
-    style D fill:#fdf2f8,stroke:#e91e8c
-    style E fill:#fdf2f8,stroke:#e91e8c
-    style F fill:#fef9e7,stroke:#f39c12
-```
-
-### Prototype / Demo Production
-
-```mermaid
-flowchart LR
-    A["⑥ Huashu brief\n3 HTML visual directions"]
-    B{Pick direction}
-    C["⑥ Huashu\nprototype / slides / video"]
-    D["⑥ Open Design\nGUI workspace"]
-    E["⑥ Google Stitch\nStitch MCP generation"]
-
-    A --> B
-    B -->|CLI preferred| C
-    B -->|GUI preferred| D
-    B -->|Stitch backend| E
-
-    style A fill:#eaf7fb,stroke:#17a589
-    style C fill:#eaf7fb,stroke:#17a589
-    style D fill:#eaf7fb,stroke:#17a589
-    style E fill:#eaf7fb,stroke:#17a589
-```
-
----
-
-## Notes on Installation
-
-Each external skill ships as a `SKILL.md` (or equivalent) installed into the agent's skill path. Typical install locations:
-
-- **Claude Code:** `.claude/skills/<skill-name>/SKILL.md` or the `plugins/` path for Anthropic-hosted skills
-- **Codex / Cursor / OpenCode:** `AGENTS.md` inline or skill directory per that runtime's convention
-
-Verify the target skill's own README for the exact install command — most now support one-line install via the Agent Skills open standard.
-
-For skills backed by external services (Google Stitch, Stitch MCP), the MCP server must be configured separately before the skill can call the generation API.
-
----
+- **Pipeline skills own canonical paths.** External output lands where the stage says it lands (e.g. `visual/variants/variant-{a,b,c}.html` with the state switcher intact); only the stage's approval gate merges anything into `docs/design/prototype.html`.
+- **`DESIGN.md` holds token authority.** Engine-invented visual values are rejected; engine output is reconciled into DESIGN.md tokens, never accepted raw.
+- **Locked structure stays locked.** External production engines vary visual properties only; any structural change routes back to `interaction-design`, which reopens the section.
+- **Skills name layers and capabilities, never vendors.** Recognition is by capability signature, in the table above. [`external-skills.md`](external-skills.md) catalogs the ecosystem for a human choosing what to install; no skill reads it at runtime.
 
 ## Prototype
 
-`prototype` is a shared utility, not a pipeline stage. It builds throwaway code to answer one design question when conversation cannot settle it — a logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question. The code is disposable; the decision it buys is not.
+`prototype` sits alongside the pipeline as a shared utility, not a stage. It builds throwaway code to answer one design question when conversation cannot settle it — a logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question. The code is disposable; the decision it buys is not. Decisions are recorded in `prototypes/<slug>/decision.md`. Despite the name, it never writes the canonical `docs/design/prototype.html` — only pipeline stages merge into that, through their gates.
+
+## Further reading
+
+- [`external-skills.md`](external-skills.md) — the reference book: every external tool by layer, comparison tables, head-to-head notes, workflow recipes, installation.
+- [`workflows/design.md`](../../../workflows/design.md) — step-by-step procedures, workflow patterns, quality standards, troubleshooting.
+- [`../README.md`](../README.md) — the design phase overview: UX vs technical, entry and skip conditions.

@@ -1,10 +1,10 @@
 # Product
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 From raw idea or existing codebase to durable product intent an engineer can build against. Nine skills contribute to one shared product model through two lanes: greenfield creation and existing-product improvement.
 
-Read [the product memory contract](../craft/context/init-context/references/product-memory.md) for the record schema and update rules. The source contract lives with context initialization; each product skill exposes the same file through a local `references/product-memory.md` symlink so packaged copies can materialize it without separate maintained versions. The shared need-layering framework (surface / deep / fundamental needs, vision synthesis, module fit) lives canonically at [`discovery/validate-demand/references/need-layers.md`](discovery/validate-demand/references/need-layers.md) and is symlinked into the skills that apply it.
+Read [the product memory contract](../craft/context/init-context/references/product-memory.md) for the record schema and update rules. The source contract lives with context initialization; each product skill exposes the same file through a local `references/product-memory.md` symlink so packaged copies can materialize it without separate maintained versions. The shared need-layering framework (surface / deep / fundamental needs, vision synthesis, module fit) lives canonically at [`discovery/validate-demand/references/need-layers.md`](discovery/validate-demand/references/need-layers.md) and is symlinked into the skills that apply it. The shared-understanding protocol (question blocks of 4–5 with recommended answers, facts-vs-decisions, and the confirm-before-final close) lives canonically at [`discovery/validate-demand/references/shared-understanding.md`](discovery/validate-demand/references/shared-understanding.md) and is symlinked the same way into every interactive product skill.
 
 ## The lanes
 
@@ -63,7 +63,7 @@ stories from an existing codebase with no prior discovery.
 
 **`brainstorm`** — turns an ambiguous idea into a Jobs-to-be-Done brief through Socratic
 dialogue: who the user is, what job they hire the product for, how they solve it today,
-and what constrains any solution. Asks questions one at a time, keeps it conversational,
+and what constrains any solution. Asks questions in small blocks, keeps it conversational,
 and stops before feature scoping. Enriches shared personas, problems, constraints, assumptions, and questions. **Credit: adapted from
 [Jesse Hattabaugh's superpowers brainstorming skill](https://github.com/obra/superpowers/blob/main/skills/brainstorming/SKILL.md)
 for the Socratic conversation pattern.**
@@ -97,7 +97,9 @@ OpenSpec brownfield-first exploration, and the prior `shape-solution` codebase i
 standalone analysis.**
 
 **`run-premortem`** — assumes the project has already failed 6 months out, then works
-backward to root causes, scored risks, and prevention strategies. Its Mission / Coherence
+backward to root causes, scored risks, and prevention strategies. Before enumerating causes
+it grills the product thread with the user — vision, demand verdict, MVP fit, and the
+discovery behind them — and its Mission / Coherence
 dimension reads any vision record and asks how the product could ship its wedge yet fail its
 mission. Lives in `discovery/`
 but runs late in the pipeline: it reads the MVP scope and demand evidence, so it is most
@@ -137,8 +139,10 @@ The PRD fixes *what* to build. When *how it looks* or *how the system is shaped*
 open, `write-prd` routes through the `design/` phase before `engineering/feature/spec`.
 
 For UX questions — layout, information hierarchy, visual system, interaction states — the
-entry point is `design/ux/design-context`, which establishes the design token source
-(`docs/design/system.md`). From there the UX pipeline runs:
+entry point is `design/ux/design-context`, which establishes design authority (the root
+`DESIGN.md`). From there the UX pipeline builds the canonical prototype
+(`docs/design/prototype.html`), with each stage linking its surfaces back to `product.html`
+capability records:
 
 ```
 design-context → interaction-design → visual-design-variants → design-implement
@@ -154,20 +158,28 @@ entry point is `design/technical/`.
 
 Both branches may run for the same effort. See `design/README.md` for the full routing table.
 
-## Shared knowledge, two lifetimes
+## The two handoff deliverables
+
+The pipeline's final handoff is **research** plus **roadmap**, aligned with the product's missions and visions:
+
+- **Research** is the full analysis: current behavior, personas, layered needs, gaps, evidence, and coverage. It accumulates in `discovery.html` while working and its accepted conclusions live as durable records in `product.html`.
+- **Roadmap** is the `roadmap` section of `product.html`: research findings decomposed into prioritized concrete changes. Each ticket links its research basis, its mission/vision alignment, and either a standalone spec file (`specs/<spec-slug>.md`) or a prototype request.
+
+## Shared knowledge, three lifetimes
 
 | Document | Holds | Lifetime |
 | --- | --- | --- |
-| `<work-root>/<effort>/discovery.html` | Findings, proposals, assessments, evidence, and unresolved analysis | Working; ignored and compacted when the effort ends |
-| `<product-docs>/<product-slug>/product.html` | Durable product understanding, accepted intent, necessary evidence, and PRD reading index | Human; tracked and shared across increments |
+| `<work-root>/<effort>/discovery.html` | Findings, proposals, assessments, evidence, unresolved analysis, and research coverage tracking | Working; ignored and compacted when the effort ends |
+| `<product-docs>/<product-slug>/product.html` | Durable product understanding, accepted intent, roadmap, necessary evidence, and PRD reading index | Human; tracked and shared across increments |
+| `<product-docs>/<product-slug>/specs/<spec-slug>.md` | Standalone feature specification for one roadmap ticket, generated by `write-prd` | Human; canonical for that feature's requirements |
 
 `state.md` points to the relevant records and maps the effort to its product. Increments reuse the product identity. Existing Markdown product documents remain readable and canonical until an authorized migration reconciles their content and updates routing; do not create a competing HTML copy.
 
-HTML is the semantic source for these two documents. Skill instructions and engineering task state retain their existing formats. There is no Markdown or hidden JSON twin. Native headings, tables, `<details>`, stable IDs, and links serve both human reading and targeted agent edits.
+HTML is the semantic source for discovery and product documents. Spec files are Markdown. Skill instructions and engineering task state retain their existing formats. There is no Markdown or hidden JSON twin of the HTML documents. Native headings, tables, `<details>`, stable IDs, and links serve both human reading and targeted agent edits.
 
 ## How skills enrich the same model
 
-Navigation groups cover users/problems, capabilities/journeys, gaps/opportunities, questions/assumptions, evidence, scope/decisions, and risks/measures. Groups are not exclusive skill territories. Records use stable subject IDs, such as `capability-export`, `gap-export-feedback`, or `question-export-channel`.
+Navigation groups cover users/problems, capabilities/journeys, gaps/opportunities, questions/assumptions, evidence, scope/decisions, risks/measures, roadmap (product.html only), and research (discovery.html only). Groups are not exclusive skill territories. Records use stable subject IDs, such as `capability-export`, `gap-export-feedback`, `question-export-channel`, or `ticket-export-notification`.
 
 Every product skill can contribute relevant observations, evidence, gaps, and questions. Specialized methods determine assessment authority: demand validation grades demand; scope skills assess commitments; premortem assesses risks; PRD consolidation promotes accepted intent. No contributor silently overrides another assessment or a user decision.
 
@@ -192,7 +204,12 @@ Shared files require serialized writes: concurrent analysis may prepare patches,
 
 Apply the durability test: if deleting the effort would lose needed product intent or rationale, promote it. `write-prd` moves or reconciles accepted conclusions into durable records, preserves essential evidence there, verifies links, then replaces working conclusions with pointers. No necessary durable link may depend on a disposable effort file.
 
-The PRD is a reading order over these records: document info → problem/goals → solution overview → detailed requirements → launch. Partial readiness is expressed through specific open questions and their blocking effects. Design and engineering consume the configured product path and relevant anchors; they do not require a particular prior skill to have run.
+**Roadmap decomposition** is part of promotion: when the `research-coverage` record says research is ready, `write-prd` decomposes accepted findings into roadmap tickets. Every P0 finding maps to at least one ticket; every ticket links its research basis and its mission/vision alignment. For each ticket it assigns the type:
+
+- **Spec ticket** (`data-ticket-type="spec"`): settled requirements become a ticket with a generated `specs/<spec-slug>.md` file
+- **Prototype ticket** (`data-ticket-type="prototype"`): an open design question becomes a ticket whose short request hands off to `design/ux/prototype`
+
+The PRD is a reading order over durable records: document info → problem/goals → solution overview → detailed requirements → roadmap → launch. The roadmap section is the PRD's forward-looking view. Partial readiness is expressed through specific open questions and their blocking effects. Design and engineering consume the configured product path and relevant anchors; they do not require a particular prior skill to have run.
 
 ## Behavioral checks
 

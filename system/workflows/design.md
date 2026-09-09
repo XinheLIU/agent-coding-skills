@@ -1,73 +1,76 @@
 # Design Workflow
 
-Last updated: 2026-08-17
+Last updated: 2026-09-09
 
-This workflow transforms product intent into implemented components through **design context → interaction design → visual design → implementation**. The pipeline skills stay thin — routing, approval gates, and artifact conventions — and dispatch heavy design work to installed external skills from the six-layer catalog (`skills-src/design/ux/README.md`).
+This workflow transforms product intent into implemented components through **design context → interaction design → visual design → implementation**. Shared design understanding is a triad — `product.html` is **why**, root `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** (contract: `skills-src/craft/context/init-context/references/design-memory.md`). The pipeline skills stay thin — routing, approval gates, triad transitions — and dispatch heavy design work to installed external skills from the six-layer catalog (`skills-src/design/ux/external-skills.md`; system overview: `skills-src/design/ux/README.md`).
 
 ## Overview
 
 ```
-PRD Part 1/3 → design context → interaction design → visual design → implement code → shipped component
-               (⑤ tokens)        (③ flows, states)    (①③⑥ visuals)   (⑥+③ production)
-               ↓                  ↓                     ↓                 ↓
-               Human layer        Working layer         Working layer     Project + Human docs
+PRD (WHY) → design context → interaction design → visual design → implement code → shipped component
+            (⑤ DESIGN.md)     (③ lock structure)   (①③⑥ style it)   (⑥+③ production)
+            ↓                  ↓                     ↓                 ↓
+            HOW written        WHAT: wireframe        WHAT: styled      WHAT: implemented
+                               sections locked        section merged    + component docs
 ```
 
 **Key principles:**
 
-1. **Interaction before visuals** — structure (what/where/when) is designed and locked before color/typography/polish.
-2. **One canonical token source** — `docs/design/system.md` is the only file downstream skills read for visual values; `/design-context` decides what feeds it.
-3. **External skills carry heavy work** — each stage checks the catalog for an installed capability (taste, knowledge, method, templates, DESIGN.md, production) and dispatches; the native workflow is always the fallback.
+1. **Interaction before visuals** — structure (what/where/when) is locked (`data-structure="locked"` in the prototype) before color/typography/polish.
+2. **One canonical token source** — root `DESIGN.md` is the only how downstream skills read for visual values; `/design-context` decides what feeds it and keeps the prototype's `:root` block in sync.
+3. **The prototype is the durable what** — every approval gate lands in `docs/design/prototype.html` as a section transition (`wireframe → styled → implemented`), so shared understanding is one openable file, not scattered effort intermediates.
+4. **External skills carry heavy work** — each stage probes the skills available in the session for the one or two slots it consumes, recognizing them by capability signature rather than vendor name, and offers what it finds; the native workflow is always the recommended fallback.
 
 ## The Five Skills
 
-### 0. `/design-context` — Token Source (ENTRY POINT)
+### 0. `/design-context` — Design Authority (ENTRY POINT)
 
-**Purpose**: Decide where design tokens come from and produce the canonical `docs/design/system.md`.
+**Purpose**: Decide where design authority comes from and produce the canonical root `DESIGN.md`.
 
-**When**: Starting design work; a `DESIGN.md` exists but nothing consumes it; you have a reference site/brand to import.
+**When**: Starting design work; a legacy `docs/design/system.md` needs migrating; you have a reference site/brand to import; the prototype's tokens drifted from DESIGN.md.
 
 **Process**:
-- Detects `DESIGN.md` (root), existing `docs/design/system.md`, PRD Part 1
-- Branches: adopt existing DESIGN.md → extract from a reference site (⑤ extractors) → adopt a ready-made brand spec (④ catalogs) → or hand off to `/design-system-create` for from-scratch creation
-- Resolves token authority conflicts (default: DESIGN.md wins visual values; system.md keeps component foundations)
-- Writes `docs/design/system.md` after approval
+- Detects `DESIGN.md` (root), legacy `docs/design/system.md`, the prototype, PRD Part 1
+- Branches: adopt existing DESIGN.md → migrate legacy system.md → extract from a reference site (⑤ extractors) → adopt a ready-made brand spec (④ catalogs) → or hand off to `/design-system-create` for from-scratch creation
+- Resolves authority conflicts (default: existing DESIGN.md frontmatter wins visual values; legacy prose survives as rationale)
+- Writes `DESIGN.md` after approval; pointers the legacy file; re-syncs the prototype's `:root` token block
 
-**Outputs**: `docs/design/system.md` (Human layer, git-tracked)
+**Outputs**: root `DESIGN.md` (Human layer, git-tracked) — the triad's **how**
 
-**External dispatch**: layers ⑤ (DESIGN.md lifecycle + extractors) and ④ (template catalogs). Never modifies `DESIGN.md` at root — that's an input, owned by external lifecycle tools.
+**External dispatch**: layers ⑤ (DESIGN.md lifecycle + extractors) and ④ (template catalogs). When an accepted ⑤ tool owns the DESIGN.md lifecycle, writes route through it and are reconciled; the file is canonical either way.
 
 ---
 
 ### 0b. `/design-system-create` — From-Scratch Fallback
 
-**Purpose**: Consultatively create `docs/design/system.md` when there is no DESIGN.md and no reference to import.
+**Purpose**: Consultatively create the root `DESIGN.md` when there is nothing to adopt.
 
 **When**: Called directly, or via `/design-context` Step 3 when the user picks the native path.
 
-**Process**: gathers product context (PRD Part 1) → proposes typography/color/spacing/layout with rationale → optional layer-② knowledge lookup for font pairings and palettes → preview HTML → approval → writes `docs/design/system.md`.
+**Process**: gathers product context (PRD Part 1) → proposes typography/color/spacing/layout with rationale → optional layer-② knowledge lookup for font pairings and palettes → preview HTML → approval → writes `DESIGN.md` (YAML frontmatter tokens + prose).
 
-**Outputs**: `docs/design/system.md` (Human layer); `.scratch/design-system/system-preview.html` (Working, disposable)
+**Outputs**: root `DESIGN.md` (Human layer); `<work-root>/<effort>/design/system-preview.html` (Working, disposable)
 
 ---
 
-### 1. `/interaction-design` — User Flows & States (CORE)
+### 1. `/interaction-design` — Structure & States (CORE)
 
 **Purpose**: Define HOW users interact before HOW it looks. Structure over style.
 
 **When**: New feature with unclear flows; PRD Part 3 five-state blocks are thin.
 
 **Process**:
-- Reads PRD Part 1 (`docs/product/<slug>/prd.md`) and Part 3
+- Reads the configured `product.html#prd` index and linked Part 1/3 records; canonical legacy PRDs remain readable
 - Designs information architecture (what the user sees first/second/third)
 - Fills the **interaction state table** — LOADING/EMPTY/ERROR/SUCCESS/PARTIAL for every feature (mandatory, no gaps)
 - Maps user journeys with emotional arc
-- Generates **low-fidelity wireframes** (gray boxes, NO colors/fonts)
+- Drafts **low-fidelity wireframe sections** (gray boxes, NO colors/fonts), each linking its `product.html` capability record via `data-capability`
+- At approval, merges the sections into `docs/design/prototype.html` at `wireframe` fidelity with `data-structure="locked"`
 - Documents responsive + accessibility requirements; surfaces unresolved decisions
 
-**Outputs** (Working layer): `.scratch/<effort>/interaction/{wireframes/,state-table.md,journey-map.md,decisions.md,responsive-a11y.md}`
+**Outputs**: locked wireframe sections in `docs/design/prototype.html` (Human layer); working exploration in `<work-root>/<effort>/interaction/{state-table.md,journey-map.md,decisions.md,responsive-a11y.md,wireframes/}`
 
-**Critical constraint**: Wireframes have no visual styling — only structure. Structure locks at approval.
+**Critical constraint**: Wireframe sections have no visual styling — only structure. Structure locks at approval; reopening a locked section is explicit and drops it back to wireframe fidelity.
 
 **External dispatch**: optional layer-② knowledge pass for state-design and flow-pattern guidelines, cited in `decisions.md`. The five-state table itself is always native.
 
@@ -75,44 +78,44 @@ PRD Part 1/3 → design context → interaction design → visual design → imp
 
 ### 2. `/visual-design-variants` — Visual Exploration
 
-**Purpose**: Explore visual directions on the locked interaction structure.
+**Purpose**: Explore visual directions on the locked structure, then merge the winner into the canonical prototype.
 
-**When**: After interaction design is approved and `docs/design/system.md` exists.
+**When**: After locked wireframe sections exist and root `DESIGN.md` exists.
 
 **Process**:
-- **Requires** `interaction/wireframes/`, `interaction/state-table.md`, and `docs/design/system.md` (hard prerequisites)
+- **Requires** locked sections in `docs/design/prototype.html` and `DESIGN.md` (hard prerequisites)
 - Defines 3 genuinely different visual directions (anti-convergence rule)
-- Generates 3 variant HTMLs — same structure, different visual treatment — each showing all 5 states with a state switcher
-- Iterates (max 3 rounds) to an approved variant
+- Generates 3 variant HTMLs in the working layer — same structure, different visual treatment — each showing all 5 states with a state switcher
+- Iterates (max 3 rounds); at approval merges the winning treatment into the surface's section, `wireframe → styled`
 
-**Outputs** (Working layer): `.scratch/<effort>/visual/{variants/variant-{a,b,c}.html,approved.html,decision.md,constraints.md}`
+**Outputs**: the styled section in `docs/design/prototype.html` (Human layer); `<work-root>/<effort>/visual/{variants/variant-{a,b,c}.html,decision.md,constraints.md}` (Working)
 
-**Critical constraint**: CANNOT change button positions, navigation hierarchy, or state transitions — only visual properties vary.
+**Critical constraint**: CANNOT change button positions, navigation hierarchy, or state transitions — only visual properties vary, and every value traces to `DESIGN.md`.
 
-**External dispatch**: layer-① taste skills sharpen direction strategies; layer-⑥ production engines may render the variant HTMLs. Reconciliation contract: locked structure preserved, system.md tokens only, output lands at `visual/variants/variant-{a,b,c}.html` with the state switcher intact.
+**External dispatch**: layer-① taste skills sharpen direction strategies; layer-⑥ production engines may render the variant HTMLs. Reconciliation contract: locked structure preserved, DESIGN.md tokens only, output lands at `visual/variants/variant-{a,b,c}.html` with the state switcher intact; only the approval gate merges into the prototype.
 
 ---
 
 ### 3. `/design-implement` — Production Code
 
-**Purpose**: Convert the approved visual design into production code matching the project's tech stack.
+**Purpose**: Convert the styled section into production code matching the project's tech stack.
 
-**When**: `visual/approved.html` exists and the user is ready to build.
+**When**: A `styled`, locked section exists in the prototype and the user is ready to build.
 
 **Process**:
-- Reads `visual/approved.html` + `interaction/state-table.md` + `docs/design/system.md`
+- Reads the styled section + `DESIGN.md` (+ `state-table.md` while the effort lives)
 - Detects tech stack (React/Vue/Svelte/HTML × Tailwind/CSS-in-JS/…)
 - Extracts design tokens into stack-appropriate format
 - Generates semantic, accessible, responsive component code implementing **all 5 states**
-- Documents the component
+- Documents the component; marks the section `implemented` with `data-component` / `data-component-doc` pointers
 
-**Outputs**: component code in project source (project-tracked); `docs/design/components/<name>.md` (Human layer)
+**Outputs**: component code in project source (project-tracked); `docs/design/components/<name>.md` (Human layer); the section marked `implemented`
 
 **External dispatch**: optional layer-③ polish pass (interaction craft, motion, feel-better, a11y review) over generated code — within token authority; structural changes route back to `/interaction-design`. Applied fixes are recorded in the component doc.
 
 ## External Orchestration
 
-The six-layer model (full catalog: `skills-src/design/ux/README.md`) maps to pipeline stages:
+The six-layer model (full catalog: `skills-src/design/ux/external-skills.md`) maps to pipeline stages:
 
 | Layer | What it provides | Consumed by | When absent |
 |:---:|---|---|---|
@@ -123,34 +126,40 @@ The six-layer model (full catalog: `skills-src/design/ux/README.md`) maps to pip
 | ⑤ Design Context | DESIGN.md format, extractors, lifecycle | `design-context` Steps 1–3 | Native `design-system-create` path |
 | ⑥ Production Environments | High-fidelity mockup/demo engines | `visual-design-variants` Step 2.5 | Inline HTML generation |
 
-Every dispatch follows the same contract: **the pipeline skill owns the artifacts; the external skill is a producer whose output is reconciled into the canonical paths.** Skills name layers and capabilities, never hardcoded vendors — the README catalog is the detailed reference.
+No stage needs more than two of these slots, so none probes all six. A stage probes its own slots at the point of use, appends the result to `<work-root>/<effort>/design/capabilities.md`, and reads that record on re-entry instead of asking again. The row doubles as the step's done condition — an optional step ends when its slot row exists, whether it reads `none`, `declined`, or `accepted`.
+
+Every dispatch follows the same contract: **the pipeline skill owns the artifacts; the external skill is a producer whose output is reconciled into the canonical paths.** Skills recognize capabilities by signature, never by vendor name. The pipeline is complete with no external tools installed; `skills-src/design/ux/external-skills.md` catalogs what may optionally slot in, for a human choosing what to install — no skill reads it at runtime.
+
+Technical design carries a lighter version: `design-agent-architecture` and `design-operational-ontology` offer a **diagramming** capability for the diagram each must produce, and fall back to drawing it directly. Those skills hold no effort-scoped memory, so the offer is stateless and writes no record.
 
 ## Memory Layers
 
-| Artifact | Layer | Tracked | Lifetime | Why |
-|----------|-------|---------|----------|-----|
-| `DESIGN.md` (root) | Human (external owner) | Yes | Project | Design context source; written by lifecycle tools, read by pipeline |
-| `docs/design/system.md` | Human | Yes | Project | Canonical design system outlives features |
-| `docs/design/components/*.md` | Human | Yes | Project | Component docs are reference |
-| `.scratch/<effort>/interaction/*` | Working | No | Effort | Exploration, disposable after implementation |
-| `.scratch/<effort>/visual/*` | Working | No | Effort | Exploration, disposable after implementation |
-| Component source code | Project | Per project | Project | Production code |
+The work root is configured in `docs/agents/memory.md` and defaults to `.scratch/`. Every stage resolves it the same way rather than hardcoding a path. Full contract: `skills-src/craft/context/init-context/references/design-memory.md`.
 
-**Promotion path**:
-- PRD Part 3 ← `state-table.md` (optional, if user approves sync in `/interaction-design`)
-- `docs/design/system.md` ← DESIGN.md merge or from-scratch creation
-- Component docs (Human layer) ← implementation
-- Production code ← approved visual design
+| Artifact | Owner | Layer | Tracked | Promotes to |
+|----------|-------|-------|---------|-------------|
+| `product.html` (product docs) — the WHY | product skills | Human | Yes | — (design links into it via `data-capability`) |
+| `DESIGN.md` (root) — the HOW | `design-context` / `design-system-create` (or an accepted ⑤ lifecycle tool) | Human | Yes | contested token-authority decision → an ADR, via `domain-modeling` |
+| `docs/design/prototype.html` — the WHAT | the stage whose gate the transition passed | Human | Yes | — (it is the promotion target of approved structure and visuals) |
+| `docs/design/system.md` (legacy) | `design-context` retires it | Human until migrated | Yes | folded into `DESIGN.md`, left as a pointer |
+| `<work-root>/<effort>/interaction/*` | `interaction-design` | Working | No | locked sections → the prototype; accepted state definitions → `product.html` capability records, via `write-prd` |
+| `<work-root>/<effort>/visual/*` | `visual-design-variants` | Working | No | winning treatment → the styled prototype section; losers discarded |
+| `docs/design/components/*.md` | `design-implement` | Human | Yes | reusable conventions → `docs/conventions`, via `sync-context` |
+| Component source code | the project | Project | Per project | — |
+
+Each stage updates `state.md` at its approval gate with what was settled, a pointer into the triad (a `data-surface` anchor, a `DESIGN.md` section, a `product.html` record), and the next stage. That pointer is how the next stage starts without re-reading the previous one's working files.
+
+After shipping, code is canonical **behavior** and the prototype section canonical **intent**. Small drift: regenerate the section from the component. Deliberate redesign: reopen the section through the pipeline. Never let them diverge silently.
 
 ## Workflow Patterns
 
 ### Pattern 1: Complete Flow (New Feature)
 
 ```
-1. /design-context              → docs/design/system.md (adopt / extract / create)
-2. /interaction-design          → wireframes + state-table.md → APPROVAL GATE
-3. /visual-design-variants      → visual/approved.html → APPROVAL GATE
-4. /design-implement            → component code + docs/design/components/<name>.md
+1. /design-context              → root DESIGN.md (adopt / migrate / extract / create)
+2. /interaction-design          → locked wireframe sections in prototype.html → APPROVAL GATE
+3. /visual-design-variants      → styled section merged → APPROVAL GATE
+4. /design-implement            → component code + docs + section marked implemented
 ```
 
 **Time**: ~1-2 hours (interaction takes longest).
@@ -160,7 +169,7 @@ Every dispatch follows the same contract: **the pipeline skill owns the artifact
 Interaction structure is correct; need a different visual treatment.
 
 ```
-1. /visual-design-variants  (reads existing wireframes + system.md) → new approved.html
+1. /visual-design-variants  (re-styles the locked sections; they drop to wireframe treatment for exploration) → new styled section
 2. /design-implement        → new component code
 ```
 
@@ -171,8 +180,8 @@ Interaction structure is correct; need a different visual treatment.
 Visual is wrong because the structure is wrong.
 
 ```
-1. /interaction-design (revise)         → updated wireframes + state table → APPROVAL GATE
-2. /visual-design-variants (regenerate) → new variants on revised structure
+1. /interaction-design (reopen the section)   → revised structure, re-locked → APPROVAL GATE
+2. /visual-design-variants (regenerate)       → new variants on revised structure
 3. /design-implement
 ```
 
@@ -183,8 +192,9 @@ Visual is wrong because the structure is wrong.
 HTML mockup in hand, need production code.
 
 ```
-1. Place HTML at .scratch/<effort>/visual/approved.html
-2. Create interaction/state-table.md manually or extract from the mockup
+1. Wrap the mockup as a prototype section: data-surface, data-capability,
+   data-fidelity="styled", data-structure="locked", five data-state blocks
+2. Reconcile its visual values into DESIGN.md tokens (run /design-context if none exists)
 3. /design-implement
 ```
 
@@ -205,7 +215,7 @@ HTML mockup in hand, need production code.
 "Make it look like Linear."
 
 ```
-1. /design-context  → extract (⑤) or adopt (④) the brand spec → docs/design/system.md
+1. /design-context  → extract (⑤) or adopt (④) the brand spec → root DESIGN.md
 2-4. as Pattern 1
 ```
 
@@ -213,31 +223,31 @@ HTML mockup in hand, need production code.
 
 ### Upstream (design reads from)
 
-- `docs/product/<slug>/prd.md` Part 1 (persona, platform, product type) and Part 3 (five-state seed)
-- `DESIGN.md` at project root (layer-⑤ design context, when present)
+- the configured `product.html#prd` (legacy PRDs remain readable) Part 1 (persona, platform, product type) and Part 3 (five-state seed) — the **why**; every prototype section links back to it. With no product docs, `map-current-product` infers the baseline from the repo.
+- `DESIGN.md` at project root — the **how** (this pipeline's own canonical output; also maintained by ⑤ lifecycle tools)
 - `CONTEXT.md` (binding design principles or constraints)
-- `.scratch/<effort>/state.md` (what feature is being built)
+- `state.md` for the active effort (what feature is being built)
 
 Entry gate: the Design Gate in `product/definition/write-prd` routes here when the PRD leaves experience or structure open.
 
 ### Downstream (design feeds)
 
-- `engineering/feature/spec` — reads `docs/design/system.md` and `DESIGN.md` as design constraints
-- `docs/product/<slug>/prd.md` Part 3 ← optional state-table sync
+- `engineering/feature/spec` — reads root `DESIGN.md` (constraints) and `docs/design/prototype.html` (the settled what)
+- the configured `product.html#prd` (legacy PRDs remain readable) Part 3 ← proposed state-table amendments, reconciled via `write-prd`
 - Testing skills ← component docs carry the accessibility contract
 
 ## Skill Boundaries
 
 | Decision type | Owner skill | Artifact |
 |---|---|---|
-| Where tokens come from (DESIGN.md vs scratch) | design-context | system.md provenance |
-| What font/color/radius values are | design-context / design-system-create | system.md |
-| User sees what first | interaction-design | architecture.md, wireframe |
-| Button goes where | interaction-design | wireframe layout |
-| Click triggers what | interaction-design | state table, journey map |
-| Loading/empty/error content | interaction-design | state table |
+| Where design authority comes from (adopt vs migrate vs scratch) | design-context | DESIGN.md provenance |
+| What font/color/radius values are | design-context / design-system-create | DESIGN.md |
+| User sees what first | interaction-design | architecture.md, wireframe section |
+| Button goes where | interaction-design | locked section layout |
+| Click triggers what | interaction-design | state blocks, journey map |
+| Loading/empty/error content | interaction-design | state table + state blocks |
 | Mobile nav pattern, keyboard nav | interaction-design | responsive-a11y.md |
-| Which visual personality wins | visual-design-variants | approved.html |
+| Which visual personality wins | visual-design-variants | the styled section |
 | Component API, code structure | design-implement | component code + docs |
 
 ## Quality Standards
@@ -265,7 +275,7 @@ All design skills enforce:
 
 ### Design System Adherence
 - Use design tokens literally (no arbitrary values)
-- External production engines must reconcile into system.md tokens — engine-invented values are rejected
+- External production engines must reconcile into DESIGN.md tokens — engine-invented values are rejected
 
 ## Hard Rules (Enforced)
 
@@ -287,20 +297,24 @@ All design skills enforce:
 
 ## Troubleshooting
 
-**"No wireframes found"** → Run `/interaction-design` first.
+**"No canonical prototype / no locked sections"** → Run `/interaction-design` first.
 
-**"No design system found"** → Run `/design-context` (or `/design-system-create` for from-scratch).
+**"No design authority found"** → Run `/design-context` (or `/design-system-create` for from-scratch).
 
-**"No approved visual design found"** → Run `/visual-design-variants` after interaction design is approved; it writes `visual/approved.html`.
+**"Section still at wireframe fidelity"** → Run `/visual-design-variants`; its approval gate merges the styled treatment into the section.
 
-**"Visual design changes button positions"** → That's an interaction change — go back to `/interaction-design`.
+**"Visual design changes button positions"** → That's an interaction change — go back to `/interaction-design`, which reopens the section explicitly.
 
-**"State table incomplete"** → `/interaction-design` enforces five-state coverage; every feature defines all 5 states.
+**"State blocks incomplete"** → `/interaction-design` enforces five-state coverage; every section renders all 5 `data-state` blocks.
 
-**"Need different aesthetic"** → Update `docs/design/system.md` first (re-run `/design-context` to re-sync from DESIGN.md, or `/design-system-create` to re-propose), then regenerate visual variants.
+**"Need different aesthetic"** → Update root `DESIGN.md` first (re-run `/design-context` to re-sync or import, or `/design-system-create` to re-propose), then regenerate visual variants.
 
-**"External skill output doesn't match system tokens"** → The reconciliation contract was violated — regenerate inline (the native fallback) rather than accepting off-system values.
+**"External skill output doesn't match DESIGN.md tokens"** → The reconciliation contract was violated — regenerate inline (the native fallback) rather than accepting off-system values.
 
-**"PRD Part 3 out of sync with state table"** → `/interaction-design` offers to sync — run it in update mode.
+**"Legacy docs/design/system.md still canonical"** → Run `/design-context`; it folds the legacy file into `DESIGN.md` and leaves a pointer.
 
-**"A design question can't be settled in conversation"** → Route to `prototype`: throwaway variants, decision recorded in `prototypes/<slug>/decision.md`, control returns to the skill that raised it.
+**"Shipped component diverged from its prototype section"** → Report it. Regenerate the section from the component for small drift; reopen through the pipeline for deliberate redesign.
+
+**"PRD Part 3 out of sync with state table"** → `/interaction-design` identifies affected capability records; `write-prd` reconciles authorized state changes.
+
+**"A design question can't be settled in conversation"** → Route to `prototype`: throwaway variants, decision recorded in `prototypes/<slug>/decision.md`, control returns to the skill that raised it. Its outputs never merge into the canonical prototype directly.
