@@ -1,6 +1,6 @@
 # Brainstorm Strategy Variants
 
-Last updated: 2026-08-06
+Last updated: 2026-09-08
 
 ## Systematic (`--strategy systematic`)
 
@@ -16,7 +16,7 @@ Last updated: 2026-08-06
 4. **Synthesize** — Consolidate findings into a structured requirements draft
 5. **Handoff** — Output an actionable brief with open questions flagged
 
-**Tools to prefer**: the runtime's normal reasoning tools; available search for technology validation; `<effort>/discovery/brainstorm.md` for cross-session persistence.
+**Tools to prefer**: the runtime's normal reasoning tools; available search for technology validation; shared persona/problem/question records in `<effort>/discovery.html` for cross-session persistence.
 
 ---
 
@@ -44,7 +44,7 @@ Last updated: 2026-08-06
 2. **Constraint inventory** — Document compliance, security, SLA, and integration requirements before any solution design
 3. **Architecture review** — Evaluate proposed approach against enterprise patterns (SSO, audit logging, RBAC, data residency)
 4. **Cross-domain validation** — Security, DevOps, and data governance lenses applied sequentially
-5. **Discovery record** — Produce a structured record in `<effort>/discovery/brainstorm.md`
+5. **Discovery record** — Enrich the matching shared persona/problem/question records in `<effort>/discovery.html`
 
 **Tools to prefer**: repository memory for persistent context; available search for compliance standards; normal file editing for the configured discovery artifact.
 

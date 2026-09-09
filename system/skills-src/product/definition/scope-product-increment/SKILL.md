@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Scope Product Increment
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Turn an existing-product improvement into a behavior delta the team can build and measure. The output says what changes for users, what stays out of scope, how done will be tested, and what evidence will prove the increment worked.
 
@@ -72,6 +72,11 @@ Use OpenSpec-style change language against current behavior:
 
 Each row must cite the baseline evidence from current capability records or the PRD.
 
+Then present the delta table with its baseline evidence and ask the user to confirm or
+correct each row before writing acceptance criteria
+(`references/shared-understanding.md`). A wrong MODIFIED row corrected here is cheap;
+corrected after acceptance criteria and instrumentation are written, it invalidates both.
+
 ### 4. Triage P0/P1/out-of-scope
 
 P0 is the smallest coherent set of behavior needed to deliver and test the target outcome. P1 is useful after the increment works. Out of scope is explicit so downstream specs do not smuggle it back in.
@@ -104,7 +109,7 @@ Do not create a second capability inventory or overwrite unrelated decisions. Pr
 ### Verify memory records
 
 - Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
-- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.

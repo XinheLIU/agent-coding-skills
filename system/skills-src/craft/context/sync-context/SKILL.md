@@ -5,7 +5,7 @@ description: Detect and repair shared-context drift after setup. Use for broken 
 
 # Sync Context
 
-Last updated: 2026-08-26
+Last updated: 2026-09-08
 
 `docs/agents/memory.md` is the prerequisite. When it is absent, hand off to `init-context`.
 
@@ -54,7 +54,10 @@ Load [`references/working-memory.md`](references/working-memory.md). For each ac
 - `## Next action` is directly executable;
 - every pointer resolves to substantive content;
 - issue status, blockers, and claims agree with repository history;
-- generated views can be rebuilt from their Markdown sources.
+- generated views can be rebuilt from their declared sources;
+- product HTML is audited as a semantic source under [the product contract](references/product-memory.md): shared IDs and anchors resolve, relevant evidence and accepted decisions remain distinct, and stale dependent conclusions are visible. Do not demand a Markdown source or regenerate product HTML.
+
+For product promotion or compaction, verify essential durable evidence and rationale survive effort deletion. Route accepted amendments and disputed assessments to the relevant product skill; do not overwrite them as factual routing repairs.
 
 Apply the durability test to working facts: if deleting the work root would lose a fact the project still needs, flag it for promotion to its Human-layer owner.
 

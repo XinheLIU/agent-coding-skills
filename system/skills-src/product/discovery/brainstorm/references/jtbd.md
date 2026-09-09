@@ -1,6 +1,6 @@
 # Jobs-to-be-Done Framework — Reference
 
-Last updated: 2026-08-06
+Last updated: 2026-09-08
 
 The framework behind the JTBD brief that `brainstorm` produces. Read this when the Specify phase needs the full pillar detail, the interview probes, or the output template.
 
@@ -49,6 +49,11 @@ Every job has three layers. Products that only serve the functional layer get ad
 | Social | How do they want to be PERCEIVED? Data-driven, prepared, competent. |
 
 The social layer is the one most often skipped and most often decisive. People adopt tools that make them look good to someone whose opinion they care about.
+
+The trilogy is a *category* split, orthogonal to the *depth* split in `need-layers.md`
+(surface / deep / fundamental). Functional jobs usually state surface or deep needs;
+Emotional and Social jobs are expressions of fundamental needs. Record each brief entry
+with its layer so downstream skills know how far the descent went.
 
 ### Pillar 3 — The Struggle
 

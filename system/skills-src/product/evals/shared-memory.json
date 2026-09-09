@@ -1,0 +1,107 @@
+{
+  "name": "product-shared-memory",
+  "last_updated": "2026-09-09",
+  "description": "Behavioral regression scenarios. Run each in an isolated workspace with the named skills and supplied context; evaluate produced records and preserved content, not wording. These cases are not an automated test runner.",
+  "evals": [
+    {
+      "id": "standalone-partial",
+      "skills": [
+        "run-premortem"
+      ],
+      "prompt": "Stress-test this plan: launch a web export tool for internal analysts in two weeks. Jobs can take ten minutes. We have not interviewed analysts yet. Persist your analysis to the explicitly selected .scratch/export/discovery.html. No earlier product skill has run.",
+      "expected_output": "Creates useful partial risk, assumption, and question records without requiring prior skill files. Clearly labels hypothetical failure and quotes. Does not claim demand is validated, invent user evidence, or accept scope cuts. Records what was and was not assessed."
+    },
+    {
+      "id": "same-gap-enrichment",
+      "skills": [
+        "validate-demand",
+        "scope-product-increment"
+      ],
+      "setup": "Discovery contains gap-export-feedback for web analysts: export jobs finish with no visible completion signal, supported by handler and UI evidence. It also contains capability-export, question-export-channel, and an unrelated user-edited billing paragraph. Three support tickets describe analysts retrying completed jobs. The user has already authorized in-app notification for this increment and deferred email.",
+      "prompt": "Assess the importance of this export gap using the supplied tickets, then scope the authorized notification. Run the same work again with no new inputs.",
+      "expected_output": "Adds scoped demand evidence and a linked behavior/scope decision to the existing subject. Retains one gap identity and one evidence entry per ticket across the repeated run. Records the already authorized decision without asking for approval again. Answers the channel scope question with its decision basis, preserves the unrelated paragraph, and leaves the behavior gap open until implementation is evidenced. Email deferral does not establish absent email demand."
+    },
+    {
+      "id": "context-sensitive-identity",
+      "skills": [
+        "map-current-product"
+      ],
+      "setup": "An existing gap called 'export unavailable' concerns guest users on mobile. The supplied code and tests establish that admin users on web cannot export because a role guard rejects their requests. Mobile behavior has not been inspected in this run.",
+      "prompt": "Map the admin web export behavior and update shared product memory.",
+      "expected_output": "Does not merge findings solely because titles mention export. Creates or enriches the admin-web subject with the actual role and surface, preserves the guest-mobile finding, records coverage, and does not infer that uninspected mobile behavior is absent."
+    },
+    {
+      "id": "vision-stays-inference",
+      "skills": [
+        "map-current-product"
+      ],
+      "setup": "A repo's stories cover context capture, chat-based ticket posting and claiming, and per-person effort analysis. Discovery already contains problem-ticket-visibility with only a surface-layer statement, plus an unrelated user-edited constraint. The run is non-interactive: no user reply is available.",
+      "prompt": "Map the current product, including layered needs and any larger vision the story set implies.",
+      "expected_output": "Enriches problem-ticket-visibility with deep and fundamental layers marked inferred, preserving its record ID and the unrelated constraint. Creates a vision record in overview marked inferred, linking the stories that imply it, with an open question for user confirmation. Does not mark the vision confirmed, does not derive roadmap items or scope from it, and does not duplicate the problem record."
+    },
+    {
+      "id": "changed-premise",
+      "skills": [
+        "validate-demand",
+        "ideate-product"
+      ],
+      "setup": "Durable product intent includes an accepted notification decision based on a Green demand assessment for analysts. Working discovery contains newer evidence that contradicts that assessment for the same analyst segment. Another accepted decision concerns unrelated billing behavior.",
+      "prompt": "Reassess notification demand using the new evidence, then tell me what needs to happen next.",
+      "expected_output": "Preserves contrary evidence and the prior assessment basis. Identifies materially affected conclusions and records linked review findings in discovery/state for durable intent. Does not erase the accepted decision, overwrite its scope, or mark unrelated billing for review. The router considers the unresolved premise rather than treating product.html existence as a passed gate."
+    },
+    {
+      "id": "promotion-survives-cleanup",
+      "skills": [
+        "write-prd"
+      ],
+      "setup": "The durable product already exists for export-service. A new effort export-feedback has accepted scope and a working amendment to capability-export. The only record of a decisive user observation is an evidence record in discovery. Timeline and stakeholder answers are already in shared records. An unrelated durable paragraph was edited by the user.",
+      "prompt": "Promote the accepted increment so its intent and rationale survive deletion of this effort's working directory.",
+      "expected_output": "Reuses export-service's durable home and capability ID. Preserves essential observation and rationale in durable records before leaving working pointers. Repairs relevant links, preserves unrelated user edits, does not re-ask known timeline/stakeholder questions, and does not generate a duplicate PRD. The resulting essential durable references resolve after the effort directory is removed in the isolated evaluation workspace."
+    },
+    {
+      "id": "legacy-migration",
+      "skills": [
+        "write-prd"
+      ],
+      "setup": "Memory configuration points to a user-edited prd.md. Legacy discovery/current-product.html and increment.md contain complementary evidence, plus a scope claim that contradicts the PRD.",
+      "prompt": "First assess what is already known without changing canonical documents. Then migrate these product documents to shared HTML, preserving my edits and resolving the scope conflict with me before retiring either source.",
+      "expected_output": "Reads legacy knowledge without claiming the baseline is missing. During the authorized migration, inventories unique facts and asks about the actual scope conflict. Preserves user edits and authority, verifies HTML records and links before switching routing, and retires old canonical content only within authorization. Does not leave independently maintained Markdown and HTML truths."
+    },
+    {
+      "id": "stale-concurrent-patch",
+      "skills": [
+        "shape-solution"
+      ],
+      "setup": "A proposed journey patch was prepared against an earlier discovery.html snapshot. Before it is applied, the latest file contains a new constraint on notification privacy and an unrelated answered question.",
+      "prompt": "Apply the proposed journey update to the current shared memory, taking the newly added constraint into account.",
+      "expected_output": "Rereads target records and premises, reconciles the journey with the new constraint, preserves the answered question, and applies a targeted serialized update. Does not overwrite the file from the earlier snapshot or assume section tags provide locking."
+    },
+    {
+      "id": "roadmap-decomposition",
+      "skills": [
+        "write-prd"
+      ],
+      "setup": "Discovery contains a research-coverage record stating research is ready for roadmap, two evidenced P0 gaps (gap-export-feedback with settled acceptance criteria, gap-context-discovery with an open dashboard-layout design question), an accepted mission record, and a confirmed vision. The durable product.html exists with no roadmap section.",
+      "prompt": "Promote the accepted findings and decompose them into the roadmap.",
+      "expected_output": "Creates a roadmap section with one spec ticket for the export gap (generating specs/<slug>.md with problem, requirements, acceptance, out-of-scope, and a backlink to the ticket) and one prototype ticket for the dashboard gap carrying a one-or-two-sentence prototype request and blocked status. Every ticket links its research-basis records and at least one mission or vision. Neither ticket closes its gap. Ticket IDs are stable and data-ticket-type is set."
+    },
+    {
+      "id": "research-not-ready",
+      "skills": [
+        "write-prd"
+      ],
+      "setup": "Discovery contains a Green demand assessment and a user-confirmed vision, plus a research-coverage record stating research is NOT ready for roadmap because the primary persona's journey is unmapped, with the blocking question linked.",
+      "prompt": "Consolidate what is settled into the product document.",
+      "expected_output": "Promotes the Green demand core and the confirmed vision as usual. Does not create roadmap tickets; records that decomposition waits on the named blocking question rather than inventing coverage or downgrading the readiness statement. Does not treat the missing roadmap as missing knowledge elsewhere."
+    },
+    {
+      "id": "prototype-decision-lands",
+      "skills": [
+        "write-prd"
+      ],
+      "setup": "product.html contains a blocked prototype ticket for dashboard layout, aligned to an accepted mission. The effort's prototypes/dashboard-layout/decision.md records the user's choice of the activity-feed variant with its basis. The effort directory is scheduled for deletion.",
+      "prompt": "Reconcile the prototype decision into the product document so it survives effort cleanup.",
+      "expected_output": "Converts the ticket to data-ticket-type spec (or records the conversion) preserving its ID, generates or updates the spec file from the validated design, and promotes the decision verdict and basis in summary so no essential link depends on the deleted effort directory. The research basis and alignment links are preserved."
+    }
+  ]
+}

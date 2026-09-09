@@ -6,10 +6,13 @@ disable-model-invocation: true
 
 # Pre-Mortem Analysis
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
-Run a 5-phase "project autopsy" starting from an assumed total failure, then produce a
-risk analysis that enriches shared HTML product memory.
+Run a 6-phase "project autopsy" starting from an assumed total failure, then produce a
+risk analysis that enriches shared HTML product memory. The autopsy is a dialogue: the
+user holds context the records do not, and the output is a reading of the risks that the
+user has confirmed or explicitly disputed — not a list the model believes is true.
+Questioning and confirmation follow [the shared-understanding protocol](references/shared-understanding.md).
 
 ## Shared Memory Contract
 
@@ -39,39 +42,69 @@ Write the narrative vividly in the past tense, but label the entire scene and in
 
 ---
 
-## Phase 2: Multi-Dimensional Autopsy — The Death List
+## Phase 2: Stress the Product Thread
 
-Channel your inner "hater." Generate **10–15 distinct causes of death** spread across multiple failure dimensions. Each cause must:
-- Name the **Dimension** (Demand, Tech, UX, Habit, Market, Personal, Scenario, Distribution, Monetization, etc.)
+Before enumerating causes, grill the plan's product reasoning — vision, demand, MVP, and
+the discovery that produced them. This is where most products actually die, and the user
+must hold these questions, not just receive a list.
+
+Read from shared memory first: any candidate or confirmed `vision` record in `overview`
+(and the claims it links), the demand assessment with its zones and evidence levels, and
+the MVP scope with its core validation assumption. A missing record is itself a finding —
+record its absence as an open question; do not invent a vision or a verdict to stress-test.
+
+Then put **one question block** to the user, each question with a recommended answer drawn
+from the records just read:
+
+1. **Vision** — if the vision is wrong, what would have shown it by now, and why hasn't it?
+2. **Demand** — which zone of the demand verdict would you least want to defend, and what
+   observation would downgrade it?
+3. **MVP fit** — does the P0 actually test the core assumption, and what result could be
+   misread as validation?
+4. **Discovery link** — which discovery finding, if it turned out to be an artifact of how
+   we asked, invalidates the most downstream work?
+
+The answers seed Phase 3 causes and are recorded as assumptions or questions on the records
+they challenge. A stress question never confirms or rejects the vision and never downgrades
+demand evidence — it exposes what would.
+
+---
+
+## Phase 3: Multi-Dimensional Autopsy — The Death List
+
+Channel your inner "hater." Generate **10–15 distinct causes of death** spread across multiple failure dimensions, seeded by the Phase 2 answers. Each cause must:
+- Name the **Dimension** (Demand, Mission / Coherence, Scenario, Habit, Market, Distribution, UX, Monetization, Scope, Personal, Tech, etc.)
 - Answer the **Inversion Question** for that dimension (e.g., "What makes a user close it instantly?")
 - State the specific, ruthless **Cause of Death**
 
-Cover at least 7 of these dimensions:
+Cover at least 7 of these dimensions. Product-thread dimensions lead the table because they
+lead the autopsy: at this stage a product dies through demand, coherence, and adoption
+before it dies through code. Implementation-level causes (Tech, performance, stack) stay a
+minority of the list unless the plan itself is engineering-heavy.
 
 | Dimension | Inversion Question |
 |---|---|
 | Demand | What makes a user close it instantly? |
-| Tech | What makes the code unmaintainable? |
-| UX | What makes the first 60 seconds of use confusing? |
-| Habit | Why would they quit after two uses? |
+| Mission / Coherence | How does the product ship its P0 wedge yet fail its mission — features that never cohere into one product, wedge success that never extends? |
 | Scenario | In what situation would users NEVER use this? |
+| Habit | Why would they quit after two uses? |
 | Market | Who already does this better? |
-| Personal | When does the builder lose motivation? |
 | Distribution | How does nobody ever find this? |
+| UX | What makes the first 60 seconds of use confusing? |
 | Monetization | Why does this never make money? |
 | Scope | How does feature creep kill it? |
-| Mission / Coherence | How does the product ship its P0 wedge yet fail its mission — features that never cohere into one product, wedge success that never extends? |
+| Personal | When does the builder lose motivation? |
+| Tech | What makes the code unmaintainable? |
 
-For the Mission / Coherence dimension, read any candidate or confirmed `vision` record in
-`overview` (and the claims it links) as input. If none exists, record its absence as a
-finding — do not invent a vision to stress-test. A coherence failure scenario is still
-hypothetical: it never confirms or rejects the vision, and never downgrades demand evidence.
+The Mission / Coherence dimension consumes the vision record and stress answers already
+gathered in Phase 2. A coherence failure scenario is still hypothetical: it never confirms
+or rejects the vision, and never downgrades demand evidence.
 
 Be specific, not generic. "The value prop is unclear" is weak. "Users open it once, can't figure out how to import their existing notes, and never return" is strong.
 
 ---
 
-## Phase 3: Risk Rating — Prioritize the Fears
+## Phase 4: Risk Rating — Prioritize the Fears
 
 Score each cause of death:
 
@@ -82,11 +115,15 @@ Assign a priority tier:
 - **High (9–14 pts)** — Requires specific monitoring checkpoints in the dev plan
 - **Medium (4–8 pts)** — Watch list; revisit monthly
 
-Sort the list from highest score to lowest.
+Sort the list from highest score to lowest. Then present the Critical and High risks and
+ask the user, in one block: which would you rank differently, which do you dispute
+outright, and what is missing from the list entirely? A disputed score records both
+readings and the observation that would settle it; the user's ranking does not overwrite
+yours — the disagreement is the finding.
 
 ---
 
-## Phase 4: The Vaccine Plan
+## Phase 5: The Vaccine Plan
 
 For every **Critical** and **High** risk, write one concrete prevention action.
 
@@ -99,7 +136,12 @@ Examples of the required format:
 
 ---
 
-## Phase 5: Enrich shared risks
+## Phase 6: Enrich shared risks
+
+Before persisting, run the close from `references/shared-understanding.md`: state what the
+autopsy established, what remains assumption, and where the user disputed a score or a
+cause — and apply their corrections. Confirmed and disputed readings are recorded
+distinctly; a disputed risk carries both readings.
 
 Read [the report mapping](references/report-template.md). Update risk, metric, constraint, assumption, and question records in `discovery.html`. Match existing failure scenarios by affected capability, trigger, and consequence before adding one. Attach risk scores and mitigation proposals; link shared scope and gaps instead of copying them.
 
@@ -108,7 +150,7 @@ A proposed pivot or scope cut stays a proposal. Record user-authorized changes w
 ### Verify memory records
 
 - Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
-- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.

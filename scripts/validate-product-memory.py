@@ -12,6 +12,8 @@ system/skills-src/craft/context/init-context/references/product-memory.md:
     shared section ids (unknown section id -> warning)
   - every local href="#..." resolves to an id in the same document
   - a visible "Last updated" marker is present (warning if missing)
+  - every roadmap-ticket <article> carries data-ticket-type="spec"|"prototype"
+    (and only roadmap-tickets carry that attribute)
 
 Usage:
     python3 scripts/validate-product-memory.py <file.html> [<file2.html> ...]
@@ -27,6 +29,9 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 RECORD_KINDS = {
+    "mission",
+    "roadmap-ticket",
+    "research-coverage",
     "persona",
     "problem",
     "demand-assessment",
@@ -46,6 +51,8 @@ RECORD_KINDS = {
 
 SECTION_IDS = {
     "overview",
+    "roadmap",
+    "research",
     "users-problems",
     "capabilities-journeys",
     "gaps-opportunities",
@@ -63,8 +70,8 @@ class MemoryDocParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.all_ids: dict[str, int] = {}  # id -> first line seen
         self.duplicate_ids: list[tuple[str, int]] = []
-        # (line, id, data-kind, data-kind-reason, enclosing section id)
-        self.articles: list[tuple[int, str | None, str | None, str | None, str | None]] = []
+        # (line, id, data-kind, data-kind-reason, enclosing section id, data-ticket-type)
+        self.articles: list[tuple[int, str | None, str | None, str | None, str | None, str | None]] = []
         self.local_links: list[tuple[int, str]] = []  # (line, target id)
         self.text_chunks: list[str] = []
         self._section_stack: list[str | None] = []
@@ -93,6 +100,7 @@ class MemoryDocParser(HTMLParser):
                     attr_map.get("data-kind"),
                     attr_map.get("data-kind-reason"),
                     enclosing,
+                    attr_map.get("data-ticket-type"),
                 )
             )
         elif tag == "a":
@@ -131,7 +139,7 @@ def validate_file(path: Path) -> tuple[int, int]:
         errors += 1
 
     kinds_sorted = ", ".join(sorted(RECORD_KINDS))
-    for line, article_id, kind, kind_reason, section_id in parser.articles:
+    for line, article_id, kind, kind_reason, section_id, ticket_type in parser.articles:
         label = f'<article id="{article_id}">' if article_id else "<article> (no id)"
         if not article_id:
             report(line, "ERROR", "<article> without an id")
@@ -169,6 +177,22 @@ def validate_file(path: Path) -> tuple[int, int]:
                 "WARNING",
                 f"{label} is inside unknown section "
                 f'"{section_id}"; shared sections: {", ".join(sorted(SECTION_IDS))}',
+            )
+            warnings += 1
+        if kind == "roadmap-ticket":
+            if ticket_type not in ("spec", "prototype"):
+                report(
+                    line,
+                    "ERROR",
+                    f'{label} roadmap-ticket needs data-ticket-type="spec" or "prototype"'
+                    f' (got {ticket_type!r})',
+                )
+                errors += 1
+        elif ticket_type is not None:
+            report(
+                line,
+                "WARNING",
+                f"{label} carries data-ticket-type but is not a roadmap-ticket",
             )
             warnings += 1
 

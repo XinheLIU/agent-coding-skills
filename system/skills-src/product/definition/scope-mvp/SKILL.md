@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Scope MVP
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Transform a validated solution into a disciplined MVP scope. The output is a triage — what to
 build, what to defer, what never to build — anchored to a single falsifiable assumption and
@@ -90,6 +90,10 @@ Run every capability through the filter (full decision table in
 - **Not ever (for this MVP)** — polish, scaling infra, secondary personas, and automation a
   manual process can stand in for.
 
+Then present the full triage — P0 with rationale, Not-now with triggers, Not-ever — and ask
+the user to challenge it before it is recorded: which cut would they reverse, which P0 would
+they drop? A triage the user has not pushed on is unconfirmed, not agreed.
+
 ### Step 5: Review the ambition
 
 Scope can be complete and still be the wrong bet. Challenge it before committing.
@@ -142,6 +146,11 @@ metrics to avoid explicitly.
 
 ## Output: enrich shared scope
 
+Before persisting, run the close from `references/shared-understanding.md`: read back the
+core assumption, the scenario × form × data point, and the P0 list, and ask the user to
+confirm or correct the reading. Disagreements the conversation cannot settle become open
+questions with revisit triggers, not silent concessions.
+
 Write HTML records in `discovery.html`:
 
 - Link the core validation assumption to the existing problem and demand assessment; do not copy or regrade demand.
@@ -157,7 +166,7 @@ Preserve capability descriptions, unrelated scope, and accepted constraints. Upd
 ### Verify memory records
 
 - Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
-- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.

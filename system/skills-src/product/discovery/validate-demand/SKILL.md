@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Validate Demand
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Decide whether a product idea has real demand behind it, and say so plainly.
 
@@ -51,8 +51,12 @@ the method.
 ### 1. Grade the evidence
 
 Run the six-area diagnostic (demand reality, status quo, specific user, narrowest wedge,
-observation, future fit), prioritized by product stage. Ask one question at a time. Push once
-when an answer stays generic.
+observation, future fit), prioritized by product stage. Ask the stage-prioritized areas as
+**one block of 4–5 questions** per `references/shared-understanding.md`: numbered, each with
+a recommended answer grounded in the evidence already read. Ask only what shared memory and
+supplied context have not answered. A question the user skips grades as Inferred and is named
+as a finding, never silently filled in. Send a follow-up block only where answers stayed
+generic, aimed at the thinnest answers.
 
 For active products, prefer evidence that reflects real use: support tickets, analytics,
 usage funnels, churn or lost-deal notes, stakeholder reports, customer-success notes, observed
@@ -95,6 +99,12 @@ carries far stronger evidence.
 
 ### 5. Issue the verdict
 
+Before issuing, read the three zone colors back to the user with the evidence level each
+rests on, and ask them to confirm or contest the reading (the close in
+`references/shared-understanding.md`). A contested zone records the disagreement and the
+observation that would settle it; the verdict still follows the evidence — the gate is not
+vetoable by preference — but cites the dispute.
+
 The verdict is the **lowest zone across the three questions**. One Red makes it Red.
 
 The verdict is per-claim: it grades this specific claim, actor, and scenario. It does not
@@ -132,7 +142,7 @@ confirms it, and it validates no demand.
 ### Verify memory records
 
 - Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
-- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.

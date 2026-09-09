@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PRD Writer
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.
 
@@ -16,10 +16,10 @@ Read [the product memory contract](references/product-memory.md) before persiste
 
 ```text
 Layer:       human — product intent survives the effort
-Contributes: coherent durable product records and a PRD reading index
-Writes:      <product-docs>/<product-slug>/product.html
+Contributes: coherent durable product records, the roadmap, and a PRD reading index
+Writes:      <product-docs>/<product-slug>/product.html and specs/<spec-slug>.md
 Coordinates: promotion pointers in discovery.html and state.md
-Promotes:    accepted intent, decisions, necessary evidence and rationale
+Promotes:    accepted intent, decisions, roadmap tickets, necessary evidence and rationale
 ```
 
 Resolve the product through user paths, `docs/agents/memory.md`, and active `state.md`. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.
@@ -55,6 +55,17 @@ Ask only for unknown information needed for the current result. Product title, p
 
 Promotion does not change a claim's evidence strength. A proposed commitment remains proposed; an open question stays open until answered. A **user-confirmed** vision promotes into `product.html` `overview` with its ID, confirmation date, and links preserved; an **inferred** candidate vision stays in working memory and the PRD links its open confirmation question instead. Never invent a vision or upgrade one by promotion. If a relevant premise changes, mark affected conclusions for review and route the unresolved assessment to the appropriate skill.
 
+## Decompose the roadmap
+
+The roadmap is the `roadmap` section of `product.html`: accepted research findings decomposed into prioritized concrete changes. Decompose only when the effort's `research-coverage` record states research is ready for roadmap; when it says not ready, promote settled records as usual and record what blocks decomposition. Early promotion (a Green verdict, a confirmed vision) never waits on roadmap readiness.
+
+1. Map every accepted P0 finding to at least one `roadmap-ticket`; review overlap between tickets (MECE as judgment, not automation). A ticket that answers no recorded finding needs an explicit user decision as its basis.
+2. Every ticket records priority (`p0`/`p1`/`p2`/`deferred`), status, its research basis (links to the gap/opportunity/problem records that justify it), and alignment links to at least one mission or vision.
+3. Assign the ticket type:
+   - **Spec ticket** (`data-ticket-type="spec"`): requirements are settled. Generate `specs/<spec-slug>.md` — problem, solution, requirements with acceptance criteria, explicit out-of-scope, success measures for that one change — opening with a link back to its ticket. The spec is canonical for its change; the ticket is canonical for priority and status. A loose spec another skill drafted may be linked provisionally with a note that this skill should tighten it.
+   - **Prototype ticket** (`data-ticket-type="prototype"`): a design question blocks specification. The ticket carries a one-or-two-sentence prototype request as the handoff to `design/ux/prototype` and stays `blocked` until the decision lands; then convert it to a spec ticket linking the decision, or close it.
+4. A ticket is intent, not implementation: it never closes a behavior gap, and completing it requires evidence of the resulting behavior. Reruns enrich existing tickets by subject match; they do not duplicate them.
+
 ## HTML output and PRD reading order
 
 The only durable product output is `product.html`, structured by shared concepts from the contract. Keep existing styling. Add a `<nav id="prd" aria-label="PRD reading order">` linking to actual records or shared sections in this order:
@@ -65,7 +76,7 @@ The only durable product output is `product.html`, structured by shared concepts
 | Part 1 — Problem and goals | Persona, usage scenario, pain, job, demand evidence, user outcomes, requirements index, scope and exclusions |
 | Part 2 — Solution overview | Relevant current context, desired business flow, information architecture, linked journeys and capabilities |
 | Part 3 — Detailed solution | Per-capability acceptance and initial/trigger/success/error/empty states where relevant; edge/recovery behavior, constraints, NFRs, analytics |
-| Part 4 — Launch | Milestone decisions, target dates when known, success thresholds, monitoring, remaining launch blockers |
+| Part 4 — Roadmap and launch | Link to the `roadmap` section (never a copy of it), milestone decisions, target dates when known, success thresholds, monitoring, remaining launch blockers |
 
 The Part labels provide a familiar reading order, not additional copies of records. A requirement index links capability and scope IDs with brief labels; the full requirement and its acceptance live once. Render tables, lists, and diagrams inside their relevant records. Use semantic HTML and inline CSS; diagrams have adjacent textual meaning and do not require JavaScript to understand the requirements.
 
@@ -79,11 +90,16 @@ Before saving or reporting readiness:
 - Check intended behavior, scope/exclusions, flows, relevant edge and recovery cases, and necessary NFRs against the actual effort. Record missing answers as questions with blocking effects.
 - Ensure accepted increments trace to affected capabilities and evidence; preserve unrelated records and user edits.
 - Verify unique IDs and resolving file/anchor links, including promotion pointers. No essential durable link may rely on disposable discovery.
-- Verify every record `<article>` carries a closed-list `data-kind` (see the contract's kind table) and sits inside one of the shared sections. Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
+- Verify every record `<article>` carries a closed-list `data-kind` (see the contract's kind table) and sits inside one of the shared sections; every `roadmap-ticket` also carries `data-ticket-type`, links at least one research-basis record and one mission or vision, and its spec or prototype-decision links resolve. Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 - Check a repeated consolidation would enrich the same records rather than create duplicates. Check HTML facts remain readable without JavaScript.
 - Update the document's visible date and changed record dates. Update `state.md` with the durable path, affected anchors, unresolved blockers, and the next action.
 
-Report the HTML path and the conclusions promoted, amended, or still unresolved. A PRD can be useful and durable while design or launch questions remain open.
+Report the HTML path and the conclusions promoted, amended, or still unresolved. Before
+claiming the PRD is ready, state what was promoted versus what remains open and ask the user
+to confirm that reading (the close in `references/shared-understanding.md`); readiness is
+claimed only after confirmation. In a non-interactive run, record the unconfirmed reading as
+an open question instead. A PRD can be useful and durable while design or launch questions
+remain open.
 
 ## Design Gate (optional)
 

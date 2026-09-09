@@ -1,6 +1,6 @@
 # Story Thinking Framework — Reference
 
-Last updated: 2026-08-02
+Last updated: 2026-09-08
 
 ## Table of Contents
 1. [The 3D Persona](#the-3d-persona)
@@ -54,7 +54,7 @@ People don't adopt tools because they're efficient. They adopt them to avoid a s
 - Are they afraid of looking incompetent? Missing a critical signal? Being held responsible for a mistake?
 - What would it feel like to "win"? More confidence? Respect from their boss? Peace of mind at 5 PM?
 
-**The "So what happens then?" test:** If you can't name a specific fear, keep asking "So what happens then?" until you hit something uncomfortable.
+**The "So what happens then?" test:** If you can't name a specific fear, keep asking "So what happens then?" until you hit something uncomfortable. This ladder is the same surface → fundamental descent as the 5-Whys probe; see `need-layers.md`.
 
 > "They want to save time."
 > → So what happens if they don't? "They might miss something important."
@@ -156,7 +156,8 @@ The moment they realize the product has changed who they are.
 
 ## Fear Archetypes
 
-Use these when the user can't name a specific fear — pick the closest match and confirm:
+Use these when the user can't name a specific fear — pick the closest match and confirm.
+These are the fundamental-layer needs of `need-layers.md`, phrased as fears:
 
 | Archetype | Example |
 |-----------|---------|

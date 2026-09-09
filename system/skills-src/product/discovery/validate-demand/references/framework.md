@@ -1,6 +1,6 @@
 # Demand Validation Framework
 
-Last updated: 2026-08-06
+Last updated: 2026-09-09
 
 Two instruments, used in sequence. The **evidence scale** grades how strongly each claim is
 supported. The **Three Soul Questions** convert those graded claims into zones and a verdict.
@@ -44,8 +44,9 @@ next validation action must be the experiment that moves them up the scale.
 
 ## The Diagnostic
 
-Six forcing questions. Ask only what the upstream brief has not already answered; one at a
-time, pushing once when an answer stays generic.
+Six forcing questions. Ask only what the upstream brief has not already answered, as one
+block of 4–5 with recommended answers (`shared-understanding.md`); follow up where an
+answer stays generic.
 
 | Area | Forcing question | Strong evidence looks like |
 | --- | --- | --- |
@@ -105,13 +106,14 @@ professionals", "AI users") fails. A role plus a situation plus a fear passes.
 
 ### The 5-Whys probe
 
-Ask "why?" from the stated pain until the chain reaches an emotion or a dollar amount.
+Ask "why?" from the stated pain until the chain reaches an emotion or a dollar amount. The
+chain descends the need layers — surface → deep → fundamental (`need-layers.md`).
 
-1. "I want to summarize news faster." → Why?
-2. "Too many articles to read." → Why does that matter?
-3. "I fall behind on industry trends." → Why does that hurt?
-4. "I look uninformed in leadership meetings." → Why does that matter?
-5. **"I'm afraid my boss thinks I'm not across the market. I'm afraid of losing my job."**
+1. "I want to summarize news faster." → Why? *(surface)*
+2. "Too many articles to read." → Why does that matter? *(deep)*
+3. "I fall behind on industry trends." → Why does that hurt? *(deep)*
+4. "I look uninformed in leadership meetings." → Why does that matter? *(deep)*
+5. **"I'm afraid my boss thinks I'm not across the market. I'm afraid of losing my job."** *(fundamental)*
 
 The real pain is #5. Features resolve #5, not #1.
 

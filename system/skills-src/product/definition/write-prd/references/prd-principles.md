@@ -1,10 +1,10 @@
 # PRD Principles Reference
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
 
 This reference condenses the full PRD framework for use by the `write-prd` skill. Read this when
 you need to understand the "why" behind the output format, or when making judgment calls about
-structure, depth, and quality bar.
+structure, depth, and quality bar. The parts below are a reading order over shared records; [the product memory contract](product-memory.md) governs persistence, partial readiness, and enrichment.
 
 ---
 
@@ -18,10 +18,9 @@ A complete PRD has five parts, each serving a distinct purpose:
 | Part 1 | Requirement Background & Goals | Why this product exists, who it serves, and what exactly it must do |
 | Part 2 | Solution Overview | The structural answer — flowchart and information architecture before detailing interactions |
 | Part 3 | Detailed Solution | How every interaction works, what goes wrong, and what non-functional constraints apply |
-| Part 4 | Launch Plan | The milestone sequence from spec to shipped |
+| Part 4 | Roadmap & Launch Plan | The prioritized roadmap tickets (linked from the shared `roadmap` section, not copied) and the milestone sequence from spec to shipped |
 
-**Rule:** Never collapse parts. Part 1 answers "what problem" before Part 2 answers "what structure"
-before Part 3 answers "how it behaves." Merging them produces shallow answers everywhere.
+Keep these questions distinguishable in the PRD reading index. A shared capability record may answer more than one part; link it from each relevant part instead of copying its content.
 
 ---
 
@@ -57,8 +56,7 @@ Always record every version bump in the Update Log table (Part 0).
 
 ## 4. Five-State Interaction Specification
 
-Every feature or page must be specified across five states. Omitting any state leaves the developer
-making decisions that belong in the PRD.
+For each feature or page, assess the five states that apply. Document applicable behavior or its blocking question; mark a state inapplicable with a reason when the product surface does not have it. Do not invent UI requirements for non-UI capabilities.
 
 | State | Question answered |
 |-------|-------------------|
@@ -176,13 +174,10 @@ Good:
 
 When using this PRD as input for an AI coding agent:
 
-1. **Generate draft** — run `/write-prd` with all available pipeline context. An early run right after the demand gate writes Part 1 and marks later parts `Pending`
-2. **Human review** — stakeholders fill any remaining TBDs; verify scope, dates, and NFRs
-3. **Mark Final** — bump version to 1.0.0 in Part 0; set Stage to "Final"
-4. **Handoff** — point `state.md` at `<product-docs>/<slug>/prd.md`; the technical workflow consumes product intent without rewriting it
-5. **Update on change** — bump version and add a row to the Update Log whenever the spec changes mid-development
+1. Consolidate accepted product knowledge into `product.html`; its PRD index links canonical records. Early promotion can preserve validated intent while other questions remain open.
+2. Review scope, evidence, dates, and NFRs; resolve only missing answers. Preserve established user decisions.
+3. Assess readiness for the specific implementation slice from its records, dependencies, and blocking questions. A document-wide Draft/Final label is not sufficient evidence of readiness.
+4. Point `state.md` at the configured `product.html#prd` and relevant requirement anchors. Legacy PRDs remain readable until migrated under the product contract.
+5. Update affected records and a dated change note when accepted intent changes; mark dependent conclusions for review where needed.
 
-The PRD lives in the tracked Human layer, not the disposable work root. Everything the pipeline produced upstream of it is a draft that dies with the effort; the PRD is where those conclusions become project truth.
-
-**Rule:** Never hand an agent a Draft-stage PRD for implementation. Parts 3 and 4 must be complete
-before development begins, or the agent will fill the gaps with assumptions.
+The product document lives in the tracked Human layer. Promotion preserves essential evidence and rationale there before working conclusions become pointers. Templates above describe content quality; [the product memory contract](product-memory.md) governs HTML persistence, partial knowledge, shared records, and authority.

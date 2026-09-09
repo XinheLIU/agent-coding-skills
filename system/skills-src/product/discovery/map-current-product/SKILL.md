@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Map Current Product
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Extract the current product from the code, docs, and tests before proposing anything new. The output is a source-backed baseline: who can do what today, what is partly built, what is only planned, and where the product surface has gaps.
 
@@ -90,7 +90,8 @@ Record at most one or two candidate `vision` records in `overview`, marked infer
 
 ### 6. Confirm with the user
 
-After synthesis — never before — send one consolidated message: the candidate visions with their supporting clusters, the deep and fundamental entries currently marked inferred, and a direct ask to confirm, correct, or reject each. Apply the reply: confirmed items become user-confirmed with the date; corrections update the records.
+After synthesis — never before — send one consolidated message following the close in
+`references/shared-understanding.md`: the candidate visions with their supporting clusters, the deep and fundamental entries currently marked inferred, and a direct ask to confirm, correct, or reject each. Apply the reply: confirmed items become user-confirmed with the date; corrections update the records.
 
 Skip the message when the run is non-interactive or the user asked for a pure audit: visions and inferred layers stay inferred, and each unconfirmed vision gets a linked open question. Do not chain follow-up questions; residual uncertainty is recorded, not interrogated.
 
@@ -148,6 +149,7 @@ If an improvement is already requested, hand off to `scope-product-increment` af
 Enrich `<work-root>/<effort>/discovery.html` using the shared record contract. Load [the HTML presentation patterns](references/html-report.md) when creating or extending the baseline visuals. Reuse the document's style and navigation.
 
 - Update overview coverage: product surface inspected, source revision when available, and exclusions.
+- Create or enrich the effort's `research-coverage` record in the `research` section of `discovery.html`: aggregate assessed and not-assessed dimensions (platforms, roles, flows, data sources) across contributors, and state whether research is ready for roadmap decomposition — naming the blocking gaps or questions when it is not. This run's inspection updates the aggregate; it does not overwrite another contributor's recorded coverage.
 - Enrich shared personas, capabilities, and journeys with current observed behavior and evidence. Keep implemented, partial, planned intent, and unassessed behavior distinct.
 - Record candidate visions in `overview` with inferred/confirmed status and links to the implying stories; when the confirmation message was skipped, record the linked open question.
 - Story records carry surface/deep/fundamental entries with per-layer status (inferred / user-confirmed / evidenced); need-fit verdicts and resilience notes travel with the boundary assessments attached to capabilities, alongside cohesion and coupling — not a separate module inventory.
@@ -160,7 +162,7 @@ Update `state.md` with the relevant anchors, open the resulting HTML for the use
 ### Verify memory records
 
 - Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
-- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.

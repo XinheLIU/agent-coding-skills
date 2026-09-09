@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Shape Solution
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Three narrative outputs plus the scenarios they imply — for new ideas and already-mapped
 existing products. One purpose: make the user real enough that every design tradeoff has a
@@ -139,7 +139,9 @@ Then assess what genuinely remains:
 
 ## Phase 2 — Targeted Interview
 
-Ask only what is missing. Consolidate into a single message — no back-and-forth chain.
+Ask only what is missing. Consolidate into a single question block — numbered, labeled, each
+with a recommended answer from what the records suggest (`references/shared-understanding.md`)
+— no back-and-forth chain.
 
 - **Who gap**: "Who is the primary user — exact job title, and are they comfortable with technology?"
 - **What gap**: "What do they do today to solve this problem, before your tool exists?"
@@ -333,6 +335,13 @@ Check every output before presenting. If anything fails, revise it.
 
 If any element feels generic — it probably is. Flag it and offer a sharper version.
 
+### Confirm the shape
+
+Before persisting, read the primary scenario and the first-use moment back to the user and
+ask them to confirm or correct the reading (the close in `references/shared-understanding.md`).
+Corrections update the records; a disagreement the conversation cannot settle is recorded
+with the observation that would settle it, not resolved by yielding.
+
 ---
 ## Output: enrich the product model
 
@@ -350,7 +359,7 @@ The narrative and story prompt remain usable human presentations, but point to s
 ### Verify memory records
 
 - Every record `<article>` has a document-unique id and a closed-list `data-kind` (see the contract's kind table).
-- Records sit inside one of the shared sections (`overview`, `users-problems`, `capabilities-journeys`, `gaps-opportunities`, `questions-assumptions`, `evidence`, `scope-decisions`, `risks-measures`).
+- Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.

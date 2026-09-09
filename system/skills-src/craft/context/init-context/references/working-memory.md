@@ -1,6 +1,6 @@
 # Working Memory Protocol
 
-Last updated: 2026-08-26
+Last updated: 2026-09-08
 
 Load this reference when creating or maintaining an active effort. Working memory answers: *what is happening now and what happens next?* It is disposable scaffolding under the configured, ignored work root.
 
@@ -19,7 +19,7 @@ Create only artifacts earned by the active workflow:
 ├── state.md
 ├── progress.md
 ├── brief.md
-├── discovery/
+├── discovery.html   # authoritative shared product records
 ├── map.md
 ├── spec.md
 ├── plan.md
@@ -33,6 +33,8 @@ Create only artifacts earned by the active workflow:
 ```
 
 The configured work root and established repository layout win over these defaults. Engineering artifacts that an existing workflow deliberately tracks elsewhere remain there and are linked from `state.md`; working memory does not duplicate them.
+
+Product efforts use [product-memory.md](product-memory.md): record product identity and the durable `product.html` path in state pointers, then follow relevant anchors. Preserve source-backed coverage; no per-skill discovery copies. Before compaction, verify essential durable evidence and rationale do not depend on the effort directory.
 
 ## `state.md`
 

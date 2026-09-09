@@ -1,6 +1,6 @@
 # The Three Axes: Scenario × Product Form × Data
 
-Last updated: 2026-08-06
+Last updated: 2026-09-08
 
 Scope is not a feature list — it is a point in a three-dimensional space. The same validated job
 produces a completely different MVP depending on where it lands.
@@ -35,7 +35,7 @@ must be available and when. Resolving them out of order produces scope that has 
 
 ## Axis 1: Scenario
 
-Read from `discovery/solution.md`, which marks a primary scenario and states five properties.
+Read from the shared primary scenario and journey records, which marks a primary scenario and states five properties.
 Never re-derive these here — if `solution.md` is missing them, that is a gap to send back, not to
 guess at.
 
@@ -70,7 +70,7 @@ The delivery vehicle. Choose one; hybrids are a stage-3 concern, not an MVP.
 ### Selection rule
 
 Choose the **cheapest form that can produce the first-use moment** described in
-`discovery/solution.md`. If a script can produce it, a web app is premature. The form is a
+the shared primary scenario and journey records. If a script can produce it, a web app is premature. The form is a
 hypothesis about delivery, not a commitment to a platform.
 
 ### The Wizard of Oz test
