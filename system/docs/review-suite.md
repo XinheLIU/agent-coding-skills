@@ -1,10 +1,10 @@
 # Code Review
 
-Last updated: 2026-08-02
+Last updated: 2026-09-08
 
 [System home](../README.md) · [Workflows](../workflows/README.md) · [Organization report](organization-report.md)
 
-This folder defines a technical review system with five complementary skills and a shared subagent fleet. `review-architecture` and `review-code-quality` are the primary review orchestrators; `review-design-doc`, `review-implementation-gaps`, and `analyze-test-gaps` provide focused gates around them.
+This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `review-architecture` and `review-code-quality` are the orchestrators; the gate chain `review-design-doc → review-implementation-gaps → review-code-quality` runs a change from plan to merge verdict, `analyze-test-gaps` audits whole-codebase test adequacy, and `refactor-code` is the corrective follow-up that acts on findings. `tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
 
 ## TL;DR — Which Skill?
 
@@ -89,6 +89,7 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 ### Code Quality Scope
 
 - Reviews implementation quality and production-readiness defects.
+- Tags every finding on two axes — **Standards** (code vs the repo's documented conventions and quality bar, fed by the domain subagents and inline pass) and **Spec** (code vs what the plan/issue asked for, fed by a spec-fidelity pass against a located spec source) — reported separately, never reranked against each other. Finding format: `[P0|P1|P2] [Standards|Spec] (confidence: N/10) file:line — description`.
 - Supports three modes:
   - Mode A: recent changes (default).
   - Mode B: whole codebase against specs/rules.
@@ -111,11 +112,11 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 
 ```text
 /review-code-quality
-  -> pick mode + scope + domains
+  -> pick mode + scope + domains + spec source
   -> run explorers in parallel
   -> run paired reviewers in parallel
   -> run standalone code-reviewer
-  -> inline quality pass + coverage diagram + consolidation
+  -> inline quality pass + spec-fidelity pass (Spec axis) + coverage diagram + consolidation
   -> verdict: READY | READY-WITH-FIXES | NOT-READY
   -> write next-steps artifact
 ```
@@ -123,6 +124,10 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 ### Code Quality Output Artifact
 
 `docs/eng-reviews/next-steps-<branch>-<YYYYMMDD-HHMM>.md`
+
+### Retired: request-code-review
+
+The former `request-code-review` skill (pre-commit verification pipeline) is folded into `review-code-quality`: its pre-commit triggers ("verify my changes", "review before commit/merge") and its static security greps now live there. Its auto-fix loop, stash-based test baseline, and auto-commit behavior were dropped by design — this system never commits without explicit user authority.
 
 ## Standalone Agent: tdd-builder
 

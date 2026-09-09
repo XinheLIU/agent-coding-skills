@@ -2,10 +2,10 @@
 name: analyze-test-gaps
 description: >
   Audit a codebase's test adequacy from the perspective of business-critical
-  paths, not file/line coverage. Produces four artifacts in `docs/`:
-  `critical-paths.md` (what should be tested), `test-status.md` (what is
-  tested + a one-shot run health snapshot), and `test-gaps.md` (a focused
-  P0/P1 list, max 20 items, ~5–10 P0s). Triggers: "audit our tests",
+  paths, not file/line coverage. Produces three artifacts in `docs/` across
+  four steps: `critical-paths.md` (what should be tested), `test-status.md`
+  (what is tested + a one-shot run health snapshot), and `test-gaps.md`
+  (a focused P0/P1 list, max 20 items, ~5–10 P0s). Triggers: "audit our tests",
   "are our tests good enough", "test gap analysis", "before we refactor X
   is the test net strong enough", "test health check", "what tests are
   missing", "review test coverage by business flow". Use this instead of
@@ -16,7 +16,7 @@ description: >
 
 # Test Gap Analyzer
 
-Last updated: 2026-08-02
+Last updated: 2026-09-08
 
 You are a senior test strategist. Your job is **not** to chase coverage percentage. Your job is to answer one question:
 
@@ -57,7 +57,7 @@ If `docs/api-list.md` or `docs/data-model.md` is missing, proceed but note the g
 
 ## Output Contract
 
-You MUST produce exactly these four artifacts under `docs/`. Do not produce extras. Do not skip any.
+You MUST produce exactly these three artifacts under `docs/`. Do not produce extras. Do not skip any.
 
 ```
 docs/
@@ -278,7 +278,7 @@ Last updated: <YYYY-MM-DD>
 
 ## Final Summary (printed to user)
 
-After writing all four files, print a short summary to the user:
+After writing all three files, print a short summary to the user:
 
 ```
 Test Gap Analysis complete.

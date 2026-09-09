@@ -5,7 +5,7 @@
       "id": 0,
       "name": "gap-analysis-explicit-plan",
       "prompt": "Compare the current codebase to docs/plans/implementation-plan.md and tell me what's done, what's partial, what's missing, and what's divergent. Write a gap analysis artifact I can hand to the next reviewer.",
-      "expected_output": "Structured artifact at .claude/artifacts/eng-reviews/gap-analysis-*.md matching the schema: Summary line with counts, Gap Diagram, Components section with Status/Planned/Actual/Confidence per item, Dependency Order, Unexpected Code list, and a Next-stage hand-off hint line.",
+      "expected_output": "Structured artifact at docs/eng-reviews/gap-analysis-*.md matching the schema: Summary line with counts, Gap Diagram, Components section with Status/Planned/Actual/Confidence per item, Dependency Order, Unexpected Code list, and a Next-stage hand-off hint line.",
       "files": []
     },
     {

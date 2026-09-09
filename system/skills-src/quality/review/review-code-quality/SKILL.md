@@ -6,23 +6,34 @@ description: >
   when available; falls back to inline review when they aren't. Produces
   confidence-calibrated findings, a test-coverage diagram, a prioritized
   next-steps plan (CRITICAL → IMPORTANT → NICE-TO-HAVE), and a merge verdict.
-  Supports three modes: (A) recent-changes via git diff [default], (B) whole
-  codebase vs spec/rules, (C) drill-down after an architecture review. Triggers:
-  "review my code", "code review", "review this PR", "review recent changes",
-  "review against spec", "drill into arch review", "what should I work on next",
-  "ready for PR?". Auto-consumes the most recent gap-analysis artifact from
-  review-implementation-gaps when present.
+  Findings are tagged on two axes — Standards (code vs this repo's conventions
+  and quality bar) and Spec (code vs what the plan/issue asked for) — reported
+  separately, never reranked against each other. Supports three modes: (A)
+  recent-changes via git diff [default], (B) whole codebase vs spec/rules,
+  (C) drill-down after an architecture review. Triggers: "review my code",
+  "code review", "review this PR", "review recent changes", "review against
+  spec", "verify my changes", "review before commit/merge", "drill into arch
+  review", "what should I work on next", "ready for PR?". Auto-consumes the
+  most recent gap-analysis artifact from review-implementation-gaps when
+  present.
 ---
 
 # Code Quality Review
 
-Last updated: 2026-08-02
+Last updated: 2026-09-08
 
 You are a staff engineer running a production-readiness review. Two jobs:
 1. Surface real issues with confidence-calibrated findings.
 2. Produce a prioritized next-steps plan and a merge verdict the user can act on.
 
-This skill is self-contained — reference material lives under `reference/` in this skill directory, never in project docs.
+## Two axes: Standards and Spec
+
+Every finding is tagged with the axis it fails:
+
+- **Standards** — does the code follow this repo's documented conventions and quality bar? Fed by the domain subagents (Step 1) and the inline pass (Steps 2.1–2.5, 3, 4).
+- **Spec** — does the code do what the plan/issue asked for? Fed by the spec-fidelity pass (Step 2.6).
+
+A change can pass one axis and fail the other: code that follows every standard but implements the wrong thing fails Spec; code that does exactly what was asked but breaks the repo's conventions fails Standards. Report the axes separately — never merge or rerank findings across them, so one axis cannot mask the other.
 
 ## Boundary with `review-architecture` (MECE)
 
@@ -94,6 +105,17 @@ State the mode and scope in one sentence. If ambiguous, ask once — never guess
 
 Default: all seven — `api`, `db`, `auth`, `reliability`, `performance`, `security`, `code-reviewer`. If the user narrows, respect it.
 
+### 0.4 Identify the spec source (Spec axis)
+
+Find the document that says what this change was supposed to do, first that applies:
+
+1. The design doc named in the consumed gap-analysis artifact (Step 0.2).
+2. Issue references in the commit messages (`git log <range> --oneline` — `#123`, `Closes #45`).
+3. A path the user supplied.
+4. The newest `docs/plans/*.md` matching the branch or feature name.
+
+If none exists, the Spec axis reports "no spec available" and the review is Standards-only — say so in the artifact; do not invent requirements.
+
 ## Step 1 — Dispatch subagents (primary path, parallel)
 
 **Try this first.** Dispatch explorers in parallel, then reviewers in parallel.
@@ -128,6 +150,8 @@ Subagents cover domain architecture; this pass catches local quality issues rega
 - Parallel abstractions that should be unified
 - Repeated error-handling boilerplate that belongs in a helper
 
+Beyond duplication, scan against the Fowler smell baseline: Feature Envy, Data Clumps, Primitive Obsession, Repeated Switches, Shotgun Surgery, Divergent Change, Speculative Generality, Message Chains, Middle Man, Refused Bequest. Two rules bind it: a documented repo standard overrides the baseline (where the repo endorses something the baseline would flag, suppress the smell), and every smell is a labelled judgment call ("possible Feature Envy"), never a hard violation. Skip anything tooling already enforces.
+
 ### 2.2 Error handling & edge cases
 - Missing null/undefined checks at boundaries
 - Silent catches / swallowed errors
@@ -147,7 +171,17 @@ Subagents cover domain architecture; this pass catches local quality issues rega
 - Touched ASCII diagrams or comments — still correct after this change?
 - Outdated comments are worse than none.
 
-**Interactive flow.** Stop after each file. For every finding with confidence ≥ 7 call `AskUserQuestion` individually — one issue, one call. 2–3 options each (include "do nothing" where reasonable). Recommend one and cite the principle it serves (DRY / explicit > clever / minimum diff / systems over heroes).
+### 2.6 Spec fidelity (Spec axis)
+
+Compare the behavior in scope against the spec source from Step 0.4:
+
+- Required behavior that is missing or partial.
+- Behavior the spec did not ask for (scope creep).
+- Requirements that look implemented but whose implementation is wrong.
+
+Cite the spec line for each finding. If a gap-analysis artifact from `review-implementation-gaps` exists, reuse its PARTIAL/MISSING/DIVERGENT statuses as the starting point instead of re-deriving them. This pass runs inline — no dedicated subagent; the axes are a reporting split, not a third reviewer.
+
+**Interactive flow.** Stop after each file. For every finding with confidence ≥ 7, follow *Rules for the interactive review* below — one issue, one `AskUserQuestion`.
 
 ## Step 3 — Test coverage gap
 
@@ -191,10 +225,25 @@ Quickly scan for:
 
 Surface only findings with confidence ≥ 7. Suppress performance theater ("this might be slow").
 
+## Step 4.5 — Static security greps
+
+Run deterministic scans over the added lines of the review diff. Any match feeds the security findings (Standards axis) — cheap, no subagent needed:
+
+```bash
+DIFF="git diff <range>"   # the scope's diff command from Step 0
+$DIFF | grep "^+" | grep -iE "(api_key|secret|password|token|passwd)\s*=\s*['\"][^'\"]{6,}['\"]"   # hardcoded secrets
+$DIFF | grep "^+" | grep -E "os\.system\(|subprocess.*shell=True"                                  # shell injection
+$DIFF | grep "^+" | grep -E "\beval\(|\bexec\("                                                    # dangerous eval/exec
+$DIFF | grep "^+" | grep -E "pickle\.loads?\("                                                     # unsafe deserialization
+$DIFF | grep "^+" | grep -E "execute\(f\"|\.format\(.*SELECT|\.format\(.*INSERT"                   # SQL via string formatting
+```
+
+A match is a candidate, not an automatic Critical — read the surrounding code, then score confidence like any other finding.
+
 ## Step 5 — Consolidate, prioritize, verdict
 
 ### 5.1 Dedupe
-Merge subagent + inline findings. Dedupe by `file:line` with a `Confirmed by: [subagents]` tag on each entry.
+Merge subagent + inline findings. Dedupe by `file:line` with a `Confirmed by: [subagents]` tag on each entry. Keep the axis tag on every finding; Standards and Spec findings stay in separate subsections and are never reranked against each other.
 
 When a subagent's finding is genuinely **architectural** (e.g., a reviewer notices schema-ownership leakage between modules, or a deploy-topology smell, or a cross-cutting decision that needs an ADR), do **not** demote it to a code-level finding. Record it in a separate **Cross-references to review-architecture** subsection with the form:
 
@@ -225,7 +274,7 @@ Order within each bucket by dependency — items with no deps first.
 
 ### 5.3 Merge verdict
 
-- Any unresolved Critical (HIGH or MEDIUM confidence) → **NOT-READY** (FIX CRITICAL FIRST)
+- Any unresolved Critical (HIGH or MEDIUM confidence) on **either axis** → **NOT-READY** (FIX CRITICAL FIRST) — name the axis in the reasoning
 - Only Warnings / Suggestions → **READY-WITH-FIXES**
 - No issues above Suggestion → **READY** (READY FOR PR)
 
@@ -247,15 +296,16 @@ Generated: {YYYY-MM-DD HH:MM}
 Branch: {branch}
 Scope: {gap-analysis path | user path | git range | arch-review drill files}
 Reviewer: review-code-quality
+Spec source: {path | "none — Standards-only review"}
 Subagents used: {list, or "none — inline only"}
 Subagents skipped: {list with reason: NOT DETECTED | failed | not invoked}
 
 ## Verdict
 READY | READY-WITH-FIXES | NOT-READY
-Reasoning: <1–2 sentences. Cite blocking Criticals if NOT-READY.>
+Reasoning: <1–2 sentences. Cite blocking Criticals and their axis if NOT-READY.>
 
 ## Summary
-- Findings: N total (P0: a, P1: b, P2: c)
+- Findings: N total (P0: a, P1: b, P2: c — Standards: s, Spec: p)
 - Coverage: X branches, Y tested (Z%)
 - Critical steps: N  Important: N  Nice-to-have: N
 
@@ -286,7 +336,7 @@ Reasoning: <1–2 sentences. Cite blocking Criticals if NOT-READY.>
 Every finding MUST use:
 
 ```
-[P0|P1|P2] (confidence: N/10) file:line — short description
+[P0|P1|P2] [Standards|Spec] (confidence: N/10) file:line — short description
 ```
 
 Confidence rules:
@@ -329,7 +379,7 @@ After writing the artifact, print:
 Code review complete → docs/eng-reviews/next-steps-{branch}-{date}.md
 
 Mode: {A|B|C}    Subagents: {n used / n skipped}
-Findings: N (P0: a / P1: b / P2: c)
+Findings: N (P0: a / P1: b / P2: c — Standards: s / Spec: p)
 Coverage: Y/X branches tested ({pct}%)
 Next: CRITICAL × N, IMPORTANT × N, NICE-TO-HAVE × N
 Verdict: READY | READY-WITH-FIXES | NOT-READY

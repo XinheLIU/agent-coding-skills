@@ -43,7 +43,7 @@
     {
       "id": "quality/review",
       "label": "Quality · Review",
-      "skills": ["review-architecture", "review-design-doc", "review-implementation-gaps", "review-code-quality", "request-code-review", "refactor-code", "simplify-code"]
+      "skills": ["review-architecture", "review-design-doc", "review-implementation-gaps", "review-code-quality", "refactor-code"]
     },
     {
       "id": "quality/debugging",

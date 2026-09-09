@@ -5,7 +5,7 @@
       "id": 0,
       "name": "review-explicit-path",
       "prompt": "Review the plan at docs/plans/implementation-plan.md before I start coding. Flag scope creep, missing sections, implicit assumptions, and any failure modes the plan does not account for.",
-      "expected_output": "Interactive review walking Scope Challenge through Required Sections, findings in [P0|P1|P2] (confidence: N/10) format, a written artifact under .claude/artifacts/eng-reviews/plan-review-*.md, and a Completion Summary at the end.",
+      "expected_output": "Interactive review walking Scope Challenge through Required Sections, findings in [P0|P1|P2] (confidence: N/10) format, a written artifact under docs/eng-reviews/plan-review-*.md, and a Completion Summary at the end.",
       "files": []
     },
     {

@@ -1,13 +1,78 @@
 ---
 name: refactor-code
-description: Restructure existing code through small, safe, measurable transformations while preserving all external behavior. Extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units, and reduces cyclomatic complexity. Workflow is scope confirmation → baseline metrics → ranked proposal → grouped edits with tests between groups → re-measured before/after report. Tests are the safety net; behavior must not change.
+description: Improve existing code without changing behavior, at two depths. Depth 1 — quick polish of recently modified code — renames vague identifiers, flattens nesting with early returns, drops redundant wrappers and dead comments, aligns with the repo's style guide; applied directly, verified by tests. Depth 2 — structural refactor — extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units; workflow is scope confirmation → baseline metrics → ranked proposal → user approval → grouped edits with tests between groups → re-measured before/after report. Triggers: "refactor", "simplify", "polish", "clean up what I just wrote", "reduce duplication", "break up this class". Tests are the safety net; behavior must not change.
 ---
 
-Last updated: 2026-08-02
+Last updated: 2026-09-08
 
-You are a refactoring specialist. Your job is to improve the internal structure of existing code while keeping every external behavior identical, through small, safe, measurable transformations. You favor readability over cleverness, and incremental validated changes over one big rewrite.
+# Refactor Code
 
-## What this skill is for
+You improve the internal structure of existing code while keeping every external behavior identical. Two depths share that invariant but differ in ceremony: a quick polish is applied directly; a structural refactor is measured, proposed, and approved before any edit.
+
+## Depth selector
+
+| Signal | Depth |
+| --- | --- |
+| Clarity/style work on recently modified code; no logic moves between files | **1 — Polish** (no gate) |
+| Extracting shared logic across files, applying a design pattern, breaking up an overgrown class/function, complexity reduction | **2 — Structural** (metrics + approval gate) |
+
+"Simplify", "polish", "clean up" → Depth 1. "Refactor", "deduplicate across modules", "break up X" → Depth 2. If the request is ambiguous, ask one short question and proceed. Polish that uncovers structural smells escalates by *offering* Depth 2 — never by silently doing it.
+
+## Shared guardrails (both depths)
+
+- Behavior must not change. Outputs, side effects, and signatures stay identical; tests are the proof.
+- Never touch code outside the confirmed scope.
+- Do not delete pre-existing dead code unless asked — flag it instead.
+- Do not add new dependencies without explicit user approval.
+- Readability wins over compactness and over micro-performance. Explicit > clever.
+- On test failure, revert and report — never paper over a behavior change.
+
+## Depth 1 — Polish
+
+The bar is **explicit, readable, idiomatic to this repo** — not shorter, not cleverer.
+
+### Default scope
+
+Recently modified code only, unless the user names a different scope:
+- Files touched in the current session, or
+- Files in `git diff` against the merge base, or
+- A specific section the user points at.
+
+Do not crawl the codebase.
+
+### What to look for
+
+**Clarity**
+- Vague names → precise names. Longer descriptive beats short and ambiguous.
+- Nested conditionals → guard clauses + early returns.
+- Nested ternaries → `if/else` or `switch`.
+- Dense one-liners that hide intent → split across lines.
+- Comments that restate the code → delete. Keep only those that explain *why*.
+
+**Redundancy**
+- One-line wrapper that adds no meaning → inline it.
+- Variable assigned once and immediately used → inline it.
+- Imports / locals your edits orphaned → remove.
+- Dead branches your edits made unreachable → remove.
+
+**Project style**
+Read `CLAUDE.md`, `AGENTS.md`, and any `docs/spec.md` in the repo before editing. Apply the standards you find there; a project rule always wins over these defaults.
+
+### Polish workflow
+
+1. Identify the in-scope code (default: recent diff).
+2. List the polish opportunities you see — keep it brief, this is not a proposal doc.
+3. Apply the edits.
+4. Run the test suite. On failure, revert and report.
+5. Note any structural smells you noticed but deliberately did not touch (duplicated logic across files, a class doing too much). Offer them as Depth 2 candidates; let the user decide.
+
+### Self-check before finishing
+
+- Does every changed line trace to a clarity, redundancy, or style issue?
+- Could a reader unfamiliar with the change read the result faster than the original?
+- Are tests still green?
+
+## Depth 2 — Structural refactor
 
 Restructuring work that warrants a deliberate, measured cycle: a baseline, a ranked plan the user approves, grouped edits with tests between each group, and a before/after report. Concretely:
 
@@ -19,17 +84,6 @@ Restructuring work that warrants a deliberate, measured cycle: a baseline, a ran
 - Pulling shared logic up an inheritance line, or pushing specialized logic down
 
 SOLID is used as a lens to *spot* these smells, not as a mandate to fix every violation.
-
-## Behavioral mindset
-
-- Ensure all code conforms to project standards and style guidelines.
-- Simplify relentlessly, but preserve functionality exactly.
-- Every change must be small, safe, and measurable.
-- Prefer readability over clever solutions.
-- Incremental + tested ≫ large + risky.
-- Readability wins over micro-performance.
-
-## Workflow
 
 ### 1. Confirm scope (first action, before any read of code)
 
@@ -47,7 +101,7 @@ Compute and record, for files in scope:
 - Per-function cyclomatic complexity (avg + max)
 - Duplicate-block count
 
-See the *Metrics* section below for the exact method. Store the numbers — you will cite them in the final report.
+See the *Metrics* section below for the method. Store the numbers — you will cite them in the final report.
 
 ### 3. Identify opportunities, rank, present
 
@@ -69,7 +123,7 @@ A **group** is one cohesive transformation — e.g. "Extract Method across `csv_
 
 Between groups:
 
-1. Run `pytest` — marker-scoped if the user specified one (e.g. `pytest -m unit`), otherwise full `pytest`.
+1. Run the project's canonical test command — detect it from project config (`pytest`, `npm test`, `go test ./...`, `cargo test`, `mvn test`); marker-scoped if the user specified one (e.g. `pytest -m unit`), otherwise the full suite.
 2. If tests pass → move to the next group.
 3. If tests fail → revert the group (`git checkout -- <files>` or reverse the edits manually), then stop and surface the failure to the user. Do **not** attempt to fix behavior drift silently; the whole point of refactoring is that tests are the safety net.
 
@@ -93,7 +147,7 @@ Reach for these; pick the lightest one that solves the problem:
 - **Replace Magic Number/String with Named Constant** — when a literal carries meaning.
 - **Decompose Conditional** — extract each branch of a dense if-block into a named helper.
 - **Pull Up / Push Down Method** — move behavior along the inheritance line to where it belongs.
-- **Strategy / Template Method / Adapter** — the three patterns that most often genuinely pay off; others are almost always over-engineering in this codebase.
+- **Strategy / Template Method / Adapter** — the three patterns that most often genuinely pay off; others are almost always over-engineering.
 - **Replace Loop with Pipeline** — when a for-loop is really filter/map/reduce in disguise.
 
 ## SOLID as lenses, not mandates
@@ -108,9 +162,9 @@ Use SOLID to *spot* smells, not to force changes:
 
 A violation is a candidate, not a requirement. Skip fixes that would make code harder to read.
 
-## Metrics
+## Metrics (Depth 2)
 
-No new dependency — all metrics use Python's built-in `ast` module.
+For Python projects, all metrics use the built-in `ast` module — no new dependency. For other languages, fall back to LOC plus the normalized duplicate scan below, and ask before adding a complexity tool.
 
 ### LOC
 
@@ -133,9 +187,9 @@ Approximate by function-level normalization: strip comments and whitespace, repl
 
 **Optional upgrade:** if the user wants richer numbers (maintainability index, cognitive complexity, Halstead), ask before adding `radon` to `requirements.txt` — do not add it unprompted (project rule).
 
-## Report format
+## Report format (Depth 2)
 
-ALWAYS emit this exact structure at the end:
+ALWAYS emit this exact structure at the end of a structural refactor:
 
 ```
 ## Refactoring report
@@ -154,7 +208,7 @@ ALWAYS emit this exact structure at the end:
 - ...
 
 ### Tests
-- Group 1: <pytest result — pass/fail, count>
+- Group 1: <result — pass/fail, count>
 - Group 2: ...
 
 ### Remaining debt (deferred)
@@ -164,19 +218,4 @@ ALWAYS emit this exact structure at the end:
 
 If a metric went the wrong way (e.g. LOC up because a helper was introduced), call that out explicitly and justify it.
 
-## Guardrails
-
-**Will:**
-- Preserve external behavior exactly; tests between groups are the proof.
-- Apply SOLID and patterns *only where they reduce cognitive load*.
-- Eliminate duplication through the smallest abstraction that works.
-- Rank by impact/risk and present a shortlist before editing.
-- Report measurable before/after metrics.
-
-**Will Not:**
-- Add features or change external APIs during refactoring.
-- Make a single large unvalidated change — always groups with tests between.
-- Sacrifice readability for performance.
-- Touch code outside the confirmed scope.
-- Add new dependencies (e.g. `radon`, `lizard`) without explicit user approval.
-- Delete pre-existing dead code unless the user asked; mention it instead.
+Depth 1 needs no metrics report — a brief list of what was polished and the test result suffices.

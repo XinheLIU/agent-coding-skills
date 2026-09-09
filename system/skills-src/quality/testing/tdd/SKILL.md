@@ -3,7 +3,7 @@ name: tdd
 description: "Use when executing implementation tasks with TDD discipline. Triggered by: /tdd, or when user says 'execute with TDD', 'run tasks with TDD', 'implement with tests', or asks to execute a plan with testing. Follows red-green-refactor for every task. Parallelizes independent tasks via subagents when available — degrades gracefully to sequential when not. Blends into existing task lists."
 ---
 
-Last updated: 2026-08-02
+Last updated: 2026-09-08
 
 # TDD Execution
 
@@ -142,38 +142,17 @@ Anti-patterns to reject:
 
 ### 2d. Review
 
-Two reviews, in order. **Do not start the second until the first passes.**
+**Per-task executor self-check** (every executor, before reporting):
+- Every spec requirement implemented; nothing extra built (no YAGNI violations)?
+- Tests written first and test real behavior, not mock behavior?
+- Names precise, no dead code, everything typed?
+- Full suite green?
 
-**Review 1 — Spec compliance**
-
-Check the implementation against the original task spec:
-- Every requirement implemented?
-- Nothing extra built (no YAGNI violations)?
-- Tests test real behavior, not mock behavior?
-- TDD cycle followed (tests exist and were written first)?
-
-*Subagent mode:* dispatch a spec reviewer subagent.
-*Sequential mode:* self-review against this checklist. Be strict.
-
-If issues found → fix them → re-review. Do not advance until ✅.
-
-**Review 2 — Code quality**
-
-After spec compliance passes:
-- Names are precise and accurate?
-- No dead code, no over-engineering?
-- No test-only methods added to production classes?
-- Mocks are complete (mirror real API) and understanding-based?
-- Everything typed?
-
-*Subagent mode:* dispatch a code quality reviewer subagent.
-*Sequential mode:* self-review against this checklist.
-
-If issues found → fix → re-review. Do not advance until ✅.
+**Full reviews are owned by the review skills, not embedded here.** After a wave that changed risky or cross-cutting code — and always at plan completion (Phase 3) — run `review-implementation-gaps` against the plan doc (spec compliance: COMPLETE / PARTIAL / MISSING / DIVERGENT per task), then `review-code-quality` Mode A on the accumulated diff (code quality on the Standards + Spec axes, with a merge verdict). Fix Criticals before starting the next wave.
 
 ### 2e. Mark progress
 
-After both reviews pass:
+After the self-check passes (and any routed-review Criticals are fixed):
 - Update `tdd-execution-plan.md`: flip `[~]` → `[x]`, update counts, update date
 - If using `TaskUpdate`: mark the session task complete
 - Add any notable notes to Blockers & Notes
@@ -186,26 +165,26 @@ Only start Wave N+1 after Wave N is 100% `[x]`.
 
 ## Phase 3 — Final Review
 
-After all waves complete:
+After all waves complete, run the review chain — this is the mandatory invocation point:
 
-Run a final review across all changes:
-- All tasks `[x]` in plan doc?
-- Full test suite passing?
-- Any open concerns from executors?
+1. All tasks `[x]` in the plan doc?
+2. Run `review-implementation-gaps` against the plan doc — every task COMPLETE?
+3. Run `review-code-quality` Mode A on the accumulated diff — verdict READY or READY-WITH-FIXES?
+4. Full test suite passing? Any open concerns from executors?
 
-Update plan doc: `Status: Complete`. Report to user.
+Fix Criticals, then update plan doc: `Status: Complete`. Report to user.
 
 ---
 
 ## Subagent Prompt Templates
 
-When using subagents, use these templates (in `./references/implementer-prompt.md`, `./references/spec-reviewer-prompt.md`, `./references/code-quality-reviewer-prompt.md`).
-
-Key rules for subagent prompts:
+Key rules for executor prompts:
 - Paste full task text inline — subagents must never read the plan file
 - Include scene-setting context (where this fits, what not to touch)
 - Include the TDD requirements block above verbatim
 - Ask them to raise questions before starting work
+- Escalation triggers: stop and report BLOCKED or NEEDS_CONTEXT if the task needs architectural decisions not in the spec, or after >10 minutes of reading without progress — bad work is worse than no work
+- Required report shape: Status (DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT), tests written and results (N/N passing), files changed, concerns if any
 
 ---
 
@@ -216,8 +195,6 @@ Key rules for subagent prompts:
 | Isolated task, 1-2 files, complete spec | haiku |
 | Multi-file, integration concerns | sonnet |
 | Architecture, review, debugging | opus |
-| Spec reviewer | sonnet |
-| Code quality reviewer | opus |
 
 ---
 
@@ -226,8 +203,8 @@ Key rules for subagent prompts:
 - Executor wrote code before tests → require restart with TDD from scratch
 - Test passes immediately without implementation → test is wrong, fix before proceeding
 - Parallel tasks both modified the same file → merge carefully, check for conflicts
-- Same review issue found twice → escalate to user; something is systematically wrong
-- More than 3 review loops on one task → escalate to user
+- Routed review reports the same issue twice → escalate to user; something is systematically wrong
+- More than 3 fix-and-re-review loops on one task's routed-review findings → escalate to user
 
 ---
 
