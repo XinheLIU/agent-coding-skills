@@ -1,22 +1,19 @@
 ---
 name: writing-great-skills
-description: Design and revise predictable agent skills with concise triggers, checkable completion criteria, progressive disclosure, and explicit shared-memory ownership. Use when adding or improving a system skill.
+description: Author or revise a predictable system skill. Use when defining a skill's invocation boundary, procedure, references, completion criteria, or shared-memory contract.
 ---
 
 # Writing Great Skills
 
-Last updated: 2026-08-02
+Last updated: 2026-08-25
 
-Predictability means the same process, not identical prose.
+Predictability means the agent follows the same process, not that every output is identical.
 
-1. Give the skill one clear invocation boundary and verb-led name.
-2. Put triggers and exclusions in the description; keep the body procedural.
-3. End each stage with a checkable completion condition.
-4. Keep one source of truth for each rule. Move branch-only detail into directly linked references.
-5. Prefer a strong leading concept over repeated explanations.
-6. Remove no-op instructions, stale sediment, duplication, and speculative branches.
-7. Declare which shared-memory artifacts the skill reads, owns, updates, and hands off.
-8. Keep Markdown authoritative when the skill generates HTML, and define the rebuild path.
-9. Validate frontmatter, links, scripts, and realistic trigger behavior before integration.
+1. **Choose invocation.** Keep model invocation only when the agent or another skill must discover the skill. For a hand-invoked skill, set `disable-model-invocation: true` and make the description a human-facing summary. The choice is complete when every intended caller can reach the skill and unintended prompts do not trigger it.
+2. **Write the pointer.** For a model-invoked skill, front-load the leading action and name each distinct trigger branch once. Put boundaries in the description only when they prevent a plausible misroute.
+3. **Protect the hierarchy.** Keep the universal procedure in `SKILL.md`. Move branch-only reference behind a direct pointer, and keep each concept's definition, rules, and caveats together. Split only when invocation or sequence creates a real context boundary.
+4. **Sharpen completion.** End every step or stage with a checkable, exhaustive done condition. Declare persistent artifacts as `reads`, `owns`, `updates`, or `hands off`; keep one canonical owner per fact.
+5. **Prune.** Remove duplicated meanings, environment lookups, stale history, speculative branches, default behavior, and prose that does not change execution. Prefer positive target behavior; reserve prohibitions for hard guardrails and pair them with the required alternative.
+6. **Validate.** Parse frontmatter, resolve every local pointer, exercise bundled scripts, and test realistic trigger and non-trigger prompts. The skill is ready when all paths terminate at their stated completion criteria and every referenced artifact exists.
 
-When adapting an external skill, record source, revision, license, retained principle, renamed concepts, changed paths, runtime changes, and commit-policy changes in the system provenance report.
+When an external skill influences the result, record its source, revision, license, retained principle, and local behavioral changes in the system provenance record.

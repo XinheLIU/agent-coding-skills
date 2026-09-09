@@ -1,14 +1,15 @@
 ---
 name: research
-description: Investigate a technical question using high-trust primary sources and persist cited findings into the active effort. Use when external facts block an idea, decision map, specification, diagnosis, or implementation.
+description: Resolve an external technical fact with cited primary evidence. Use when an idea, decision, specification, diagnosis, or implementation depends on information unavailable in the repository.
 ---
 
 # Research
 
-Last updated: 2026-08-02
+Last updated: 2026-08-25
 
-Resolve the active effort from `docs/agents/memory.md`. Investigate official documentation, specifications, source code, or first-party APIs. Trace each material claim to the source that owns it.
+1. State the question and the decision it blocks. Read `docs/agents/memory.md` and the active effort when configured. The question is bounded when a source could prove or disprove the answer.
+2. Investigate official documentation, specifications, source code, or first-party APIs. Every material claim must trace to the source that owns it; record conflicts and uncertainty.
+3. Synthesize the answer, evidence, implications, and unresolved uncertainty. The result is complete when the waiting decision can proceed or the missing evidence is named precisely.
+4. For persistent work, write one focused report under `<effort>/research/` and add its pointer to `state.md` or the waiting decision ticket. For transient work, return the same structure in the conversation.
 
-Write one focused Markdown report under `<effort>/research/`, including the question, answer, evidence, uncertainty, and implications for the waiting decision. Update `state.md` or the relevant decision ticket with a pointer.
-
-Delegation is optional and runtime-neutral: use it only when available and authorized. The persisted report, not agent context, is the handoff.
+Delegation is optional and runtime-neutral. The cited report, rather than private agent context, is the durable handoff.

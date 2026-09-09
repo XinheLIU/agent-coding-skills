@@ -5,13 +5,13 @@ description: "Design a general layered Agent system architecture following the 6
 
 # Agent Architecture Designer
 
-Last updated: 2026-08-10
+Last updated: 2026-09-09
 
 ## Workflow
 
 ### Phase 1: Discovery
 
-Ask only for missing information. If the effort has a PRD (`docs/product/<slug>/prd.md`), read it first — it usually answers scope, core jobs, and success criteria. If the user's request already answers an item, do not repeat it.
+Ask only for missing information. Resolve the product document through user paths, `docs/agents/memory.md`, and `state.md` (`product.html#prd`, or a canonical legacy PRD). Read relevant scope, jobs, success measures, and open questions first; reuse established answers.
 
 1. **Agent name and scope** - What is this agent called, and what domain or workflow does it serve?
 2. **Core jobs** - What are the 1-3 outcomes it must reliably deliver?
@@ -122,7 +122,7 @@ Structure:
 
 #### 2. Mermaid Diagram
 
-Use the template from [layered-architecture.md](references/layered-architecture.md) as base. Customize:
+Use the template from [layered-architecture.md](references/layered-architecture.md) as base. If a diagramming skill is available — one that renders a described structure into an exportable SVG, HTML, or image — name it and what it would change, then ask; the fenced Mermaid block is the default and satisfies the quality checks below. Customize:
 - Replace placeholder labels with actual component names
 - Add domain-specific data/knowledge/semantic nodes inside L6
 - Add local memory, workspace, and artifact nodes inside L5

@@ -1,25 +1,24 @@
 ---
 name: wayfinder
-description: Plan an effort too large for one session as a shared map of decision tickets with Markdown and HTML dependency views. Use when the destination is known but the route remains foggy or decisions can proceed concurrently.
+description: Map a multi-session effort into dependency-ordered decision tickets. Use when the destination is known but the route is unclear, or independent decisions can proceed concurrently.
 ---
 
 # Wayfinder
 
-Last updated: 2026-08-10
+Last updated: 2026-08-25
 
-Wayfinding resolves decisions; it does not execute the destination.
+Wayfinding resolves the route; the delivery workflow executes it.
 
 ## Chart
 
-1. Read shared memory and relevant domain context — including `docs/product/<slug>/prd.md` when the effort has one; the PRD's scope and Not-To-Do lists seed Destination and Out of scope.
-2. Use `grilling` to name the destination and scope.
-3. Write `<effort>/map.md` with Destination, Notes, Decisions so far, Not yet specified, and Out of scope.
-4. Create one Markdown issue per precise decision. Record type, status, blockers, and claim.
-5. Render the dependency sources to `roadmap.md` and `roadmap.html` with `draw-portfolio-dag`.
-6. Stop after charting; execution requires a separate request.
+1. Read shared memory and relevant domain context, including the effort PRD when present. Extract the destination, fixed scope, and explicit exclusions.
+2. Use `grilling` until destination and scope are concrete enough to distinguish an in-scope decision from an unrelated question.
+3. Write `<effort>/map.md` with Destination, Decisions so far, Open decisions, and Out of scope.
+4. Create one `issues/NN-<slug>.md` per open decision. Each ticket records status, blockers, claim, and the exact question whose answer closes it.
+5. Use `draw-portfolio-dag` to regenerate `roadmap.md` and `roadmap.html`. Charting is complete when every open decision is represented once and every dependency is either an edge or an explicit external blocker.
 
 ## Resolve
 
-Work one frontier ticket per session unless independent research tickets are explicitly delegated. Claim before working. Store the full answer in its ticket, append only a linked gist to `map.md`, graduate newly visible fog into tickets, then regenerate both roadmap views. A ticket conversation can't settle can be resolved with `prototype`; the recorded decision lands in the ticket.
+Work one frontier ticket per session unless the user authorizes independent tickets to run concurrently. Claim the ticket before working, store its full answer in the ticket, and keep only a linked summary in `map.md`. Turn newly exposed uncertainty into tickets, then regenerate both roadmap views.
 
-The map is complete when no in-scope fog or open decision remains. Hand off to `spec`; do not implement directly unless the effort was explicitly re-scoped.
+The map is complete when no in-scope open decision remains. Hand the resolved map to `spec`; implementation requires a separate request or an explicit scope change.

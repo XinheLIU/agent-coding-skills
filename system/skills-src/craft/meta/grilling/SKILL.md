@@ -1,12 +1,13 @@
 ---
 name: grilling
-description: Interview the user one decision at a time to sharpen an idea, plan, design, triage brief, or wayfinder ticket. Use when unresolved decisions—not discoverable facts—block progress.
+description: Resolve user-owned decisions one at a time. Use when choices that cannot be discovered from the environment block an idea, plan, design, triage brief, or wayfinder ticket.
 ---
 
 # Grilling
 
-Last updated: 2026-08-02
+Last updated: 2026-08-25
 
-Explore the environment for facts. Put actual decisions to the user one at a time, leading with a recommended answer and its trade-off.
-
-Walk dependencies before downstream choices. Summarize each confirmed decision for the calling workflow, which owns persistence. Stop when the caller’s completion condition is satisfied; do not implement the result.
+1. Inspect the available context until every remaining blocker is a decision rather than a discoverable fact.
+2. Walk prerequisite decisions before downstream choices. Ask one question at a time; lead with a recommendation and its trade-off.
+3. Reflect each answer as a concrete decision and correct it immediately if the user disagrees.
+4. Stop when every decision required by the caller's completion criterion is resolved. Return confirmed decisions and genuinely open questions to the caller, which owns persistence and implementation.

@@ -5,9 +5,9 @@ description: Maintain shared domain language and durable architectural decisions
 
 # Domain Modeling
 
-Last updated: 2026-08-10
+Last updated: 2026-09-08
 
-Read the configured `CONTEXT.md` or `CONTEXT-MAP.md`, relevant ADRs, and — when the effort has one — the PRD (`docs/product/<slug>/prd.md`) for candidate terms. Challenge overloaded terms with concrete scenarios and compare claims against code.
+Read the configured `CONTEXT.md` or `CONTEXT-MAP.md`, relevant ADRs, and the product document resolved through memory/state pointers (`product.html#prd`, or a canonical legacy PRD) for candidate terms. Challenge overloaded terms with concrete scenarios and compare claims against code.
 
 Update the glossary as soon as a term is resolved. Keep it implementation-free:
 

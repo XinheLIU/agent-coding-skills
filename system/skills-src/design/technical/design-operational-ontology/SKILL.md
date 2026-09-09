@@ -5,7 +5,7 @@ description: Design or review domain-specific operational ontology architectures
 
 # Design Operational Ontology
 
-> Last updated: 2026-08-10
+> Last updated: 2026-09-09
 
 Turn a business decision loop—not a database schema—into a vendor-neutral operational ontology that people and AI can query, act through, audit, and evolve safely.
 
@@ -36,7 +36,7 @@ The skill is self-contained. Do not require the source wiki, the Palantir produc
 
 Choose one mode and state it:
 
-- **Greenfield mode**: the user has a PRD (including an effort PRD at `docs/product/<slug>/prd.md`), idea, desired capability, or incomplete workflow.
+- **Greenfield mode**: the user has product requirements, an idea, a desired capability, or an incomplete workflow. Resolve existing product requirements through `docs/agents/memory.md` and `state.md` (`product.html#prd`, or a canonical legacy PRD), then follow relevant record anchors.
 - **Upgrade mode**: the user has an existing architecture, schema, service design, or implementation.
 - **Review mode**: the user wants critique or a gap analysis without a rewritten target design.
 
@@ -185,7 +185,7 @@ In Review mode, stop after the evidence-backed gap analysis and ranked recommend
 
 ## Deliver and verify
 
-Use the structure in [references/architecture-spec.md](references/architecture-spec.md). Keep prose short; prefer explicit tables, typed contracts, and one useful end-to-end diagram.
+Use the structure in [references/architecture-spec.md](references/architecture-spec.md). Keep prose short; prefer explicit tables, typed contracts, and one useful end-to-end diagram. If a diagramming skill is available, name it and what it would change, then ask; drawing the diagram directly is the default and keeps the skill self-contained.
 
 Before delivery, verify:
 

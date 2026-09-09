@@ -1,11 +1,11 @@
 # Feature Delivery Workflow
 
-Last updated: 2026-08-10
+Last updated: 2026-09-08
 
 Use this workflow once intent is approved. The active effort is the shared unit of memory.
 
 ```text
-<product-docs>/<slug>/prd.md (write-prd), brief.md (brainstorm-feature), or completed map.md (wayfinder)
+<product-docs>/<product-slug>/product.html#prd (write-prd), brief.md (brainstorm-feature), or completed map.md (wayfinder)
   → spec.md
   → plan.md                 (missing integrated skill)
   → issues/NN-*.md

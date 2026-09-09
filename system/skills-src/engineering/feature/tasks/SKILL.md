@@ -3,7 +3,7 @@ name: tasks
 description: Break a feature spec.md + plan.md into an ordered, phase-organized tasks.md checklist. Use after /plan, when the user is ready to enumerate implementation tasks. Organizes tasks by user-story priority (P1/P2/P3) so each story stays an independently shippable MVP slice.
 ---
 
-Last updated: 2026-08-02
+Last updated: 2026-08-25
 
 # /tasks — Break the plan into executable tasks
 
@@ -121,7 +121,7 @@ Write the final content to `<feature-dir>/tasks.md` using `references/tasks-temp
 - Set `## Next action` to "Implement tasks from `specs/NNN-<short-name>/tasks.md`. Claim each task by creating `.scratch/NNN-<short-name>/tasks/NNN-slug.md` per the working memory protocol before touching its code."
 - Add `- Tasks: specs/NNN-<short-name>/tasks.md` under `## Pointers` (update the pending placeholder from `/spec`).
 
-If `.scratch/NNN-<short-name>/state.md` does not exist (e.g., worktree was created outside `/spec`), create it following the template in `craft/context/setup/init-context/references/working-memory.md`.
+If `.scratch/NNN-<short-name>/state.md` does not exist (e.g., worktree was created outside `/spec`), create it following the template in `craft/context/init-context/references/working-memory.md`.
 
 Report to the user:
 
