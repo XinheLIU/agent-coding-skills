@@ -8,22 +8,31 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.assessed_surface]
+  retrieves: [product.relevant_context, system.affected_source]
+  produces: [product.behavior_evidence, product.coverage]
+  updates: [product.baseline_proposals]
+  invalidates: [product.behavior_dependents]
+  handoff_to: [product, design]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Extract the current product from the code, docs, and tests before proposing anything new. The output is a source-backed baseline: who can do what today, what is partly built, what is only planned, and where the product surface has gaps.
 
 ## Shared Memory Contract
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
-```text
-Layer:       working
-Contributes: current capabilities and journeys, inferred personas, layered needs, candidate visions, gaps, questions, code evidence, constraints
-Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
-Promotes:    baseline context needed to explain accepted intent, with source pointers → product.html, via write-prd
-```
 
 Read product intent, relevant capabilities, gaps, and questions before inspecting code. Record the inspected product surface and revision where available. Enrich existing subjects with observed behavior; preserve proposed behavior and accepted intent as separate facts.
 
-Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and return record anchors to the coordinator. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Boundary
 
@@ -61,7 +70,7 @@ Classify each product-facing capability:
 
 Every row needs an evidence pointer: file path plus route/function/component/test name when available.
 
-### 4. Derive user stories with layered needs and module mapping
+### 4. Derive user stories with layered needs and source evidence
 
 Write stories only for behavior with evidence. Use the product-facing form:
 
@@ -95,44 +104,13 @@ After synthesis — never before — send one consolidated message following the
 
 Skip the message when the run is non-interactive or the user asked for a pure audit: visions and inferred layers stay inferred, and each unconfirmed vision gets a linked open question. Do not chain follow-up questions; residual uncertainty is recorded, not interrogated.
 
-### 7. Analyze module boundaries, interactions, and need fit
+### 7. Assess observable constraints and unanswered design questions
 
-For each functional area, assess:
+Record user-visible performance, permissions, recovery, accessibility, and integration behavior only where observed or promised, with environment/revision and evidence. Code modules and API/data paths are evidence pointers, not mandatory architecture assessments.
 
-**Cohesion**: Does each module have a single, well-defined responsibility? Are related functions grouped together?
+If understanding a user outcome exposes a technical uncertainty, record the question and its blocking effect. Route cohesion/coupling, dependency cycles, API contracts, data-model design, or refactoring recommendations to `codebase-design`, `improve-codebase-architecture`, or `review-architecture` when that analysis is requested. Do not infer demand or poor architecture from code inventory alone.
 
-**Coupling**: Which modules depend on each other? Are dependencies one-way or circular? Are interfaces clean or leaky?
-
-**Interaction patterns**: How do modules communicate? (direct calls, events, message queues, APIs)
-
-**Need fit**: Judged against the deep needs of the stories the module implements — not the surface asks — does it serve, over-serve, under-serve, or serve no real need? Add a change-resilience note: would this boundary survive the candidate or confirmed vision, or does the vision imply it moves? Fit verdicts are separate from the structural verdicts above. Vocabulary: `references/need-layers.md`.
-
-Mark high-coupling or low-cohesion areas as refactoring candidates.
-
-### 8. Technical design pass (when tech-design skill available)
-
-For core modules and cross-cutting concerns, document:
-- **Interfaces**: public contracts, API boundaries
-- **Data models**: entities, schemas, persistence layer
-- **Business logic**: domain rules, state transitions
-
-If `tech-design` skill is available, delegate interface and data model analysis for complex modules.
-
-### 9. Non-functional requirements (for frameworks and supporting features)
-
-For reusable components, libraries, or platform features, assess beyond functional needs:
-
-| Dimension | Questions |
-| --- | --- |
-| Ease of use | Clear API? Minimal configuration? Good defaults? |
-| Performance | Latency targets? Throughput needs? Resource constraints? |
-| Extensibility | Plugin architecture? Open for extension, closed for modification? |
-| Fault tolerance | Graceful degradation? Retry logic? Error boundaries? |
-| Generality | Single use case or broadly applicable? Parameterized? |
-
-Document evidence from existing code (error handling patterns, config files, plugin directories).
-
-### 10. Identify improvement candidates
+### 8. Identify improvement candidates
 
 List gaps and next-product questions without scoping them. Use this vocabulary so `scope-product-increment` can consume it directly:
 
@@ -140,7 +118,7 @@ List gaps and next-product questions without scoping them. Use this vocabulary s
 - **Opportunity:** current behavior works but the user outcome is weaker than the product promise
 - **Question:** evidence is insufficient to decide whether behavior exists or matters
 
-A fit shortfall from step 7 — under-serves, serves-no-real-need, or poor vision resilience — becomes a gap or opportunity naming the layer it fails.
+A shortfall names the expected user outcome and observed behavior; insufficient evidence remains a question.
 
 If an improvement is already requested, hand off to `scope-product-increment` after the baseline exists.
 
@@ -152,12 +130,12 @@ Enrich `<work-root>/<effort>/discovery.html` using the shared record contract. L
 - Create or enrich the effort's `research-coverage` record in the `research` section of `discovery.html`: aggregate assessed and not-assessed dimensions (platforms, roles, flows, data sources) across contributors, and state whether research is ready for roadmap decomposition — naming the blocking gaps or questions when it is not. This run's inspection updates the aggregate; it does not overwrite another contributor's recorded coverage.
 - Enrich shared personas, capabilities, and journeys with current observed behavior and evidence. Keep implemented, partial, planned intent, and unassessed behavior distinct.
 - Record candidate visions in `overview` with inferred/confirmed status and links to the implying stories; when the confirmation message was skipped, record the linked open question.
-- Story records carry surface/deep/fundamental entries with per-layer status (inferred / user-confirmed / evidenced); need-fit verdicts and resilience notes travel with the boundary assessments attached to capabilities, alongside cohesion and coupling — not a separate module inventory.
-- Attach module maps, boundary assessments, interactions, and NFR observations to the capabilities or constraints they explain; use evidence details for code-level depth.
+- Story records carry surface/deep/fundamental entries with per-layer status (inferred / user-confirmed / evidenced); unconfirmed need-fit hypotheses remain questions linked to observed capabilities.
+- Attach user-flow maps and observable constraints to the capabilities they explain; cite code paths only as evidence.
 - Match existing gaps, opportunities, and questions before adding findings. Cite the expected outcome and observed shortfall. Resolve an existing behavior question only when inspection answers it; do not close demand or scope questions from code alone.
 - Preserve desired behavior and scope decisions contributed by other skills. If the baseline contradicts them, record the disagreement and mark affected conclusions for review.
 
-Update `state.md` with the relevant anchors, open the resulting HTML for the user when requested or presenting a new report, and report the absolute path plus the records added or enriched. No companion Markdown baseline.
+Return the relevant anchors to the coordinator, open the resulting HTML for the user when requested or presenting a new report, and report the absolute path plus the records added or enriched. No companion Markdown baseline.
 
 ### Verify memory records
 
@@ -170,14 +148,11 @@ Update `state.md` with the relevant anchors, open the resulting HTML for the use
 ## Quality Bar
 
 - Every implemented story names a persona, action, outcome, surface need, functional modules, and evidence path; deep and fundamental needs are stated or recorded as open questions, each marked with its status (inferred / user-confirmed / evidenced) and source.
-- Module boundaries are analyzed: each module's responsibility is clear, cohesion and coupling are assessed, refactoring candidates are marked, and each module carries a need-fit verdict and vision-resilience note distinct from its structural verdicts.
 - Candidate visions are supported by at least two story clusters, marked inferred until the user confirms, and never converted into roadmap items.
 - User confirmation happens in one consolidated message, or is explicitly skipped with the open questions recorded.
-- Module interaction patterns are documented with clear interfaces.
-- For core modules, technical design covers interfaces, data models, and business logic.
-- For frameworks and supporting features, non-functional requirements are assessed across ease of use, performance, extensibility, fault tolerance, and generality.
+- Observable constraints and coverage are evidenced; technical design questions are routed with their blocking effects.
 - In-progress and planned work stay separate.
-- UI/API/model gaps are visible instead of smoothed over, with architectural impact noted.
+- UI/API/model gaps are visible instead of smoothed over, with user impact noted.
 - Source-backed facts are separated from inference.
 - The artifact is a baseline another skill can consume without re-reading the whole codebase.
 

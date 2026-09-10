@@ -1,6 +1,6 @@
 # Writing the Instruction File
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
 
 Load only for an approved structural rewrite. This is a hierarchy guide, not a required template.
 
@@ -9,7 +9,7 @@ Load only for an approved structural rewrite. This is a hierarchy guide, not a r
 1. **Purpose:** enough domain intent to orient the agent; link the durable product source when one exists.
 2. **Verified commands:** literal commands whose omission would slow or misdirect work.
 3. **Repository constraints:** cross-cutting, checkable behavior with consequences and alternatives.
-4. **Shared-context startup:** how to resolve active work and canonical Human-layer facts.
+4. **Shared-context startup:** how to resolve active work and canonical domain context and retained change records.
 5. **Context pointers:** trigger -> target for branch-specific detail.
 6. **Danger zones and historical reasons:** only when experience earned them.
 

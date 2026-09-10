@@ -5,7 +5,22 @@ description: Diagnose hard bugs and performance regressions through a red-capabl
 
 # Diagnosing Bugs
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [change.symptom]
+  retrieves: [change.requirements, system.affected_source, verification.failure_history, operations.environment]
+  produces: [change.diagnosis, change.regression_evidence]
+  updates: [run.investigation]
+  invalidates: [verification.for_changed_code, system.disproved_assumptions]
+  handoff_to: [implementation, testing]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Read shared memory, relevant domain context, and ADRs. Create or update the active effort’s `diagnosis.md`.
 
@@ -27,4 +42,4 @@ Turn the minimized reproduction into a failing regression test at the correct pu
 
 ## 5. Close
 
-Remove temporary instrumentation, record the confirmed cause and verification, update `state.md`, and route architectural seam failures to `improve-codebase-architecture`. Do not commit unless asked.
+Remove temporary instrumentation, record the confirmed cause and verification, return routing updates to the coordinator, and route architectural seam failures to `improve-codebase-architecture`. Do not commit unless asked.

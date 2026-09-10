@@ -7,6 +7,21 @@ description: Build throwaway code to answer one design question. Use when conver
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [design.open_question]
+  retrieves: [change.requirements, design.relevant_decisions]
+  produces: [design.experiment_evidence, design.decision_proposal]
+  updates: [run.prototype]
+  invalidates: [design.disproved_assumptions]
+  handoff_to: [requesting_domain]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 A prototype is **throwaway code that answers a question**. The question decides the shape: a hand-driven harness for a state model ([LOGIC.md](references/LOGIC.md)), or competing renderings of one surface ([UI.md](references/UI.md)).
 
 Do not confuse this with `docs/design/prototype.html`, the canonical prototype owned by the pipeline stages ([references/design-memory.md](references/design-memory.md)). This skill's outputs are disposable and never merge into it directly; the stage that raised the question folds the decision in through its own approval gate.
@@ -113,23 +128,14 @@ Create a throwaway route following the project's routing convention. Name it obv
 
 Full contract: [references/design-memory.md](references/design-memory.md).
 
-```text
-Triad role:  none — a side utility; its outputs never merge into the canonical prototype directly
-Layer:       working — the code is throwaway and so is the record of testing it
-Owns:        <work-root>/<effort>/prototypes/<slug>/decision.md
-Coordinates: state.md — resumes the stage that raised the question
-Promotes:    interaction decisions → PRD Part 3, via write-prd
-             architectural decisions → an ADR, via domain-modeling
-             (either kind may then reach docs/design/prototype.html, but only through the owning stage's gate)
-```
 
-Read `docs/agents/memory.md`, the active `state.md`, and the artifact that raised the question (a question or journey/scope record in `discovery.html`, a `map.md` decision ticket, or a `design-system/pages/<page>.md` spec). Write only the question, variants tested, evidence from user feedback, verdict, and pointer to the throwaway branch. Never edit upstream artifacts. Update `state.md` to resume the stage that raised the question.
+Read `docs/agents/memory.md`, the active `state.md`, and the artifact that raised the question (a question or journey/scope record in `discovery.html`, a `map.md` decision ticket, or a `design-system/pages/<page>.md` spec). Write only the question, variants tested, evidence from user feedback, verdict, and pointer to the throwaway branch. Return the verdict and evidence to the domain owner/coordinator. At acceptance, retain consequential rationale, alternatives, criterion/decision IDs, and consumed revisions in linked Change Context before implementation. Resume the requesting stage through the common handoff envelope.
 
-Classify the verdict before handing back — the two kinds promote to different homes. A decision about how the product behaves or looks is product intent and belongs in the PRD. A decision that constrains how the system is built — a data shape, a boundary, a protocol — is an architectural trade-off and belongs in an ADR. State which kind it is in `decision.md` so the promotion is unambiguous later.
+Classify the verdict before handing back — the two kinds promote to different homes. A decision about how the product behaves or looks is product intent and belongs in the PRD. A decision that constrains how the system is built — a data shape, a boundary, a protocol — is an architectural trade-off and belongs in an ADR. State which kind it is in `decision.md` so the owning stage can reconcile it at acceptance.
 
 The prototype code is deliberately disposable; the decision it bought is not. That is the point of the loop — throw away the code, keep the answer.
 
-If routing is absent, work in conversation only and recommend `manage-context` before persisting.
+Use coordinator-resolved existing homes or protocol defaults; ask only when identity or destination remains ambiguous.
 
 ## What This Skill Does NOT Do
 

@@ -8,21 +8,33 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.accepted_intent]
+  retrieves: [product.evidence, product.current_behavior, change.existing_requirements, design.relevant_decisions]
+  produces: [change.canonical_spec, product.reading_index]
+  updates: [product.durable_records, change.requirements]
+  invalidates: [design.requirement_dependents, verification.criteria]
+  handoff_to: [design, implementation]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.
 
 ## Shared Memory Contract
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy migration. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
 
-```text
-Layer:       human — product intent survives the effort
-Contributes: coherent durable product records, the roadmap, and a PRD reading index
-Writes:      <product-docs>/<product-slug>/product.html and specs/<spec-slug>.md
-Coordinates: promotion pointers in discovery.html and state.md
-Promotes:    accepted intent, decisions, roadmap tickets, necessary evidence and rationale
-```
 
 Resolve the product through user paths, `docs/agents/memory.md`, and active `state.md`. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.
+
+## One change, one requirements source
+
+Reuse the coordinator's canonical ticket ID and spec reference. If a spec already exists, including one created by engineering `spec`, reconcile that same document and preserve its requirement/criterion IDs. Create a spec only when none exists. Preserve established homes; new local-only changes use tracked `docs/changes/<change-id>/`. Product indexes and capability records link change-specific normative text rather than restating it. The canonical tracker owns ticket status; a roadmap summary references that source and revision.
 
 ## Read and assess
 
@@ -51,7 +63,7 @@ Ask only for unknown information needed for the current result. Product title, p
 3. For an accepted increment, apply ADDED / MODIFIED / REMOVED to the relevant intended behavior and scope only. Preserve current observation, unrelated requirements, and rejected alternatives with lasting rationale. A removed behavior remains identifiable for references; record that the intent was superseded instead of reusing its ID.
 4. Bring the minimum supporting rationale and evidence into durable storage, or link stable sources. Necessary evidence must not depend on an effort directory scheduled for deletion. Keep raw code inventories and execution narratives in working memory.
 5. Build or update the PRD reading index over the canonical records. Add a dated change note with affected record links and the decision/source basis. Do not duplicate normative requirements into the index or a separate PRD file.
-6. Verify durable content and links before replacing promoted working conclusions with pointers. Repair cross-record links, record any amendment-to-canonical ID mapping, then update `state.md`. Do not erase evidence or unresolved analysis that the active effort still needs.
+6. Verify durable content and links before replacing promoted working conclusions with pointers. Repair cross-record links, record any amendment-to-canonical ID mapping, then return routing updates to the coordinator. Do not erase evidence or unresolved analysis that the active effort still needs.
 
 Promotion does not change a claim's evidence strength. A proposed commitment remains proposed; an open question stays open until answered. A **user-confirmed** vision promotes into `product.html` `overview` with its ID, confirmation date, and links preserved; an **inferred** candidate vision stays in working memory and the PRD links its open confirmation question instead. Never invent a vision or upgrade one by promotion. If a relevant premise changes, mark affected conclusions for review and route the unresolved assessment to the appropriate skill.
 
@@ -62,13 +74,13 @@ The roadmap is the `roadmap` section of `product.html`: accepted research findin
 1. Map every accepted P0 finding to at least one `roadmap-ticket`; review overlap between tickets (MECE as judgment, not automation). A ticket that answers no recorded finding needs an explicit user decision as its basis.
 2. Every ticket records priority (`p0`/`p1`/`p2`/`deferred`), status, its research basis (links to the gap/opportunity/problem records that justify it), and alignment links to at least one mission or vision.
 3. Assign the ticket type:
-   - **Spec ticket** (`data-ticket-type="spec"`): requirements are settled. Generate `specs/<spec-slug>.md` — problem, solution, requirements with acceptance criteria, explicit out-of-scope, success measures for that one change — opening with a link back to its ticket. The spec is canonical for its change; the ticket is canonical for priority and status. A loose spec another skill drafted may be linked provisionally with a note that this skill should tighten it.
+   - **Spec ticket** (`data-ticket-type="spec"`): requirements are settled. Reuse the canonical spec when present; otherwise create it in the resolved change home (existing product layout may use `specs/<spec-slug>.md`) — problem, solution, requirements with acceptance criteria, explicit out-of-scope, success measures for that one change — opening with a link back to its ticket. The spec is canonical for its change; the ticket is canonical for priority and status. A loose spec another skill drafted may be linked provisionally with a note that this skill should tighten it.
    - **Prototype ticket** (`data-ticket-type="prototype"`): a design question blocks specification. The ticket carries a one-or-two-sentence prototype request as the handoff to `design/ux/prototype` and stays `blocked` until the decision lands; then convert it to a spec ticket linking the decision, or close it.
 4. A ticket is intent, not implementation: it never closes a behavior gap, and completing it requires evidence of the resulting behavior. Reruns enrich existing tickets by subject match; they do not duplicate them.
 
 ## HTML output and PRD reading order
 
-The only durable product output is `product.html`, structured by shared concepts from the contract. Keep existing styling. Add a `<nav id="prd" aria-label="PRD reading order">` linking to actual records or shared sections in this order:
+Durable outputs are shared `product.html` records and the single linked spec per change, structured by the Product contract. Keep existing styling. Add a `<nav id="prd" aria-label="PRD reading order">` linking to actual records or shared sections in this order:
 
 | Reading part | Content to establish or link |
 | --- | --- |
@@ -92,7 +104,7 @@ Before saving or reporting readiness:
 - Verify unique IDs and resolving file/anchor links, including promotion pointers. No essential durable link may rely on disposable discovery.
 - Verify every record `<article>` carries a closed-list `data-kind` (see the contract's kind table) and sits inside one of the shared sections; every `roadmap-ticket` also carries `data-ticket-type`, links at least one research-basis record and one mission or vision, and its spec or prototype-decision links resolve. Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 - Check a repeated consolidation would enrich the same records rather than create duplicates. Check HTML facts remain readable without JavaScript.
-- Update the document's visible date and changed record dates. Update `state.md` with the durable path, affected anchors, unresolved blockers, and the next action.
+- Update the document's visible date and changed record dates. Return the durable path, affected anchors, consumed revisions, unresolved blockers, and next action for the coordinator to update run routing.
 
 Report the HTML path and the conclusions promoted, amended, or still unresolved. Before
 claiming the PRD is ready, state what was promoted versus what remains open and ask the user
@@ -116,9 +128,9 @@ The PRD fixes *what* to build. When *how it looks* or *how the system is shaped*
 | Only the implementation *approach* is open — product and experience are settled | `engineering/feature/brainstorm-feature` |
 | None of the above | `spec` directly |
 
-**Skip test** — skip design entirely when all three hold: the Part 2 flowchart and Part 3 five-state blocks are complete; vocabulary is settled (glossary exists or terms are unambiguous); the change fits the existing architecture. What remains then is implementation choices, which `plan` owns.
+**Skip test** — skip design entirely when all three hold: the Part 2 flowchart and Part 3 five-state blocks are complete; vocabulary is settled (glossary exists or terms are unambiguous); the change fits the existing architecture. What remains then is implementation choices, handled by the active agent's planning stage in the delivery workflow.
 
-More than one row may apply — UX and technical design can both run. UX output additionally feeds frontend implementation via `design/ux/design-implement` and `spec`. A design question that the criteria and conversation cannot settle goes to `prototype`: throwaway variants, decision recorded in `prototypes/<slug>/decision.md`, control returns to the skill that raised it.
+More than one row may apply — UX and technical design can both run. UX output additionally feeds frontend implementation via `design/ux/design-implement` and `spec`. A design question that the criteria and conversation cannot settle goes to `prototype`: throwaway variants, draft decision recorded in `prototypes/<slug>/decision.md`, consequential verdict and basis retained in Change Context at acceptance, control returns to the skill that raised it.
 
 ---
 

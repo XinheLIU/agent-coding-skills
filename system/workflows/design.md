@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-09
 
-This workflow transforms product intent into implemented components through **design context → interaction design → visual design → implementation**. Shared design understanding is a triad — `product.html` is **why**, root `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** (contract: `skills-src/craft/context/init-context/references/design-memory.md`). The pipeline skills stay thin — routing, approval gates, triad transitions — and dispatch heavy design work to installed external skills from the six-layer catalog (`skills-src/design/ux/external-skills.md`; system overview: `skills-src/design/ux/README.md`).
+This workflow transforms product intent into implemented components through **design context → interaction design → visual design → implementation**. Shared design understanding is a triad — `product.html` is **why**, root `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** (contract: `skills-src/craft/context/init-context/references/design-memory.md`). Pipeline skills own design reasoning, gates, and artifact validation; the coordinator binds optional design capabilities from the six-layer catalog (`skills-src/design/ux/external-skills.md`; system overview: `skills-src/design/ux/README.md`).
 
 ## Overview
 
@@ -19,7 +19,7 @@ PRD (WHY) → design context → interaction design → visual design → implem
 1. **Interaction before visuals** — structure (what/where/when) is locked (`data-structure="locked"` in the prototype) before color/typography/polish.
 2. **One canonical token source** — root `DESIGN.md` is the only how downstream skills read for visual values; `/design-context` decides what feeds it and keeps the prototype's `:root` block in sync.
 3. **The prototype is the durable what** — every approval gate lands in `docs/design/prototype.html` as a section transition (`wireframe → styled → implemented`), so shared understanding is one openable file, not scattered effort intermediates.
-4. **External skills carry heavy work** — each stage probes the skills available in the session for the one or two slots it consumes, recognizing them by capability signature rather than vendor name, and offers what it finds; the native workflow is always the recommended fallback.
+4. **External skills carry heavy work** — the coordinator probes available capabilities for the one or two slots requested by the stage, recognizing them by capability signature rather than vendor name, and offers what it finds; the native workflow is always the recommended fallback.
 
 ## The Five Skills
 
@@ -35,7 +35,7 @@ PRD (WHY) → design context → interaction design → visual design → implem
 - Resolves authority conflicts (default: existing DESIGN.md frontmatter wins visual values; legacy prose survives as rationale)
 - Writes `DESIGN.md` after approval; pointers the legacy file; re-syncs the prototype's `:root` token block
 
-**Outputs**: root `DESIGN.md` (Human layer, git-tracked) — the triad's **how**
+**Outputs**: root `DESIGN.md` (Current State, git-tracked) — the triad's **how**
 
 **External dispatch**: layers ⑤ (DESIGN.md lifecycle + extractors) and ④ (template catalogs). When an accepted ⑤ tool owns the DESIGN.md lifecycle, writes route through it and are reconciled; the file is canonical either way.
 
@@ -49,7 +49,7 @@ PRD (WHY) → design context → interaction design → visual design → implem
 
 **Process**: gathers product context (PRD Part 1) → proposes typography/color/spacing/layout with rationale → optional layer-② knowledge lookup for font pairings and palettes → preview HTML → approval → writes `DESIGN.md` (YAML frontmatter tokens + prose).
 
-**Outputs**: root `DESIGN.md` (Human layer); `<work-root>/<effort>/design/system-preview.html` (Working, disposable)
+**Outputs**: root `DESIGN.md` (Current State); `<work-root>/<effort>/design/system-preview.html` (Run Context, disposable after reconciliation)
 
 ---
 
@@ -68,7 +68,7 @@ PRD (WHY) → design context → interaction design → visual design → implem
 - At approval, merges the sections into `docs/design/prototype.html` at `wireframe` fidelity with `data-structure="locked"`
 - Documents responsive + accessibility requirements; surfaces unresolved decisions
 
-**Outputs**: locked wireframe sections in `docs/design/prototype.html` (Human layer); working exploration in `<work-root>/<effort>/interaction/{state-table.md,journey-map.md,decisions.md,responsive-a11y.md,wireframes/}`
+**Outputs**: locked wireframe sections in `docs/design/prototype.html` (Change Context); working exploration in `<work-root>/<effort>/interaction/{state-table.md,journey-map.md,decisions.md,responsive-a11y.md,wireframes/}`
 
 **Critical constraint**: Wireframe sections have no visual styling — only structure. Structure locks at approval; reopening a locked section is explicit and drops it back to wireframe fidelity.
 
@@ -88,7 +88,7 @@ PRD (WHY) → design context → interaction design → visual design → implem
 - Generates 3 variant HTMLs in the working layer — same structure, different visual treatment — each showing all 5 states with a state switcher
 - Iterates (max 3 rounds); at approval merges the winning treatment into the surface's section, `wireframe → styled`
 
-**Outputs**: the styled section in `docs/design/prototype.html` (Human layer); `<work-root>/<effort>/visual/{variants/variant-{a,b,c}.html,decision.md,constraints.md}` (Working)
+**Outputs**: the styled section in `docs/design/prototype.html` (Change Context); `<work-root>/<effort>/visual/{variants/variant-{a,b,c}.html,decision.md,constraints.md}` (Run Context)
 
 **Critical constraint**: CANNOT change button positions, navigation hierarchy, or state transitions — only visual properties vary, and every value traces to `DESIGN.md`.
 
@@ -109,7 +109,7 @@ PRD (WHY) → design context → interaction design → visual design → implem
 - Generates semantic, accessible, responsive component code implementing **all 5 states**
 - Documents the component; marks the section `implemented` with `data-component` / `data-component-doc` pointers
 
-**Outputs**: component code in project source (project-tracked); `docs/design/components/<name>.md` (Human layer); the section marked `implemented`
+**Outputs**: component code in project source (project-tracked); `docs/design/components/<name>.md` (Current State with linked change rationale); the section marked `implemented`
 
 **External dispatch**: optional layer-③ polish pass (interaction craft, motion, feel-better, a11y review) over generated code — within token authority; structural changes route back to `/interaction-design`. Applied fixes are recorded in the component doc.
 
@@ -126,30 +126,19 @@ The six-layer model (full catalog: `skills-src/design/ux/external-skills.md`) ma
 | ⑤ Design Context | DESIGN.md format, extractors, lifecycle | `design-context` Steps 1–3 | Native `design-system-create` path |
 | ⑥ Production Environments | High-fidelity mockup/demo engines | `visual-design-variants` Step 2.5 | Inline HTML generation |
 
-No stage needs more than two of these slots, so none probes all six. A stage probes its own slots at the point of use, appends the result to `<work-root>/<effort>/design/capabilities.md`, and reads that record on re-entry instead of asking again. The row doubles as the step's done condition — an optional step ends when its slot row exists, whether it reads `none`, `declined`, or `accepted`.
+No stage needs more than two of these slots, so none probes all six. The coordinator probes requested slots at the point of use, serializes the result into `<work-root>/<effort>/design/capabilities.md`, and reads that record on re-entry instead of asking again. The row doubles as the step's done condition — an optional step ends when its slot row exists, whether it reads `none`, `declined`, or `accepted`.
 
 Every dispatch follows the same contract: **the pipeline skill owns the artifacts; the external skill is a producer whose output is reconciled into the canonical paths.** Skills recognize capabilities by signature, never by vendor name. The pipeline is complete with no external tools installed; `skills-src/design/ux/external-skills.md` catalogs what may optionally slot in, for a human choosing what to install — no skill reads it at runtime.
 
-Technical design carries a lighter version: `design-agent-architecture` and `design-operational-ontology` offer a **diagramming** capability for the diagram each must produce, and fall back to drawing it directly. Those skills hold no effort-scoped memory, so the offer is stateless and writes no record.
+Technical design carries a lighter version: `design-agent-architecture` and `design-operational-ontology` offer a **diagramming** capability for the diagram each must produce, and fall back to drawing it directly. The coordinator binds optional diagramming; accepted technical decisions/contracts remain linked Change Context even when no run artifact is needed.
 
-## Memory Layers
+## Context and acceptance
 
-The work root is configured in `docs/agents/memory.md` and defaults to `.scratch/`. Every stage resolves it the same way rather than hardcoding a path. Full contract: `skills-src/craft/context/init-context/references/design-memory.md`.
+Use [the shared protocol](../skills-src/craft/context/init-context/references/PROTOCOL.md) for lifecycle and identity; [the Design contract](../skills-src/craft/context/init-context/references/design-memory.md) defines artifact roles. The coordinator supplies paths and canonical change/spec/criterion IDs and applies transitions under [context coordination](context-coordination.md). Keep requirement text in its canonical spec; design records reference it.
 
-| Artifact | Owner | Layer | Tracked | Promotes to |
-|----------|-------|-------|---------|-------------|
-| `product.html` (product docs) — the WHY | product skills | Human | Yes | — (design links into it via `data-capability`) |
-| `DESIGN.md` (root) — the HOW | `design-context` / `design-system-create` (or an accepted ⑤ lifecycle tool) | Human | Yes | contested token-authority decision → an ADR, via `domain-modeling` |
-| `docs/design/prototype.html` — the WHAT | the stage whose gate the transition passed | Human | Yes | — (it is the promotion target of approved structure and visuals) |
-| `docs/design/system.md` (legacy) | `design-context` retires it | Human until migrated | Yes | folded into `DESIGN.md`, left as a pointer |
-| `<work-root>/<effort>/interaction/*` | `interaction-design` | Working | No | locked sections → the prototype; accepted state definitions → `product.html` capability records, via `write-prd` |
-| `<work-root>/<effort>/visual/*` | `visual-design-variants` | Working | No | winning treatment → the styled prototype section; losers discarded |
-| `docs/design/components/*.md` | `design-implement` | Human | Yes | reusable conventions → `docs/conventions`, via `sync-context` |
-| Component source code | the project | Project | Per project | — |
+At every acceptance gate retain consequential decisions with ID, rationale, alternatives, affected surfaces, and consumed requirement/token/contract revisions beside the accepted design or in Change Context. Component documentation must not be the first durable home of rationale. Return those references, delta, blockers, and next action; the coordinator updates run routing and applies scoped freshness propagation.
 
-Each stage updates `state.md` at its approval gate with what was settled, a pointer into the triad (a `data-surface` anchor, a `DESIGN.md` section, a `product.html` record), and the next stage. That pointer is how the next stage starts without re-reading the previous one's working files.
-
-After shipping, code is canonical **behavior** and the prototype section canonical **intent**. Small drift: regenerate the section from the component. Deliberate redesign: reopen the section through the pipeline. Never let them diverge silently.
+The prototype preserves accepted intent; shipped code establishes actual behavior. Record divergence and route reassessment to Design. Do not require a synchronized second implementation of the UI. Reopen sections only for accepted design changes. Drafts/variants are disposable only after essential rationale and evidence are retained.
 
 ## Workflow Patterns
 
@@ -313,7 +302,7 @@ All design skills enforce:
 
 **"Legacy docs/design/system.md still canonical"** → Run `/design-context`; it folds the legacy file into `DESIGN.md` and leaves a pointer.
 
-**"Shipped component diverged from its prototype section"** → Report it. Regenerate the section from the component for small drift; reopen through the pipeline for deliberate redesign.
+**"Shipped component diverged from its prototype section"** → Report it. Record the divergence and route design reassessment; reopen only for accepted design changes.
 
 **"PRD Part 3 out of sync with state table"** → `/interaction-design` identifies affected capability records; `write-prd` reconciles authorized state changes.
 

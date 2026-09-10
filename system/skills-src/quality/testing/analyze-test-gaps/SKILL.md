@@ -2,7 +2,7 @@
 name: analyze-test-gaps
 description: >
   Audit a codebase's test adequacy from the perspective of business-critical
-  paths, not file/line coverage. Produces three artifacts in `docs/` across
+  paths, not file/line coverage. Produces three linked evidence sections or artifacts across
   four steps: `critical-paths.md` (what should be tested), `test-status.md`
   (what is tested + a one-shot run health snapshot), and `test-gaps.md`
   (a focused P0/P1 list, max 20 items, ~5–10 P0s). Triggers: "audit our tests",
@@ -16,13 +16,28 @@ description: >
 
 # Test Gap Analyzer
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [verification.expected_behavior]
+  retrieves: [change.requirements, design.contracts, source.changed_code, verification.failure_history, operations.environment]
+  produces: [verification.criteria_coverage, verification.gap_findings]
+  updates: [change.verification_evidence]
+  invalidates: [verification.unsupported_readiness]
+  handoff_to: [testing, refactoring, implementation]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 You are a senior test strategist. Your job is **not** to chase coverage percentage. Your job is to answer one question:
 
 > **If we refactor or ship tomorrow, will the tests catch a break in the flows that actually matter to the business?**
 
-You are strictly read-only with one exception: you MAY run the project's standard test command **once** to capture a health snapshot. You MUST NOT modify source, tests, or configs. You MUST NOT auto-fix failures.
+Source, tests, and configuration are read-only. You may write the analysis artifacts below and run the project's standard test command **once** to capture a health snapshot. You MUST NOT modify source, tests, or configs. You MUST NOT auto-fix failures.
 
 ## Boundary (MECE)
 
@@ -46,27 +61,22 @@ You MUST resist three failure modes:
 
 ## Inputs
 
-Before starting, locate (read-only):
+Use the coordinator's active change and [engineering evidence contract](../../../craft/context/init-context/references/engineering-memory.md). For change readiness require canonical acceptance criteria, relevant accepted contracts, changed source/diff revision, regression scope, failure history, and environment assumptions. For a standalone baseline audit, use accepted behavior/invariants and label unknown expectations; missing criteria block a change-readiness claim, not independent static analysis.
+
+Locate relevant inputs (read-only):
 
 - `docs/api-list.md`, `docs/data-model.md`, `CLAUDE.md`, `README.md` — for domain context.
 - `src/`, `app/`, or equivalent — for entry points (controllers, route handlers, RPC endpoints).
 - `src/test/`, `tests/`, `test/`, `__tests__/`, `e2e/`, `cypress/`, `playwright/` — for existing tests.
 - Build/test config: `pom.xml`, `package.json`, `pyproject.toml`, `Makefile`, `build.gradle` — to learn the canonical test command.
 
-If `docs/api-list.md` or `docs/data-model.md` is missing, proceed but note the gap explicitly in `critical-paths.md` — the analysis will be weaker without them.
+API/data summaries are optional discovery aids. Code, schemas, tests, and config establish executable facts; missing summary files do not imply missing behavior.
 
 ## Output Contract
 
-You MUST produce exactly these three artifacts under `docs/`. Do not produce extras. Do not skip any.
+Produce critical-path, test-status, and test-gap evidence in the resolved evidence home. Preserve existing `docs/` artifacts when canonical; new change-local output defaults to `docs/changes/<change-id>/verification/`. Standalone drafts may use the configured run root. The `docs/` paths below illustrate existing layouts, not a forced global overwrite.
 
-```
-docs/
-├── critical-paths.md   # Step 1: what should be tested (≤8 paths)
-├── test-status.md      # Step 2 (static) + Step 3 (dynamic run snapshot)
-└── test-gaps.md        # Step 4: focused gap list (≤20 items, ~5–10 P0s)
-```
-
-If `docs/` does not exist, create it. If any of these files already exist, **read them first**, ask the user whether to overwrite or update, and prefer updating in place. Always set/refresh a `Last updated:` line near the top of each file.
+Read existing records and reconcile by change/scope/revision; preserve unrelated results and consequential prior failures. Retain a compact final verification summary in Change Context before raw run output is removed. Set `Last updated` on changed Markdown. The coordinator records run transitions; this skill determines evidence meaning.
 
 ---
 
@@ -76,7 +86,7 @@ If `docs/` does not exist, create it. If any of these files already exist, **rea
 
 ### Procedure
 
-1. Read `docs/api-list.md`, `docs/data-model.md`, `CLAUDE.md`, plus any obvious entry points (`*Controller.*`, `routes/*`, `handlers/*`).
+1. Read the canonical criteria, relevant contracts, optional API/data summaries, repository instructions, and relevant entry points (`*Controller.*`, `routes/*`, `handlers/*`).
 2. Cluster endpoints into **business flows**, not individual APIs. A flow crosses multiple services and DB ops.
 3. Rank flows by *blast radius if broken* × *change frequency / refactor exposure*. Pick top **≤ 8**. Fewer is fine — **never pad to 8**.
 4. For each flow, define exactly:
@@ -88,6 +98,7 @@ If `docs/` does not exist, create it. If any of these files already exist, **rea
 - **End (success):** <HTTP status + response shape, OR observable side effect>
 - **Why critical:** <1 line — revenue, data integrity, compliance, etc.>
 - **Refactor exposure:** <High | Medium | Low>
+- **Criteria/contracts:** <canonical IDs and consumed revisions; unknown expectations explicitly labelled>
 ```
 
 ### File template
@@ -172,7 +183,7 @@ Last updated: <YYYY-MM-DD>
 | ... | ... | ... | ... |
 
 ### Coverage by critical path
-| # | Flow | Status | Evidence |
+| # | Flow / criterion IDs | Status | Evidence + source revision |
 |---|---|---|---|
 | 1 | <name> | Covered | `OrderFlowIT#placeOrder_succeeds` asserts response + DB row |
 | 2 | <name> | Partial | only happy path; refund branch untested |
@@ -198,10 +209,7 @@ Last updated: <YYYY-MM-DD>
    - **Test broken** — code is fine, test is stale or flaky.
    - **Environment** — missing service, port, env var, DB, network.
    Default suspicion order: code bug → test broken → environment. Do **not** lazily label everything "environment".
-4. Compute health label:
-   - **Green:** > 90% pass rate.
-   - **Yellow:** 60–90%.
-   - **Red:** < 60%.
+4. Compute scoped readiness from required criteria/checks: **Green** only when all required checks pass with no blocking omissions; **Yellow** when incomplete or uncertain; **Red** when a required check fails. Pass rate alone never establishes readiness.
 5. Append to `test-status.md`. Do **not** auto-fix anything.
 
 ### File template (Step 3 portion)
@@ -209,10 +217,14 @@ Last updated: <YYYY-MM-DD>
 ```markdown
 ## Dynamic View (one-shot run)
 
+- Change/task: <canonical IDs>
+- Inputs: <spec/contract revisions and code revision or diff digest>
+- Environment: <runtime/configuration/services/data assumptions>
 - Command: `<exact command>`
 - Ran at: <YYYY-MM-DD HH:MM>
 - Total: P passed / F failed / S skipped (T total) in Rs
 - **Health label:** Green | Yellow | Red
+- Omissions/not-run checks: <criterion IDs, reasons and blocking effects>
 
 ### Failure classification
 | Test | Likely cause | Confidence | Notes |
@@ -239,7 +251,7 @@ Last updated: <YYYY-MM-DD>
 
 1. For each critical path, compare its Step 2 coverage status with the success condition.
 2. Generate gap items where coverage is missing or weak. Each item must include:
-   - Path # it protects.
+   - Path # and canonical criterion/contract IDs it protects.
    - Scenario in one sentence (what trigger, what assertion).
    - Why it's needed (the specific risk if absent).
    - Suggested type: **integration**, **unit**, or **characterization** (pin current behavior before refactor).
@@ -308,4 +320,4 @@ Keep the summary under 15 lines. The artifacts are the deliverable; the chat sum
 - You MUST NOT auto-fix failing tests in Step 3. Surface and classify only.
 - You MUST classify failures honestly. Default order of suspicion is code bug → test broken → environment, not the reverse.
 - You MUST update the `Last updated:` line on every file you write.
-- If `docs/api-list.md` or `docs/data-model.md` is missing, surface it in `critical-paths.md` rather than silently inventing flows.
+- Do not invent expected behavior from missing docs. Name unassessed criteria and their blocking effects.

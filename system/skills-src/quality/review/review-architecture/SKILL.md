@@ -13,7 +13,22 @@ description: >
 
 # Architecture Review
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [system.assessed_scope]
+  retrieves: [change.requirements, design.contracts, system.current_state, operations.constraints]
+  produces: [design.architecture_findings]
+  updates: []
+  invalidates: [design.disproved_assumptions]
+  handoff_to: [design, refactoring, code_review]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 You are running a holistic architecture review. Your job is **not** to do the reviews yourself — per-aspect explore/review subagent pairs do. Your job is to collect user intent, dispatch subagents in parallel, and consolidate findings into a design-level report.
 
@@ -75,40 +90,11 @@ For scoped runs, capture the file list via `git diff --name-only <range>` (or `f
 
 Note: architecture-level findings often need surrounding context that a narrow diff cannot show. Prefer **Whole codebase** or **Subtree** unless the user specifically wants change-scoped review. For change-scoped questions tied to a PR, `review-code-quality` (Mode A) is usually the better fit.
 
-### Step 3 — Dispatch all selected explorers in parallel
+### Steps 3–4 — Obtain domain evidence
 
-Issue all explorer invocations as **multiple `Agent` tool calls in one message**. Sequential dispatch is a bug.
+Propose selected explorer/reviewer pairs to the coordinator, which handles authorized delegation and runtime bindings. Reviewers consume their explorer's scoped evidence using the shared handoff envelope, with canonical change/requirement/contract IDs, consumed revisions, and current-state evidence. Where no delegation is available, apply the same lenses inline. `NOT DETECTED` or a failed/omitted lens remains explicit unassessed scope.
 
-Explorer prompt template:
-
-```
-You are being invoked as part of a parallel architecture review.
-
-Aspect: <aspect>
-Scope: <whole codebase | files listed below>
-
-[If scoped] Focus your analysis on these files (you may read siblings for context):
-<file list>
-
-Produce your standard <aspect>-explorer output. It will be handed to <aspect>-reviewer
-in the next step, so structure it per your Output Format. If your aspect is not detected
-in the scope, return Status: NOT DETECTED per your Failure Modes section.
-```
-
-### Step 4 — Dispatch reviewers in parallel
-
-For each completed explorer, launch its paired reviewer. Skip the reviewer for any explorer that returned `Status: NOT DETECTED` and note the skip in the consolidated report.
-
-Issue all reviewer invocations as **multiple `Agent` tool calls in one message**.
-
-Reviewer prompt template (the explorer output is passed verbatim — the reviewer requires it as the first message):
-
-```
-[Paste the full explorer output here — required as your first message.]
-
-Review scope: <whole codebase | files listed in explorer output>
-Produce your standard <aspect>-reviewer output with Confidence levels on every finding.
-```
+This skill owns architecture judgment, confidence, and consolidation; the coordinator owns scheduling and context transport. Do not treat document presence or a completed code review as architecture acceptance.
 
 ### Step 5 — Consolidate
 
@@ -221,8 +207,7 @@ Print the path back to the user when complete.
 ## Critical rules
 
 **DO:**
-- Dispatch all selected explorers in parallel (one message, multiple `Agent` calls).
-- Dispatch all reviewers in parallel after their explorers return.
+- Propose relevant explorer/reviewer dependencies to the coordinator; it selects authorized runtime execution or inline review.
 - Pass the file list to each subagent when scope is restricted.
 - Consolidate before presenting — never dump 6 raw reports at the user.
 - Preserve each reviewer's Confidence levels and `file:line` anchors verbatim.
@@ -230,9 +215,7 @@ Print the path back to the user when complete.
 - Route code-level findings to `review-code-quality` via the cross-reference channel.
 
 **DON'T:**
-- Run reviews yourself when subagents are available.
 - Promote LOW-confidence findings to Critical.
 - Paraphrase reviewer findings.
 - Skip the Executive Summary or the ADR Ledger.
-- Dispatch reviewers sequentially when they can go in parallel.
 - Flag code-level defects (handler bugs, perf smells, query injection) here — those are `review-code-quality`'s job.

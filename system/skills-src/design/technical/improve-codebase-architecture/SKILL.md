@@ -5,7 +5,22 @@ description: Survey architectural friction and propose deepening opportunities a
 
 # Improve Codebase Architecture
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [system.affected_source]
+  retrieves: [system.invariants, design.relevant_decisions, verification.failure_history]
+  produces: [design.structural_assessment]
+  updates: []
+  invalidates: [design.disproved_assumptions]
+  handoff_to: [refactoring, design]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Read memory routing, domain context, ADRs, and `codebase-design`. Scope the survey to the user’s target or recent hot spots.
 

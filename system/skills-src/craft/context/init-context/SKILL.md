@@ -1,25 +1,34 @@
 ---
 name: init-context
-description: Initialize shared agent context when docs/agents/memory.md is absent or routing was lost. Configure working memory, minimal Human-layer pointers, and an optional code index; use sync-context for later drift.
+description: Initialize shared agent context when docs/agents/memory.md is absent or routing was lost. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use sync-context for later drift.
 ---
 
 # Init Context
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
-Set up the three-layer memory contract once. Read [`references/PROTOCOL.md`](references/PROTOCOL.md) before proposing writes.
+## Context contract
 
-| Layer | Answers | Default home |
-| --- | --- | --- |
-| Human | Why must the project behave this way? | `CONTEXT.md`, `docs/adr/`, `docs/product/` |
-| Code index | Where is the current implementation and how is it connected? | Configured, optional, rebuildable index |
-| Working | What is happening now and what happens next? | `.scratch/<effort>/` or configured work root |
+```yaml
+context:
+  requires: []
+  retrieves: [repository.instructions, context.existing_records]
+  produces: [context.routing]
+  updates: [context.configuration, run.state]
+  invalidates: [context.broken_references]
+  handoff_to: [coordinator]
+```
+
+Shared semantics: [shared protocol](references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
+Set up routing under the lifecycle model in [the protocol](references/PROTOCOL.md). Do not define another layer scheme.
 
 `AGENTS.md` and `docs/agents/memory.md` are routing indexes. They point at canonical sources instead of copying their contents.
 
 ## 1. Inspect
 
-Read the repository's current agent instructions, memory config, manifests, CI config, work root, Human-layer documents, and code-index signals. Derive commands and paths from the environment.
+Read the repository's current agent instructions, memory config, manifests, CI config, work root, durable context documents, and code-index signals. Derive commands and paths from the environment.
 
 Inspection is complete when each prospective output is classified as `keep`, `create`, or `repair`, and every proposed value has either repository evidence or a named user decision.
 
@@ -31,6 +40,8 @@ Reuse settled choices. Resolve only these missing values:
 
 - **Work root:** preserve an established location; otherwise `.scratch/`.
 - **Issue tracker:** preserve the repository's tracker; otherwise GitHub when the remote proves it, local Markdown when it does not.
+- **Change records:** preserve the canonical ticket/spec home; new local changes use tracked `docs/changes/<change-id>/`. Keep canonical ticket ID distinct from branch/run identity.
+- **Operations:** link relevant environment/build/deploy constraints and existing release-evidence homes; load the Operations contract only when needed.
 - **Active effort:** explicit user selection, current branch mapping, or a documented repository rule.
 - **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](references/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
 - **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](references/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `design-context` migrates it — not an incidental setup action.
@@ -41,7 +52,7 @@ Configuration is complete when a cold session can resolve every enabled layer wi
 
 ## 3. Propose one write plan
 
-List exact files to create or update, existing content to preserve, verification commands, and any dependency installation. Ask for one approval before writing. A skipped item stays unchanged.
+List exact files to create or update, existing content to preserve, verification commands, and any dependency installation. Apply already authorized setup changes; ask only for unresolved choices or actions outside authorization. A skipped item stays unchanged.
 
 The plan may include:
 
@@ -60,13 +71,13 @@ Load [`references/working-memory.md`](references/working-memory.md) for the acti
 
 Use [`references/templates/AGENTS.template.md`](references/templates/AGENTS.template.md) only for missing routing sections. Preserve user-authored instructions. Every context pointer must name the condition that makes an agent open its target, and every target must resolve.
 
-Create `state.md` only for a real active effort. It must identify the current status, one concrete next action, blockers, and the minimum pointers needed to resume. Confirm the work root is ignored.
+Create `state.md` only for a real active effort. It must identify the current status, one concrete next action, blockers, canonical change/task and status references, consumed revisions, and the minimum pointers needed to resume. Confirm the work root is ignored.
 
 This step is complete when the memory config resolves all enabled layers and the active effort can resume from `state.md` without reconstructing prior conversation.
 
-## 5. Route Human-layer facts
+## 5. Route durable facts
 
-Load [`references/canonical-doc-layout.md`](references/canonical-doc-layout.md). Move or link existing durable facts to one canonical Human-layer home:
+Load [`references/canonical-doc-layout.md`](references/canonical-doc-layout.md). Move or link existing durable facts to one canonical lifecycle-appropriate home:
 
 - terminology and bounded-context language -> `CONTEXT.md` or `CONTEXT-MAP.md`
 - settled, durable trade-offs -> `docs/adr/NNNN-<slug>.md`
@@ -92,7 +103,7 @@ Setup is complete when that sequence reaches one executable next action, all ena
 
 ## Guardrails
 
-- Derive current structure and commands from code, manifests, and configuration; reserve Human memory for facts those sources cannot explain.
+- Use code, manifests, and configuration as executable evidence; maintain useful Current State summaries with evidence and revisions, and keep historical rationale in Change Context/ADRs.
 - Preserve user-authored sections and unrelated state.
 - Move unique rationale to its canonical home before removing a stale copy.
 - Store credentials, personal data, and large raw logs outside shared memory.

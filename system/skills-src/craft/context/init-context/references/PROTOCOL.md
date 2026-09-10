@@ -1,173 +1,126 @@
-# Shared Memory Protocol
+# Shared Context Protocol
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
-## Repository configuration
+This is the suite's canonical lifecycle, identity, ownership, and handoff contract. Domain contracts specialize artifact meaning; workflows coordinate execution. It applies to standalone skills as well as composed workflows.
 
-`docs/agents/memory.md` is the routing document written during setup. It records:
+## Four lifecycles
 
-- the work root and issue tracker;
-- single-context or multi-context domain memory;
-- product identity and canonical product-document path when product work exists;
-- whether the optional code index is enabled;
-- the active-effort selection rule.
+| Lifecycle | Contains | Retention |
+| --- | --- | --- |
+| North Star | Mission, vision, principles, non-goals | Durable; revised through explicit decisions |
+| Current State | Current product behavior, applicable design rules, system boundaries, operational constraints | Maintain present truth with evidence and relevant revision/environment |
+| Change Context | Canonical ticket, requirements, accepted designs/contracts, consequential decisions, verification summary, release references | Retain a compact record after completion or abandonment |
+| Run Context | Execution plan, claims, scratch analysis, temporary assumptions, raw outputs, session handoff | Remove only after durable information is reconciled |
 
-If the file is absent, a skill may perform read-only work using existing conventions. A skill must run or recommend setup before creating persistent shared state whose location is ambiguous.
+Classify records, not file extensions or workflow stages. Several lifecycles may share a document: label the record's role explicitly when it would otherwise be ambiguous. Current-state records contain current assertions; change records and ADRs contain historical deltas and rationale. An accepted change does not establish shipped behavior.
 
-## Layer contract
+Code indexes are derived views, not a lifecycle. Current-state summaries may explain structure; code, schemas, tests, and configuration establish executable facts. Record source revision and environment where they affect interpretation. Refresh a generated index with its owning tool, and confirm results against source before acting.
 
-Three layers, each defined by the question it answers:
+Keep established HTML and Markdown formats. Product HTML records are semantic sources with no Markdown twin; engineering HTML roadmaps remain derived from canonical tickets. `Last updated` is required documentation metadata, not proof of freshness.
 
-| Layer | Answers | Lifetime | Git |
-| --- | --- | --- | --- |
-| Human | Why: decisions, constraints, terminology, product intent | Project | Tracked |
-| Code Index | What/How: where code lives, what calls what | Rebuildable | Either |
-| Working | Now: current effort state, next actions, drafts | Effort | Ignored |
+## Repository configuration and resolution
 
-**The separation principle.** Human layer documents only WHY — decisions code cannot show, constraints that bind the project, terminology that must stay consistent. Code Index (optional) documents WHAT and HOW — current structure agents can discover by reading code or querying an index. Working memory holds ephemeral state for the current effort.
+`docs/agents/memory.md` records existing tracker locations, the work root, active-change selection, domain paths, product identity, and optional index commands. Defaults apply only when a home is not already established:
 
-**The durability test.** Before writing persistent state, ask: *if the work root were deleted today, would the project have lost a fact it still needs?* If yes, the fact belongs in the Human layer. If no, it belongs in working memory.
+- Durable local changes: tracked `docs/changes/<change-id>/`.
+- Run Context: `<work-root>/<effort>/`, default `.scratch/<effort>/`.
+- Product: `docs/product/<product-slug>/product.html`.
 
-A skill choosing a path picks the layer from the question its output answers, never from the workflow stage that produced it. Product intent, scope boundaries, and settled trade-offs are WHY facts and belong in the Human layer even though a discovery or delivery effort is what surfaced them — they get passed around, outlive the effort, and cannot be recovered by reading code. Drafts, task state, and evidence trails answer NOW and stay in working memory.
+The coordinator resolves explicit user references first, then memory configuration and active-state pointers, then an unambiguous branch mapping. A branch or directory name never replaces an existing ticket ID. Ask when multiple candidates remain. Without configuration, read-only work can use supplied sources; use unambiguous existing homes or these defaults for authorized persistence, and use `init-context` when routing remains ambiguous.
 
-**Promotion is one-way: Working → Human.** Promote a decision when it is settled, hard to reverse, and would surprise someone who did not watch it happen. The working artifact keeps a link to the promoted fact, never a second copy. Nothing is ever demoted from a persistent layer into working memory.
+For a cold session: resolve change/task identity and canonical status; read Run Context's next action if present; load only the required and relevant optional records declared by the skill, including their evidence and active review findings. Absence of a prior skill's output does not require rerunning a pipeline when the substantive answer already exists. Missing substantive input blocks only dependent work.
 
-**Completion compacts; it does not archive by default.** Once an effort is verified as landed or abandoned, its plans, implemented specs, task state, scratch notes, handoffs, and evidence trails have finished their job. Extract only facts that still earn durable storage, point those records at the canonical evidence, then remove the completed working artifacts. Keep an archive only when an explicit audit, regulatory, or repository retention rule requires one.
+## One change, multiple contributions
 
-Route the durable residue by purpose:
+Use the same canonical ticket ID across Product, Design, Implementation, Testing, and Release. Requirements and acceptance criteria have one canonical spec, with stable requirement/criterion IDs. `spec` consumes an existing spec; only when none exists does it create requirements under [the Product contract](product-memory.md). Plans, tickets, designs, and tests reference criteria rather than copying normative text.
 
-| What remains useful | Canonical record |
+Technical contracts and accepted decisions remain separately addressable and link to the change. For independently deliverable slices, `tasks` creates child tickets with parent references and dependencies. Fine-grained execution steps are a Run Context checklist, not a second ticket system. Preserve established trackers and their field spellings.
+
+Canonical ticket status lives once: in the existing tracker, or in the local ticket record. A product roadmap ticket may itself be that record. Roadmaps and session state link to canonical status; any rendered status is a derived view labelled with its source revision. Child ticket status is distinct from parent status and does not automatically complete the parent.
+
+## Relationships and freshness
+
+Store forward relationships with the artifact; derive reverse references when needed:
+
+| Field | Meaning |
 | --- | --- |
-| Why a consequential choice was made, including meaningful rejected alternatives | ADR or the repository's decision-record home |
-| A reader-relevant shipped, removed, deprecated, or migrated outcome | Existing changelog or release-history home |
-| Product intent, scope, non-goals, or terminology that remains normative | Existing product or terminology home |
-| Current behavior, structure, commands, and verification | Code, tests, manifests, and configuration; durable records point there instead of restating them |
+| `depends_on` | Prerequisite record/ticket/contract, with consumed revision where material |
+| `affects` | Behavior, surface, criterion, module, or environment changed or assessed |
+| `supersedes` | Earlier decision or record replaced for a stated scope; keep its history |
+| `status` | Domain-specific progress or decision state, using that domain's vocabulary |
 
-A completed plan is never promoted wholesale. The implementation sequence, checked boxes, intermediate reasoning, and superseded drafts are not project memory.
+In HTML, express these names as visible labelled links inside the record; in Markdown use labelled fields or existing frontmatter. Do not add a second metadata store. Requirement revisions, code commits or diff digests, document hashes, artifact digests, and environment/configuration versions are suitable consumed revisions; dates alone are not.
 
-## Skill contract
+Freshness is separate from status: `current`, `needs review`, or `disputed`, with a changed-premise reference and affected scope. A completed ticket or accepted decision may need review without losing its historical status.
 
-Every installed skill participates in this protocol in one of four modes:
+When a premise changes:
 
-- **Owner**: reads configured inputs, writes one canonical artifact, and records the transition.
-- **Contributor**: reads shared records and enriches facts within its competence under an explicit shared-record contract; no exclusive file ownership. Product skills use [the product memory contract](product-memory.md); design skills use [the design memory contract](design-memory.md).
-- **Consumer**: reads canonical artifacts and may report findings, but does not rewrite their facts.
-- **Transient**: performs an in-session operation and writes no persistent memory.
+1. Record the new revision and delta.
+2. Inspect dependents that consumed the relevant premise, including cross-domain consumers.
+3. Mark materially affected conclusions `needs review`, naming the premise; where write authority is absent, create a linked review finding and notify the coordinator.
+4. Route reassessment to the domain owner. Preserve prior decisions, evidence, and disputes.
+5. Follow affected conclusions onward only where the premise matters; revalidate that scope and leave unrelated records current.
 
-An owner declares three things before it writes (a product contributor instead declares `Contributes`, `Writes`, and `Promotes` as specified in the product contract):
+## Skill declarations
 
-```text
-Layer:    working | human | code-index
-Owns:     <the one path it writes>
-Promotes: <the durable fact it contributes upward> → <owning artifact>
+Every suite `SKILL.md` contains one fenced YAML block with all six list fields:
+
+```yaml
+context:
+  requires: [change.requirements, design.relevant_decisions]
+  retrieves: [system.affected_modules, operations.checks]
+  produces: [change.implementation_evidence]
+  updates: [run.execution_plan]
+  invalidates: [verification.for_changed_code]
+  handoff_to: [testing, code_review]
 ```
 
-`Promotes: none` is a valid and common answer — most working artifacts are consumed by a downstream skill and then discarded with the effort. State it explicitly rather than leaving it open.
+These are semantic selectors, not literal paths or mandatory skill names. Domain contracts resolve their artifact roles. `requires` names substantive inputs for the requested mode; `retrieves` names optional relevant context; `produces` names domain results; `updates` names owned records or proposed coordinated updates; `invalidates` identifies conclusions to assess, never permission to rewrite another domain's decisions; `handoff_to` names consumers, never automatic dispatch. Empty lists are valid. Apply only selectors relevant to the requested task; report missing input and its blocking effect.
 
-Setup, workflow, and handoff skills may coordinate state; they do not acquire ownership of the artifacts they route.
+Skills may be owners, record-level contributors, consumers, or transient operations. Ownership concerns facts and contribution authority, not exclusive ownership of an entire shared file. Keep domain reasoning, evidence interpretation, validation, and operational constraints inside the skill. Keep path/identity resolution, context assembly, runtime bindings, scheduling, claims, coordinated writes, freshness propagation, and cleanup in the coordinator. See [workflow coordination](../../../../../workflows/context-coordination.md).
 
-## Read protocol
+## Domain ownership
 
-Before acting, a memory-aware skill reads only the relevant surfaces:
+| Domain | Owns / produces | Reads | Downstream evidence | Invalidated by |
+| --- | --- | --- | --- | --- |
+| Product | Problem, intent, priority, scope, requirements, criteria, product decisions | North Star, current capabilities, user evidence, constraints, feasibility | Change/spec IDs, criteria, boundaries, questions | Changed evidence, goals, behavior, feasibility |
+| Design | UX/UI decisions, data/API/system/module contracts, alternatives, prototypes, warranted ADRs | Requirements, affected current state, patterns, constraints | Accepted decision/contract references, prototype sections, constraints | Requirements, shared contracts/tokens, architecture, disproved assumptions |
+| Implementation | Decomposition, dependency/parallelization proposals, execution plan, code, implementation evidence | Change, accepted design, source/dependencies, criteria, checks | Revision/diff, surfaces, deviations, criterion references, verification needs | Requirements/design/dependencies, conflicting edits, failed verification |
+| Testing | Expected-behavior coverage, tests, regressions, edge cases, failure history | Criteria, contracts, code, regression surface, environment | Criterion → test/evidence → revision mapping, failures, omissions, readiness | Relevant requirements, contracts, code, tests, environment |
+| Refactoring | Preservation constraints, structural assessment, debt decisions, before/after evidence | Invariants, dependencies, accepted behavior, tests, rationale | Structural delta, preservation evidence, state/ADR amendments | Broken invariants, behavior/dependency changes, invalid baseline |
+| DevOps / CI-CD | Environment, build/deploy config, constraints, migration/release/rollback decisions and evidence | Change, verified artifact/revision, CI, topology, contracts | Artifact, environment, gates, migration, observability, rollback references | Artifact/config/runtime/topology/migration/production-condition changes |
 
-1. Read `docs/agents/memory.md`.
-2. Read the Human-layer documents that carry terminology, constraints, and decisions at the paths the memory config names.
-3. Resolve the active effort from the user, current branch, or configured rule.
-4. Read its `state.md`, then follow pointers to the minimum required artifacts.
-5. Identify source versus view from the artifact contract. Generated roadmaps and code-index HTML remain views of declared sources. Product `discovery.html` and `product.html` are semantic sources: follow their record IDs, evidence, and decision basis directly; do not look for a Markdown twin. Read [product-memory.md](product-memory.md) when creating, reconciling, or promoting product records.
+Load [Product](product-memory.md), [Design](design-memory.md), [engineering and verification](engineering-memory.md), or [Operations](operations-memory.md) detail only for the affected domain.
 
-## Write protocol
+## Handoff envelope
 
-1. Write facts in one canonical artifact; link elsewhere instead of copying them.
-2. Update only artifacts owned by the active skill, explicitly delegated to it, or shared records permitted by their contribution contract. Shared contribution does not authorize changing another assessment or accepted decision.
-3. Preserve user-authored sections and unrelated state.
-4. Add or update `Last updated: YYYY-MM-DD` near the top of edited Markdown; product HTML also shows document and changed-record dates.
-5. Update `state.md` with status, next action, blockers, and pointers after a workflow transition.
-6. Regenerate affected generated HTML views after changing their declared sources. Edit semantic product HTML directly; do not generate it from a duplicate source.
-7. Never record credentials, tokens, personal data, or large raw logs in shared memory.
-
-## Artifact ownership
-
-### Human layer — WHY only
-
-Tracked in git. Documents decisions, constraints, terminology, and product intent — things code cannot show.
-
-| Content | Owned by | Other skills |
-| --- | --- | --- |
-| Memory configuration and routing | the setup skill that wrote it | Read; repair factual drift only |
-| Terminology and bounded-context language | whichever skill authors terminology, else the user | Consume; propose changes through the owner |
-| Decisions with rationale | whichever skill authors decisions, else the user | Consume; propose changes through the owner |
-| Reader-relevant change history | whichever workflow owns the existing changelog or release history, else the user | Add a concise outcome and pointers; omit execution narrative |
-| Product intent, problem framing, scope | `write-prd` consolidates and promotes when installed, else the user | Read canonical records; contribute linked working evidence or proposed amendments without overwriting accepted intent |
-
-Ownership is a rule about *who edits*, not about filenames. Product memory additionally permits shared contribution at record level under its explicit authority rules. Whatever path the repository already uses for a kind of content is that content's canonical home; a skill that consumes it proposes changes rather than editing in place.
-
-**What does not belong here** — anything an agent can derive from code, manifests, configuration, or an index. Current structure, coding patterns, dependency lists, and descriptions of how something works all fail the source test, however well written.
-
-### Code Index layer — WHAT/HOW (optional)
-
-Rebuildable from source, so it is never the origin of a fact. It answers where code lives and what connects to what, letting an agent skip repeated search.
-
-The index is owned by whatever tool built it. Consumers query it and request a refresh when it is stale; they do not hand-edit index output, and they confirm a query result against source before acting on it.
-
-**When to enable:** only when the repository is large enough that repeated source search costs materially more than querying an index. Tool choice is the user's; a repository that already has an index keeps it.
-
-### Working layer — NOW
-
-Under the configured work root, git-ignored. Discarded with the effort. The `Promotes` column names the durable fact the artifact contributes upward; `none` means the artifact is consumed downstream and then dies with the effort.
-
-| Kind of artifact | Owned by | Promotes |
-| --- | --- | --- |
-| The effort's routing hub — status, next action, blockers, pointers | whichever skill currently coordinates the effort | none; it routes rather than stores |
-| Append-only session log | every participating skill appends | none; history is never rewritten |
-| Product discovery HTML records | product skills share contributions by subject and competence | accepted product intent, essential evidence and rationale via `write-prd` |
-| Other discovery and exploration notes | the skill that produced them | the durable framing or constraint they settle |
-| Prototype and experiment records | the skill that ran them | the decision the experiment settled |
-| Implementation specs, plans, and task claims | the skill executing that stage | a lasting design choice, if the work produced one |
-| Diagnosis and investigation notes | the skill that investigated | a rule worth enforcing beyond this fix |
-| Generated views | the generator | none; regenerate rather than hand-edit |
-| Handoffs | the skill that closed the session | none; successors follow the pointers to source |
-
-Two rules make this table usable without knowing which skills a repository has installed. First, an exclusive artifact is owned by whichever skill wrote it; shared product records follow the contributor contract instead of first-writer ownership. Second, an artifact appears in exactly one layer table: when its layer is unclear, apply the durability test rather than writing it to both.
-
-Implementation specs deserve a note, because they split. A step-by-step plan for building something is working memory and dies with the effort. The design choice that plan encodes — the trade-off someone would otherwise re-litigate — is a WHY fact and promotes. A noteworthy shipped result may become one changelog entry. Both records point to canonical evidence; neither preserves the completed plan.
-
-## Working-memory shape
+Every cross-session or domain handoff contains:
 
 ```text
-<work-root>/<effort>/
-├── state.md           ← routing hub; routes, does not store
-├── progress.md        ← append-only session log
-├── specs/             ← earned on first multi-ticket initiative
-│   └── NNN-slug.md    ← one file per design initiative
-├── tasks/             ← one file per atomic work item
-│   └── NNN-slug.md
-├── discovery.html     ← shared product records, authoritative HTML
-├── research/          ← optional: spikes
-├── prototypes/
-├── handoffs/
-├── diagnosis.md
-└── roadmap.html       ← generated by scripts/gen-roadmap.py; never edit directly
+change/task identity + scope
+references and consumed revisions
+delta + accepted decision references
+unresolved questions and blocking effects
+next action
 ```
 
-Create only artifacts earned by the workflow. `specs/` is not scaffolded — create it on the first multi-ticket initiative. Use the branch name as the `<effort>` slug when one exists.
+References must be accessible to the receiver, including across worktrees. If a reference cannot be shared directly, transport a bounded, revision-labelled excerpt as temporary Run Context, identifying its canonical source and expiry/revalidation condition. Do not turn the excerpt into a second requirements source. Persist consequential accepted decisions before handing off; private conversation is insufficient.
 
-Durable product intent lives at `<product-docs>/<product-slug>/product.html`, not under the work root. Its PRD reading index links canonical records. Legacy product docs remain readable at configured paths until migrated; see [product-memory.md](product-memory.md).
+## Coordinated writes and claims
 
-Engineering feature artifacts that an established workflow tracks elsewhere are referenced from `state.md`; working memory does not duplicate them. Tracking does not make them permanent: after implementation, apply completion compaction to tracked specs, plans, and task files too.
+The coordinator serializes writes to each shared file/tracker record. Before applying a contribution it rereads the target and consumed premises, matches stable IDs, and reconciles against the current revision. Preserve unrelated edits and conflicting assessments; never use a stale whole-document replacement. Repeated reconciliation with unchanged inputs must create no duplicate records, tickets, or evidence.
 
-## Product-docs shape
+Claims are exclusive Run Context records referencing canonical task identity and base revision. Acquire a claim only after rechecking dependencies and existing claims. Use an available atomic tracker operation or a single serialized writer; a Markdown field edit alone is not a lock. Without safe coordination, execute serially. A handoff transfers the claim explicitly; a context reset or expired session does not silently steal it. Release on verified completion, explicit abandonment, or coordinated transfer. Implementation proposes safe work boundaries; the coordinator schedules them.
 
-```text
-docs/product/          ← `<product-docs>`, default `docs/product/`
-└── <product-slug>/
-    └── product.html   ← durable records and PRD reading index
-```
+## Retention and completion
 
-`<product-slug>` identifies the product across efforts. An increment reuses the existing product document; `state.md` maps the effort to that product and relevant record anchors. The configured home wins over defaults.
+Before removing Run Context:
 
-## Concurrency
+1. Establish landed or abandoned outcome from repository/tracker evidence.
+2. Retain the canonical ticket/spec, accepted designs/contracts and consequential rationale, compact verification summary (criteria, revision, environment, failures and omissions), and release references in Change Context. Abandoned changes retain the reason and unverified scope.
+3. Reconcile current behavior, architecture, design rules, and operational state with evidence; preserve history in change records/ADRs. Do not present planned behavior as current.
+4. Verify all essential references without the run directory, including accepted design rationale. Move unique required evidence before removing raw outputs; references to unavailable logs are insufficient.
+5. Remove only reconciled execution plans, scratch, claims, temporary excerpts, raw outputs, and session handoffs, and repair routing.
 
-Serialize mutations to shared product HTML. Concurrent analysis does not grant concurrent file writes; one coordinator rereads and reconciles proposed patches against the latest records before applying them. IDs establish identity, not locks.
-
-A task file (`tasks/NNN-slug.md`) must declare `state:` and `claimed_by:` before any agent touches its implementation. Write `claimed_by: <agent-id>` and advance `state` to `claimed` before modifying anything. A claim is exclusive until the task reaches `done` or `abandoned`. `depends_on:` lists the IDs of tasks that must be `done` before this task can reach `ready`. The only path to `done` is a passing `verify:` command — never advance state directly from `review` to `done` without it.
+Completion compacts Change Context; it does not delete requirements, accepted decisions, or final evidence by default. An archive is optional under repository retention rules. Do not promote an execution transcript wholesale. Preserve user-authored content, update Markdown dates and HTML record dates, and never store secrets or unnecessary personal data in shared context.

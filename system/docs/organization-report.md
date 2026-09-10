@@ -1,6 +1,6 @@
 # Organization Report
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 ## Chosen structure
 
@@ -12,15 +12,13 @@ The user’s clarification determines the central invariant: skills do not opera
 
 | Source category | Skills |
 | --- | ---: |
-| Product ideation | 10 |
-| Architecture design | 9 |
-| Feature delivery | 6 |
-| Code quality | 4 |
-| Context management | 18 |
-| Frontend | 3 |
-| Debugging | 3 |
-| Research and planning | 5 |
-| **Total skills** | **58** |
+| Product | 9 |
+| Design | 11 |
+| Engineering | 5 |
+| Quality | 10 |
+| Craft / context | 10 |
+| Operations | 0 |
+| **Total skills** | **45** |
 
 The product also contains 26 canonical shared agents after removing one stale duplicate, plus five commands including setup.
 
@@ -31,7 +29,7 @@ The product also contains 26 canonical shared agents after removing one stale du
 | `ask-matt` | Adapted as workflow routing, now folded into `manage-context` |
 | `setup-matt-pocock-skills` | Adapted as `manage-context` (Phase A) and the setup command |
 | `handoff`, `grilling`, `research`, `prototype`, `wayfinder` | Adapted as system skills with configured working-memory outputs |
-| `domain-modeling`, `codebase-design`, `improve-codebase-architecture` | Adapted as shared core-memory and design capabilities |
+| `domain-modeling`, `codebase-design`, `improve-codebase-architecture` | Adapted as shared terminology, decision, and design capabilities |
 | `triage`, `diagnosing-bugs`, `resolving-merge-conflicts` | Adapted with runtime-neutral behavior and no automatic commits |
 | `writing-great-skills` | Adapted with explicit memory ownership and provenance rules |
 | `grill-with-docs` | Assigned for merge into `brainstorm-feature` |
@@ -47,28 +45,13 @@ No files under `references/` were edited or promoted unchanged.
 
 ## Shared artifact model
 
-```text
-docs/agents/memory.md             repository-specific routing
-CONTEXT.md + docs/adr/            core domain memory
-README.md + docs/                 human memory
-docs/product/<product-slug>/product.html  human memory — durable records + PRD index, tracked
-docs/wiki/                        optional code-map wiki
-<work-root>/<effort>/             working memory, git-ignored
-  state.md
-  progress.md
-  discovery.html — shared product findings, scope, questions, risks, and evidence
-  brief.md / map.md / spec.md / plan.md
-  issues/NN-*.md
-  research/ prototypes/ handoffs/
-  diagnosis.md
-  roadmap.md -> roadmap.html
-```
+The [shared protocol](../skills-src/craft/context/init-context/references/PROTOCOL.md) defines the four lifecycles and [document layout](../skills-src/craft/context/init-context/references/canonical-doc-layout.md) maps roles to homes. Product HTML remains semantic source; engineering roadmap HTML remains derived. Retained Change Context is separate from disposable Run Context. Each of the 45 skills declares the same six fields.
 
-Product HTML records own product meaning, evidence, and decision state. Engineering task Markdown remains authoritative for its generated HTML views. The artifact contract distinguishes semantic sources from presentation.
+The [coordinator](../workflows/context-coordination.md) resolves identity, assembles relevant context, binds available runtimes, serializes writes/claims, propagates freshness, and cleans up reconciled scratch. Direct planning/execution contracts remove delivery's dependency on missing skills.
 
 ## Consolidation decisions
 
-- Keep canonical skill packages grouped under `skills-src/<category>/`, including product-facing skills under `skills-src/product-ideation/`; expose every package through a flat symlink in `skills/` for loader discovery.
+- Keep canonical skill packages grouped under `skills-src/<category>/`, including product-facing skills under `skills-src/product/`; expose every package through a flat symlink in `skills/` for loader discovery.
 - Centralize shared agents and commands.
 - Remove the older duplicate `tdd-builder`; retain the feature-delivery version.
 - Preserve detailed frontend, engineering-setup, Git, and review guides under `docs/`.

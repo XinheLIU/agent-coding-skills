@@ -5,7 +5,22 @@ description: Render Markdown workstreams and dependency tickets as an interactiv
 
 # Draw Portfolio DAG
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [change.tickets]
+  retrieves: [change.dependencies]
+  produces: [change.roadmap_view]
+  updates: [run.derived_views]
+  invalidates: []
+  handoff_to: [coordinator]
+```
+
+Shared semantics: [shared protocol](../../context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Resolve `SKILL_DIR` as this skill's directory and call its scripts by absolute path.
 
@@ -23,7 +38,7 @@ The scanner accepts one folder per workstream:
 
 Each issue uses an H1 plus `**Status:**` and `**Blocked by:**` fields. The scanner resolves same-workstream blockers written as `NN - title`. It reports prose and cross-workstream blockers in `nodes[*].unresolved_dep_text` for explicit resolution.
 
-When the source uses different fields or YAML frontmatter, adapt `scripts/scan_specs.py` to the source format. Preserve the project's documents as the authority.
+The bundled scanner supports only the documented legacy shape. For other tracker schemas, supply a derived manifest/overlay matching the existing renderer schema from canonical IDs, status, dependencies, and source revisions; validate every node against its source. Do not rewrite tracker documents to fit the scanner or silently omit unsupported sources. Scanner aliases are view IDs only; retain canonical IDs in labels/source references.
 
 ## Procedure
 
@@ -35,7 +50,7 @@ When the source uses different fields or YAML frontmatter, adapt `scripts/scan_s
 
    Read the warnings and every non-empty `unresolved_dep_text`. Scanning is complete when the manifest contains every intended workstream and ticket exactly once.
 
-2. **Resolve ambiguity.** Put genuine cross-ticket edges and optional labels in an overlay:
+2. **Resolve ambiguity.** Verify cross-ticket edges against the canonical ticket relationships; ask the coordinator to reconcile missing relationships there first. An optional derived overlay can encode verified edges and presentation labels for rendering:
 
    ```json
    {
@@ -64,6 +79,6 @@ When the source uses different fields or YAML frontmatter, adapt `scripts/scan_s
 
 ## Source and view
 
-Markdown owns ticket status and dependency text. The overlay owns only explicit edges the scanner cannot infer and optional tags. Generated HTML and Mermaid are views.
+Markdown owns ticket status and dependency text. The overlay projects verified canonical edges the scanner cannot parse, plus presentation tags; it never owns dependency truth. Record input revisions and rederive the overlay when premises change. Generated HTML and Mermaid are views.
 
 Re-scan after ticket changes, then re-render. HTML drag positions persist in browser `localStorage`; `--storage-key` controls whether multiple outputs share that layout.

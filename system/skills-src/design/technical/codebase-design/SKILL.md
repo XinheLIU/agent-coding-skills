@@ -5,7 +5,22 @@ description: Apply shared deep-module vocabulary to interfaces and test seams. U
 
 # Codebase Design
 
-Last updated: 2026-08-10
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [design.question, system.affected_source]
+  retrieves: [change.requirements, system.invariants]
+  produces: [design.module_contracts]
+  updates: [design.accepted_decisions]
+  invalidates: [implementation.affected_plan, verification.contract_coverage]
+  handoff_to: [implementation, testing]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Use these terms consistently:
 
@@ -19,4 +34,4 @@ Use these terms consistently:
 
 Prefer a small interface hiding substantial behavior. Apply the deletion test: deleting a useful module redistributes complexity across callers; deleting a pass-through removes complexity. Treat the interface as the public test surface. Introduce a seam when real variation exists, not for hypothetical flexibility.
 
-This skill owns vocabulary, not persistent artifacts. Record accepted designs in the active `plan.md` or an earned ADR — `tasks` and `tdd` consume them. The PRD or spec naming the behavior is the upstream input when one exists.
+This skill owns module-design reasoning. Retain accepted contracts and consequential decisions as separately addressable Change Context linked to the canonical change/spec/criteria and consumed revisions; the run plan links them. Record warranted ADRs and update applicable System State when boundaries change. `tasks` and `tdd` consume these references; do not keep accepted design only in the disposable plan.

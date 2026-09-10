@@ -8,22 +8,31 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.current_behavior, product.change_request]
+  retrieves: [product.relevant_context, design.feasibility]
+  produces: [product.behavior_delta, product.criteria_proposal]
+  updates: [product.discovery_records]
+  invalidates: [design.scope_dependents, verification.criteria]
+  handoff_to: [product, design]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Turn an existing-product improvement into a behavior delta the team can build and measure. The output says what changes for users, what stays out of scope, how done will be tested, and what evidence will prove the increment worked.
 
 ## Shared Memory Contract
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
-```text
-Layer:       working
-Contributes: behavior deltas, scope decisions, acceptance criteria, edge cases, metrics, questions
-Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
-Promotes:    accepted behavior changes, acceptance criteria, exclusions and measurement → product.html, via write-prd
-```
 
 Read current capabilities and their evidence/coverage, accepted product intent, demand assessments, proposed solutions, and existing scope. Enrich the affected records with an explicit delta and linked scope decisions.
 
-Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and return record anchors to the coordinator. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Boundary
 
@@ -104,7 +113,7 @@ Write HTML records in `discovery.html`; link to durable records where the subjec
 - Measurement: analytics questions, event trigger/properties/privacy/QA, success thresholds, and guardrails linked to the outcomes they test.
 - Refinement: enrich shared decisions, questions, assumptions, risks, and blockers. Link a remedy to its gap; leave the gap open until implementation is evidenced.
 
-Do not create a second capability inventory or overwrite unrelated decisions. Preserve unanswered questions with their blocking effect and next resolver. Update `state.md` with changed anchors.
+Do not create a second capability inventory or overwrite unrelated decisions. Preserve unanswered questions with their blocking effect and next resolver. Return routing updates to the coordinator with changed anchors.
 
 ### Verify memory records
 

@@ -8,6 +8,21 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.solution_proposal]
+  retrieves: [product.demand_assessment, product.constraints]
+  produces: [product.scope_proposal]
+  updates: [product.discovery_records]
+  invalidates: [design.scope_dependents, verification.criteria]
+  handoff_to: [product]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Transform a validated solution into a disciplined MVP scope. The output is a triage — what to
 build, what to defer, what never to build — anchored to a single falsifiable assumption and
 located at one explicit point in the scenario × form × data space.
@@ -26,16 +41,10 @@ shape onto existing behavior.
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
-```text
-Layer:       working
-Contributes: scope decisions, capability priorities, validation assumptions, exclusions, metrics, questions
-Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
-Promotes:    accepted scope, rationale, exclusions, success measures → product.html, via write-prd
-```
 
 Read demand assessments, scenarios, capabilities, constraints, risks, and accepted scope. Resolve scope axes and link selected capability IDs; do not rewrite their current behavior or demand grade.
 
-Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and return record anchors to the coordinator. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 If demand evidence is assumption-only, disputed, Yellow, or Red, record the blocking claim and route to `validate-demand` before treating scope as a validated commitment. If the user already authorized an exploratory scope, keep it proposed and preserve the unresolved validation question. Absence of an earlier skill file alone is not a blocker.
 
@@ -161,7 +170,7 @@ Write HTML records in `discovery.html`:
 - Add validation-sprint actions and success metrics linked to the assumption they test, with thresholds when established.
 - Enrich existing questions, assumptions, risks, and gaps rather than appending another "Open Questions / Risks" copy. Selecting a remedy does not close the original gap.
 
-Preserve capability descriptions, unrelated scope, and accepted constraints. Update `state.md` with the records changed and unresolved blockers.
+Preserve capability descriptions, unrelated scope, and accepted constraints. Return routing updates to the coordinator with the records changed and unresolved blockers.
 
 ### Verify memory records
 

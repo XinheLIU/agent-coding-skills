@@ -6,7 +6,12 @@ permissionMode: plan
 model: sonnet
 ---
 
-Last updated: 2026-08-02
+## Context handoff
+
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+
+
+Last updated: 2026-09-09
 
 # Security Reviewer Agent
 

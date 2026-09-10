@@ -8,6 +8,21 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.idea]
+  retrieves: [product.relevant_context]
+  produces: [product.problem_hypotheses]
+  updates: [product.discovery_records]
+  invalidates: [product.premise_dependents]
+  handoff_to: [product]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Turn an ambiguous idea into a Jobs-to-be-Done brief through natural Socratic conversation.
 Ask questions in small blocks, understand the context, and build a clear picture before
 proposing anything.
@@ -22,16 +37,10 @@ This skill adapts the Socratic conversation pattern from [Jesse Hattabaugh's sup
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
-```text
-Layer:       working
-Contributes: personas, problems, outcomes, constraints, assumptions, questions
-Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
-Promotes:    persona, job, struggle → product.html, via write-prd
-```
 
 Read existing users/problems, demand findings, relevant capabilities, and any selected idea. Enrich the same persona and problem records; keep feature suggestions proposed and link their unresolved questions.
 
-Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and return record anchors to the coordinator. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Process
 
@@ -89,7 +98,7 @@ Any failure returns to Phase 1 to sharpen the focus.
 
 Once the brief passes, produce a short summary: what is confirmed, what still needs validation, and the next step.
 
-Enrich the shared records in `discovery.html`: users/problems for the brief, risks/measures for constraints and outcomes, and questions/assumptions for what remains unresolved. Link existing records rather than repeating them in a separate brief. Update `state.md` with the relevant anchors.
+Enrich the shared records in `discovery.html`: users/problems for the brief, risks/measures for constraints and outcomes, and questions/assumptions for what remains unresolved. Link existing records rather than repeating them in a separate brief. Return the relevant anchors to the coordinator.
 
 ### Verify memory records
 

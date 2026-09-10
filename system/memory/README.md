@@ -1,68 +1,17 @@
-# Shared Memory System
+# Shared Context
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
-Skills in this system coordinate through repository artifacts rather than private session state. The setup command records the repository-specific paths in `docs/agents/memory.md`; every memory-aware skill reads that file before choosing inputs or outputs.
+The [canonical protocol](../skills-src/craft/context/init-context/references/PROTOCOL.md) defines North Star, Current State, Change Context, and Run Context. Code indexes and generated roadmaps are derived views. Classify records by lifecycle even when they share one HTML or Markdown document.
 
-## Layers
+Setup records repository paths in `docs/agents/memory.md`. The [coordinator](../workflows/context-coordination.md) resolves identity and relevant context once, applies serialized contributions, tracks freshness, and performs cleanup. Skills own domain reasoning and evidence interpretation.
 
-A layer is defined by the question its artifacts answer and how long the answer stays true — not by who reads it or which skill wrote it.
+- [Product](../skills-src/craft/context/init-context/references/product-memory.md): addressable HTML records, one canonical change spec, evidence versus commitment.
+- [Design](../skills-src/craft/context/init-context/references/design-memory.md): token authority, accepted prototype intent, consequential decisions retained at acceptance.
+- [Engineering and verification](../skills-src/craft/context/init-context/references/engineering-memory.md): child tickets, criterion evidence, refactoring preservation and architecture updates.
+- [Operations](../skills-src/craft/context/init-context/references/operations-memory.md): environment constraints and release evidence.
+- [Run shape](../skills-src/craft/context/init-context/references/working-memory.md) and [document layout](../skills-src/craft/context/init-context/references/canonical-doc-layout.md): paths, routing, and retention checks.
 
-| Layer | Answers | Lifetime | Git | Default artifacts |
-| --- | --- | --- | --- | --- |
-| Core | What words and constraints bind this project | Project | Tracked | `CONTEXT.md`, `CONTEXT-MAP.md`, `docs/adr/` |
-| Human | What we are building, why, and how it works | Project | Tracked | `README.md`, `docs/product/` (vision, personas, journeys, PRDs), `docs/architecture/`, `docs/conventions/`, runbooks |
-| Wiki | Where the code for X lives | Rebuildable | Tracked or ignored | `docs/wiki/index.md`, `code-map.md`, generated `code-map.html` |
-| Working | How the current effort is going and what happens next | Effort | Ignored | `<work-root>/<effort>/state.md`, `progress.md`, discovery drafts, `spec.md`, `plan.md`, `issues/`, research, prototypes, diagnoses, handoffs, roadmaps |
+A completed change retains its ticket/spec, accepted decisions, compact verification, and release references. Only reconciled execution scratch is disposable. Preserve established trackers; new local changes use tracked `docs/changes/<change-id>/`.
 
-Repositories may preserve an established work root such as `specs/`. The configured path in `docs/agents/memory.md` wins over the default.
-
-## The boundary
-
-**Working memory is scaffolding. The Human and Core layers are the building.**
-
-Apply the durability test before writing anything persistent:
-
-> If the work root were deleted today, would the project have lost a fact it still needs?
-
-If yes, that fact belongs in the Human or Core layer. If no, it belongs in working memory.
-
-This is why a PRD is Human-layer and a `spec.md` is Working-layer even though both are documents written during the same effort. The PRD states what the product is for; it stays true after the effort closes. The spec states how this increment gets built; once the code ships, the code is the better answer.
-
-Concretely:
-
-| Belongs in Human / Core | Belongs in Working |
-| --- | --- |
-| Product intent — persona, job, demand verdict, user stories, scope commitments, Not-To-Do list | Discovery drafts and the conversation that produced them |
-| Architecture boundaries and dependency rules | The plan for changing them |
-| Settled trade-offs with rationale (ADRs) | The options considered while deciding |
-| Conventions the next contributor must follow | The refactor that establishes one |
-| How to operate and deploy the system | Task claims, status, blockers, progress log |
-
-## Promotion
-
-Facts move **up** — Working → Human or Core. Never down.
-
-Promote when a decision is settled, hard to reverse, and would surprise someone who did not watch it happen. When a fact is promoted, the working artifact keeps a link to its new home, not a copy. Write each fact once.
-
-Three promotion points are built into the workflows:
-
-| Trigger | Promotes | To |
-| --- | --- | --- |
-| Demand gate returns Green (`validate-demand`) | Persona, job, struggle, demand type, evidence grade | `<product-docs>/<product-slug>/product.html` problem/demand records, via `write-prd` |
-| Scope is locked (`scope-mvp` → `write-prd`) | Requirement list, in/out-of-scope, Not-To-Do, interaction specs, NFRs | The same PRD, extended |
-| A prototype settles an architectural question | The decision and its rationale | An ADR, via `domain-modeling` |
-
-Everything else is promoted by `sync-context` full mode, which detects settled decisions still sitting in working memory and routes them to their owner.
-
-## Source and view
-
-The artifact contract declares its semantic source. Engineering task status, decisions, and dependencies remain in Markdown; their HTML views are reproducible from declared inputs. Product memory uses authoritative `discovery.html` and `product.html`, with shared addressable records and no Markdown twin. Browser-local state stores presentation preferences only.
-
-Product skills enrich shared subjects—personas, capabilities, gaps, questions, evidence, decisions, and risks—rather than owning separate files or sections. See [the product memory contract](../skills-src/craft/context/init-context/references/product-memory.md) for identity, contribution authority, migration, and promotion.
-
-## Where the rules live
-
-The skills that create and reconcile these layers are collected in [`craft/context`](../skills-src/craft/context/README.md). `init-context` configures all four layers on first setup; `sync-context` is the one entry point responsible for keeping them consistent after code changes.
-
-The protocol spec — read/write rules, the layer contract, and the ownership registry — travels with its owning skill at [`init-context/references/PROTOCOL.md`](../skills-src/craft/context/init-context/references/PROTOCOL.md), so a skill copied out of this repo carries the contract with it.
+[Verification evidence and commands](evals/verification.md) cover structural checks, cleanup fixtures, existing DAG/Product checks, and an independent cross-domain handoff scenario.

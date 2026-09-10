@@ -5,7 +5,22 @@ description: Resolve an in-progress Git merge or rebase from both sides' documen
 
 # Resolving Merge Conflicts
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [source.conflict_state]
+  retrieves: [change.requirements, design.relevant_decisions, source.both_intents]
+  produces: [change.conflict_resolution_evidence]
+  updates: [source.conflicted_files]
+  invalidates: [verification.for_changed_code, context.affected_dependents]
+  handoff_to: [testing, coordinator]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Inspect Git state, conflicting files, commits, source issues/specs, and relevant shared memory. For each hunk, state both intents and preserve both when compatible. When incompatible, choose the result that matches the operation’s stated goal and report the trade-off. Do not invent unrelated behavior.
 

@@ -1,15 +1,13 @@
-# Engineering · Feature
+# Feature Delivery Skills
 
-Last updated: 2026-08-10
+Last updated: 2026-09-09
 
-Delivering a feature from PRD to merged code. Consumes `product/definition/write-prd` — directly, or through the optional `design/` phase when the PRD left experience or structure open; produces a spec, a task list, and working code.
+[Feature delivery](../../../workflows/feature-delivery.md) composes these skills around one canonical change and requirement source:
 
-| Skill | Owns |
-| --- | --- |
-| `analyze` | Break down a feature request into components, risks, and unknowns before committing |
-| `brainstorm-feature` | Generate implementation approaches for a specific feature |
-| `spec` | Technical spec — implementation contract consumed by task breakdown |
-| `tasks` | Task list decomposed from spec, sized for one session each |
-| `handoff` | Context package for handing work to another agent or session |
+- `brainstorm-feature`: resolve uncertain feature intent.
+- `spec`: reuse requirements or establish the sole spec when absent.
+- `tasks`: propose independently deliverable child tickets and dependencies.
+- `analyze`: read-only consistency and coverage review.
+- `handoff`: transfer accessible references, revisions, delta, and next action.
 
-The happy path is `spec` → `tasks` → implement. `analyze` is an optional read-only audit after `tasks` — it cross-checks `spec.md`, `plan.md`, and `tasks.md`, so it cannot run first. `brainstorm-feature` precedes `spec` when the implementation approach is non-obvious. `handoff` closes a session without losing state.
+Planning and execution are active-agent stages defined in the workflow; no integrated `plan` or `implement` skill is required. Execution checklists and claims are Run Context; tickets, accepted requirements/designs, and compact final evidence are retained Change Context.

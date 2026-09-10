@@ -1,7 +1,7 @@
 # Operations
 
-Last updated: 2026-08-09
+Last updated: 2026-09-09
 
-Shipping and running software: CI/CD pipelines, deployment, mobile-specific delivery, infrastructure automation.
+This domain currently has no integrated skills. Its [Operations context contract](../craft/context/init-context/references/operations-memory.md) defines CI/CD inputs, environment constraints, release evidence, rollback references, and invalidation under the same change identity.
 
-No skills here yet. Planned sub-areas: `ci-cd/`, `mobile/`, `infra/`.
+The [release stage](../../workflows/feature-delivery.md#release-and-close) uses existing project tooling through the coordinator. Adding provider integrations or a deployment framework is outside this iteration.

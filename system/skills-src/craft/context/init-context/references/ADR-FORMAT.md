@@ -1,15 +1,24 @@
 # ADR Format
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
 
 ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
 
-Create the `docs/adr/` directory lazily — only when the first ADR is needed.
+Preserve the configured decision-record home. Create `docs/adr/` lazily only when an ADR is warranted. Consequential accepted choices that do not warrant an ADR still belong beside the accepted design/change.
+
+ADRs are historical Change Context under [the shared protocol](PROTOCOL.md). Link the canonical change when applicable, consumed premise revisions, affected scope, and related contracts. Preserve previous decisions; `supersedes` records a replacement, while freshness is assessed separately from acceptance status. Update applicable System State when architecture boundaries change.
 
 ## Template
 
 ```md
 # {Short title of the decision}
+
+Last updated: YYYY-MM-DD
+
+Change: {canonical ID/reference when applicable}
+Status: {proposed | accepted | superseded}
+Basis: {premise references and consumed revisions}
+affects: {scope}
 
 {1-3 sentences: what's the context, what did we decide, and why.}
 ```
@@ -26,7 +35,7 @@ Only include these when they add genuine value. Most ADRs won't need them.
 
 ## Numbering
 
-Scan `docs/adr/` for the highest existing number and increment by one.
+The coordinator allocates the next ID in the existing numbering scheme under serialized writes, rereading before allocation; concurrent authors do not independently claim the same number.
 
 ## When to offer an ADR
 

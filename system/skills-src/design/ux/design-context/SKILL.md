@@ -5,6 +5,21 @@ description: "Establish or refresh this project's design authority — the root 
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [design.authority_question]
+  retrieves: [product.relevant_context, design.existing_authority]
+  produces: [design.authority_decision]
+  updates: [design.applicable_rules, design.accepted_decisions]
+  invalidates: [design.token_dependents, verification.visual_evidence]
+  handoff_to: [interaction_design, visual_design]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 # Design Context
 
 Establish the design authority every other UX skill depends on: a canonical `DESIGN.md` at the project root.
@@ -33,14 +48,14 @@ Do NOT use when:
 - A user-supplied reference (site URL, brand name, screenshot) if offered in conversation
 
 **Downstream:**
-- `DESIGN.md` at project root (Human layer, git-tracked) — the canonical **how**; feeds `/interaction-design`, `/visual-design-variants`, `/design-implement`, `spec`, and the `:root` token block of `docs/design/prototype.html`
+- `DESIGN.md` at project root (Current State, git-tracked) — the canonical **how**; feeds `/interaction-design`, `/visual-design-variants`, `/design-implement`, `spec`, and the `:root` token block of `docs/design/prototype.html`
 - When an external ⑤ tool owns the DESIGN.md lifecycle (accepted in `capabilities.md`), this skill routes writes through it and reconciles the result; the file is canonical either way.
 
 ## Workflow
 
 ### Step 0: Detect Context State
 
-Resolve the product document from explicit user paths, `docs/agents/memory.md`, and active `state.md`. New product memory uses `product.html#prd`; follow its persona, capability, scope, and question links. Legacy `prd.md` remains readable when canonical. Do not pick the first file found across products. Read HTML source records directly, preserving evidence/commitment distinctions. When no product document exists at all, the why can be inferred from the repo via `map-current-product`; offer it before designing against guesses.
+Use the coordinator-resolved product/spec and relevant records. Preserve canonical requirement/criterion IDs and distinguish observed behavior from accepted intent.
 
 ```bash
 # The possible sources of design truth
@@ -65,7 +80,7 @@ Branch on the result:
 2. Extract the token set from each: colors, typography, spacing, radius, motion, principles, component foundations.
 3. Diff the token values across sources and surface every conflict.
 
-**AskUserQuestion** when conflicts exist:
+**Ask through the coordinator** when conflicts exist:
 
 > DESIGN.md and the legacy docs/design/system.md disagree on these tokens:
 > - [token]: DESIGN.md says [X], system.md says [Y]
@@ -80,22 +95,9 @@ Default rule when the user has no preference: **existing DESIGN.md frontmatter i
 
 ### Step 2: Acquire Design Authority from a Reference
 
-Read `<work-root>/<effort>/design/capabilities.md`. If it carries `④ templates` and `⑤ design context` rows, follow their decisions. Otherwise scan the skills available in this session for either:
+Request optional ④ templates or ⑤ design-context results through the coordinator. Preserve DESIGN.md authority and reconcile provenance/tokens before acceptance. Native adoption/extraction/creation remains available.
 
-- **④ templates** — a skill that ships finished design systems or brand specs to adopt wholesale. It carries no process and makes no judgment.
-- **⑤ design context** — a skill that creates, extracts, or maintains a root `DESIGN.md` as a durable file across sessions.
-
-Append one row per slot recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. A found capability is named with what it would change and offered against the native path below; it is never used without asking.
-
-The user has a reference — a site they like, a known brand, or a screenshot. Three ways to turn it into a `DESIGN.md`, differing in what they are faithful to:
-
-| Method | Faithful to | Best when |
-|---|---|---|
-| Read the live site's CSS | Their exact token values | The reference's stylesheet is the truth you want |
-| Read the rendered design | Their visual intent — imagery, density, do/don't rules | The feel matters more than the hex codes |
-| Adopt a published spec | Whatever the spec's author captured | A close-enough brand already has one written |
-
-**AskUserQuestion:**
+**the coordinator’s question interface:**
 
 > You referenced [site/brand]. How should I turn it into design context?
 >
@@ -108,7 +110,7 @@ Carry out the chosen method, draft the result as `DESIGN.md` content, and contin
 
 ### Step 3: No Reference — Create from Scratch
 
-**AskUserQuestion:**
+**the coordinator’s question interface:**
 
 > No DESIGN.md or reference to import. How should design authority be created?
 >
@@ -136,7 +138,7 @@ Validate before writing:
 - One decisive accent color
 - 2–3 surface levels only
 
-Show the merged result, then **AskUserQuestion**:
+Show the merged result, then **Ask through the coordinator**:
 
 > Merged design authority ready. Conflicts resolved: [N]. Source: [existing DESIGN.md / legacy system.md / extraction / catalog].
 >
@@ -154,12 +156,12 @@ Write on approval. When an accepted ⑤ tool owns the DESIGN.md lifecycle, route
 Report:
 
 - **Design authority source:** [existing DESIGN.md / migrated from system.md / extracted from <url> / adopted from <catalog> / created via /design-system-create]
-- **Canonical output:** `DESIGN.md` at project root (Human layer) — the triad's **how**
+- **Canonical output:** `DESIGN.md` at project root (Current State) — the triad's **how**
 - **Legacy migration:** [system.md folded in and pointered / none present]
 - **Prototype token sync:** [re-synced / no prototype yet]
 - **Unresolved conflicts:** [none / list]
 
-**AskUserQuestion** for next step:
+**Ask through the coordinator** for next step:
 
 > Design authority established.
 >
@@ -167,22 +169,16 @@ Report:
 > **B)** Run `/visual-design-variants` — structure already locked, go straight to visuals
 > **C)** Done — I'll continue manually
 
+## Accepted decision handoff
+
+At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+
 ## Shared Memory Contract
 
 Full contract: [references/design-memory.md](references/design-memory.md).
 
-```text
-Triad role:  HOW — this skill owns the canonical DESIGN.md at the project root
-Layer:       human — design authority outlives the effort
-Owns:        DESIGN.md (directly, or reconciled through an accepted ⑤ lifecycle tool)
-Maintains:   the :root token block of docs/design/prototype.html (sync only, never sections)
-Retires:     docs/design/system.md — folded into DESIGN.md, left as a pointer
-Contributes: <work-root>/<effort>/design/capabilities.md — the `④ templates` and `⑤ design context` rows only
-Coordinates: state.md — records the authority source and the next design stage
-Promotes:    a contested token-authority decision → an ADR, via domain-modeling
-```
 
-Resolve the work root and the active effort from `docs/agents/memory.md`, defaulting to `.scratch/` when nothing is configured. The only working artifact this skill writes is its two rows in `capabilities.md`; extraction intermediates stay wherever the tool that produced them put them.
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
 Durability test: if the work root were deleted, would the project lose a fact it still needs? `DESIGN.md` yes — it is the only record of which tokens won and why. A downloaded template's intermediates no.
 
@@ -208,7 +204,7 @@ Before writing `DESIGN.md`:
 - the configured product document — the why (product context when creating from scratch)
 
 **Writes to:**
-- `DESIGN.md` at project root (Human layer)
+- `DESIGN.md` at project root (Current State)
 - `docs/design/prototype.html` `:root` token block (sync only)
 
 **Feeds:**

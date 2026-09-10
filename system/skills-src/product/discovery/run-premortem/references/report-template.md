@@ -20,4 +20,4 @@ Each risk needs a concrete failure chain and an explicit basis for its score. Us
 
 Record unresolved assumptions, questions, and behavioral gaps in their shared homes and link them. Do not close a gap because a mitigation was proposed or selected. Do not change demand grades from a hypothetical failure narrative. Record assessed coverage so a reader can distinguish "not assessed" from "assessed with no material finding."
 
-Before handoff, verify unchanged scope remains intact, proposed actions are not presented as commitments, and repeated runs do not duplicate findings. Update the HTML and affected record dates, then `state.md` with relevant anchors.
+Before handoff, verify unchanged scope remains intact, proposed actions are not presented as commitments, and repeated runs do not duplicate findings. Update the HTML and affected record dates, then return relevant anchors to the coordinator.

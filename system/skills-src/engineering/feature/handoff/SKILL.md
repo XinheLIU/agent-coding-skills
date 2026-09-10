@@ -1,91 +1,58 @@
 ---
 name: handoff
-description: Preserve the current work for a fresh agent session using the shared memory protocol. Use before a context reset, when branching into research or a prototype, or when transferring an active effort.
+description: Preserve actionable context for a fresh session or domain consumer using canonical change identity, accessible revision-labelled references, and explicit next action. Use before a reset or transfer of active work.
 ---
 
 # Handoff
 
-Last updated: 2026-08-16
+Last updated: 2026-09-09
 
-**Announce at start:** "I'm using the handoff skill to preserve context for the next session."
+## Context contract
 
-Capture the current effort's state into a handoff document that a cold session can act on without re-reading the full history. Reads both the feature artifacts in the worktree and the working memory in `.scratch/`.
+```yaml
+context:
+  requires: [change.active_identity]
+  retrieves: [run.state, change.requirements, design.relevant_decisions, verification.latest_evidence]
+  produces: [run.handoff]
+  updates: []
+  invalidates: []
+  handoff_to: [receiving_agent, coordinator]
+```
 
----
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
-## Inputs
 
-Read in this order:
+Use the [shared handoff envelope](../../../craft/context/init-context/references/PROTOCOL.md#handoff-envelope). The coordinator supplies the active change/task, relevant run pointers, canonical status, and consumed revisions. Read only the referenced sections needed to resume.
 
-1. `docs/agents/memory.md` — resolve the work root and active effort slug.
-2. `.scratch/<effort>/state.md` — current posture, next action, blockers, pointers.
-3. `.scratch/<effort>/progress.md` — recent session log (last 3–5 entries).
-4. `.scratch/<effort>/specs/*.md` — design initiatives, if any.
-5. `.scratch/<effort>/tasks/*.md` — claimed or in-progress task files, if any.
-6. Feature artifacts via `state.md` Pointers — `specs/NNN-name/spec.md`, `plan.md`, `tasks.md` (read only the sections needed: status, open tasks, current phase).
+## Produce the envelope
 
-If `docs/agents/memory.md` is absent, use the current branch name as the effort slug and `.scratch/` as the work root.
-
----
-
-## Output
-
-Write `<work-root>/<effort>/handoffs/YYYYMMDD-HHMM-<focus>.md` where `<focus>` is a 2–3 word description of the current sub-task (e.g., `auth-middleware`, `api-contracts`).
-
-Structure:
+Write a concise Run Context handoff at `<work-root>/<effort>/handoffs/<session>-<focus>.md`, or return it to the parent coordinator for transport. Include:
 
 ```markdown
 # Handoff: <focus>
 
-Date: YYYY-MM-DD HH:MM
-Effort: <effort-slug>
-Branch: <branch-name>
+Last updated: YYYY-MM-DD
 
-## Objective
-<One sentence: what is the overall feature or effort trying to achieve.>
+Change/task: <canonical IDs and links>
+Scope: <bounded work and receiver>
 
-## Current status
-<Two to four sentences: what was done in this session, where it landed.>
+## References and consumed revisions
+<Canonical spec/criteria, accepted design/contracts, source revision or diff digest,
+verification environment, active freshness findings, canonical ticket status link.>
 
-## Confirmed decisions
-- <Decision and its rationale — point to ADR or spec section if it exists.>
+## Delta and accepted decisions
+<What changed; references to accepted decisions and retained rationale.>
 
-## Open questions
-- <Unresolved questions that block or shape the next step.>
+## Unresolved questions
+<Question → blocking effect; include conflicts and verification omissions.>
 
-## Blockers
-<What is preventing progress. "none" if nothing.>
+## Next action
+<One executable action and its needed reference.>
 
-## Next concrete action
-<One specific action — enough to start without reading anything else. Name the file and the change.>
-
-## Source pointers
-- Working memory state: `.scratch/<effort>/state.md`
-- Feature spec: `specs/NNN-name/spec.md` (section X if relevant)
-- Task list: `specs/NNN-name/tasks.md` (phase Y, next unchecked task)
-- Active task files: `.scratch/<effort>/tasks/` (list any `in-progress` or `review` tasks)
-- Code: <file:line for the most relevant context>
-- Verification: <last known test run result or `n/a`>
-
-## Suggested skills for the receiving session
-- <skill-name> — reason
+## Claim transfer
+<Current owner and explicit transfer state, or not applicable.>
 ```
 
-Reference existing artifacts instead of duplicating them. Redact secrets and personal data. Keep the handoff under 60 lines — it is a pointer document, not a transcript.
+Verify all references from the receiving environment, including worktree access. Transport a bounded source excerpt with its revision and revalidation condition only when needed; it remains temporary context. Retain accepted requirements, consequential decisions, and final evidence before handing off rather than leaving their only copy in this file.
 
----
-
-## After writing
-
-Update `.scratch/<effort>/state.md`:
-
-- Set `## Status` to "Handoff written — session ended."
-- Set `## Next action` to the same text as `## Next concrete action` in the handoff.
-- Add a pointer under `## Pointers`: `- Handoff: .scratch/<effort>/handoffs/<filename>.md`
-- Append to `progress.md`:
-  ```
-  ## YYYY-MM-DD — Handoff to <focus>
-  Session ended. Wrote handoff at handoffs/<filename>.md. Next: <one-line summary of next action>.
-  ```
-
-Do not commit.
+Return the envelope and proposed next action to the coordinator, which updates run routing, appends progress, and transfers claims explicitly. Keep the handoff under roughly 60 lines; do not copy the conversation or maintain duplicate ticket status. No commit is implied.

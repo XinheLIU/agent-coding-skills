@@ -5,7 +5,22 @@ description: Review or update a repository's AGENTS.md or CLAUDE.md. Use to enco
 
 # Review Agent Instructions
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [repository.instructions]
+  retrieves: [context.configuration, repository.incident_evidence]
+  produces: [context.instruction_findings]
+  updates: [context.instructions]
+  invalidates: [context.instruction_dependents]
+  handoff_to: [coordinator]
+```
+
+Shared semantics: [shared protocol](../../context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Own the requested `AGENTS.md` or `CLAUDE.md` and its context pointers. The file should contain only always-needed repository constraints and trigger-bearing pointers to canonical detail.
 

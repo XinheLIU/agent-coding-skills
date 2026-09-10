@@ -13,14 +13,28 @@ description: >
   (C) drill-down after an architecture review. Triggers: "review my code",
   "code review", "review this PR", "review recent changes", "review against
   spec", "verify my changes", "review before commit/merge", "drill into arch
-  review", "what should I work on next", "ready for PR?". Auto-consumes the
-  most recent gap-analysis artifact from review-implementation-gaps when
+  review", "what should I work on next", "ready for PR?". Consumes a matching change/revision gap-analysis artifact from review-implementation-gaps when
   present.
 ---
 
 # Code Quality Review
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [source.review_scope]
+  retrieves: [change.requirements, design.contracts, repository.standards, verification.latest_evidence]
+  produces: [verification.standards_findings, verification.spec_findings]
+  updates: [change.review_evidence]
+  invalidates: [verification.unsupported_readiness]
+  handoff_to: [implementation, testing, operations]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 You are a staff engineer running a production-readiness review. Two jobs:
 1. Surface real issues with confidence-calibrated findings.
@@ -80,17 +94,7 @@ If the invocation implies a mode (pasted arch-review → C; "review against spec
 
 ### 0.2 Pick a scope (depends on mode)
 
-**Mode A** — first that applies:
-1. Gap-analysis artifact from `review-implementation-gaps`:
-   ```bash
-   ls -t docs/eng-reviews/gap-analysis-*.md 2>/dev/null | head -1
-   ```
-   If found, focus on components under `Next-stage hand-off hint` (COMPLETE + PARTIAL). Skip MISSING — nothing to review yet. For DIVERGENT, note the deviation and review the code as-written.
-2. User-supplied path or git range.
-3. Branch diff fallback:
-   ```bash
-   git diff $(git merge-base HEAD $(git rev-parse --abbrev-ref origin/HEAD | sed 's@^origin/@@' 2>/dev/null || echo main))...HEAD --name-only
-   ```
+**Mode A** — use the coordinator-resolved explicit path/range or active branch diff, including relevant uncommitted changes. Reuse a gap-analysis artifact only when its canonical change identity and consumed source/design revisions match the review scope; otherwise mark it for reassessment. For COMPLETE/PARTIAL items review existing code, for DIVERGENT items carry the accepted design deviation, and retain MISSING items as Spec-axis omissions. Do not let a prior report narrow away accepted criteria.
 
 **Mode B** — read up front and compile a rules digest:
 - `AGENTS.md` (root + relevant subdirectory copies)
@@ -107,43 +111,17 @@ Default: all seven — `api`, `db`, `auth`, `reliability`, `performance`, `secur
 
 ### 0.4 Identify the spec source (Spec axis)
 
-Find the document that says what this change was supposed to do, first that applies:
+Use the coordinator-resolved canonical change/spec and acceptance criteria, then relevant accepted design/contracts and matching gap evidence. Record consumed revisions. Explicit user references take precedence; never use an unrelated newest report as authority. If criteria are absent, report the Spec axis as unassessed; Standards review can continue.
 
-1. The design doc named in the consumed gap-analysis artifact (Step 0.2).
-2. Issue references in the commit messages (`git log <range> --oneline` — `#123`, `Closes #45`).
-3. A path the user supplied.
-4. The newest `docs/plans/*.md` matching the branch or feature name.
+## Step 1 — Request relevant domain analysis
 
-If none exists, the Spec axis reports "no spec available" and the review is Standards-only — say so in the artifact; do not invent requirements.
+Propose the relevant `api`, `db`, `auth`, `reliability`, `performance`, `security`, and `code-reviewer` lenses. The coordinator handles available/authorized delegation, explorer-before-reviewer dependencies, accessible context, claims, and runtime calls. When delegation is absent, apply the same lenses inline. A failed or omitted lens is visible as unassessed scope, not a passing review.
 
-## Step 1 — Dispatch subagents (primary path, parallel)
-
-**Try this first.** Dispatch explorers in parallel, then reviewers in parallel.
-
-- **Explorers** (parallel): `api-explorer`, `db-explorer`, `auth-explorer`, `reliability-explorer`, `performance-explorer`, `security-explorer`. Issue all as **multiple `Agent` tool calls in one message**.
-- **Reviewers** (parallel, after explorers return): `api-reviewer`, `db-reviewer`, `auth-reviewer`, `reliability-reviewer`, `performance-reviewer`, `security-reviewer`. Each receives its paired explorer's output as the first message. Skip the reviewer if its explorer returned `Status: NOT DETECTED`.
-- `code-reviewer` is standalone (no explorer pair) — covers code quality + test coverage/quality (cyclomatic complexity, smells, test pyramid, FIRST/AAA, assertion quality).
-
-Every dispatch prompt must include:
-- The mode and scope line from Step 0.
-- **Mode A:** git range, changed-file list, full diff.
-- **Mode B:** the rules digest from Step 0.2.
-- **Mode C:** parent arch-review findings filtered to this subagent's domain.
-
-Role prompts live at `.claude/agents/<role>.md` (mirror `agents/<role>.md`).
-
-### Fallback when subagents are unavailable
-
-If the runtime lacks the explorer/reviewer subagent types, or every dispatched `Agent` call errors out:
-- Announce: "Subagents unavailable → running inline review."
-- Proceed to Step 2 and perform the review yourself using the same domain lens.
-- Findings keep the same format and confidence scoring — the rest of the pipeline is identical.
-
-A single subagent failing is **not** a fallback trigger — note that domain as skipped and continue with the rest.
+Each domain receives the shared handoff envelope plus review mode/scope, relevant diff or rules, and domain-filtered parent findings. Return evidence with criterion/contract IDs, source revision/diff identity, environment assumptions, and omissions. Role prompts are suite-local under `system/agents/` (resolve from the suite, not a hardcoded runtime mirror).
 
 ## Step 2 — Inline review (always runs; also the fallback)
 
-Subagents cover domain architecture; this pass catches local quality issues regardless. Walk each file in scope.
+Domain contributions cover their assigned concerns; this pass catches local quality issues regardless. Walk each file in scope.
 
 ### 2.1 DRY violations (flag aggressively)
 - Copy-pasted logic in 2+ places
@@ -181,7 +159,11 @@ Compare the behavior in scope against the spec source from Step 0.4:
 
 Cite the spec line for each finding. If a gap-analysis artifact from `review-implementation-gaps` exists, reuse its PARTIAL/MISSING/DIVERGENT statuses as the starting point instead of re-deriving them. This pass runs inline — no dedicated subagent; the axes are a reporting split, not a third reviewer.
 
-**Interactive flow.** Stop after each file. For every finding with confidence ≥ 7, follow *Rules for the interactive review* below — one issue, one `AskUserQuestion`.
+**Interactive flow.** Stop after each file. For every finding with confidence ≥ 7, follow *Rules for the interactive review* below — one issue, one `the coordinator’s question interface`.
+
+## Evidence identity
+
+Use [engineering context](../../../craft/context/init-context/references/engineering-memory.md). Retain change/task ID, criteria and contract revisions, reviewed code/diff revision, environment assumptions, failures, skipped checks, omissions, and separate Standards/Spec readiness. A static code review cannot stand in for executed acceptance evidence. Changed relevant inputs mark affected conclusions for review.
 
 ## Step 3 — Test coverage gap
 
@@ -354,7 +336,7 @@ Confidence rules:
 
 ## Rules for the interactive review
 
-- One issue = one `AskUserQuestion`. Never batch.
+- One issue = one `the coordinator’s question interface`. Never batch.
 - Specific `file:line` references always.
 - 2–3 options per question including "do nothing" where reasonable.
 - One sentence per option.

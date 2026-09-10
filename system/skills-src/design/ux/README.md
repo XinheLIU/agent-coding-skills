@@ -14,7 +14,7 @@ UX design turns PRD intent into implemented components. Shared design understand
 | **How** | `DESIGN.md` (project root) | Design authority: tokens in YAML frontmatter + prose rationale |
 | **What** | `docs/design/prototype.html` | The canonical prototype: per-surface sections, five switchable states, fidelity and lock markers |
 
-The internal skills are **thin stage orchestrators**: they own the triad transitions (approval gates, fidelity markers, memory layers), run the stage workflow, and dispatch heavy design work — taste, knowledge lookups, visual production, polish — to whatever external tools are installed. Every stage has a native fallback, so the pipeline is complete with zero external tools installed and strictly better with them.
+The internal skills own design reasoning, acceptance gates, fidelity markers, and validation. The coordinator binds optional design work — taste, knowledge lookups, visual production, polish — to whatever external tools are installed. Every stage has a native fallback, so the pipeline is complete with zero external tools installed and strictly better with them.
 
 ## The internal pipeline
 
@@ -61,7 +61,7 @@ Two hard sequencing rules, both machine-checkable in the prototype:
 1. **Interaction before visuals** — structure (what/where/when) is designed and locked (`data-structure="locked"`) before color, typography, or polish. `visual-design-variants` may not move buttons, navigation, or state transitions; a structural change reopens the section through `interaction-design`.
 2. **One canonical token source** — root `DESIGN.md` is the only how downstream skills read for visual values. `design-context` decides what feeds it (adopt, extract, migrate, or create) and keeps the prototype's `:root` token block in sync.
 
-Memory layers: `<work-root>/<effort>/` artifacts are Working layer (untracked, disposable after implementation); the work root is configured in `docs/agents/memory.md` and defaults to `.scratch/`. The triad documents and `docs/design/components/*.md` are Human layer (git-tracked, outlive features). Legacy `docs/design/system.md` files remain readable until `design-context` folds them into `DESIGN.md`. Full table, with promotion targets, in `workflows/design.md`.
+Lifecycle and retention follow [the shared protocol](../../craft/context/init-context/references/PROTOCOL.md), with artifact roles in [the Design contract](../../craft/context/init-context/references/design-memory.md). Retain accepted prototype intent and consequential rationale at acceptance; Current State describes applicable design rules. Run exploration is disposable only after reconciliation.
 
 ## The six-layer external model
 
@@ -90,7 +90,7 @@ Most external-tool failures come from skipping layers (jumping to ⑥ without �
 
 ## Dispatch contract
 
-A stage recognizes a capability **by what a skill's own description claims as its main artifact** — never by a vendor name, which a distributed skill cannot look up. Each stage probes only the slots it consumes, at the point it consumes them, and the native workflow is always the fallback.
+A stage recognizes a capability **by what a skill's own description claims as its main artifact** — never by a vendor name, which a distributed skill cannot look up. The coordinator probes only slots the current stage requests, at the point of use, and the native workflow is always the fallback.
 
 | Layer | Capability slot | Recognize it by | Consumed by | Dispatch point | Fallback |
 |:---:|---|---|---|---|---|
@@ -106,7 +106,7 @@ When a candidate matches two slots, place it by its main artifact: a stance is �
 
 ### The capability record
 
-Each probe appends one row to `<work-root>/<effort>/design/capabilities.md` — Working layer, dies with the effort, co-located with `system-preview.html`. With no active effort it is `<work-root>/design/capabilities.md`.
+The coordinator records one row per relevant probe to `<work-root>/<effort>/design/capabilities.md` — Run Context, dies with the effort, co-located with `system-preview.html`. With no active effort it is `<work-root>/design/capabilities.md`.
 
 ```markdown
 | Slot | Found | Decision | By |
@@ -115,7 +115,7 @@ Each probe appends one row to `<work-root>/<effort>/design/capabilities.md` — 
 | ③ method | <name> | accepted — polish pass, limits 1–3 applied | design-implement |
 ```
 
-The row is what makes an optional step checkable: "skip silently" is not a done condition, "the `③ method` row exists and reads `none`" is. Rows are disjoint — a skill writes only the slots it consumes and never edits another's — so there is no contention and no owner. Each stage declares it `Contributes:`, per the contributor mode in `init-context/references/PROTOCOL.md`. A row that contradicts what you observe is reported to the user, not overwritten; refresh one only when the user says a skill was installed or removed.
+The [coordinator](../../../workflows/context-coordination.md) owns capability discovery, recorded choices, runtime calls, and serialized updates. Disjoint rows do not remove file contention. Reuse settled choices; changed availability requires reassessment of that slot. Domain skills request slots and validate outputs.
 
 The reconciliation rules, enforced by every stage:
 
@@ -126,7 +126,7 @@ The reconciliation rules, enforced by every stage:
 
 ## Prototype
 
-`prototype` sits alongside the pipeline as a shared utility, not a stage. It builds throwaway code to answer one design question when conversation cannot settle it — a logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question. The code is disposable; the decision it buys is not. Decisions are recorded in `prototypes/<slug>/decision.md`. Despite the name, it never writes the canonical `docs/design/prototype.html` — only pipeline stages merge into that, through their gates.
+`prototype` sits alongside the pipeline as a shared utility, not a stage. It builds throwaway code to answer one design question when conversation cannot settle it — a logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question. The code is disposable; the decision it buys is not. Draft decisions are recorded in `prototypes/<slug>/decision.md`; consequential verdict and rationale are retained in linked Change Context at acceptance. Despite the name, it never writes the canonical `docs/design/prototype.html` — only pipeline stages merge into that, through their gates.
 
 ## Further reading
 

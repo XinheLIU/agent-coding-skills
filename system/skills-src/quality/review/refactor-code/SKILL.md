@@ -1,13 +1,36 @@
 ---
 name: refactor-code
-description: Improve existing code without changing behavior, at two depths. Depth 1 — quick polish of recently modified code — renames vague identifiers, flattens nesting with early returns, drops redundant wrappers and dead comments, aligns with the repo's style guide; applied directly, verified by tests. Depth 2 — structural refactor — extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units; workflow is scope confirmation → baseline metrics → ranked proposal → user approval → grouped edits with tests between groups → re-measured before/after report. Triggers: "refactor", "simplify", "polish", "clean up what I just wrote", "reduce duplication", "break up this class". Tests are the safety net; behavior must not change.
+description: "Improve existing code without changing behavior, at two depths. Depth 1 — quick polish of recently modified code — renames vague identifiers, flattens nesting with early returns, drops redundant wrappers and dead comments, aligns with the repo's style guide; applied directly, verified by tests. Depth 2 — structural refactor — extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units; workflow is scope confirmation → baseline metrics → ranked proposal → user approval → grouped edits with tests between groups → re-measured before/after report. Triggers: \"refactor\", \"simplify\", \"polish\", \"clean up what I just wrote\", \"reduce duplication\", \"break up this class\". Tests are the safety net; behavior must not change."
 ---
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [system.invariants, source.refactor_scope]
+  retrieves: [change.requirements, design.relevant_decisions, system.dependencies, verification.baseline]
+  produces: [change.preservation_evidence, design.structural_delta]
+  updates: [source.implementation, system.current_state, design.applicable_decisions]
+  invalidates: [verification.for_changed_code, system.boundary_dependents]
+  handoff_to: [testing, design, code_review]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 # Refactor Code
 
 You improve the internal structure of existing code while keeping every external behavior identical. Two depths share that invariant but differ in ceremony: a quick polish is applied directly; a structural refactor is measured, proposed, and approved before any edit.
+
+## Context and preservation contract
+
+Read [engineering context](../../../craft/context/init-context/references/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
+
+Capture before/after source revisions or diff identities and equivalent checks/environment. Return `change.preservation_evidence`: invariant/criterion → before/after check → result, structural delta, omissions, and next action. If module boundaries or dependency rules change, update the configured System State with current evidence and amend or supersede applicable ADRs while preserving history. When another owner must author an amendment, return a blocking handoff until it is reconciled. If architecture is unchanged, record that assessment without creating an empty ADR. External behavior changes return to Product/Design for scope resolution.
+
+The coordinator resolves paths, claims, and shared writes; this skill owns the structural judgment and preservation assessment.
 
 ## Depth selector
 
@@ -125,7 +148,7 @@ Between groups:
 
 1. Run the project's canonical test command — detect it from project config (`pytest`, `npm test`, `go test ./...`, `cargo test`, `mvn test`); marker-scoped if the user specified one (e.g. `pytest -m unit`), otherwise the full suite.
 2. If tests pass → move to the next group.
-3. If tests fail → revert the group (`git checkout -- <files>` or reverse the edits manually), then stop and surface the failure to the user. Do **not** attempt to fix behavior drift silently; the whole point of refactoring is that tests are the safety net.
+3. If tests fail → reverse only this group's own edits, preserving pre-existing and concurrent work, then stop and surface the failure to the user. Do **not** attempt to fix behavior drift silently; the whole point of refactoring is that tests are the safety net.
 
 ### 5. Re-measure metrics
 
@@ -210,6 +233,10 @@ ALWAYS emit this exact structure at the end of a structural refactor:
 ### Tests
 - Group 1: <result — pass/fail, count>
 - Group 2: ...
+
+### Architecture context
+- System State / ADR amendments: <references and revisions, or evidence that boundaries are unchanged>
+- Preservation: <invariant/criterion mapping, baseline/current revisions, environment and omissions>
 
 ### Remaining debt (deferred)
 - <Item> — <why deferred>

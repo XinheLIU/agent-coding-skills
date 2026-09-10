@@ -8,6 +8,21 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.problem_or_baseline]
+  retrieves: [product.demand_assessment, north_star.relevant_goals]
+  produces: [product.solution_proposal]
+  updates: [product.discovery_records]
+  invalidates: [product.solution_dependents]
+  handoff_to: [product, design]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Three narrative outputs plus the scenarios they imply — for new ideas and already-mapped
 existing products. One purpose: make the user real enough that every design tradeoff has a
 human answer.
@@ -31,16 +46,10 @@ Full framework detail, examples, and failure modes: [references/framework.md](re
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
-```text
-Layer:       working
-Contributes: desired capabilities, stories, journeys, personas, scenarios, gaps, questions, constraints
-Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
-Promotes:    accepted stories, scenarios, first-use moment, constraints → product.html, via write-prd
-```
 
 Read users/problems, demand assessments, current capabilities and coverage, gaps, and accepted decisions. Enrich shared personas and capabilities with proposed behavior and scenarios; reuse established answers.
 
-Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and return record anchors to the coordinator. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 If a relevant demand assessment is Yellow, Red, disputed, or assumption-only, name the unresolved claim and route to `validate-demand` before treating the solution as validated. A user-authorized exploratory solution can proceed as a proposal with that uncertainty explicit. Do not infer a passed demand gate from document existence.
 
@@ -354,7 +363,7 @@ Persist HTML records in `discovery.html`. The Simple/Complex distinction control
 - Match and enrich gaps or open questions exposed by missing flows and integrations. If evidence shows no gap, record the assessed coverage without inventing one.
 - For complex work, attach system context, feature-status and journey diagrams to the relevant records, linking current capability evidence. Add distinct personas only when their context differs.
 
-The narrative and story prompt remain usable human presentations, but point to shared facts. Any optional HTML demo is an illustrative prototype linked from the relevant journey, not a second product-memory document. Update `state.md` with affected record anchors.
+The narrative and story prompt remain usable human presentations, but point to shared facts. Any optional HTML demo is an illustrative prototype linked from the relevant journey, not a second product-memory document. Return routing updates to the coordinator with affected record anchors.
 
 ### Verify memory records
 

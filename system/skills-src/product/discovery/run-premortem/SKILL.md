@@ -8,6 +8,21 @@ disable-model-invocation: true
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [change.proposal]
+  retrieves: [product.relevant_context, design.contracts, operations.constraints]
+  produces: [product.risk_assessment]
+  updates: [product.risk_records]
+  invalidates: [change.risk_dependents]
+  handoff_to: [product, design, operations]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Run a 6-phase "project autopsy" starting from an assumed total failure, then produce a
 risk analysis that enriches shared HTML product memory. The autopsy is a dialogue: the
 user holds context the records do not, and the output is a reading of the risks that the
@@ -18,16 +33,10 @@ Questioning and confirmation follow [the shared-understanding protocol](referenc
 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
-```text
-Layer:       working
-Contributes: risks, mitigations, constraints, monitoring metrics, linked gaps, assumptions, questions
-Writes:      <work-root>/<effort>/discovery.html — shared records, not an exclusive section
-Promotes:    accepted mitigations, edge cases, NFRs and monitoring decisions → product.html, via write-prd
-```
 
 Read the supplied plan or existing scope, relevant demand evidence, capabilities, gaps, and risks. Enrich existing failure scenarios before adding new ones. Hypothetical failures and quotes are exercises, never observed evidence.
 
-Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and update `state.md` with record anchors. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
+Follow read–match–enrich–verify: create only missing records, preserve other contributions, link related evidence and questions, and return record anchors to the coordinator. If invoked standalone, use supplied context and create useful partial memory; an absent prior artifact is not an absent answer. Missing substantive prerequisites remain explicit questions, not invented facts. Existing authorization governs decisions.
 
 ## Phase 1: Set the Gravestone Scene
 
@@ -145,7 +154,7 @@ distinctly; a disputed risk carries both readings.
 
 Read [the report mapping](references/report-template.md). Update risk, metric, constraint, assumption, and question records in `discovery.html`. Match existing failure scenarios by affected capability, trigger, and consequence before adding one. Attach risk scores and mitigation proposals; link shared scope and gaps instead of copying them.
 
-A proposed pivot or scope cut stays a proposal. Record user-authorized changes with their basis and route to the appropriate scope skill to reconcile the delta; do not silently rewrite scope or close a gap. Update `state.md` with changed anchors and report the HTML path.
+A proposed pivot or scope cut stays a proposal. Record user-authorized changes with their basis and route to the appropriate scope skill to reconcile the delta; do not silently rewrite scope or close a gap. Return routing updates to the coordinator with changed anchors and report the HTML path.
 
 ### Verify memory records
 

@@ -7,6 +7,23 @@ description: "Design a general layered Agent system architecture following the 6
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [change.intent]
+  retrieves: [change.requirements, system.current_state, operations.constraints]
+  produces: [design.system_contracts]
+  updates: [design.accepted_decisions]
+  invalidates: [implementation.affected_plan, verification.contract_coverage]
+  handoff_to: [implementation, operations]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
+Accepted technical contracts and consequential decisions are retained Change Context linked to the canonical change/spec/criterion IDs and consumed revisions, under [the Design contract](../../../craft/context/init-context/references/design-memory.md). Proposals remain distinct from applicable System State; update that state only with established evidence. The architecture layers described below model the product, not a replacement for the suite's four context lifecycles.
+
 ## Workflow
 
 ### Phase 1: Discovery

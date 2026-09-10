@@ -7,6 +7,21 @@ description: "Decide how a feature behaves before deciding how it looks — info
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [change.requirements]
+  retrieves: [product.relevant_context, design.applicable_rules, design.relevant_decisions]
+  produces: [design.interaction_contract]
+  updates: [design.prototype_intent, design.accepted_decisions]
+  invalidates: [design.visual_dependents, verification.interaction_evidence]
+  handoff_to: [visual_design, product, implementation]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 Design the **how users interact** before the **how it looks**. Define information architecture, user flows, and all interaction states (loading, empty, error, success, partial) through low-fidelity wireframes.
 
 ## When to Use
@@ -27,7 +42,7 @@ Design the **how users interact** before the **how it looks**. Define informatio
 - `docs/design/prototype.html` (existing canonical prototype — the **what**; sections may be reopened here)
 
 **Downstream:**
-- `docs/design/prototype.html` — wireframe-fidelity sections, one per surface, all five states rendered, `data-structure="locked"` at approval (Human layer; the hard prerequisite of `/visual-design-variants`)
+- `docs/design/prototype.html` — wireframe-fidelity sections, one per surface, all five states rendered, `data-structure="locked"` at approval (Change Context; the hard prerequisite of `/visual-design-variants`)
 - Working exploration in `<work-root>/<effort>/interaction/`:
   - `context.md` — product context gathered in Step 1
   - `state-table.md` — five-state coverage analysis (LOADING / EMPTY / ERROR / SUCCESS / PARTIAL) that the prototype's state blocks render
@@ -43,29 +58,15 @@ The locked wireframe sections in the prototype are what `/visual-design-variants
 
 ### Step 0: Detect Context
 
-Resolve the product document from explicit user paths, `docs/agents/memory.md`, and active `state.md`. New product memory uses `product.html#prd`; follow its persona, capability, scope, and question links. Legacy `prd.md` remains readable when canonical. Do not pick the first file found across products. Read HTML source records directly, preserving evidence/commitment distinctions.
+Use the coordinator-resolved product/spec and relevant records. Preserve canonical requirement/criterion IDs and distinguish observed behavior from accepted intent.
 
-Resolve the work root the same way: read `docs/agents/memory.md` and use the work root it configures; with none configured, or no such file, the work root is `.scratch/`.
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
-```bash
-WORK_ROOT=<the path resolved above>
-
-# Detect the canonical prototype and any prior working exploration
-[ -f docs/design/prototype.html ] && echo "PROTOTYPE: found" || echo "PROTOTYPE: missing"
-EFFORT_DIR=$(find "$WORK_ROOT" -maxdepth 1 -type d -name "[0-9]*-*" 2>/dev/null | sort -r | head -1)
-if [ -n "$EFFORT_DIR" ] && [ -d "$EFFORT_DIR/interaction" ]; then
-  echo "Existing interaction exploration: $EFFORT_DIR/interaction"
-fi
-
-# Detect design authority (optional at this stage)
-if [ -f DESIGN.md ] || [ -f docs/design/system.md ]; then
-  echo "Design authority exists"
-fi
-```
+The coordinator supplies the configured work root and exact active effort; never select the newest directory as identity.
 
 When the prototype exists, list its sections and their `data-surface` / `data-structure` / `data-fidelity` markers. A surface this effort touches that is `locked` must be explicitly reopened — that is a structure change, surfaced to the user, never silent.
 
-**AskUserQuestion** if existing interaction design found:
+**Ask through the coordinator** if existing interaction design found:
 
 > Found existing interaction design from [date]. 
 >
@@ -99,7 +100,7 @@ Read from these sources (auto-gather, don't ask if present):
    - Key user tasks
    - Entry/exit points
 
-If PRD missing or incomplete, **AskUserQuestion** (single comprehensive question):
+If PRD missing or incomplete, **Ask through the coordinator** (single comprehensive question):
 
 > I need context to design the interaction flows:
 >
@@ -113,20 +114,7 @@ Record answers in `$EFFORT_DIR/interaction/context.md`.
 
 ### Step 1.5: Consult Prior Art (optional)
 
-Read `<work-root>/<effort>/design/capabilities.md`. If it carries a `② knowledge — UX guidelines` row, follow that row's decision and continue at Step 2.
-
-Otherwise scan the skills available in this session for one that answers "what are the valid options" from a catalog of state-design and flow patterns by product type, without picking one for you. Append one row recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. With `none`, continue at Step 2 — the five-state table below is self-sufficient.
-
-With something found, name it and what it would change, then **AskUserQuestion**:
-
-> A UX-guideline reference is available: **[name]** — it would [what it changes, one clause].
->
-> **A)** Fill the state table from first principles (Recommended)
-> **B)** Consult **[name]** first for state-design and flow patterns
-
-When consulted, look up two things: state-design patterns for this product type (what loading, empty, and error usually look like here) and flow patterns for the identified tasks (onboarding, CRUD, search/filter). Fold what you use into `decisions.md` with a citation line (`Source: <reference>, <query>`).
-
-Done when `capabilities.md` carries a `② knowledge — UX guidelines` row and anything consulted is cited in `decisions.md`.
+Request optional ② knowledge for UX guidelines through the coordinator. Interpret relevant state/flow guidance and cite consulted sources in decision rationale. The five-state table remains native; absent an optional capability, continue directly.
 
 ### Step 2: Define Information Architecture
 
@@ -189,7 +177,7 @@ Write to `$EFFORT_DIR/interaction/architecture.md`:
 If forced to show only 3 elements: [which 3 and why]
 ```
 
-**AskUserQuestion** to confirm architecture:
+**Ask through the coordinator** to confirm architecture:
 
 > Here's the information architecture I'm proposing:
 >
@@ -212,45 +200,7 @@ If C chosen, generate low-fi HTML wireframe (gray boxes only) and show screensho
 
 Create table structure:
 
-```markdown
-## Interaction State Table
-
-For each user-facing feature, specify what the user **SEES** (not backend behavior).
-
-| FEATURE | LOADING | EMPTY | ERROR | SUCCESS | PARTIAL |
-|---------|---------|-------|-------|---------|---------|
-| [Feature 1] | [Skeleton UI with pulse animation] | [Warm empty state: icon, message, primary action] | [Error icon, specific message, retry button, support link] | [Full data display] | [Partial data + "Loading more..." indicator] |
-| [Feature 2] | ... | ... | ... | ... | ... |
-
-### State Design Guidelines
-
-**LOADING:**
-- Show skeleton UI matching success layout
-- Never generic spinner alone — show structure
-- Indicate progress if measurable
-
-**EMPTY:**
-- Warmth required — not just "No items"
-- Explain why empty
-- Provide primary action (e.g., "Create your first project")
-- Optional: onboarding context
-
-**ERROR:**
-- Specific error message (not "Something went wrong")
-- What happened, why it might have happened
-- Clear recovery action (Retry, Contact Support, etc.)
-- Preserve user's unsaved work when possible
-
-**SUCCESS:**
-- Full data display
-- All interactions enabled
-- Clear next actions
-
-**PARTIAL:**
-- Mixed state — some data loaded, some still loading
-- OR degraded mode — core function works, secondary features unavailable
-- Clear indication of what's missing and why
-```
+Read [Example 1](references/output-examples.md#example-1) when producing this artifact.
 
 **Identify features** from PRD/context. Common categories:
 - Data lists/tables
@@ -262,7 +212,7 @@ For each user-facing feature, specify what the user **SEES** (not backend behavi
 
 For EACH feature, fill the 5 states.
 
-**AskUserQuestion** once per feature (NOT batched):
+**Ask through the coordinator** once per feature (NOT batched):
 
 > **Feature: [Name]**
 >
@@ -280,7 +230,7 @@ Write completed table to `$EFFORT_DIR/interaction/state-table.md`.
 
 **Sync with PRD Part 3:**
 
-If PRD exists and Part 3 is incomplete, **AskUserQuestion**:
+If PRD exists and Part 3 is incomplete, **Ask through the coordinator**:
 
 > The interaction state table is now complete. PRD Part 3 (Five-State Blocks) should match this.
 >
@@ -320,7 +270,7 @@ Where does this flow succeed or fail?
 
 Write to `$EFFORT_DIR/interaction/journey-map.md`.
 
-**AskUserQuestion** to validate journeys:
+**Ask through the coordinator** to validate journeys:
 
 > Mapped [N] critical user journeys. Key emotional moments:
 >
@@ -346,66 +296,7 @@ Draft in the working layer first (`$EFFORT_DIR/interaction/wireframes/*.html`), 
 
 **Generate one wireframe per key screen:**
 
-```html
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-  font-family: -apple-system, system-ui, sans-serif; 
-  background: #f5f5f5; 
-  color: #333;
-  padding: 20px;
-}
-.wireframe-label {
-  background: #ffeb3b;
-  padding: 2px 6px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.box {
-  background: white;
-  border: 2px solid #e0e0e0;
-  padding: 20px;
-  margin: 10px 0;
-}
-button {
-  background: #e0e0e0;
-  border: 2px solid #999;
-  padding: 10px 20px;
-  font-family: inherit;
-  cursor: pointer;
-}
-</style>
-</head>
-<body>
-<span class="wireframe-label">Wireframe: [Screen Name]</span>
-
-<!-- Structure here -->
-<div class="box">
-  <h1>[PRIMARY HEADLINE]</h1>
-  <p>[Supporting text - 1-2 sentences]</p>
-  <button>[PRIMARY ACTION]</button>
-</div>
-
-<!-- Show all 5 states if applicable -->
-<h2>State: LOADING</h2>
-<div class="box">
-  [Skeleton structure]
-</div>
-
-<h2>State: EMPTY</h2>
-<div class="box">
-  [Empty state structure]
-</div>
-
-<!-- etc -->
-
-</body>
-</html>
-```
+Read [Example 2](references/output-examples.md#example-2) when producing this artifact.
 
 Save drafts to `$EFFORT_DIR/interaction/wireframes/[surface-slug].html`.
 
@@ -427,7 +318,7 @@ Generate wireframes for:
 2. Each critical flow screen
 3. Mobile breakpoint version if responsive behavior differs significantly
 
-**AskUserQuestion** after generating wireframes:
+**Ask through the coordinator** after generating wireframes:
 
 > Generated [N] wireframes. Opening in browser...
 >
@@ -441,45 +332,7 @@ Generate wireframes for:
 
 Record **why** you made each interaction choice:
 
-```markdown
-## Interaction Decisions
-
-### Decision 1: [Topic]
-
-**What we decided:** [Specific choice]
-
-**Why:** [Rationale — user need, constraint, best practice]
-
-**Alternatives considered:**
-- Option A: [why rejected]
-- Option B: [why rejected]
-
-**Implications:**
-- Engineering: [what this means for implementation]
-- Visual design: [constraints for visual-design-variants]
-- Accessibility: [a11y requirements]
-
----
-
-### Decision 2: Mobile Navigation Pattern
-
-**What we decided:** Collapsible sidebar (slide-in drawer)
-
-**Why:** Primary nav has 6 items — too many for bottom tabs, hamburger hides context
-
-**Alternatives considered:**
-- Bottom tabs: Rejected — only fits 5 items, our 6th is important
-- Hamburger: Rejected — users need to see nav context while working
-
-**Implications:**
-- Engineering: Need drawer component with gesture support
-- Visual design: Drawer must be visually distinct from main content
-- Accessibility: Focus trap when open, Escape to close, ARIA labels
-
----
-
-[Continue for each major decision]
-```
+Read [Example 3](references/output-examples.md#example-3) when producing this artifact.
 
 Write to `$EFFORT_DIR/interaction/decisions.md`.
 
@@ -559,7 +412,7 @@ Write to `$EFFORT_DIR/interaction/responsive-a11y.md`.
 | Form validation: inline or on submit? | Engineer does on-submit only (poor UX) | Inline validation after blur, final check on submit |
 ```
 
-For each unresolved decision, **AskUserQuestion** individually (NOT batched):
+For each unresolved decision, **Ask through the coordinator** individually (NOT batched):
 
 > **Decision: [Topic]**
 >
@@ -609,7 +462,7 @@ Structure is locked in the canonical prototype. `/visual-design-variants` will
 style the locked sections — colors, typography, polish — WITHOUT changing them.
 ```
 
-**AskUserQuestion** for next step:
+**Ask through the coordinator** for next step:
 
 > Interaction design complete. [N] features, [M] states, [P] flows defined.
 >
@@ -683,23 +536,19 @@ docs/design/prototype.html      # Canonical prototype — wireframe sections, lo
     unresolved.md          # Deferred decisions (if any)
 ```
 
+## Accepted decision handoff
+
+At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+
 ## Shared Memory Contract
 
 Full contract: [references/design-memory.md](references/design-memory.md).
 
-```text
-Triad role:  WHAT (structure) — creates and locks wireframe sections of the canonical prototype
-Layer:       human (prototype sections) + working (exploration)
-Owns:        docs/design/prototype.html sections this effort creates or reopens; <work-root>/<effort>/interaction/
-Contributes: <work-root>/<effort>/design/capabilities.md — the `② knowledge — UX guidelines` row only
-Coordinates: state.md — records that structure is locked, with the data-surface anchors, and names the next stage
-Promotes:    accepted state definitions and flows → product.html capability records, via write-prd
-```
 
-Resolve the work root and active effort as in Step 0. Everything under `interaction/` is exploration — the argument, not the conclusion. What survives is the locked wireframe sections in the prototype and the state definitions promoted to capability records.
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
 Durability test: the locked sections yes — they are the structure every later pass styles and implements, so they merge into the prototype. The five-state definitions yes — they are acceptance criteria someone will re-derive otherwise, so they promote to capability records. The journey maps and working drafts no; they were the argument.
 
 When sync is authorized, `write-prd` promotes accepted state definitions into canonical capability records and replaces the working definitions with links. Alternatives that were considered and rejected stay in working memory and are discarded with it.
 
-**Update `state.md` at the approval gate** — structure locked, the `data-surface` anchors touched, next stage `/visual-design-variants`. That pointer is what lets the next stage start without re-reading everything here.
+**Return the transition to the coordinator at the approval gate** — structure locked, the `data-surface` anchors touched, next stage `/visual-design-variants`. That pointer is what lets the next stage start without re-reading everything here.

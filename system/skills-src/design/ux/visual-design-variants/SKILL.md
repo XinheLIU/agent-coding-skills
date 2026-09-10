@@ -5,6 +5,21 @@ description: "Explore three genuinely different visual directions — color, typ
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [design.locked_structure, design.applicable_rules]
+  retrieves: [change.requirements, design.relevant_decisions]
+  produces: [design.visual_decision]
+  updates: [design.prototype_intent, design.accepted_decisions]
+  invalidates: [implementation.visual_dependents, verification.visual_evidence]
+  handoff_to: [implementation]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 # Visual Design Variants
 
 Explore **visual directions** (colors, typography, visual weight) on an already-defined **interaction structure**. This skill generates 3 variants that share the same layout but differ in visual treatment.
@@ -43,30 +58,11 @@ Do NOT use when:
 
 ### Step 0: Verify Prerequisites
 
-Resolve the product document from explicit user paths, `docs/agents/memory.md`, and active `state.md`. New product memory uses `product.html#prd`; follow its persona, capability, scope, and question links. Legacy `prd.md` remains readable when canonical. Do not pick the first file found across products.
+Use the coordinator-resolved product/spec and relevant records. Preserve canonical requirement/criterion IDs and distinguish observed behavior from accepted intent.
 
-Resolve the work root from the same `docs/agents/memory.md`; with none configured, or no such file, it is `.scratch/`. Then check all required inputs exist:
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
-```bash
-WORK_ROOT=<the path resolved above>
-
-# Effort directory for working exploration (create one if none is active)
-EFFORT_DIR=$(find "$WORK_ROOT" -maxdepth 1 -type d -name "[0-9]*-*" 2>/dev/null | sort -r | head -1)
-
-# Check the canonical prototype
-if [ ! -f docs/design/prototype.html ]; then
-  echo "ERROR: No canonical prototype - run /interaction-design first"
-  exit 1
-fi
-
-# Check design authority
-if [ ! -f DESIGN.md ] && [ ! -f docs/design/system.md ]; then
-  echo "ERROR: No design authority - run /design-context or /design-system-create first"
-  exit 1
-fi
-
-echo "Prerequisites verified"
-```
+The coordinator supplies the configured work root and exact active effort; never select the newest directory as identity.
 
 Then read the prototype and verify the target surfaces are ready: each section this effort styles must carry `data-structure="locked"`. A section still `open` goes back to `/interaction-design`. Note the in-scope `data-surface` slugs and confirm all five `data-state` blocks are present in each.
 
@@ -145,7 +141,7 @@ Write structural constraints to `$EFFORT_DIR/visual/constraints.md`:
 
 Create 3 distinct **visual personalities** that fit the interaction structure:
 
-**AskUserQuestion** to understand intent:
+**Ask through the coordinator** to understand intent:
 
 > The interaction structure is locked. Now exploring visual directions on top of it.
 >
@@ -185,7 +181,7 @@ Based on response, propose 3 visual directions:
 
 **Anti-convergence rule:** The 3 directions MUST use different visual strategies. Not just slight color tweaks — genuinely different visual treatments.
 
-**AskUserQuestion** to confirm directions before generating:
+**Ask through the coordinator** to confirm directions before generating:
 
 > Proposed visual directions:
 >
@@ -202,21 +198,7 @@ If C, open the prototype section in browser before continuing.
 
 ### Step 2.5: External Production (optional)
 
-Read `<work-root>/<effort>/design/capabilities.md`. If it carries `① taste` and `⑥ production` rows, follow their decisions and continue at Step 3.
-
-Otherwise scan the skills available in this session for either:
-
-- **① taste** — a skill that argues for or vetoes a design direction and produces no palette, template, or code as its own artifact. It sharpens the three direction strategies from Step 2; it never chooses among them.
-- **⑥ production** — a skill that renders high-fidelity mockups, prototypes, or decks from a brief that is already settled. It decides nothing.
-
-Append one row per slot recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. With `none` for both, continue at Step 3 — the default path.
-
-With something found, name it and what it would change, then **AskUserQuestion**:
-
-> A [taste / production] capability is available: **[name]** — it would [what it changes, one clause].
->
-> **A)** Generate the variants inline per Step 3 (Recommended)
-> **B)** Use **[name]**, reconciled into this skill's contract below
+Request optional ① taste and ⑥ production results through the coordinator. Native direction/HTML generation is the fallback.
 
 Whatever produces them, the output must satisfy this skill's contract:
 
@@ -227,7 +209,7 @@ Whatever produces them, the output must satisfy this skill's contract:
 
 If the output cannot meet these four, generate inline per Step 3 — the default path.
 
-Done when `capabilities.md` carries `① taste` and `⑥ production` rows and three variants exist at the canonical paths.
+Done when the three variants satisfy the domain checks; return capability outcomes to the coordinator.
 
 ### Step 3: Generate Visual Variants
 
@@ -240,99 +222,7 @@ For each direction (A, B, C), generate full HTML that:
 
 **Generation process per variant:**
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Visual Variant [A/B/C] — [Feature Name]</title>
-<style>
-/* Design tokens */
-:root {
-  /* Extract from DESIGN.md frontmatter */
-  --font-display: [from system];
-  --font-body: [from system];
-  --color-primary: [from system];
-  --color-accent: [from system];
-  /* etc */
-  
-  /* Variant-specific visual adjustments */
-  --visual-weight-primary: [based on direction];
-  --visual-saturation: [based on direction];
-  /* etc */
-}
-
-/* Base structure from the locked section (LOCKED) */
-[Copy exact layout structure from the prototype section]
-
-/* Visual treatment (VARIABLE per direction) */
-.primary-cta {
-  /* Direction A: bold color, heavy weight */
-  /* Direction B: subtle color, large size */
-  /* Direction C: gradient background, medium weight */
-}
-
-/* State-specific styles */
-.state-loading { /* skeleton UI */ }
-.state-empty { /* warm empty state */ }
-.state-error { /* error display */ }
-.state-success { /* full data */ }
-.state-partial { /* mixed state */ }
-</style>
-</head>
-<body>
-
-<!-- State: SUCCESS (default view) -->
-<div class="state-success">
-  [Full implementation preserving the locked structure]
-</div>
-
-<!-- State: LOADING -->
-<div class="state-loading" style="display:none;">
-  [Skeleton UI matching success structure]
-</div>
-
-<!-- State: EMPTY -->
-<div class="state-empty" style="display:none;">
-  [Warm empty state with icon, message, CTA]
-</div>
-
-<!-- State: ERROR -->
-<div class="state-error" style="display:none;">
-  [Error message with recovery action]
-</div>
-
-<!-- State: PARTIAL -->
-<div class="state-partial" style="display:none;">
-  [Partial data + loading indicator]
-</div>
-
-<script>
-// State switcher for preview
-function showState(state) {
-  document.querySelectorAll('[class^="state-"]').forEach(el => {
-    el.style.display = 'none';
-  });
-  document.querySelector('.state-' + state).style.display = 'block';
-}
-
-// Controls
-document.body.insertAdjacentHTML('beforeend', `
-  <div style="position:fixed;bottom:20px;right:20px;background:white;padding:10px;border:2px solid #333;border-radius:8px;">
-    <strong>State:</strong>
-    <button onclick="showState('success')">Success</button>
-    <button onclick="showState('loading')">Loading</button>
-    <button onclick="showState('empty')">Empty</button>
-    <button onclick="showState('error')">Error</button>
-    <button onclick="showState('partial')">Partial</button>
-  </div>
-`);
-</script>
-
-</body>
-</html>
-```
+Read [Example 1](references/output-examples.md#example-1) when producing this artifact.
 
 Save to:
 - `$EFFORT_DIR/visual/variants/variant-a.html`
@@ -349,7 +239,7 @@ open $EFFORT_DIR/visual/variants/variant-b.html
 open $EFFORT_DIR/visual/variants/variant-c.html
 ```
 
-**AskUserQuestion** for feedback:
+**Ask through the coordinator** for feedback:
 
 > Visual variants generated. Opening in browser...
 >
@@ -389,7 +279,7 @@ Based on feedback:
 - If approved, merge it as in A
 
 **If D (none work):**
-- **AskUserQuestion**: "What's missing visually?" or "What feeling isn't captured?"
+- **Ask through the coordinator**: "What's missing visually?" or "What feeling isn't captured?"
 - Define 3 NEW visual directions
 - Regenerate from Step 3
 
@@ -397,45 +287,7 @@ Based on feedback:
 
 Once variant approved, write decision rationale:
 
-```markdown
-## Visual Design Decision
-
-**Date:** [timestamp]
-
-**Chosen Direction:** Variant [A/B/C] — [Name]
-
-### Why This Direction
-
-**Visual strategy that won:**
-- Typography: [what worked]
-- Color treatment: [what worked]
-- Visual weight distribution: [what worked]
-- Emotional resonance: [why this feels right for the product]
-
-### What Was Tried and Rejected
-
-**Variant [X]:** [Why it didn't work]  
-**Variant [Y]:** [Why it didn't work]
-
-### Key Visual Decisions
-
-**Decision 1:** [Specific choice, e.g., "Bold color on CTA vs subtle"]  
-**Rationale:** [Why this serves user goals better]
-
-**Decision 2:** [...]
-
-### Implementation Notes
-
-**For `/design-implement`:**
-- The styled section in the canonical prototype is ready to convert to production code
-- All 5 states are defined and approved
-- Structure is unchanged (section stayed locked)
-- DESIGN.md tokens were followed
-
-**Files:**
-- Canonical: `docs/design/prototype.html` — section `[data-surface]` now at styled fidelity
-- Source variants: `$EFFORT_DIR/visual/variants/*.html`
-```
+Read [Example 2](references/output-examples.md#example-2) when producing this artifact.
 
 Write to `$EFFORT_DIR/visual/decision.md`.
 
@@ -467,7 +319,7 @@ Implementation will convert it to production code.
 - `$EFFORT_DIR/interaction/state-table.md` (state semantics, while the effort lives)
 ```
 
-**AskUserQuestion** for next step:
+**Ask through the coordinator** for next step:
 
 > Visual design complete. Approved variant ready.
 >
@@ -536,23 +388,19 @@ docs/design/prototype.html   # Section updated in place: wireframe → styled (C
     decision.md            # Visual decision rationale
 ```
 
+## Accepted decision handoff
+
+At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+
 ## Shared Memory Contract
 
 Full contract: [references/design-memory.md](references/design-memory.md).
 
-```text
-Triad role:  WHAT (visuals) — raises locked sections from wireframe to styled fidelity
-Layer:       human (the merged section) + working (variants and rationale)
-Owns:        <work-root>/<effort>/visual/; the fidelity transition of in-scope prototype sections
-Contributes: <work-root>/<effort>/design/capabilities.md — the `① taste` and `⑥ production` rows only
-Coordinates: state.md — records the approved direction, the data-surface anchors, and the next stage
-Promotes:    none beyond the merge — the styled section plus DESIGN.md are the durable record
-```
 
-Resolve the work root and active effort as in Step 0.
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
-`Promotes: none` beyond the merge is deliberate. This skill picks among directions that `DESIGN.md` already permits; it does not create token authority. If choosing a variant reveals that the authority itself is wrong — a token missing, an accent that cannot carry the hierarchy — that is a change to `DESIGN.md` and routes back to `/design-context`, not a local override.
+This skill picks among directions that `DESIGN.md` already permits; it does not create token authority. Retain consequential selection rationale with the accepted decision before implementation. If choosing a variant reveals that the authority itself is wrong — a token missing, an accent that cannot carry the hierarchy — that is a change to `DESIGN.md` and routes back to `/design-context`, not a local override.
 
 Durability test: the losing variants no — they were the argument. The winning treatment yes — it merges into the canonical section. `decision.md` explains a choice the merged section cannot show, so keep it until the component ships and its rationale is folded into the component doc.
 
-**Update `state.md` at the approval gate** — approved direction, the styled `data-surface` anchors, next stage `/design-implement`.
+**Return the transition to the coordinator at the approval gate** — approved direction, the styled `data-surface` anchors, next stage `/design-implement`.

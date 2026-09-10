@@ -1,10 +1,10 @@
 # Code Review
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 [System home](../README.md) · [Workflows](../workflows/README.md) · [Organization report](organization-report.md)
 
-This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `review-architecture` and `review-code-quality` are the orchestrators; the gate chain `review-design-doc → review-implementation-gaps → review-code-quality` runs a change from plan to merge verdict, `analyze-test-gaps` audits whole-codebase test adequacy, and `refactor-code` is the corrective follow-up that acts on findings. `tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
+This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `review-architecture` and `review-code-quality` own domain review reasoning while the shared coordinator owns runtime orchestration; the gate chain `review-design-doc → review-implementation-gaps → review-code-quality` runs a change from plan to merge verdict, `analyze-test-gaps` audits whole-codebase test adequacy, and `refactor-code` is the corrective follow-up that acts on findings. `tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
 
 ## TL;DR — Which Skill?
 
@@ -48,7 +48,7 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 
 ## Skill 1: review-architecture
 
-`review-architecture` orchestrates six aspect pairs (`explorer` then `reviewer`) in parallel, then consolidates a design-level report.
+`review-architecture` proposes relevant aspect pairs (`explorer` then `reviewer`) and consolidates a design-level report. The coordinator handles authorized delegation or inline execution.
 
 ### Architecture Scope
 
@@ -133,7 +133,7 @@ The former `request-code-review` skill (pre-commit verification pipeline) is fol
 
 `tdd-builder` is not part of either review pipeline. It is an orchestration agent for new features using strict test-first delivery.
 
-- Sequence: `brainstorm-feature` (when needed) -> `spec` -> `plan` -> `tasks` (tests required).
+- Sequence: `brainstorm-feature` (when needed) -> `spec` (reuse canonical requirements) -> direct planning -> `tasks` (criterion-based checks). Planning and execution are workflow stages, not missing skill invocations.
 - Optional execution loop: red -> green -> refactor.
 - Enforces story-by-story progression and blocks code-before-test behavior.
 
@@ -158,7 +158,7 @@ Operational defaults:
 
 - Explorers: haiku, typically `Read` + `Grep` + `Glob`.
 - Reviewers: sonnet, `Read` + `Grep`, plan permission mode, read-only posture.
-- Reviewer sequencing rule: reviewers must run after explorer outputs exist; sibling reviewers should run in parallel.
+- Reviewer sequencing rule: reviewers consume available explorer evidence; the coordinator selects parallel or inline execution based on authorization and capability.
 
 ## Cross-Skill Handoff
 
@@ -174,7 +174,7 @@ This keeps findings MECE and avoids duplicate or contradictory reporting.
 ```text
 DO                                          DON'T
 --                                          -----
-Dispatch explorers/reviewers in parallel    Run everything sequentially
+Use coordinator-selected execution          Require unavailable delegation
 Pass scoped file lists when restricted      Review outside the requested scope
 Preserve file:line anchors and confidence   Paraphrase away evidence
 Consolidate before presenting               Dump raw subagent outputs at user
@@ -189,7 +189,7 @@ Route cross-domain findings via references  File findings on the wrong side
 | `review-architecture` | `docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md` |
 | `review-code-quality` | `docs/eng-reviews/next-steps-<branch>-<YYYYMMDD-HHMM>.md` |
 
-Both artifacts are expected to be self-contained: scope, invoked aspects/domains, evidence-anchored findings, and actionable next steps.
+Preserve established artifact homes; new local change evidence defaults to `docs/changes/<change-id>/verification/`. Each report includes canonical change/task, criterion/contract references, consumed revisions, environment assumptions, failures/omissions, and actionable next steps. Standards and Spec verdicts remain separate. Use the [shared handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope) and [coordinator](../workflows/context-coordination.md).
 
 ## Pointers
 

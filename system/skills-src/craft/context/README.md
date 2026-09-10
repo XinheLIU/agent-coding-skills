@@ -1,22 +1,14 @@
 # Context Skills
 
-Last updated: 2026-08-26
+Last updated: 2026-09-09
 
-Shared context has three layers:
-
-| Layer | Answers | Canonical contents |
-| --- | --- | --- |
-| Human | Why must the project behave this way? | Product intent, terminology, constraints, ADRs |
-| Code index | Where is the current implementation and how is it connected? | Optional rebuildable index |
-| Working | What is happening now and what happens next? | Active effort state, drafts, issues, and handoffs |
-
-`AGENTS.md` and `docs/agents/memory.md` route agents to these sources; they are indexes, not additional knowledge stores. Each fact has one canonical home. While work is active, promoted conclusions replace working copies with pointers. When work finishes, its plans and scratch artifacts are compacted into decision records or reader-relevant changelog entries, then removed unless a retention rule requires them.
+The [shared protocol](init-context/references/PROTOCOL.md) is the sole definition of North Star, Current State, Change Context, and Run Context. Indexes are derived views. Retain compact change records and reconcile present truth before deleting run scratch.
 
 | Skill | Use it for |
 | --- | --- |
-| `init-context` | Configure the three layers when routing is absent |
-| `sync-context` | Detect and repair drift after setup |
-| `translate-agent-context` | Preserve behavior while moving agent surfaces across runtimes |
-| `manage-context` | Compatibility entry point for older callers |
+| `init-context` | Configure routing and canonical homes when absent |
+| `sync-context` | Detect drift, route domain reassessment, and verify retention |
+| `translate-agent-context` | Preserve behavior across runtime surfaces |
+| `manage-context` | Compatibility entry for older callers |
 
-The full layer and ownership contract lives with `init-context` in [`references/PROTOCOL.md`](init-context/references/PROTOCOL.md).
+The [coordinator](../../../workflows/context-coordination.md) resolves identities and paths, serializes shared writes, binds runtime capabilities, and applies proposed transitions. Domain skills own their judgments and evidence.

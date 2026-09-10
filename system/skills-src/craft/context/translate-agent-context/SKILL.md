@@ -12,7 +12,22 @@ description: >
 
 # Translate Agent Context
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [context.source_behavior, runtime.target_capabilities]
+  retrieves: [context.configuration]
+  produces: [context.parity_report]
+  updates: [context.runtime_bindings]
+  invalidates: [context.runtime_assumptions]
+  handoff_to: [coordinator]
+```
+
+Shared semantics: [shared protocol](../init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Translate required behavior, not filenames or brand-specific conventions. The source remains available until its destination exists and passes an equivalent check.
 

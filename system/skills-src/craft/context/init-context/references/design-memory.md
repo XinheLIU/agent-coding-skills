@@ -4,6 +4,12 @@ Last updated: 2026-09-09
 
 Design skills contribute to one shared design understanding. A skill owns its reasoning method, not the understanding itself. Read this contract before reading or updating design memory. It also applies when a skill runs standalone.
 
+## Lifecycle and authority
+
+The [shared protocol](PROTOCOL.md) defines lifecycles, relationships, freshness, and the handoff envelope. Product records span North Star, Current State, and Change Context; applicable DESIGN.md rules are Current State; accepted prototype sections and consequential design decisions are Change Context. The prototype preserves accepted intent; code establishes actual behavior. Technical data/API/system/module contracts are separately addressable Change Context, linked to the same canonical change and requirement/criterion IDs.
+
+At acceptance, retain consequential rationale beside the design or in the change's decision home (new local default `docs/changes/<change-id>/decisions/<decision-id>.md`). Record ID, status, scope, decision, basis/alternatives, consumed requirement/token/contract revisions, `depends_on`, `affects`, and `supersedes` when applicable. Keep previous decisions; mark applicability `needs review` when relevant premises change. Do this before implementation; component documentation is not a prerequisite. Minor visual choices need no new ADR, but consequential rationale must not live only in scratch.
+
 ## The triad
 
 Shared design understanding is three durable documents, answering three different questions:
@@ -14,15 +20,15 @@ Shared design understanding is three durable documents, answering three differen
 | **How** | `DESIGN.md` at the project root | Design authority: visual tokens in YAML frontmatter (colors, typography, spacing, radius, motion), plus prose — aesthetic rationale, component foundations, accessibility rules, provenance. | `design-context` (native), or an accepted external ⑤ design-context capability. |
 | **What** | `docs/design/prototype.html` | The canonical prototype: rendered structure and visuals per surface, all five states switchable, fidelity and lock markers, links back to the why. | The pipeline stage whose gate the change passed through. |
 
-A reader who opens these three files knows what the product is for, what its design rules are, and what the design actually looks like — without reconstructing any effort's working files. Everything else design skills produce is working memory and dies with the effort.
+A reader who opens these three files knows what the product is for, what its design rules are, and what the design actually looks like — without reconstructing any effort's working files. Separately linked accepted contracts and consequential decisions are also durable. Drafts, rejected variant files, and raw experiments remain Run Context after required rationale/evidence is retained.
 
 ## Documents and routing
 
-- Working: `<work-root>/<effort>/design/` — wireframe drafts, variant HTMLs, the capability record (`capabilities.md`), decision notes, and throwaway prototypes under `prototypes/<slug>/`.
-- Human: the triad above, plus `docs/design/components/<name>.md` — the per-component implementation record (API, states, choices the code cannot show).
+- Run Context: `<work-root>/<effort>/design/` — wireframe drafts, variant HTMLs, the capability record (`capabilities.md`), draft decision notes, and throwaway prototypes under `prototypes/<slug>/`.
+- Durable: the triad above, plus `docs/design/components/<name>.md` — the per-component implementation record (API, states, choices the code cannot show).
 - Routing stays in `docs/agents/memory.md` and `<work-root>/<effort>/state.md`, exactly as for product memory. Resolve explicit user paths first, then memory configuration and active-state pointers. The work root defaults to `.scratch/`.
 
-MECE guides the boundary, not a hard constraint: a fact needed after the effort ends must reach the triad; analysis in progress stays in the work root. The durability test is unchanged — if the work root were deleted, would the project lose a fact it still needs?
+MECE guides the boundary, not a hard constraint: a fact needed after the effort ends must reach the triad or linked Change Context; analysis in progress stays in the work root. The durability test is unchanged — if the work root were deleted, would the project lose a fact it still needs?
 
 **Legacy.** `docs/design/system.md` remains readable while it is still the canonical token source; `design-context` folds it into `DESIGN.md` on its next run and leaves a one-line pointer behind. Older efforts' `interaction/state-table.md` and `visual/approved.html` remain readable as working intermediates; the canonical prototype supersedes them as the durable handoff.
 
@@ -36,8 +42,9 @@ MECE guides the boundary, not a hard constraint: a fact needed after the effort 
   - `data-fidelity="wireframe | styled | implemented"`
   - `data-structure="open | locked"`
   - `data-updated="YYYY-MM-DD"`
+- **Visible reference links per section** identify the canonical change, relevant requirement/criterion IDs, accepted decision references and consumed revisions. Use ordinary links and text rather than a parallel metadata store.
 - **All five states rendered** inside each section as `data-state="loading | empty | error | success | partial"` blocks, driven by one shared state switcher (floating control, keyboard-accessible). Five-state coverage is checked by the presence of the five blocks, not by prose.
-- **Every visual value is a CSS custom property** declared at `:root` with a provenance comment naming `DESIGN.md` and the date it was last synced. At `wireframe` fidelity, sections use only the grayscale wireframe palette; token properties apply from `styled` onward.
+- **Every visual value is a CSS custom property** declared at `:root` with a provenance comment naming `DESIGN.md` and the consumed token revision plus the date it was last synced; the date alone does not prove freshness. At `wireframe` fidelity, sections use only the grayscale wireframe palette; token properties apply from `styled` onward.
 - **Implemented sections** additionally carry `data-component="<source-path>"` and `data-component-doc="docs/design/components/<name>.md"`.
 
 Do not invent additional lifecycle attributes; if a section genuinely needs one, add a `data-attr-reason` stating why so review flags it.
@@ -60,21 +67,21 @@ Stage transitions:
 
 ## Supersession
 
-Shipped code is canonical **behavior**; the prototype is canonical **intent**. When they diverge, report the divergence rather than silently editing either. Small drift: regenerate the section from the shipped component and keep `implemented`. Deliberate redesign: reopen the section through the pipeline. A component doc records which prototype section it supersedes, so the trace survives either way.
+Shipped code is canonical **behavior**; the prototype is canonical **intent**. When they diverge, report the divergence rather than silently editing either. Record the affected intent/behavior and route reassessment to the design owner. Reopen a section only for an accepted design change. Do not require a synchronized second implementation of the UI; an `implemented` marker and source/component-doc pointers provide traceability, not proof that the prototype reproduces every shipped behavior.
 
 ## Coordination and the capability record
 
-`state.md` is updated at every approval gate with what settled, a pointer into the triad (a `data-surface` anchor, a `DESIGN.md` section, a `product.html` record), and the next stage. `<work-root>/<effort>/design/capabilities.md` keeps its existing contract — disjoint rows per capability slot, contributor mode per [PROTOCOL.md](PROTOCOL.md) — it is dispatch memory, not shared understanding, and is unchanged by this contract.
+At a gate, the design skill returns accepted decision/contract and surface references, consumed revisions, delta, questions, and next action. The coordinator applies run-state updates, capability discovery/dispatch, and serialized writes under [workflow coordination](../../../../../workflows/context-coordination.md). Capability rows are Run Context; disjoint rows do not permit concurrent file writes.
 
 ## Promotion
 
 | Working fact | Promotes to | Via |
 | --- | --- | --- |
-| Accepted state definitions and flows | `product.html` capability records | `write-prd` |
+| Accepted state definitions and flows | canonical change spec/criteria; product records link them | `write-prd` reconciles product scope |
 | Contested token-authority decision | an ADR | `domain-modeling` |
 | Reusable component conventions | `docs/conventions` | `sync-context` |
 | Approved structure or visual treatment | the canonical prototype section | the owning stage's approval gate |
-| Visual variant choice among permitted directions | nothing further — the merged styled section plus `DESIGN.md` are the record | — |
+| Consequential variant or interaction choice | accepted design/change decision with basis, alternatives, and revisions | owning stage at acceptance |
 
 ## External ⑤ tools
 

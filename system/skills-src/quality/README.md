@@ -1,6 +1,6 @@
 # Quality
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Correctness, clarity, and resilience across delivery. Ten skills in three lanes that run
 throughout the lifecycle, not after it: a build lane (test-first implementation), a review
@@ -61,16 +61,12 @@ reproducible symptom.
 
 ### Testing (`testing/`) — does the code do what it claims?
 
-**`tdd`** — executes implementation tasks with strict red-green-refactor discipline, in
-parallel waves of independent tasks when subagents are available. Each executor runs a
-per-task self-check; full reviews are routed, not embedded: `review-implementation-gaps`
-checks spec compliance and `review-code-quality` checks quality after risky waves and always
-at plan completion. Progress lives in `docs/plans/tdd-execution-plan.md`.
+**`tdd`** — executes one criterion-based red-green-refactor behavior slice at a time. It proposes verification/review needs; the coordinator schedules authorized parallel work or executes serially. Canonical progress stays in tickets; fine-grained steps are Run Context, and final revision/environment evidence is retained Change Context.
 
 **`analyze-test-gaps`** — audits test adequacy by business flow, not coverage percentage.
 Identifies ≤8 critical paths, maps which tests actually protect them, runs the suite once
 for a health snapshot with honest failure classification, and emits a capped P0/P1 gap list.
-Three artifacts in `docs/`: `critical-paths.md`, `test-status.md`, `test-gaps.md`. Run it
+Three evidence sections/artifacts: `critical-paths.md`, `test-status.md`, `test-gaps.md`, using existing homes or the change-local verification directory. Run it
 before a large refactor to know whether the safety net will hold.
 
 ### Review (`review/`) — is it built right?
@@ -118,7 +114,7 @@ reconstructing both sides' intent. Never auto-commits.
 - **Architecture restructuring** belongs to `design/technical/improve-codebase-architecture`;
   `review-architecture` judges the design, it does not redesign it. `diagnosing-bugs` routes
   seam failures there too.
-- **Plans and specs** come from `engineering/feature` (`spec` → `tasks`); `tdd` executes
+- **Requirements** have one canonical source; engineering `spec` consumes it, the active agent plans directly, and `tasks` proposes child tickets; `tdd` executes
   them and `review-implementation-gaps` audits against them. Pre-code plan stress-testing at
   the product level is `product/discovery/run-premortem`.
 

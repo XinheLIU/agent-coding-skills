@@ -18,12 +18,12 @@ Rules:
 
 - `<summary>` text is informative — area name + story count + gap count — never "click to expand".
 - Every diagram gets an adjacent one-sentence takeaway ("what this shows").
-- Gaps and refactor flags surface at level 1 as badges; the evidence for them lives at level 3.
+- Gaps and unanswered questions surface at level 1 as badges; the evidence for them lives at level 3.
 - Relevant capability records are reachable from the overview and journeys without duplicating their text.
 
 ## Baseline summary
 
-Within the shared overview, add baseline coverage, observation date, and one row of status pills — implemented (emerald), in-progress (amber), planned (slate), gaps (red) — each with its count, anchor-linked to its section. Compact legend: solid box = module, nested box = submodule, red edge = tight coupling, dashed edge = loose. No introduction paragraph — straight into the snapshot.
+Within the shared overview, add baseline coverage, observation date, and one row of status pills — implemented (emerald), in-progress (amber), planned (slate), gaps (red) — each with its count, anchor-linked to its section. Diagram labels identify observable capabilities and user-flow steps. No introduction paragraph — straight into the snapshot.
 
 ## Section patterns
 
@@ -31,19 +31,19 @@ Within the shared overview, add baseline coverage, observation date, and one row
 
 **Vision panel** — one bordered block per candidate vision in the overview: the vision statement, an `inferred` (slate) or `confirmed` (emerald) chip, and anchor links to the implying story clusters. When skipped confirmation left it inferred, the panel links the open question.
 
-**System module map** — the centerpiece. One diagram showing hierarchy and coupling together (patterns below). Takeaway sentence names the biggest structural fact ("Three modules route through `core/state`; pricing couples tightly to it").
+**Product surface map** — a diagram of actors, observable capabilities, and user-flow relationships, with an adjacent takeaway and source evidence.
 
 **User journeys** — one horizontal step chain per flow: actor chip → entry point → steps → outcome. Each step links to its canonical capability or journey record. Hand-built flex row of boxes with SVG arrows; a journey chart only when satisfaction/effort per step genuinely matters.
 
 **Functional areas** — linked capability records grouped by area, with evidence in `<details>`:
 
 - **Stories table** — story, surface need, deep need, modules (anchor-linked), evidence. Rows summarize and anchor-link the canonical records; layer entries live on those records. Surface needs carry an `evidenced` chip when code-backed; deep-need cells carry a slate `inferred` chip until confirmed; fundamental needs live in the per-area `<details>`, not the table. Inferred personas marked with a slate `inferred` chip naming the source.
-- **Boundary verdict row** — cohesion (High/Medium/Low), coupling (Tight/Loose), and fit (serves / over-serves / under-serves / serves-no-real-need) as chips; a red `refactor candidate` chip when structurally flagged; an amber `vision-strained` chip when resilience against the candidate vision is poor.
-- **Interaction diagram** — graph of this area's modules and what they call, using the offline diagram pattern below.
+- **Constraint row** — observed permissions, recovery, accessibility, or latency, with environment/revision and evidence; unknown expectations stay questions.
+- **Interaction diagram** — graph of this area's user-flow steps and observable outcomes, using the offline diagram pattern below.
 
 **In-progress / planned** — two separate tables. In-progress rows name the missing link ("UI without backend"); planned rows carry a confidence chip. Never merged with implemented.
 
-**NFR profile** — for frameworks and supporting components only. One row per component, five dimensions (ease of use, performance, extensibility, fault tolerance, generality) rendered as filled/empty dots (`●●●○○`), evidence path trailing.
+**Observable constraints** — show measured or promised user-facing behavior with evidence and assessed coverage; do not rate internal architecture.
 
 **Gaps and opportunities** — enrich existing shared gap/opportunity records: finding, expected versus observed behavior, evidence, affected capabilities, and linked questions. Questions live in shared question records. Use badges for navigation, not duplicate cards with independently maintained findings.
 
@@ -53,7 +53,7 @@ Pick per content; vary them — sameness reads as filler.
 
 ### Graph diagrams
 
-For coupling and interactions, use a small inline SVG or a readable Mermaid source block with an adjacent explanation. If a renderer is already available, embed its SVG result; do not add a remote runtime dependency. Link the diagram to the capabilities and evidence it explains. Diagram labels summarize records; they do not own product state.
+For user flows and capability relationships, use a small inline SVG or a readable Mermaid source block with an adjacent explanation. If a renderer is already available, embed its SVG result; do not add a remote runtime dependency. Link the diagram to the capabilities and evidence it explains. Diagram labels summarize records; they do not own product state.
 
 ### Nested boxes (module hierarchy)
 
@@ -63,14 +63,10 @@ Hand-built: modules as bordered `<div>`s, submodules nested inside, depth = nest
 
 Flex row: rounded boxes joined by SVG arrows, actor chip on the left, outcome box highlighted. Each box anchor-links to its module section. Keep one journey per row; allow horizontal overflow within the chain.
 
-### Dot ratings (NFR profile)
-
-Filled/empty dots in a table cell beat a radar chart for five dimensions — comparable down a column, legible without a legend.
-
 ## Style guidance
 
 - Editorial, not corporate-dashboard: generous whitespace, a readable maximum width, stone/slate palette, one accent (indigo works) for navigation and links.
-- Status colors mean status only: emerald implemented, amber in-progress/opportunity, slate planned/question, red gap/tight coupling.
+- Status colors mean status only: emerald implemented, amber in-progress/opportunity, slate planned/question, red gap.
 - Module labels inside diagrams: small uppercase monospace text with modest letter spacing — schematic, not UI.
 - Keep diagrams under ~360px tall; wide ones scroll in their own overflow container, never the page.
 - Inline shared CSS once. Native `<details>`, anchors, and tables work without JavaScript. Do not add Tailwind/Mermaid CDN dependencies; use the shared document styling and inline visuals.

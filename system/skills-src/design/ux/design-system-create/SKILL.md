@@ -5,6 +5,21 @@ description: "Build design authority from scratch when there is nothing to adopt
 
 Last updated: 2026-09-09
 
+## Context contract
+
+```yaml
+context:
+  requires: [product.relevant_context]
+  retrieves: [design.existing_authority, operations.constraints]
+  produces: [design.tokens, design.rationale]
+  updates: [design.applicable_rules, design.accepted_decisions]
+  invalidates: [design.token_dependents]
+  handoff_to: [interaction_design, visual_design]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 # Design System Creation
 
 Create the canonical design authority that grounds all design work in this project: `DESIGN.md` at the project root — the **how** of the shared design triad ([references/design-memory.md](references/design-memory.md)).
@@ -36,12 +51,9 @@ Do NOT use when:
 
 ### Step 0: Check for Existing Design Authority
 
-Resolve the work root before writing anything. Read `docs/agents/memory.md` and use the work root it configures; when it configures none, or the file is absent, the work root is `.scratch/`. Then find the active effort:
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
-```bash
-WORK_ROOT=<the path resolved above>
-EFFORT=$(basename "$(find "$WORK_ROOT" -maxdepth 1 -type d -name '[0-9]*-*' 2>/dev/null | sort -r | head -1)")
-```
+The coordinator supplies the configured work root and exact active effort; never select the newest directory as identity.
 
 This skill does not require an active effort — with no effort directory, write the preview to `$WORK_ROOT/design/` instead.
 
@@ -95,7 +107,7 @@ Present what you found (persona, platform, type) and ask for:
 - **Memorable thing**: What should users remember about this experience? (forces unique direction)
 - **Design direction**: Any specific aesthetic, references, or constraints?
 
-Do NOT ask these as separate questions. Present all in one AskUserQuestion with:
+Do NOT ask these as separate questions. Present all in one question through the coordinator with:
 - Pre-filled defaults from auto-gather
 - Only ask for genuine gaps
 - Include context about where each pre-fill came from
@@ -104,20 +116,9 @@ Do NOT ask these as separate questions. Present all in one AskUserQuestion with:
 
 Generate a complete design system grounded in the product context. This is a consultative process — propose with rationale, not a form.
 
-Read `<work-root>/<effort>/design/capabilities.md` — or `<work-root>/design/capabilities.md` with no active effort. If it carries a `② knowledge — type/color` row, follow that row's decision through 2.2 and 2.3.
+Request optional ② type/color knowledge through the coordinator. Use it as evidence for palette/type choices; this skill owns the decision and native fallback.
 
-Otherwise scan the skills available in this session for one that answers "what are the valid options" from a catalog of font pairings or palettes, without picking one for you. Append one row recording what was found, or `none`. Rows are `| slot | found or none | decision | this skill |`; create the file with that header when absent. With `none`, propose from first principles — the default path.
-
-With something found, name it and what it would change, then **AskUserQuestion**:
-
-> A design-knowledge reference is available: **[name]** — it would [what it changes, one clause].
->
-> **A)** Propose typography and palette from first principles (Recommended)
-> **B)** Consult **[name]** for pairings and palettes suited to this product type
-
-The row decides for both 2.2 and 2.3; do not ask twice.
-
-#### 2.1 Aesthetic Direction
+### 2.1 Aesthetic Direction
 
 Tie the aesthetic to product goals and user needs. Examples:
 
@@ -226,7 +227,7 @@ State these as principles, not code.
 
 ### Step 3: Generate Preview HTML
 
-Create a simple preview showing the design system elements. This is Working-layer (disposable after approval), so write to:
+Create a simple preview showing the design system elements. This is Run Context (disposable after approval), so write to:
 
 ```bash
 mkdir -p "$WORK_ROOT/$EFFORT/design"
@@ -254,7 +255,7 @@ Show the design system proposal:
 
 Then display the preview HTML inline so the user can see it rendered.
 
-Use AskUserQuestion with options:
+Use the coordinator’s question interface with options:
 - A) Approve this design system (write DESIGN.md at the project root)
 - B) Adjust [specific element] — specify what to change
 - C) Start over with different direction
@@ -266,56 +267,7 @@ If C: Return to Step 1 with new direction
 
 After approval, write `DESIGN.md` at the project root. Machine-readable tokens go in YAML frontmatter; judgment stays in prose. This is the shape external ⑤ lifecycle tools maintain, so the native path and the tool path produce the same file.
 
-```markdown
----
-colors:
-  surface-page: "#FFFFFF"
-  surface-raised: "#F9FAFB"
-  surface-overlay: "#FFFFFF"
-  text-primary: "#111827"
-  text-secondary: "#6B7280"
-  text-tertiary: "#9CA3AF"
-  accent: "#3B82F6"
-  accent-hover: "#2563EB"
-  accent-active: "#1D4ED8"
-  success: "#10B981"
-  warning: "#F59E0B"
-  error: "#EF4444"
-  info: "#3B82F6"
-  border-default: "#E5E7EB"
-  border-subtle: "#F3F4F6"
-typography:
-  font-heading: "'[Font]', [fallbacks]"
-  font-body: "'[Font]', [fallbacks]"
-  scale-base: 16px
-  scale-ratio: 1.25
-spacing: [4, 8, 12, 16, 24, 32, 48, 64]
-radius:
-  sm: 6px
-  md: 10px
-  lg: 20px
-  full: 9999px
----
-
-# Design Authority
-
-Last updated: YYYY-MM-DD
-
-## Aesthetic Direction
-
-[2-3 sentences: what this design communicates and why it fits the product/users]
-
-## Typography
-
-### Fonts
-- **Heading**: [Font Name] — [rationale]
-- **Body**: [Font Name] — [rationale]
-
-### Font Stacks
-```css
---font-heading: '[Font]', [fallbacks];
---font-body: '[Font]', [fallbacks];
-```
+Read [Example 1](references/output-examples.md#example-1) when producing this artifact.
 
 ### Type Scale
 Base and ratio per frontmatter.
@@ -391,28 +343,24 @@ If `docs/design/prototype.html` exists, re-sync its `:root` token block from the
 ### Step 6: Summary
 
 Report what was created:
-- `DESIGN.md` — Human layer, git-tracked canonical design authority (the triad's **how**)
-- `<work-root>/<effort>/design/system-preview.html` — Working layer, preview (can be deleted)
+- `DESIGN.md` — Current State, git-tracked canonical design authority (the triad's **how**)
+- `<work-root>/<effort>/design/system-preview.html` — Run Context, preview (can be deleted)
 
 Next steps:
 - Use `/interaction-design` to define structure and states in the canonical prototype, then `/visual-design-variants` for visual options
 - Use `/design-implement` to convert approved designs into production code
 - DESIGN.md is now the source of truth; refer to it in all visual work
 
+## Accepted decision handoff
+
+At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+
 ## Shared Memory Contract
 
 Full contract: [references/design-memory.md](references/design-memory.md).
 
-```text
-Triad role:  HOW — from-scratch path for the canonical DESIGN.md
-Layer:       human — design authority outlives every effort that uses it
-Owns:        DESIGN.md at the project root (as /design-context's delegate)
-Contributes: <work-root>/<effort>/design/capabilities.md — the `② knowledge — type/color` row only
-Coordinates: state.md — records that design authority now exists and names the next stage
-Promotes:    aesthetic rationale that constrains the build → an ADR, via domain-modeling
-```
 
-Resolve the work root and active effort from `docs/agents/memory.md`, defaulting to `.scratch/`. The approval preview is a working artifact at `<work-root>/<effort>/design/system-preview.html` and dies with the effort.
+Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
 Durability test: `DESIGN.md` yes — every later component reads it. The preview no; once the authority is written, the authority is the answer.
 
@@ -437,7 +385,7 @@ Before writing `DESIGN.md`:
 - `CONTEXT.md` (design principles if any)
 
 **Writes to:**
-- `DESIGN.md` at project root (Human layer)
+- `DESIGN.md` at project root (Current State)
 - `docs/design/prototype.html` `:root` token block (sync only, when a prototype exists)
 
 **Feeds:**

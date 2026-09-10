@@ -3,7 +3,22 @@ name: review-design-doc
 description: Engineering review of a design doc (DESIGN.md, docs/plans/*.md) BEFORE any code is written. Catches scope creep, implicit assumptions, missing failure modes, and overcomplexity in the plan itself. Use this skill whenever the user asks to "review the plan", "review my DESIGN.md", "check my design doc", "is the plan ready", or mentions they are about to start coding from a plan/spec document. Also use proactively when the user shares a design doc and is about to start implementation — catching plan-stage issues is 10x cheaper than finding them after code is written.
 ---
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [design.proposal]
+  retrieves: [change.requirements, system.current_state, operations.constraints]
+  produces: [design.review_findings]
+  updates: [change.design_review_evidence]
+  invalidates: [design.unsupported_assumptions]
+  handoff_to: [design, implementation]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 # Engineering Plan Review
 
@@ -18,15 +33,7 @@ You are a staff engineer reviewing a design document before any code is written.
 
 ## Step 0 — Locate the plan
 
-1. If the user provided a path, use it. Read the whole file.
-2. Otherwise, find the most recent plan:
-   ```bash
-   ls -t docs/plans/*.md 2>/dev/null | head -1
-   ```
-3. If multiple plans are plausible, ask the user which one.
-4. If no plan exists, STOP and tell the user this skill reviews an existing plan — offer to help write one instead.
-
-Read the full plan start to finish before analyzing anything. Note the branch (`git branch --show-current`) — you'll need it for the output artifact.
+Use the coordinator-resolved proposal and canonical change/spec/criteria. Explicit user paths win; ask if multiple proposals remain plausible. Read relevant accepted contract/decision revisions and Current State evidence. A missing proposal blocks this review, but no particular plan filename is required. Keep proposed scope distinct from accepted requirements.
 
 ## Step 1 — Scope Challenge (do this first, always)
 
@@ -37,11 +44,11 @@ Before reviewing any section, answer:
 3. **Complexity smell:** Does the plan touch more than 8 files OR introduce more than 2 new services/classes? If yes, treat it as a smell and challenge whether the same goal can be reached with fewer moving parts.
 4. **Completeness check:** Is the plan the complete version, or a shortcut that saves human-hours but only minutes with AI-assisted coding? When AI makes completeness cheap (tests, edge cases, error paths), recommend the complete version.
 
-**If scope-challenge triggers (rebuild / 8+ files / 2+ services / shortcut),** call AskUserQuestion BEFORE proceeding. Present a reduced scope as option A. Do not continue the review until scope is agreed.
+**If scope-challenge triggers (rebuild / 8+ files / 2+ services / shortcut),** ask through the coordinator BEFORE proceeding. Present a reduced scope as option A. Do not continue the review until scope is agreed.
 
 ## Step 2 — Review sections (after scope is agreed)
 
-Walk sections 2.1 through 2.6 in order. After EACH section: STOP. For every issue with confidence ≥ 7, call AskUserQuestion individually (one issue = one call, never batch). Present 2–3 options with tradeoffs, your recommendation, and which engineering preference it maps to.
+Walk sections 2.1 through 2.6 in order. After EACH section: STOP. For every issue with confidence ≥ 7, ask through the coordinator individually (one issue = one call, never batch). Present 2–3 options with tradeoffs, your recommendation, and which engineering preference it maps to.
 
 ### 2.1 Architecture
 
@@ -68,6 +75,7 @@ Apply these cognitive patterns as you review:
 ### 2.3 Test Strategy
 
 Not a coverage audit (that's `review-code-quality`'s job). Just: does the plan specify what will be tested and how?
+- Do verification expectations map to canonical acceptance-criterion IDs and relevant contracts?
 - Are critical paths named?
 - Are edge cases listed?
 - Is there a regression case for any behavior being changed?
@@ -123,7 +131,7 @@ docs/eng-reviews/plan-review-{branch}-{YYYYMMDD-HHMM}.md
 
 The artifact must contain:
 
-1. **Header** — plan path, branch, date, reviewer: review-design-doc
+1. **Header** — canonical change/task, plan/spec/contract references and consumed revisions, source baseline, Last updated date, reviewer: review-design-doc
 2. **Scope decision** — did scope-challenge trigger? accepted as-is or reduced? one-line summary.
 3. **Findings by section** — all findings ≥ 7 confidence, in the exact finding format above.
 4. **NOT in scope** — deferred items agreed during the review.
@@ -149,7 +157,7 @@ The artifact must contain:
 
 ## Rules for the interactive review
 
-- One issue = one AskUserQuestion. Never combine multiple issues.
+- One issue = one question through the coordinator. Never combine multiple issues.
 - Concrete references always: section number, file path, line number if applicable.
 - 2–3 options per question, including "do nothing" when reasonable.
 - One sentence per option. User should pick in under 5 seconds.

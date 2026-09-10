@@ -3,11 +3,30 @@ name: design-operational-ontology
 description: Design or review domain-specific operational ontology architectures that integrate semantic models, executable Kinetic actions, Dynamic context and evolution, AI agents, data/writeback, decision lineage, security, and governance. Use when a user provides a PRD, product idea, workflow, data model, or existing technical architecture and wants to create or upgrade it with Palantir-inspired ontology principles; build an executable digital twin or system of action; define AI-safe decision loops; or design scenarios such as O2O投放/campaign delivery, B2C commerce, quantitative trading, manufacturing, finance, or operations.
 ---
 
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [change.intent, design.domain_scenarios]
+  retrieves: [change.requirements, system.current_state, operations.constraints]
+  produces: [design.ontology_contracts]
+  updates: [design.accepted_decisions]
+  invalidates: [implementation.affected_plan, verification.contract_coverage]
+  handoff_to: [implementation, operations]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
 # Design Operational Ontology
 
 > Last updated: 2026-09-09
 
 Turn a business decision loop—not a database schema—into a vendor-neutral operational ontology that people and AI can query, act through, audit, and evolve safely.
+
+Accepted technical contracts and consequential decisions are retained Change Context linked to the canonical change/spec/criterion IDs and consumed revisions, under [the Design contract](../../../craft/context/init-context/references/design-memory.md). Proposals remain distinct from applicable System State; update that state only with established evidence. The architecture layers described below model the product, not a replacement for the suite's four context lifecycles.
 
 ## Required references
 

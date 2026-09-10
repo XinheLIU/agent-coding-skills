@@ -5,7 +5,22 @@ description: Resolve an external technical fact with cited primary evidence. Use
 
 # Research
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [research.question]
+  retrieves: [change.relevant_context]
+  produces: [research.cited_evidence]
+  updates: []
+  invalidates: [context.evidence_dependents]
+  handoff_to: [requesting_domain]
+```
+
+Shared semantics: [shared protocol](../../context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 1. State the question and the decision it blocks. Read `docs/agents/memory.md` and the active effort when configured. The question is bounded when a source could prove or disprove the answer.
 2. Investigate official documentation, specifications, source code, or first-party APIs. Every material claim must trace to the source that owns it; record conflicts and uncertainty.

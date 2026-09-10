@@ -3,7 +3,22 @@ name: review-implementation-gaps
 description: Compare the current codebase against a design doc (DESIGN.md, docs/plans/*.md) and produce a structured gap analysis — what's complete, partial, missing, divergent, or unexpected scope creep. Use this skill whenever the user asks "what's left to do", "gap analysis", "am I done with the plan", "compare code to the plan", or "what did I miss from the design". Also use when a plan is partway implemented and the user is about to continue — knowing the current gap map prevents re-implementing finished work or skipping unfinished work. Writes a machine-readable-ish artifact that the review-code-quality skill auto-consumes.
 ---
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [design.accepted_contracts, source.review_scope]
+  retrieves: [change.requirements, verification.latest_evidence]
+  produces: [verification.implementation_gap_map]
+  updates: [change.review_evidence]
+  invalidates: [verification.unsupported_readiness]
+  handoff_to: [implementation, testing, code_review]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 # Engineering Gap Review
 
@@ -18,13 +33,14 @@ You are comparing the actual state of the codebase to what a design document pro
 
 ## Step 0 — Locate inputs
 
-1. **Design doc:** use the path the user gave, or find the most recent `docs/plans/*.md`. Read it fully.
+1. **Change and design:** use the coordinator-resolved canonical ticket/spec and acceptance criteria plus relevant accepted design/contract references. Read only relevant sections and consumed revisions. Do not select an unrelated newest plan. For an explicit standalone design audit, label absent criteria and avoid claiming acceptance readiness.
 2. **Codebase root:** assume `git rev-parse --show-toplevel`. Note the current branch — you'll need it for the output filename.
 3. If neither exists, STOP and ask.
 
 ## Step 1 — Parse the design doc into a checklist
 
 Extract planned items. For each, capture:
+- **Criterion/contract references** and consumed revisions; preserve IDs, do not rewrite normative text.
 - **Name** (short, stable identifier — lowercase with dashes, e.g., `auth-middleware`, `user-schema`)
 - **Intent** (one line — what this component is supposed to do)
 - **Planned location** (file path if the design names one; a directory hint otherwise)
@@ -45,7 +61,7 @@ Classify each item into exactly one status:
 
 | Status | Meaning |
 |---|---|
-| **COMPLETE** | Found at expected path, implementation matches intent, dependencies wired |
+| **COMPLETE** | Found at expected path, implementation matches intent, dependencies wired; static finding, not executed acceptance proof |
 | **PARTIAL** | Found but incomplete — missing branches, missing error handling, stub functions, TODO comments, or missing behaviors from the spec |
 | **MISSING** | No code found that implements this item |
 | **DIVERGENT** | Code exists but differs meaningfully from the design (different approach, different data model, different API shape) |
@@ -88,7 +104,7 @@ DEPENDENCY ORDER (build in this sequence):
 
 ## Output artifact (this is the handoff — get the schema right)
 
-Write to:
+Retain the assessment in Change Context, preserving an established review home; otherwise use `docs/changes/<change-id>/verification/`. An established path may be:
 
 ```
 docs/eng-reviews/gap-analysis-{branch}-{YYYYMMDD-HHMM}.md
@@ -98,7 +114,11 @@ Use exactly this structure — `review-code-quality` parses it:
 
 ```markdown
 # Gap Analysis
+Last updated: YYYY-MM-DD
 Generated: {YYYY-MM-DD HH:MM}
+Change/task: {canonical IDs}
+Consumed inputs: {spec/contract revisions and code revision or diff digest}
+Environment/coverage: {assumptions, omissions, and blocking effects}
 Branch: {branch}
 Design doc: {relative path to plan}
 Reviewer: review-implementation-gaps
@@ -113,6 +133,7 @@ Reviewer: review-implementation-gaps
 ## Components
 
 ### <component-name>
+- **Criteria/contracts:** <canonical IDs and references>
 - **Status:** COMPLETE | PARTIAL | MISSING | DIVERGENT | UNEXPECTED
 - **Planned:** <path or location hint> — "<intent, one line>"
 - **Actual:** <path:line-range, or — if missing>

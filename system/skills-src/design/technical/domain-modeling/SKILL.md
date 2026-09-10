@@ -5,7 +5,22 @@ description: Maintain shared domain language and durable architectural decisions
 
 # Domain Modeling
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [design.domain_question]
+  retrieves: [system.terminology, design.relevant_decisions, change.requirements]
+  produces: [design.domain_model, design.decision_records]
+  updates: [system.terminology, design.applicable_decisions]
+  invalidates: [context.term_dependents, design.contract_dependents]
+  handoff_to: [design, implementation]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Read the configured `CONTEXT.md` or `CONTEXT-MAP.md`, relevant ADRs, and the product document resolved through memory/state pointers (`product.html#prd`, or a canonical legacy PRD) for candidate terms. Challenge overloaded terms with concrete scenarios and compare claims against code.
 

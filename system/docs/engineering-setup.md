@@ -1,6 +1,6 @@
 # Engineering Setup
 
-Last updated: 2026-08-25
+Last updated: 2026-09-09
 
 **Lifecycle stage 3.** Engineering Setup covers everything needed to make a codebase ready for reliable agent-assisted delivery. Its scope spans three sub-areas:
 
@@ -18,23 +18,11 @@ In agentic coding, **context is the bottleneck**. Too little context leads to ha
 
 ## The Core Framework
 
-Context lives in **four layers**, each with a different lifetime and a different author. The full model, including git-tracking policy and how `AGENTS.md` discovers the code index, is documented in the [`craft/context`](../skills-src/craft/context/README.md) category README.
+The [shared protocol](../skills-src/craft/context/init-context/references/PROTOCOL.md) defines North Star, Current State, Change Context, and Run Context. Code indexes are derived views. The [coordinator](../workflows/context-coordination.md) owns context assembly, runtime bindings, claims, transitions, and cleanup; domain skills own facts and judgments.
 
-| Layer | Question | Lives in | Git | Author |
-| --- | --- | --- | --- | --- |
-| **Human** | "How is this built, and why?" | `AGENTS.md`, `CLAUDE.md`, `docs/` | Tracked | People, agent-assisted |
-| **Wiki** | "Where is X, and what connects to it?" | `docs/wiki/`, `.codemap/`, `graphify/` | Tracked by default | Tools |
-| **Working** | "What am I doing, and where did I leave off?" | `.scratch/<effort>/` | Ignored | The active workflow |
+`sync-context` reconciles drift and routes affected conclusions to their owners. Keep accepted requirements/designs and compact final evidence after completion; remove only reconciled execution material. Current-state summaries explain applicable behavior/boundaries with source revisions, while ADRs and change records retain historical rationale.
 
-`sync-context` full mode is the single entry point responsible for reconciling the layers when they drift.
-
-Within the Human layer, ownership splits further by **content type** and **runtime**:
-
-- **Operational** — *what/why* the project is. Project overview, architecture, modules, interfaces, data tables, test coverage.
-  - `CLAUDE.md` / `AGENTS.md` content shape → `review-agent-instructions` (detects which file is present and applies the matching skeleton and line ceiling)
-- **Technical** — *how the agent must behave*. Naming, formatting, API patterns, security rules, per-task guardrails, implicit conventions.
-  - Discovery, classification, runtime-aware routing → `extract-rules` (writes to `.claude/rules/*.md`, inline AGENTS.md, or `docs/conventions/*.md` based on detected runtime; per-task patterns to `docs/spec.md`)
-- **Cross-runtime parity** — port Claude-specific surfaces (slash commands, hooks, `.claude/skills/`, orchestrator subagents) into agent-agnostic equivalents → `translate-agent-context`
+Instruction-file content is maintained by `review-agent-instructions`; runtime parity by `translate-agent-context`. Other documentation capabilities are optional and must be available before invocation.
 
 ---
 
@@ -44,9 +32,9 @@ Within the Human layer, ownership splits further by **content type** and **runti
 
 The one-time setup entry point for the whole collection. Writes `docs/agents/memory.md` and initializes the configured memory layers.
 
-**Phase A (setup)** — runs when routing is absent. Configures the shared memory layers, work root, issue tracker, and optional wiki; writes `docs/agents/memory.md`; and bootstraps the Working layer. Broader documentation, rule extraction, and indexing are separate capabilities.
+**Phase A (setup)** — runs when routing is absent. Configures the shared memory layers, work root, issue tracker, and optional wiki; writes `docs/agents/memory.md`; and bootstraps the Run Context. Broader documentation, rule extraction, and indexing are separate capabilities.
 
-**Phase B (sync)** — runs when routing exists. Detects drift across Human docs, Wiki index, and Working memory, then makes narrow factual corrections or reports structural work for the owning capability. Distinguishes drift (fix the doc) from a constraint violation (fix the code).
+**Phase B (sync)** — runs when routing exists. Detects drift across domain records, derived indexes, and Run Context, then makes narrow factual corrections or reports structural work for the owning capability. Distinguishes drift (fix the doc) from a constraint violation (fix the code).
 
 Protocol spec at [`init-context/references/PROTOCOL.md`](../skills/init-context/references/PROTOCOL.md). Triggers: "set up context management", "the docs are stale", "sync the context", run after a merge or before a handoff.
 

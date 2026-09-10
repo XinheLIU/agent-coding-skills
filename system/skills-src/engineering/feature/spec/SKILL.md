@@ -1,174 +1,58 @@
 ---
 name: spec
-description: Start a new feature by creating a git worktree, feature branch, and spec.md (user stories, functional requirements, success criteria). Use when the user wants to kick off a new feature from a description. Folds a short clarify Q&A inline to resolve ambiguities.
+description: Establish a feature's delivery boundary around its canonical ticket and requirements. Reuse an existing spec; create requirements only when none exist. Use to prepare an approved change for design, planning, and implementation.
 ---
 
-Last updated: 2026-09-08
+# Spec — Establish the change boundary
 
-# /spec — Start a new feature
+Last updated: 2026-09-09
 
-Turn a short feature description into a worktree + `specs/NNN-<short-name>/spec.md`. This is the first step of the spec-driven workflow (`/spec` → `/plan` → `/tasks`).
+## Context contract
 
-## When to use
+```yaml
+context:
+  requires: [change.intent_or_existing_requirements]
+  retrieves: [product.relevant_context, design.relevant_decisions]
+  produces: [change.spec_readiness]
+  updates: [change.requirements_when_absent]
+  invalidates: [design.requirement_dependents, verification.criteria]
+  handoff_to: [design, implementation]
+```
 
-Invoke this skill when the user:
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
-- Says "add a new feature", "start a feature", "let's build X", or gives a feature pitch.
-- Runs `/spec <description>`.
 
-Do NOT use this skill for bug fixes, refactors, or edits to an existing feature.
+Consume the canonical change and requirements selected by the coordinator. Keep ticket, requirement, and acceptance-criterion IDs across delivery; a new branch is not a new change identity.
 
 ## Inputs
 
-- **Required**: a natural-language feature description (user message or `$ARGUMENTS`).
-- **Optional**: the product document resolved from user paths, `docs/agents/memory.md`, and `state.md` (`product.html#prd`, or a canonical legacy PRD). Follow its index to relevant persona, capability, scope, acceptance, and question records. Derive stories, FRs, and success criteria from accepted intent; cite record anchors in **Input**. Read active linked review findings before relying on durable conclusions. Proposed behavior and disputed premises are not settled requirements; missing implementation-critical answers remain blockers.
-- **Optional**: design artifacts — resolved `map.md` decisions (`wayfinder`), root `DESIGN.md` and `docs/design/prototype.html` (the `design/ux` triad — see `workflows/design.md`; legacy `docs/design/system.md` readable until migrated), glossary and ADRs (`domain-modeling`), architecture docs. Treat them as constraints and terminology sources; implementation detail they contain still stays out of `spec.md` — it belongs to `plan.md`.
-- **Implicit**: current working directory must be inside a git repository.
+- Existing ticket/spec and accepted product records, or explicit feature intent when no requirements exist.
+- Relevant Product evidence, scope, criteria, open questions, and review findings.
+- Accepted design/contract references and relevant Current State when available.
 
-## Outputs
+Use [the Product contract](../../../craft/context/init-context/references/product-memory.md) for requirement authority and [delivery](../../../../workflows/feature-delivery.md) for coordination and the planning/execution stages.
 
-- A new worktree at `<repo-parent>/<repo-name>.worktrees/NNN-<short-name>/` on branch `NNN-<short-name>`.
-- `specs/NNN-<short-name>/spec.md` inside the worktree, derived from `references/spec-template.md`.
-- Session is switched into the worktree (via `EnterWorktree path=...`) so follow-on commands run there.
+## Reuse before authoring
 
-## Prerequisites check
+1. Follow the canonical ticket's spec link and relevant criterion anchors. An existing Markdown spec or canonical legacy PRD remains the requirement source. Do not create another `spec.md` from its contents.
+2. Assess whether behavior, scope, priorities, acceptance, exclusions, and success measures are specific enough to implement. Read accepted design as constraints and linked decisions; do not recast it as new requirements.
+3. Surface contradictions or missing implementation-critical answers with their exact blocking effect. Resolve from existing evidence first; ask only remaining substantive questions. Route proposed scope changes to Product and contract changes to Design.
+4. Return the change ID, canonical spec path and consumed revision, criterion references, accepted decisions, unresolved questions, and next action. The coordinator updates run routing.
 
-Run at the start. If any fails, stop and tell the user.
+## When no canonical requirements exist
 
-1. `git rev-parse --git-dir` succeeds (we are in a git repo).
-2. The feature description is non-empty. If empty, ask the user for it.
-3. Working tree state is clean enough that creating a new worktree is safe. (Worktrees don't touch the current tree, so uncommitted changes are fine — just note them in the report.)
+Create a single spec in the established product/tracker home; for a new local-only change default to tracked `docs/changes/<change-id>/spec.md`. Establish or reuse its canonical ticket. Use [the spec template](references/spec-template.md) only for this branch. Explicit user intent may supply authority; missing prior discovery artifacts do not force a research pipeline.
 
-## Workflow
+Requirements use stable IDs, independently testable behavior, and criterion IDs with Given/When/Then or another concrete pass/fail signal. Separate observed behavior from proposed or accepted scope. Record important edge/recovery cases and assumptions; do not invent dates, metrics, or scope to fill a template. Technical contracts and consequential decisions are separately linked Change Context.
 
-### Step 1 — Derive the short name
+For product-backed changes, return the new spec reference for `write-prd` to reconcile into the existing product reading index/roadmap. It tightens the same source instead of generating a competing spec. No product document is required solely for a small local change.
 
-From the description, pick **2–4 kebab-case words** that capture the feature. Examples:
-- "Add a pomodoro timer CLI with session history" → `pomodoro-timer`
-- "Let users reset their password via email" → `password-reset-email`
+## Verify and hand off
 
-Keep it short and content-bearing. Avoid articles ("the", "a") and generic words ("feature", "system").
+- Exactly one canonical requirement source; existing IDs and unrelated requirements preserved.
+- Requirements and acceptance criteria are testable, with authorization/decision basis and source references.
+- Missing answers remain explicit blockers; proposed intent is not silently accepted.
+- Accepted designs/contracts are accessible and revision-labelled.
+- Next action is the relevant design stage or direct planning under the delivery workflow.
 
-### Step 2 — Pick the feature number
-
-- Resolve repo root: `git rev-parse --show-toplevel`.
-- If `<repo-root>/specs/` does not exist, pick `001`.
-- Otherwise scan for existing `NNN-*` subdirectories, find the max `NNN`, and use `max + 1`, zero-padded to 3 digits.
-
-The resulting identifier is `NNN-<short-name>` (e.g., `003-pomodoro-timer`). This is used for BOTH the branch name and the spec directory.
-
-### Step 3 — Create the worktree and branch
-
-- Worktree path: `<repo-parent>/<repo-name>.worktrees/NNN-<short-name>/`
-  - `<repo-name>` = basename of repo root.
-  - `<repo-parent>` = parent of repo root.
-- Run: `git worktree add -b NNN-<short-name> <worktree-path>`
-- Switch the session into the worktree using the `EnterWorktree` tool with `path=<worktree-path>`. (EnterWorktree accepts `path` for an existing worktree that already appears in `git worktree list`.)
-
-All subsequent file operations use absolute paths inside the worktree.
-
-**Initialize working memory for this effort.** Immediately after switching into the worktree:
-
-- Confirm `.scratch/` is in `.gitignore`. If not, add the rule.
-- Create `.scratch/NNN-<short-name>/state.md`:
-
-```markdown
-# NNN-<short-name> — State
-
-Last updated: YYYY-MM-DD
-
-## Status
-Spec in progress.
-
-## Next action
-Finish and approve spec.md, then run /plan.
-
-## Blockers
-none
-
-## Pointers
-- Spec: `specs/NNN-<short-name>/spec.md`
-- Plan: (pending /plan)
-- Tasks: (pending /tasks)
-- Progress: `.scratch/NNN-<short-name>/progress.md`
-```
-
-This is the working memory anchor for the effort. Every subsequent skill (`/plan`, `/tasks`, `handoff`) updates this file in place rather than creating a new one.
-
-### Step 4 — Create the feature directory
-
-`mkdir -p <worktree>/specs/NNN-<short-name>/`
-
-### Step 5 — Draft `spec.md`
-
-Read `references/spec-template.md` (in this skill directory) and fill in every placeholder. Write the result to `<worktree>/specs/NNN-<short-name>/spec.md`.
-
-Content rules:
-
-- **User Stories**: prioritized P1 → P2 → P3. Each MUST be independently testable (implementing only P1 must still ship a viable MVP). Give each story a title, a "Why this priority" line, an "Independent Test" line, and at least one Given/When/Then acceptance scenario.
-- **Functional Requirements** (`FR-001`, `FR-002`, …): each MUST be testable and unambiguous. Use MUST/SHOULD language. If something genuinely cannot be determined from the description, mark it `[NEEDS CLARIFICATION: <question>]` — these become questions in Step 6.
-- **Key Entities**: include only if the feature is data-bearing. List entity name, what it represents, key attributes (no implementation types).
-- **Success Criteria** (`SC-001`, …): measurable, technology-agnostic, user- or business-outcome-oriented ("complete signup in under 2 minutes", "reduce support tickets by 50%"). No implementation language.
-- **Edge Cases**: boundary conditions, error scenarios.
-- **Assumptions**: anything you inferred because the description did not say.
-
-Never put implementation choices (framework, database, API shape) in `spec.md`. Those belong in `plan.md`.
-
-Set:
-- `**Feature Branch**: NNN-<short-name>`
-- `**Created**: YYYY-MM-DD` (today's date)
-- `**Status**: Draft`
-- `**Input**: User description: "<original description>"`
-
-### Step 6 — Inline clarify pass
-
-Scan the draft for `[NEEDS CLARIFICATION: …]` markers and for any remaining genuine ambiguities across these axes:
-
-- Functional scope, domain/data model, UX flow, NFRs, integrations, edge cases, terminology.
-
-Pick **up to 3** of the highest-impact questions. If there are fewer real ambiguities, ask fewer. **Do not invent questions** just to hit the cap. A question the PRD or a design artifact already answers is not an ambiguity; apply the answer and do not re-ask.
-
-Ask them in a single `AskUserQuestion` call (multi-question), with the recommended option listed first and labeled `(Recommended)` where you have a strong default. For open-ended answers, offer 2–3 concrete options and allow "Other".
-
-After the user answers:
-
-1. Add a `## Clarifications` section at the end of the spec (if not already present) with a `### Session YYYY-MM-DD` subsection.
-2. Append one bullet per Q/A: `- Q: <question> → A: <answer>`
-3. Apply each answer to the relevant spec sections (FRs, user stories, success criteria, edge cases, assumptions) — update in place, do not duplicate.
-4. Remove the corresponding `[NEEDS CLARIFICATION: …]` marker.
-
-### Step 7 — Validate
-
-Before finishing, check:
-
-- No remaining `[NEEDS CLARIFICATION: …]` markers.
-- Every mandatory section is present and filled (User Scenarios, Requirements, Success Criteria).
-- No implementation details (language, framework, DB, HTTP verbs, file paths) appear in requirements or success criteria.
-- Every FR is independently testable.
-- Every SC is measurable (has a number or a clear pass/fail signal).
-- Every user story has at least one Given/When/Then acceptance scenario.
-
-If any check fails, fix the spec and re-validate. At most 2 fix iterations — if still failing, report what could not be resolved and stop.
-
-### Step 8 — Report
-
-Output a concise summary to the user:
-
-- Branch created: `NNN-<short-name>`
-- Worktree path
-- Spec path
-- Working memory: `.scratch/NNN-<short-name>/state.md` created
-- User story count by priority
-- FR count, SC count
-- Any assumptions the user should confirm
-- Suggested next command: `/plan`
-
-## Non-goals
-
-- Do NOT generate `plan.md`, `tasks.md`, research notes, data models, contracts, or checklists. Those belong to later skills.
-- Do NOT modify the original (pre-worktree) working tree.
-- Do NOT commit or push.
-
-## Template
-
-The spec structure is defined in `references/spec-template.md` in this skill directory. Read it, fill it, write the result. Do not keep the HTML comments from the template in the final `spec.md`.
+Worktree creation, path resolution, claims, and runtime bindings belong to the coordinator. This skill does not require a worktree or an unavailable planning skill. Do not commit or push.

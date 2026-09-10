@@ -3,7 +3,7 @@
 <!-- Keep this file under 200 lines. It is an index, not an encyclopedia.
      Anything that grows past a few lines belongs in docs/ with a pointer here. -->
 
-Last updated: {{YYYY-MM-DD}}
+Last updated: 2026-09-09
 
 ## What this project is
 
@@ -23,8 +23,7 @@ Last updated: {{YYYY-MM-DD}}
 
 Read the relevant file before changing anything.
 
-Route only WHY questions here. Structure, naming, and current behaviour are read
-from the code or the index, never from a row in this table.
+Route relevant North Star, Current State, Change Context, and Run Context here. Current-state summaries cite executable evidence; indexes are derived views.
 
 | I want to know... | Read |
 | --- | --- |
@@ -32,6 +31,8 @@ from the code or the index, never from a row in this table.
 | Why a hard-to-reverse choice was made | {{decision-record directory}} |
 | What problem the product solves, and what is out of scope | {{product-intent directory}} |
 | A constraint that binds the project from outside | {{whichever of the above owns it}} |
+| Requirements, accepted decisions, and final evidence for this change | {{canonical change/ticket/spec}} |
+| Applicable system boundaries and operational constraints | {{current-state docs and source evidence}} |
 | What is happening right now | {{work-root}}/{{effort}}/state.md |
 
 <!-- Every path here must resolve. Delete rows whose target you did not create. -->
@@ -50,18 +51,18 @@ symbols, callers, or change impact. Refresh with `{{refresh-command}}`.
 
 1. Run `{{init script}}` to verify the environment.
 2. Read `git log --oneline -10` for recent history.
-3. Read `{{work-root}}/state.md` for status and the next action, then follow its pointers.
+3. Read `{{work-root}}/{{effort}}/state.md` for canonical change/status pointers and the next action, then follow its pointers.
 
 ## Working rules
 
 <!-- Genuine constraints only. Generic advice earns no place here. -->
 
 1. **Read the code for structure.** Derive module boundaries and patterns from the
-   source or the index; this file explains only why they are that way.
+   source or a source-verified index; Current State explains applicable boundaries.
 2. **Verify before claiming.** Confirm a relationship against the code, never
    against another document.
 3. **Record a decision where decisions live.** When a change settles a
-   hard-to-reverse trade-off, add the record; do not describe the new structure.
+   consequential trade-off, retain its rationale and update applicable Current State.
 4. {{Project-specific rule.}}
 
 ## Do not

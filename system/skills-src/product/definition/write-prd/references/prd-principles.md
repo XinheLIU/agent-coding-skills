@@ -180,4 +180,4 @@ When using this PRD as input for an AI coding agent:
 4. Point `state.md` at the configured `product.html#prd` and relevant requirement anchors. Legacy PRDs remain readable until migrated under the product contract.
 5. Update affected records and a dated change note when accepted intent changes; mark dependent conclusions for review where needed.
 
-The product document lives in the tracked Human layer. Promotion preserves essential evidence and rationale there before working conclusions become pointers. Templates above describe content quality; [the product memory contract](product-memory.md) governs HTML persistence, partial knowledge, shared records, and authority.
+The product document contains tracked North Star, Current State, and Change Context records under the shared protocol. Promotion preserves essential evidence and rationale there before working conclusions become pointers. Templates above describe content quality; [the product memory contract](product-memory.md) governs HTML persistence, partial knowledge, shared records, and authority.

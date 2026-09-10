@@ -1,6 +1,6 @@
 # System TODO
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 This list separates adaptation work inherited from Matt’s model from cleanup required by the existing system. Priority reflects workflow correctness and data integrity.
 
@@ -10,18 +10,18 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 
 ## P0 — Shared memory and delivery
 
-- [ ] Implement the missing `plan` skill. It must own `plan.md`, testing seams, architecture decisions, and the handoff to dependency tickets.
-- [ ] Update every persistent existing skill to read `docs/agents/memory.md`, declare owned artifacts, and update `state.md` at transitions.
-- [ ] Change `tasks` from a single `tasks.md` checklist to one vertical-slice issue file per ticket with `Status`, `Blocked by`, and `Claimed by`.
-- [ ] Resolve the PRD/spec boundary: `write-prd` owns product intent; `spec` owns technical feature behavior.
+- [x] Define direct planning/execution contracts in feature delivery; dedicated skills remain optional future work.
+- [x] Declare six-field context contracts across 45 skills; centralize coordination and lifecycle semantics.
+- [x] Decompose independently deliverable slices as child tickets; keep fine-grained steps and claims in Run Context.
+- [x] Reuse one canonical change spec from Product through verification; retain accepted decisions and compact evidence.
 
 ## P0 — Matt-derived capability modifications
 
 - [ ] Merge domain-aware persistence from `grill-with-docs` into `brainstorm-feature`; use `grilling` as the question primitive and `domain-modeling` as the only glossary/ADR writer.
 - [ ] Add a synthesis mode from `to-spec` to `spec` that consumes approved conversation/map decisions without repeating the interview.
 - [ ] Merge tracer-bullet and expand-contract rules from `to-tickets` into `tasks`.
-- [ ] Merge `implement` into the delivery executor: claim one frontier issue, use TDD, run project checks, review, update shared state, and never commit automatically.
-- [ ] Reconcile TDD contracts: keep behavior-level red/green slices at agreed public seams; decide whether refactoring occurs inside each cycle or in the review phase.
+- [x] Define the delivery executor contract: canonical identity, claims, criterion-based TDD/checks, review, shared reconciliation, and no automatic commit.
+- [x] Reconcile TDD around criterion-based behavior slices; optional refactoring stays inside a green preservation loop, with reviews selected by the coordinator.
 - [x] ~~Add Standards and Spec as separate axes in `review-code-quality`~~ — Done 2026-09-08: findings are axis-tagged and reported separately; the Spec axis runs as an inline spec-fidelity pass reusing gap-analysis statuses, so no third overlapping reviewer was created.
 - [ ] Connect `wayfinder` ticket creation and completion directly to the roadmap renderer.
 - [ ] Add tracker-specific GitHub, GitLab, and local-Markdown templates to `manage-context` (Phase A).
@@ -34,7 +34,7 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 - [ ] Fix `document-codebase` stale names (`review-Codex-md`, `.Codex/rules`), duplicated AGENTS/CLAUDE wording, project-specific residue, and README ownership overlap.
 - [x] ~~Fix `analyze-test-gaps` artifact-count contradiction~~ — Done 2026-09-08: description and Output Contract now say three artifacts across four steps.
 - [ ] Unify the `analyze-test-gaps` critical-path location with `document-codebase`.
-- [ ] Correct the retained `tdd-builder` agent’s nonexistent spec “Step 3.5” reference.
+- [x] Replace the retained `tdd-builder` handoff with canonical requirements and direct planning/execution; remove the nonexistent spec Step 3.5.
 - [ ] Make `create-readme` the sole root-README author; `document-codebase` should delegate or exclude that output.
 
 ## P1 — Runtime and discoverability

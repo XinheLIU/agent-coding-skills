@@ -1,6 +1,6 @@
 # Ideas Workflow
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 Use this workflow when the problem, product shape, or next increment is uncertain. Product skills enrich shared records rather than passing separate reports down a fixed file chain. Read [the product memory contract](../skills-src/craft/context/init-context/references/product-memory.md) for identity, authority, enrichment, promotion, and legacy inputs.
 
@@ -43,8 +43,8 @@ Demand verdicts are per-claim; the whole-product mission is tracked as a `vision
 
 Run `write-prd` as soon as Green demand establishes durable intent, then again as decisions settle. It reconciles accepted records into `product.html`, preserves essential evidence and rationale, and replaces working conclusions with links. The PRD is a human reading index over those records, not a second independently maintained document. Unresolved questions identify exactly what remains unready.
 
-Incremental efforts reuse the existing product identity. Resolve both paths from configuration and `state.md`, preserving canonical legacy product documents until an authorized migration is complete. Update state with affected anchors and the next action after each transition.
+The [coordinator](context-coordination.md) resolves product/change identity, context, and paths and applies serialized transitions. Increments reuse product identity and canonical ticket/spec/criterion IDs; legacy documents remain canonical until an authorized migration. Skills return affected anchors, consumed revisions, blockers, and next action.
 
-The design gate in `write-prd` routes to UX, technical design, feature brainstorming, or directly to `spec`. Downstream readers follow the configured product path and accepted capability/scope records, including any blocking questions. Implementation plans stay in working memory.
+The design gate in `write-prd` routes to UX, technical design, feature brainstorming, or directly to `spec`. Downstream readers follow the configured product path and accepted capability/scope records, including any blocking questions. Execution plans stay in Run Context; accepted requirements/designs and consequential decisions remain Change Context. The same spec is consumed throughout delivery.
 
 Before closing an effort, verify that durable intent remains understandable and its essential links resolve without the effort directory. Serialize shared-file writes and preserve unrelated records throughout.

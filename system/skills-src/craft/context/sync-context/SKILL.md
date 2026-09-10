@@ -1,93 +1,59 @@
 ---
 name: sync-context
-description: Detect and repair shared-context drift after setup. Use for broken routing, stale Human-layer facts, an outdated code index, or working memory that no longer matches repository state; use init-context when routing is absent.
+description: Detect and repair shared-context drift after setup. Use for broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state; use init-context when routing is absent.
 ---
 
 # Sync Context
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
-`docs/agents/memory.md` is the prerequisite. When it is absent, hand off to `init-context`.
+## Context contract
 
-Read the layer and ownership contract in [`references/PROTOCOL.md`](references/PROTOCOL.md). Load [`references/canonical-doc-layout.md`](references/canonical-doc-layout.md) for routing classification. Load the code-index or working-memory references only when the selected mode reaches those branches.
+```yaml
+context:
+  requires: [context.configuration]
+  retrieves: [context.changed_premises, run.state]
+  produces: [context.drift_findings]
+  updates: [context.routing, run.state]
+  invalidates: [context.affected_dependents]
+  handoff_to: [domain_owners, coordinator]
+```
+
+Shared semantics: [shared protocol](../init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
+
+Use the [protocol](references/PROTOCOL.md) and [document layout](references/canonical-doc-layout.md) for routing, freshness, ownership, and retention. When routing is absent, use `init-context`; read-only inspection may proceed from explicit sources.
 
 ## Modes
 
-| Mode | Trigger | Scope |
-| --- | --- | --- |
-| Fast | Default, after a narrow change | Routing paths, pointers, and commands |
-| Full | `--full`, pre-handoff, after a merge, or periodic maintenance | Fast checks plus Human facts, code index, and active working memory |
+- **Fast**: inspect routing and changed premises within the requested scope.
+- **Full**: additionally reconcile affected domain context, active runs, optional indexes, and completion retention.
 
-## 1. Establish the boundary
+## Establish evidence
 
-Read the memory config and resolve all enabled roots. Select a concrete comparison boundary from the requested commit range, merge, release, or last successful sync; use document dates only as a fallback. Inspect changed, moved, and deleted files plus dependency changes.
+Use a requested revision/range, merge, release, or last successful sync as the baseline. A document date alone cannot establish freshness. Record relevant source revisions/environment and inspect changed paths, contracts, and dependencies. Follow only relevant domain records and reverse references derived from their forward relationships.
 
-The baseline is complete when every later finding can cite either current repository state or a diff since the boundary.
+## Classify and route
 
-## 2. Audit routing
+Use the layout guide's `OK`, `UPDATE`, `STRUCTURAL`, `MISSING`, `MOVE`, `PROMOTE`, `COMPACT`, and `DELETE` dispositions. Every finding names evidence, owner, affected scope, and exact proposed action.
 
-For each existing routing document, verify:
+Current-state architecture, conventions, and runbooks may explain present truth with executable evidence; do not delete them just because code also describes structure. Historical decisions retain their prior verdict and rationale. Changing a premise marks only materially affected dependents `needs review`; route reassessment to their owner instead of silently rewriting another domain's judgment.
 
-- local paths resolve and each pointer states when to follow it;
-- literal commands match current configuration and execute where safe;
-- `Last updated:` reflects relevant changes;
-- each durable fact appears in one canonical home;
-- `AGENTS.md` or `CLAUDE.md` remains an index instead of a cache of discoverable repository facts.
+## Full-mode checks
 
-Classify each finding as `OK`, `UPDATE`, `STRUCTURAL`, `MISSING`, `MOVE`, `PROMOTE`, `COMPACT`, or `DELETE`. A legacy architecture, conventions, quality, or technology document is a migration candidate when it only caches current code or configuration; retain unique rationale by moving it to `CONTEXT.md` or an ADR before proposing deletion.
+- Active runs link canonical change/task status, useful next action, blockers, required references and revisions; do not maintain independent ticket status.
+- Claims and shared writes follow serialized reconciliation. Repeated contributions with unchanged evidence create no duplicate records.
+- Generated views can be rebuilt from declared sources. Query an enabled code index against source or refresh it using its recorded command.
+- Product HTML is a semantic source under [the Product contract](references/product-memory.md), not a generated view; preserve record IDs, authority, and active review findings.
+- Design acceptance preserved consequential rationale under [the Design contract](../init-context/references/design-memory.md), independently of component documentation.
+- Final verification identifies criteria, code/diff revision, environment, failures, omissions, and release references where applicable.
 
-Routing is audited when every path and changed fact in scope has one classification and one owner.
+## Completion retention
 
-## 3. Audit full-mode branches
+Follow the protocol's retention gate. Retain the canonical ticket/spec, accepted designs/contracts, consequential decisions, compact verification and release references in Change Context. Reconcile applicable Current State. Verify all essential links and rationale with the run directory unavailable before removing execution plans, raw outputs, claims, temporary excerpts, or handoffs. A tracked spec does not become disposable on implementation.
 
-### Code index
+## Apply and verify
 
-When enabled, query a symbol changed since the boundary and confirm the result against source. A stale index is refreshed with its recorded command. Load [`references/index-tools/external-tools.md`](references/index-tools/external-tools.md) only when the configured tool cannot be identified or operated from repository instructions.
+The coordinator may repair factual routing, refresh derived indexes/views, and apply already authorized updates. Return domain findings to their owners; absent a specialized skill, the active agent can perform competent domain work under its contract. Ask only for unresolved decisions or actions outside existing authorization, naming the concrete proposed change.
 
-This branch is complete when the configured index is explicitly disabled or a source-verified query succeeds.
-
-### Working memory
-
-Load [`references/working-memory.md`](references/working-memory.md). For each active effort, verify that:
-
-- `state.md` matches landed or abandoned work;
-- `## Next action` is directly executable;
-- every pointer resolves to substantive content;
-- issue status, blockers, and claims agree with repository history;
-- generated views can be rebuilt from their declared sources;
-- product HTML is audited as a semantic source under [the product contract](references/product-memory.md): shared IDs and anchors resolve, relevant evidence and accepted decisions remain distinct, and stale dependent conclusions are visible. Do not demand a Markdown source or regenerate product HTML.
-
-For product promotion or compaction, verify essential durable evidence and rationale survive effort deletion. Route accepted amendments and disputed assessments to the relevant product skill; do not overwrite them as factual routing repairs.
-
-Apply the durability test to working facts: if deleting the work root would lose a fact the project still needs, flag it for promotion to its Human-layer owner.
-
-Scan the work root and tracked documentation locations for finished execution artifacts, including implemented specs, completed plans, closed task files, obsolete handoffs, generated working views, and scratch notes. For each completed effort, propose one `COMPACT` action:
-
-- rationale and meaningful rejected alternatives -> the existing decision-record home;
-- reader-relevant shipped outcome -> the existing changelog or release-history home;
-- current behavior and verification -> pointers to code, tests, configuration, issues, or release records;
-- remaining execution narrative -> delete after confirming it contains no unique durable fact.
-
-Do not propose an archive unless an explicit retention rule requires it. Do not create a changelog merely to preserve working history.
-
-This branch is complete when every active effort has a valid next action, every finished artifact has a verified compaction or deletion finding, and every durable fact has a canonical destination.
-
-## 4. Report and apply
-
-Report findings before structural writes, promotions, or deletions. Each finding names evidence, classification, canonical owner, exact action, and verification. Ask for one approval covering the numbered action plan; a skipped action remains unchanged.
-
-This skill may directly repair factual routing, refresh an enabled index, update current `state.md` fields, and regenerate views. Route structural work as follows:
-
-| Finding | Owner |
-| --- | --- |
-| Missing memory configuration or layer structure | `init-context` |
-| Instruction-file hierarchy or pointer quality | `review-agent-instructions` |
-| Product intent awaiting promotion | the skill that owns product docs, when one is installed |
-| Terminology or a durable technical decision | the skill that owns decisions and terminology, when one is installed |
-| Reader-relevant completed change | the workflow that owns the existing changelog or release history, else the user |
-
-Where no such skill is installed, report the promotion candidate and leave authoring to the user. This skill detects misplacement; it does not author decisions.
-
-Apply independent actions concurrently only when their files and state do not overlap. Update `Last updated:` in every edited Markdown file and preserve unrelated user content.
-
-Synchronization is complete when every approved action is verified, every deferred action is explicit, all routing pointers resolve, no promoted fact remains duplicated in working memory, and no approved completed execution artifact remains. Leave commits to the user.
+Preserve unrelated/user-authored records, update Markdown dates, and verify changed references. Report applied, deferred, and still-blocked findings with scope and evidence. Synchronization is complete only when all applied actions are verified and retained change records survive cleanup. No commit is implied.

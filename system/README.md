@@ -1,29 +1,14 @@
 # Agent Coding System
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 This directory is the plugin and product. Its skills share a repository memory system: setup declares the paths and protocols once, then idea, delivery, testing, debugging, review, and documentation skills coordinate through those artifacts.
 
 ## System model
 
-```mermaid
-flowchart LR
-    C[setup command] --> P[docs/agents/memory.md]
-    W[workflow] --> S[skills]
-    S <--> P
-    P --> CORE[core memory<br/>context + ADR]
-    P --> HUMAN[human memory<br/>README + docs + PRDs]
-    P --> WIKI[optional wiki<br/>code maps]
-    P --> WORK[working memory<br/>state + specs + issues + evidence]
-    WORK -->|promote what settles| HUMAN
-    WORK -->|promote trade-offs| CORE
-    WORK --> PRODUCT[shared product HTML records]
-    PRODUCT -->|promote| HUMAN
-    WORK --> MD[engineering Markdown state]
-    MD --> HTML[generated HTML views]
-```
+The [shared protocol](skills-src/craft/context/init-context/references/PROTOCOL.md) defines four lifecycles: North Star, Current State, Change Context, and Run Context. Product records retain their HTML format; engineering tickets and specs keep Markdown or established tracker homes. One canonical ticket/spec connects all contributions.
 
-The protocol makes ownership explicit: each fact has one canonical home; skills follow pointers instead of copying state. Product skills enrich shared HTML records directly; engineering task HTML remains generated from Markdown. Promotion runs one way — a settled decision moves out of the disposable work root into a tracked layer, leaving a link behind rather than a copy.
+[Workflow coordination](workflows/context-coordination.md) resolves paths and identity, assembles relevant context, binds available runtime capabilities, serializes contributions, tracks freshness, and cleans up reconciled scratch. Skills retain domain reasoning and evidence interpretation.
 
 ## Structure
 
@@ -39,20 +24,11 @@ The protocol makes ownership explicit: each fact has one canonical home; skills 
 | [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin manifest |
 | [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest |
 
-## Memory layers
+## Context and retention
 
-| Layer | Answers | Lifetime | Git | Typical contents |
-| --- | --- | --- | --- | --- |
-| Core | What words and constraints bind this project | Project | Tracked | `CONTEXT.md`, ADRs, architecture Markdown and HTML |
-| Human | What we are building, why, and how it works | Project | Tracked | README, PRDs under `docs/product/`, architecture and conventions docs, runbooks |
-| Wiki | Where the code for X lives | Rebuildable | Either | Code-map Markdown and HTML for large repositories |
-| Working | How the current effort is going and what happens next | Effort | Ignored | State, progress log, discovery drafts, specs, plans, issues, research, diagnoses, handoffs, roadmaps |
+Lifecycle and artifact roles live in [shared memory](memory/README.md), with detailed domain contracts loaded only when relevant. Code indexes are derived views. Accepted requirements/designs, consequential decisions, compact verification, and release references survive completion; execution plans, claims, raw outputs, and handoffs are disposable after reconciliation.
 
-A layer is defined by the question its artifacts answer, not by who reads them. The boundary that matters in practice: **working memory is scaffolding, the Human and Core layers are the building.** Before writing persistent state, apply the durability test — *if the work root were deleted today, would the project have lost a fact it still needs?* If yes, it belongs in a tracked layer. Facts are promoted upward only, never demoted.
-
-This is why product intent (`docs/product/<product-slug>/product.html`) is Human-layer while a feature spec is Working-layer: the PRD states what the product is for and stays true after the effort closes; the spec states how one increment gets built, and the shipped code supersedes it.
-
-Setup defaults working memory to `.scratch/<effort>/` in the Matt-style local tracker model, while preserving established roots such as `specs/`.
+Preserve existing tracker/document locations. New local-only changes use tracked `docs/changes/<change-id>/`; run scratch uses the configured work root, default `.scratch/<effort>/`. Current-state assertions carry evidence and relevant revision/environment; documentation dates alone do not prove freshness.
 
 ## Workflow entry points
 
@@ -76,6 +52,6 @@ It inspects existing conventions, proposes the memory configuration, and writes 
 
 ## Current limitations
 
-The missing integrated `plan` skill still interrupts feature delivery. Several imported existing skills also need memory-protocol, runtime, and ownership cleanup. These are intentionally explicit in [`TODO.md`](TODO.md), not hidden behind the new structure.
+Planning and execution are active-agent stages defined in the delivery workflow; dedicated `plan` and `implement` skills and an executable Harness are not part of this iteration. Operations defines a context/release boundary using existing project tooling. Remaining adaptations are tracked in [`TODO.md`](TODO.md).
 
 External adaptations and revisions are recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).

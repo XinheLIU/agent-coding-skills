@@ -6,7 +6,22 @@ disable-model-invocation: true
 
 # Ideate Product
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [product.request]
+  retrieves: [product.relevant_context, product.open_questions]
+  produces: [product.route_proposal]
+  updates: []
+  invalidates: []
+  handoff_to: [coordinator]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 Product ideation has two lanes: greenfield creation and existing-product improvement. Most
 efforts fail by skipping the earliest unanswered question, not by answering one badly.
@@ -26,11 +41,6 @@ Existing product:
 This skill diagnoses which question is actually open and routes there. It owns no artifact of
 its own and writes no analysis — every substantive output belongs to the skill it routes to.
 
-```text
-Layer:    transient — routes state, writes none
-Owns:     nothing
-Promotes: nothing; it detects unpromoted intent and routes to the owner
-```
 
 ## Boundary
 

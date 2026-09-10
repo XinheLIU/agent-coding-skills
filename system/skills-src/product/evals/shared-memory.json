@@ -83,7 +83,7 @@
       ],
       "setup": "Discovery contains a research-coverage record stating research is ready for roadmap, two evidenced P0 gaps (gap-export-feedback with settled acceptance criteria, gap-context-discovery with an open dashboard-layout design question), an accepted mission record, and a confirmed vision. The durable product.html exists with no roadmap section.",
       "prompt": "Promote the accepted findings and decompose them into the roadmap.",
-      "expected_output": "Creates a roadmap section with one spec ticket for the export gap (generating specs/<slug>.md with problem, requirements, acceptance, out-of-scope, and a backlink to the ticket) and one prototype ticket for the dashboard gap carrying a one-or-two-sentence prototype request and blocked status. Every ticket links its research-basis records and at least one mission or vision. Neither ticket closes its gap. Ticket IDs are stable and data-ticket-type is set."
+      "expected_output": "Creates a roadmap section with one spec ticket for the export gap (generating specs/<slug>.md with problem, requirements, acceptance, out-of-scope, and a backlink to the ticket) and one prototype ticket for the dashboard gap carrying a one-or-two-sentence prototype request and blocked status. Every ticket links its research-basis records and at least one mission or vision. Neither ticket closes its gap. Ticket IDs are stable and data-ticket-type is set. Preserve existing tracker/spec homes; for new local-only changes the default is tracked docs/changes/<change-id>/. Canonical ticket status is referenced from other views."
     },
     {
       "id": "research-not-ready",
@@ -101,7 +101,7 @@
       ],
       "setup": "product.html contains a blocked prototype ticket for dashboard layout, aligned to an accepted mission. The effort's prototypes/dashboard-layout/decision.md records the user's choice of the activity-feed variant with its basis. The effort directory is scheduled for deletion.",
       "prompt": "Reconcile the prototype decision into the product document so it survives effort cleanup.",
-      "expected_output": "Converts the ticket to data-ticket-type spec (or records the conversion) preserving its ID, generates or updates the spec file from the validated design, and promotes the decision verdict and basis in summary so no essential link depends on the deleted effort directory. The research basis and alignment links are preserved."
+      "expected_output": "Converts the ticket to data-ticket-type spec (or records the conversion) preserving its ID, generates or updates the spec file from the validated design, and promotes the decision verdict and basis in summary so no essential link depends on the deleted effort directory. The research basis and alignment links are preserved. Preserve consequential verdict/basis at acceptance, keep canonical change and requirement IDs, and reuse an existing spec rather than generating a second requirement source."
     }
   ]
 }

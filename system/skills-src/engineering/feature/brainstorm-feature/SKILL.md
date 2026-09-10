@@ -3,11 +3,26 @@ name: brainstorm-feature
 description: Turn a vague idea into a validated feature brief before any implementation. Use when the user's request is ambiguous, high-impact, or opens a new feature/system area. Runs one-question-at-a-time clarification, produces an Understanding Lock, explores 2–3 approaches with trade-offs, and hands off a concise brief to /spec. Hard gate — no code or specs get written until the user approves the design.
 ---
 
-Last updated: 2026-08-02
+Last updated: 2026-09-09
+
+## Context contract
+
+```yaml
+context:
+  requires: [change.intent]
+  retrieves: [product.relevant_context, system.affected_source, design.relevant_decisions]
+  produces: [change.feature_brief, design.decision_proposals]
+  updates: [run.exploration]
+  invalidates: [change.disputed_assumptions]
+  handoff_to: [product, specification]
+```
+
+Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+
 
 # /brainstorm-feature — Turn an idea into a validated brief
 
-Turn a raw, vague, or ambitious idea into a **clear, validated feature brief** through structured dialogue. This is step 0 of the workflow: `/brainstorm-feature` → `/spec` → `/plan` → `/tasks`.
+Turn a raw, vague, or ambitious idea into a **clear, validated feature brief** through structured dialogue. This is step 0 of the workflow: `brainstorm-feature` → `spec` → direct planning → `tasks`.
 
 ## When to use
 
@@ -25,7 +40,7 @@ Skip this skill (go straight to `/spec`) only when the user's description is alr
 While this skill is active:
 
 - **Do NOT write source code.**
-- **Do NOT invoke `/spec`, `/plan`, `/tasks`, or any implementation skill.**
+- **Do NOT invoke `spec`, planning, or `tasks`, or any implementation skill.**
 - **Do NOT scaffold files, install deps, or modify the working tree** (except writing the design doc at the end, if the user approves).
 - You are operating as a **design facilitator**, not a builder.
 
@@ -67,7 +82,7 @@ Don't try to brainstorm-feature a whole platform in one go.
 
 ### 3. Clarify — one question at a time
 
-Ask the user one question per message (use `AskUserQuestion`). Prefer multi-choice options with a `(Recommended)` tag on your strongest default. Use open-ended only when options genuinely can't be enumerated.
+Ask the user one question per message (use `the coordinator’s question interface`). Prefer multi-choice options with a `(Recommended)` tag on your strongest default. Use open-ended only when options genuinely can't be enumerated.
 
 Cover, in roughly this order — **only the axes that are unclear** from the initial pitch:
 
@@ -101,7 +116,7 @@ Before proposing ANY design, pause and present:
 
 **Open Questions** — anything unresolved.
 
-Then ask, in plain text (not `AskUserQuestion`, because we want a conversational confirmation, not a forced choice):
+If intent remains unconfirmed, return this conversational confirmation through the coordinator:
 
 > "Does this accurately reflect your intent? Confirm or correct before we move to design."
 
@@ -141,13 +156,13 @@ If the user asks to change something, go back to the relevant step. This is norm
 
 ### 7. Decision Log
 
-Maintain a running decision log in the conversation as you go. For each real decision:
+Keep draft decisions in the run record. At acceptance, retain consequential decisions beside the accepted design/change with stable IDs, consumed revisions, and canonical requirement references; private conversation is not the only handoff. For each real decision:
 
 - **What** was decided.
 - **Alternatives** considered.
 - **Why** this option won.
 
-Include the log in the final design doc.
+The final design doc links canonical decisions rather than duplicating their normative text. Reuse an existing canonical spec; a Feature Brief is a reading summary, not another requirement source.
 
 ### 8. Write the design doc
 
@@ -161,60 +176,7 @@ docs/designs/YYYY-MM-DD-<kebab-topic>.md
 
 If `docs/designs/` doesn't exist, create it. Use this skeleton:
 
-```markdown
-# Design: <Feature Title>
-
-**Date**: YYYY-MM-DD
-**Status**: Approved — ready for /spec
-
-## Understanding Summary
-
-- <bullet>
-- <bullet>
-
-## Assumptions
-
-- <bullet (assumption)>
-
-## Non-Goals
-
-- <bullet>
-
-## Chosen Approach
-
-<one paragraph + why it beat the alternatives>
-
-## Design
-
-### Architecture
-<...>
-
-### Data model
-<...>
-
-### Interfaces
-<...>
-
-### Error handling & edge cases
-<...>
-
-### Testing strategy
-<...>
-
-## Decision Log
-
-| Decision | Alternatives | Why |
-|---|---|---|
-| <what> | <alts> | <why> |
-
-## Next step
-
-Hand off to `/spec` with the Feature Brief below.
-
-## Feature Brief (for /spec)
-
-<2–4 sentences capturing: what it is, who it's for, what P1 user story it delivers, the headline constraint. This is what you paste into /spec.>
-```
+For this output, load [Example 1](references/output-examples.md#example-1) and fill only the relevant scope.
 
 Do NOT `git commit` unless the user explicitly asks.
 

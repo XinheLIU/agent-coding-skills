@@ -1,0 +1,106 @@
+{
+  "name": "context-lifecycle-handoffs",
+  "last_updated": "2026-09-09",
+  "description": "Behavioral scenarios for isolated forward-testing. Expected outcomes are evaluated from artifacts/actions; validate_suite.py checks structure only and is not a Harness.",
+  "evals": [
+    {
+      "id": "cold-session",
+      "skills": [
+        "spec",
+        "handoff"
+      ],
+      "setup": "Two products and three scratch runs exist. User names EXP-42 whose ticket links req-v3 and D-4; unrelated billing records exist.",
+      "prompt": "Prepare the active change for implementation in a cold session.",
+      "expected_output": "Resolve EXP-42 from explicit selection, load only relevant spec/criteria/design and active review findings, preserve IDs; do not select newest directory or read every domain."
+    },
+    {
+      "id": "one-source-through-delivery",
+      "skills": [
+        "write-prd",
+        "spec",
+        "tasks"
+      ],
+      "setup": "EXP-42 already links specs/export.md with FR-7/AC-9, accepted D-4, and an existing independently deliverable child EXP-42-A.",
+      "prompt": "Prepare delivery and decompose the remaining independent slice, then repeat unchanged.",
+      "expected_output": "Reuse canonical spec and IDs without duplicate normative text; reuse child A and create only missing child with parent and depends_on; run checklist is not a shadow tracker; repeated reconciliation is a no-op."
+    },
+    {
+      "id": "accepted-rationale-cleanup",
+      "skills": [
+        "visual-design-variants",
+        "handoff",
+        "sync-context"
+      ],
+      "setup": "Accepted prototype section export has D-4 rationale only in scratch; code later lands with criterion evidence.",
+      "prompt": "Retain the choice now, hand it off, and clean finished execution scratch after landing.",
+      "expected_output": "Retain consequential decision/basis/alternatives/revisions at acceptance before component docs. Keep ticket/spec/design/final verification; essential links and rationale remain usable without scratch; code is behavior and prototype is intent without maintaining a second UI."
+    },
+    {
+      "id": "scoped-invalidation",
+      "skills": [
+        "sync-context"
+      ],
+      "setup": "AC-9 evidence and D-4 depend on API-2 v1. API-2 v2 changes export semantics. BILL-2 uses API-9 unchanged.",
+      "prompt": "Reconcile the changed contract.",
+      "expected_output": "Preserve accepted/completed statuses and prior evidence; mark only materially affected conclusions needs review naming API-2 v2, follow relevant transitive dependents, route owners; BILL-2 remains current."
+    },
+    {
+      "id": "verification-context",
+      "skills": [
+        "analyze-test-gaps",
+        "review-code-quality"
+      ],
+      "setup": "AC-9 passes at code abc123/staging-v4; AC-10 was not run; a new config staging-v5 changes callbacks.",
+      "prompt": "Are we ready to release?",
+      "expected_output": "Map criteria to executed evidence and exact revision/environment. Record failures and omissions, preserve separate Standards/Spec axes; reassess affected v5 evidence and block unsupported readiness despite a high pass percentage."
+    },
+    {
+      "id": "refactor-state",
+      "skills": [
+        "refactor-code"
+      ],
+      "setup": "EXP-42 refactor moves export scheduling across a module boundary; AC-9 behavior is unchanged; ADR-3 states the old boundary.",
+      "prompt": "Refactor and preserve behavior.",
+      "expected_output": "Establish before/after invariant/criterion checks at known revisions/environment, retain structural delta/preservation evidence, update System State and amend/supersede ADR-3 without losing rationale; external behavior changes return to Product/Design."
+    },
+    {
+      "id": "release-artifact",
+      "skills": [
+        "handoff"
+      ],
+      "setup": "Verification covers artifact sha256:42 at abc123, staging-v4; release candidate sha256:43 was rebuilt with new config.",
+      "prompt": "Prepare release evidence and next action using existing deployment tooling.",
+      "expected_output": "Same change identity throughout; do not attach old verdict to artifact 43 without reassessment. Evidence identifies artifact/build/env/gates/migration/observability/rollback and omissions. No deploy is implied by handoff."
+    },
+    {
+      "id": "concurrent-reconciliation",
+      "skills": [
+        "tasks",
+        "shape-solution"
+      ],
+      "setup": "A patch and claim request were prepared at v1. Current record v2 adds privacy constraint and another answer. Task already claimed by agent-A.",
+      "prompt": "Reconcile the contribution and claim the task for agent-B.",
+      "expected_output": "Reread target/premises; preserve current edits, match IDs, reject stale claim overwrite and require explicit transfer; without atomic claims or single writer execute serially. Repeat unchanged patch produces no duplicate record."
+    },
+    {
+      "id": "product-observation-boundary",
+      "skills": [
+        "map-current-product"
+      ],
+      "setup": "Code/tests establish admin web export completion, partial mobile behavior, and no demand interviews. Repository has tightly coupled internals.",
+      "prompt": "Map the current product without an architecture review.",
+      "expected_output": "Record observable behavior, roles, flows, source revision and coverage; preserve evidence/inference/commitment distinction. Do not require cohesion/coupling/API/data-model assessments or treat code as demand evidence; route substantive technical questions separately."
+    },
+    {
+      "id": "missing-stage-capability",
+      "skills": [
+        "spec",
+        "tasks",
+        "tdd"
+      ],
+      "setup": "Only suite skills are installed; no plan/implement skill or Agent tool exists. Accepted requirements and approach are available.",
+      "prompt": "Deliver the approved change with tests.",
+      "expected_output": "Active agent performs workflow planning/execution directly with existing tools; reuse canonical tickets/run plan and criterion-based checks. Never invoke missing skills or require delegation; unresolved substantive blockers remain explicit."
+    }
+  ]
+}
