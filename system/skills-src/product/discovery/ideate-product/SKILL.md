@@ -29,13 +29,15 @@ efforts fail by skipping the earliest unanswered question, not by answering one 
 ```text
 Greenfield:
 1. Is the demand real?      →  brainstorm → validate-demand
-2. What is the solution?    →  shape-solution          (key artifact: user stories)
-3. What ships first?        →  scope-mvp                (scenario × form × data)
+2. What is the solution?    →  shape-solution          (key artifact: target experience)
+3. What are the commitments?→  define-outcomes         (verifiable promises + deferred intent)
 
 Existing product:
 1. What exists today?       →  map-current-product      (key artifact: current behavior)
 2. Is the improvement real? →  validate-demand          (active-product evidence)
-3. What changes next?       →  scope-product-increment  (ADDED / MODIFIED / REMOVED)
+3. What changes and proves done? →  define-outcomes     (ADDED / MODIFIED / REMOVED + verification)
+
+Optional: design-experiment — resolve a named uncertainty cheaply before committing
 ```
 
 This skill diagnoses which question is actually open and routes there. It owns no artifact of
@@ -80,9 +82,10 @@ Existing-product routing overrides the greenfield table:
 | Situation | Route to |
 | --- | --- |
 | "What does this codebase/app do?" or "write user stories from this codebase" | `map-current-product` |
-| "Improve/iterate/refine this existing app" and affected current behavior is not evidenced | `map-current-product` (next: `scope-product-increment`) |
-| Existing-product improvement with weak or disputed evidence | `validate-demand` using active-product evidence (next if Green: `scope-product-increment`) |
-| Existing-product improvement with baseline and evidence already clear | `scope-product-increment` |
+| "Improve/iterate/refine this existing app" and affected current behavior is not evidenced | `map-current-product` (next: `define-outcomes`) |
+| Existing-product improvement with weak or disputed evidence | `validate-demand` using active-product evidence (next if Green: `define-outcomes`) |
+| Existing-product improvement with baseline and evidence already clear | `define-outcomes` |
+| Existing-product improvement but solution shape is unclear or unduly constrained | `shape-solution` first, then `define-outcomes` |
 | Architecture refactor, cleanup, or internal redesign with no user outcome | `design/technical/codebase-design` or `design/technical/improve-codebase-architecture` |
 
 | Situation | Route to |
@@ -92,12 +95,13 @@ Existing-product routing overrides the greenfield table:
 | Struggle named, demand unproven or disputed | `validate-demand` |
 | Demand just graded Green, nothing in the tracked layer yet | `write-prd` (early mode), then `shape-solution` |
 | Demand verdict Green, no solution shape | `shape-solution` |
-| Solution and user stories exist, scope undefined | `scope-mvp` |
-| Current product mapped, increment undefined | `scope-product-increment` |
-| Scope set, risks unexamined | `run-premortem` |
+| Solution shape exists, outcomes not committed | `define-outcomes` |
+| Specific assumption needs cheap validation before committing | `design-experiment` |
+| Current product mapped, increment undefined | `define-outcomes` |
+| Outcomes defined, risks unexamined | `run-premortem` |
 | Accepted conclusions are unpromoted, or the PRD needs reconciliation after an increment | `write-prd` to extend it |
 | Demand evidence is assumption-only | back to `validate-demand` |
-| Scope change accepted in premortem | `scope-mvp` or `scope-product-increment`, matching the effort |
+| A scope change was accepted in premortem | `define-outcomes` to update outcome contracts |
 | Effort shipped but its PRD was never written | `write-prd`, or `sync-context` for the wider sweep |
 
 Two cases override the table:

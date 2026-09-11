@@ -4,6 +4,8 @@ description: Triage a greenfield or new-product MVP into disciplined first-slice
 disable-model-invocation: true
 ---
 
+> **Deprecated — use `design-experiment` for bounded validation experiments, or `define-outcomes` for product commitments.** This skill is replaced by the new outcome-definition model. Old invocations route here for one release; then this file is removed.
+
 # Scope MVP
 
 Last updated: 2026-09-09

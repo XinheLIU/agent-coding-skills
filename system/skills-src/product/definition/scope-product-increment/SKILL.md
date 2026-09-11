@@ -4,6 +4,8 @@ description: Scope a user-visible improvement to an existing product. Use when t
 disable-model-invocation: true
 ---
 
+> **Deprecated — use `define-outcomes` instead.** This skill is replaced by `define-outcomes`, which handles both new and existing-product work with a common outcome-contract model. Old invocations route here for one release; then this file is removed.
+
 # Scope Product Increment
 
 Last updated: 2026-09-09

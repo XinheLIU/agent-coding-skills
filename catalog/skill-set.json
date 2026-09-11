@@ -18,7 +18,7 @@
     {
       "id": "product/definition",
       "label": "Product · Definition",
-      "skills": ["shape-solution", "scope-mvp", "scope-product-increment", "write-prd"]
+      "skills": ["shape-solution", "define-outcomes", "design-experiment", "write-prd"]
     },
     {
       "id": "design/ux",

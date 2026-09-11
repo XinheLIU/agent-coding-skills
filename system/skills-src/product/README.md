@@ -15,16 +15,17 @@ product work starts with current behavior.
 flowchart LR
     subgraph GF["Greenfield lane"]
         BR[brainstorm] --> VD{validate-demand}
-        VD -->|Green| DS[shape-solution] --> SM[scope-mvp]
+        VD -->|Green| DS[shape-solution] --> DO[define-outcomes]
         VD -->|Red| STOP([stop / re-frame])
     end
     subgraph EP["Existing-product lane"]
         MCP[map-current-product] --> VDI{validate-demand}
-        VDI -->|Green or already evidenced| SPI[scope-product-increment]
+        VDI -->|Green or already evidenced| DOI[define-outcomes]
         VDI -->|Red| STOP2([stop / re-frame])
     end
-    SM --> PM[run-premortem]
-    SPI --> PM
+    DE[design-experiment] -.->|optional: resolve uncertainty| DS
+    DO --> PM[run-premortem]
+    DOI --> PM
     PM --> PRD[write-prd] --> ENG(["design gate → engineering/feature/spec"])
     IP[ideate-product] -.->|routes| GF & EP
 ```
@@ -45,8 +46,9 @@ PRD leaves experience or structure open (see the Design Gate in `write-prd`).
 | An existing codebase/app and you want to know what it already does | `map-current-product` |
 | User stories from existing code | `map-current-product` |
 | A validated greenfield demand with no solution shape | `shape-solution` |
-| A designed solution with too many features | `scope-mvp` |
-| An existing-product improvement to scope | `scope-product-increment` |
+| A solution shape that needs verifiable commitments | `define-outcomes` |
+| An existing-product improvement to scope | `define-outcomes` |
+| A specific assumption to validate cheaply before committing | `design-experiment` |
 | A scoped plan you want to stress-test | `run-premortem` |
 | A Green demand verdict and nothing tracked yet | `write-prd` — early mode, Part 1 only |
 | A scoped existing-product increment and an existing PRD | `write-prd` — delta mode |
@@ -116,20 +118,9 @@ routes to the owning skill. It performs no analysis and owns no artifact; readin
 solution shape: a 3D Persona, a 4-Act Narrative, a 4-Stage User Journey, and the scenarios the
 solution must cover. Output depth adapts to complexity within shared HTML; complex systems may need diagrams and illustrative demos. It enriches existing personas, desired capabilities, journeys, gaps, and questions while preserving observed behavior.
 
-**`scope-mvp`** — resolves the three scope axes (scenario × product form × data
-availability), then triages features into P0 (build now), P1/P2 (not yet), and Not-To-Do
-(never for this MVP), anchored to one falsifiable core assumption. Includes an ambition
-review that challenges whether the scope is the right bet, not just a complete one — reading
-the product's vision record as the 12-month ideal, or persisting its own ideal as a candidate
-vision when none exists. It stays
-greenfield/MVP-focused; existing-product iteration routes to `scope-product-increment`. Enriches shared scope decisions, capability priorities, assumptions, and measures.
+**`define-outcomes`** — turns a chosen solution into verifiable product commitments using the same model for new products and existing-product work. It defines outcome-oriented user stories with observable success states, end-to-end verification scenarios, required capabilities, and deferred intent with rationale. For existing products, outcomes are expressed as ADDED / MODIFIED / REMOVED behavior against the source-backed baseline. Delivery sequencing stays downstream; `define-outcomes` owns the commitments and their verification contracts.
 
-**`scope-product-increment`** — scopes active-product improvement as an explicit
-`ADDED / MODIFIED / REMOVED` behavior delta against source-backed current capabilities or accepted product intent. It records
-P0/P1/out-of-scope, acceptance criteria, edge cases and recovery, instrumentation, success
-metrics, and refinement notes. Enriches capability deltas, acceptance, scope decisions, questions, and measures. **Credit: adapts PM-Skills
-acceptance criteria, edge-case, instrumentation, and refinement-note patterns; OpenSpec delta
-language; and gstack scope postures with explicit opt-in for scope changes.**
+**`design-experiment`** — designs a bounded experiment to resolve a named, falsifiable uncertainty cheaply. Invoked explicitly when a specific assumption can be tested before full commitment. The experiment returns evidence to `shape-solution` (if the target experience changes) or `define-outcomes` (if the solution holds but a commitment needs adjustment). The experiment's scope never becomes the product's scope.
 
 **`write-prd`** — consolidates durable product knowledge in `<product-docs>/<product-slug>/product.html`. Its PRD reading index links canonical records instead of maintaining a separate summary document. It promotes accepted conclusions with necessary rationale and evidence, preserves IDs and user edits, and replaces working conclusions with pointers. A user-confirmed vision promotes to `overview`; an inferred candidate stays working with its confirmation question linked. Run early after Green demand, then again as scope settles or an increment is accepted. It can also consolidate explicit standalone inputs without inventing missing validation or scope.
 
@@ -223,7 +214,7 @@ their reference snapshots read-only. See [`../../THIRD_PARTY_NOTICES.md`](../../
 ## Typical workflows
 
 **Greenfield, full run** — a new idea taken all the way to a spec:
-`brainstorm` → `validate-demand` → `shape-solution` → `scope-mvp` → `run-premortem` →
+`brainstorm` → `validate-demand` → `shape-solution` → `define-outcomes` → `run-premortem` →
 `write-prd`. Expect the gate to send weak ideas back — that is the pipeline working, not
 failing. After `write-prd`, the Design Gate routes to `spec` directly or through the
 optional `design/` phase.
@@ -235,11 +226,11 @@ without requiring upstream artifacts.
 **Existing codebase** — inherit or revisit a product that already has code:
 `map-current-product` extracts implemented user stories, in-progress features, planned work, and
 gaps directly from the code. If the user asks for the next improvement, validate the evidence if
-needed, then run `scope-product-increment` and `write-prd` in delta mode.
+needed, then run `define-outcomes` and `write-prd` in delta mode.
 
 **Improve existing product** — a live app has a known problem:
 `map-current-product` if no baseline exists → `validate-demand` when the evidence is weak or
-disputed → `scope-product-increment` → optional `run-premortem` → `write-prd` delta mode.
+disputed → `define-outcomes` → optional `run-premortem` → `write-prd` delta mode.
 
 **Stalled effort** — discovery started weeks ago and nobody remembers the state:
 `ideate-product` reads `state.md` and the artifacts, reports which question is open, and

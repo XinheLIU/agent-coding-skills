@@ -1,6 +1,6 @@
 ---
 name: shape-solution
-description: Turn a validated demand or current-product baseline into a concrete solution shape with user stories, personas, and scenarios. Use when the user asks for personas, user journeys, scenarios, or how a product/feature should work; for user stories derived directly from existing code, use map-current-product first.
+description: Turn a validated demand or current-product baseline into a concrete solution with understood target experience, connected journeys, and required capabilities. Use when defining what a product or feature should do from the user's side — including ambitious redesigns of existing products. For user stories from existing code without prior discovery, use map-current-product first.
 disable-model-invocation: true
 ---
 
@@ -64,6 +64,7 @@ If a relevant demand assessment is Yellow, Red, disputed, or assumption-only, na
 | **Feature list** | Itemized features, no user context | Have the "what", missing Who + Fear → Phase 0B → Phase 1 |
 | **Partial context** | PRD with some user description or scenarios | Assess gaps → Phase 0B → ask only what is missing |
 | **Rich context** | Persona named, current hack described, emotional stakes stated | Phase 0B → Phase 3 |
+| **Solution already settled** | Target experience agreed; questions are about commitments and verification | → `define-outcomes` directly |
 
 If you have enough context, generate. Don't interview when you can infer.
 
@@ -118,6 +119,31 @@ Extract only what shaping needs:
 - gaps that change the user's journey or first-use moment
 
 If a needed baseline claim is stale or lacks evidence, record that question and route the relevant inspection to `map-current-product`. Enrich linked gaps and proposed journeys within this skill; do not overwrite unsupported current-behavior claims.
+
+---
+## Phase A — Frame Outcome and Ambition
+
+Before generating personas or narratives, establish:
+
+- Whose problem is being solved and what the deeper need is behind the requested functionality.
+- What a substantially better experience would look like — not just a small delta on today.
+- Which constraints are real and which are inherited assumptions. Supporting an existing data format may be a real constraint; modifying only the existing screen may merely be an assumption.
+
+For existing-product work: "existing" does not imply "incremental." The solution may be a local improvement, a new subsystem, or a substantial redesign — let the deep need guide the ambition, not the current surface.
+
+---
+## Phase B — Explore the Relevant Experience
+
+Map preparation, use, and consequences before narrowing to a scenario:
+
+- What must happen before the main action?
+- What happens during it?
+- What does the user do with the result?
+- What changes on repeated use?
+- What happens when something fails?
+- Where do other people or systems enter the journey?
+
+The primary scenario is the center of the solution. Secondary scenarios may be in scope if they are coherent with the target experience; assess them rather than excluding them by default.
 
 ---
 ## Phase 1 — Diagnose Persona Gaps
@@ -197,7 +223,7 @@ The story arc is the "why" behind every feature. Show it happening; don't summar
 Where UX decisions live. Each stage has a job:
 
 - **Discovery**: what surfaces the product? What skepticism must it overcome ("just another tool I'll abandon")?
-- **First Use**: one action, immediate value. The "Aha!" must be a single visible result in under 30 seconds.
+- **First Use**: one action, immediate value. For simple tools, a single visible result quickly. For more complex or discovery-oriented products, a clear demonstration that the core job is achievable matters more than a fixed time target.
 - **Core Process**: the repeated trigger and habit. What keeps the 10th use from feeling stale?
 - **Long-Term Value**: the identity moment when they realize the tool changed who they are. Design implication for retention.
 
@@ -205,18 +231,9 @@ For multiple personas (Complex), map only the journey segments that diverge betw
 
 ### Scenarios
 
-For each scenario: the trigger, who is present, where they are, what they have at hand, and what
-"done" looks like. Then state the axis properties `scope-mvp` reads:
+For each scenario: the trigger, who is present, where they are, what they have at hand, and what "done" looks like. Also note: frequency, session length, participants, connectivity, and whether the user waits or the work runs in the background.
 
-| Property | Values to state |
-| --- | --- |
-| Frequency | Per-day / per-week / per-month / episodic |
-| Session length | Seconds / minutes / a working session |
-| Participants | Single user / collaborative / handed off between roles |
-| Connectivity | Always online / intermittent / offline required |
-| Attention | Attended (user waits) / unattended (runs in background) |
-
-Mark the **primary scenario** — the one the MVP must serve. Secondary scenarios are context, not scope.
+Mark the **primary scenario** — the core job the solution must serve. Secondary scenarios may be in scope depending on the coherence of the target experience; note which are included in the solution shape and which are deferred.
 
 When complexity is Complex, also state for the primary scenario: which personas participate,
 which existing features already serve it, and which features are still needed (referencing
@@ -311,6 +328,38 @@ Rules:
 Skip the HTML demo entirely when the product is a CLI, API, background service, or data pipeline.
 
 ---
+## Phase C — Compare Meaningful Alternatives
+
+For consequential decisions, compare mechanisms or experiences rather than only small, medium, and large feature lists. Possible distinctions include:
+
+- Assist an existing workflow.
+- Automate it while retaining user control.
+- Remove the need for it by changing how information is organized.
+
+For each option assess: outcome coverage, coherence, assumptions, risk, and likely complexity. Complexity informs the decision; it does not automatically select the smallest option.
+
+When the Expand posture applies, produce two or three meaningfully different options — including a focused baseline. For each: target outcome, differentiation, assumptions tested, effort class (S/M/L/XL), upside, and failure mode.
+
+Recommend one and name the evidence that would change the recommendation. No scope change is accepted without explicit user approval.
+
+---
+## Phase D — Confirm the Target Solution
+
+**Exit condition:** the target solution is understood, even if its first release is not yet selected.
+
+Produce:
+
+- Intended outcomes and connected journeys
+- Required capabilities and their relationships
+- Important alternatives considered and why they were rejected or remain open
+- Evidence-backed constraints (distinguished from assumptions)
+- Unresolved questions with the observation that would settle each
+
+Before persisting, read the primary scenario and the target experience back to the user and confirm or correct the reading (the close in `references/shared-understanding.md`). Corrections update the records; a disagreement the conversation cannot settle is recorded with the observation that would settle it, not resolved by yielding.
+
+The goal at this stage is a solution understood well enough to define its outcomes — not a delivery plan. Delivery sequencing belongs to `define-outcomes` and downstream planning.
+
+---
 ## Phase 4 — Quality Validation
 
 Check every output before presenting. If anything fails, revise it.
@@ -377,6 +426,6 @@ The narrative and story prompt remain usable human presentations, but point to s
 
 - **Does not validate demand** — it shapes a solution for a demand already judged real
 - **Does not map an existing codebase** — `map-current-product` owns source-backed current behavior
-- **Does not scope the MVP** — it produces stories and scenarios, not a feature triage
+- **Does not define outcome commitments** — `define-outcomes` turns the solution shape into verifiable promises
 - **Does not write the PRD** — it drafts the solution, not the consolidated spec
 - **Does not build prototypes** — it produces narratives and diagrams, not code

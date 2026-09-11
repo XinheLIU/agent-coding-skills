@@ -1,0 +1,5 @@
+interface:
+  display_name: "Define Outcomes"
+  short_description: "Turn a chosen solution into verifiable product commitments"
+policy:
+  allow_implicit_invocation: false
