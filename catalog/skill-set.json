@@ -2,43 +2,59 @@
   "schemaVersion": 1,
   "id": "agent-coding-skills",
   "title": "Agent Coding System",
-  "tagline": "Plan, build, review, and ship software with shared agent memory.",
-  "description": "A coordinated engineering system covering product discovery, architecture, context management, feature delivery, testing, debugging, and frontend work.",
-  "version": "0.1.0",
+  "tagline": "Plan, design, build, test, deploy, and maintain software with shared agent memory.",
+  "description": "A coordinated engineering system covering the full AI-native SDLC: product discovery, requirements, UX and technical design, feature delivery, testing, deployment, and autonomous maintenance.",
+  "version": "0.2.0",
   "repository": "https://github.com/XinheLIU/agent-coding-skills",
   "accent": "rust",
   "sourcePattern": "system/skills-src/{category}/{skill}/SKILL.md",
   "install": "/plugin install agent-coding-skills@agent-coding-skills",
   "categories": [
     {
-      "id": "product/discovery",
-      "label": "Product · Discovery",
-      "skills": ["brainstorm", "validate-demand", "map-current-product", "run-premortem", "ideate-product"]
+      "id": "lifecycle",
+      "label": "SDLC Lifecycle",
+      "description": "Six entry points for the full software development lifecycle",
+      "skills": ["plan", "design", "build", "test", "deploy", "maintain"]
     },
     {
-      "id": "product/definition",
-      "label": "Product · Definition",
-      "skills": ["shape-solution", "define-outcomes", "design-experiment", "write-prd"]
+      "id": "plan",
+      "label": "Plan",
+      "skills": ["brainstorm", "validate-demand", "map-current-product", "run-premortem", "ideate-product", "shape-solution", "define-outcomes", "design-experiment", "write-prd"]
+    },
+    {
+      "id": "design/requirements",
+      "label": "Design · Requirements",
+      "skills": ["settle-requirements"]
     },
     {
       "id": "design/ux",
       "label": "Design · UX",
-      "skills": ["design-context", "design-system-create", "interaction-design", "visual-design-variants", "design-implement", "prototype"]
+      "skills": ["design-context", "design-system-create", "design-interaction-flow", "visual-design-variants", "design-implement", "validate-prototype"]
     },
     {
       "id": "design/technical",
       "label": "Design · Technical",
-      "skills": ["domain-modeling", "codebase-design", "design-agent-architecture", "design-operational-ontology", "improve-codebase-architecture"]
+      "skills": ["explore-unknowns", "engineer-domain-model", "harden-architecture", "design-agent-architecture", "design-operational-ontology", "audit-architecture", "challenge-approach"]
     },
     {
-      "id": "engineering/feature",
-      "label": "Engineering · Feature",
-      "skills": ["analyze", "brainstorm-feature", "spec", "tasks", "handoff"]
+      "id": "build",
+      "label": "Build",
+      "skills": ["analyze", "brainstorm-approaches", "plan-implementation", "break-into-tasks", "tdd", "handoff"]
     },
     {
-      "id": "quality/testing",
-      "label": "Quality · Testing",
-      "skills": ["tdd", "analyze-test-gaps"]
+      "id": "test",
+      "label": "Test",
+      "skills": ["analyze-test-gaps"]
+    },
+    {
+      "id": "deploy",
+      "label": "Deploy",
+      "skills": []
+    },
+    {
+      "id": "maintain",
+      "label": "Maintain",
+      "skills": ["diagnose-incident", "triage"]
     },
     {
       "id": "quality/review",
@@ -48,7 +64,7 @@
     {
       "id": "quality/debugging",
       "label": "Quality · Debugging",
-      "skills": ["diagnosing-bugs", "triage", "resolving-merge-conflicts"]
+      "skills": ["resolving-merge-conflicts"]
     },
     {
       "id": "craft/context",
@@ -58,7 +74,7 @@
     {
       "id": "craft/meta",
       "label": "Craft · Meta",
-      "skills": ["research", "grilling", "wayfinder", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions"]
+      "skills": ["research", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions"]
     }
   ]
 }

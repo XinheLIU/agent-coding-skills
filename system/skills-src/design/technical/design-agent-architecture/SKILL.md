@@ -161,4 +161,4 @@ Wrap in a fenced code block: ` ```mermaid `
 - Human checkpoints and stop conditions are explicit
 - Mermaid diagram has no syntax errors (check bracket matching and subgraph nesting)
 
-The architecture doc and diagram feed `engineering/feature/spec`; record hard-to-reverse choices as ADRs via `domain-modeling`.
+The architecture doc and diagram feed `build/plan-implementation`; record hard-to-reverse choices as ADRs via `engineer-domain-model`.

@@ -1,6 +1,6 @@
 # Product Memory Contract
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 Product skills contribute to shared product knowledge. A skill owns its reasoning method, not a file or an exclusive section. Read this contract before reading or updating product memory. It also applies when a skill runs standalone.
 
@@ -73,6 +73,34 @@ Use `<article id="gap-export-feedback" data-kind="gap">` for an addressable reco
 | `research-coverage` | Aggregated coverage and roadmap-readiness for the research phase | `research` |
 
 Do not invent a kind. If genuinely none fits, add a `data-kind-reason` attribute on the record stating why, so the validator flags it for review instead of failing. Skill names are contributor provenance, never record kinds or navigation boundaries.
+
+### Capability commitment attributes
+
+A `capability` record set by `define-outcomes` carries two further closed-list attributes. They are orthogonal: commitment says whether the capability is part of what the product promises, depth says how far it goes. Priority numbers are not a substitute — they cannot express a capability that ships narrower than shaped.
+
+| `data-commitment` | Meaning |
+| --- | --- |
+| `committed` | An outcome's verification fails without it |
+| `reduced` | Committed, at a named lower depth |
+| `deferred` | Accepted intent, not in this commitment; carries a re-entry trigger |
+| `excluded` | Decided against, resting on a constraint or evidenced non-need |
+| `open` | Unresolved and blocking; carries a linked question |
+
+| `data-depth` | Meaning |
+| --- | --- |
+| `full` | The capability as shaped in the target experience |
+| `narrowed` | Full behavior over a restricted set of inputs, cases, or actors |
+| `fixed` | Behavior whose tunable policy is frozen to one choice |
+| `manual` | The user-visible outcome produced by a human behind the interface |
+
+`data-depth` applies only to `committed` and `reduced` records, and may carry more than one value (`data-depth="narrowed fixed"`). The basis for each decision — verification link, lost user capability, constraint, or re-entry trigger — lives in the record body, never in the attribute.
+
+```html
+<article id="cap-private-doc-retrieval" data-kind="capability"
+         data-commitment="reduced" data-depth="narrowed fixed">
+```
+
+Only `define-outcomes` sets these. Downstream skills read them: a proposal that drops a `committed` capability or lowers a recorded depth returns to product rather than resolving locally.
 
 One record describes one meaningful subject in a stated context. Use stable, document-unique IDs; preserve them across edits and promotion. Match by product, actor, outcome, surface, and relevant version or scenario before creating a record. Similar titles alone do not establish identity. Link related records with ordinary `<a href="#record-id">` or relative file-and-anchor links. Promotion pointers retain the old ID and link to the new canonical home. Do not reuse retired IDs for different subjects.
 
@@ -185,7 +213,7 @@ Any product skill can add relevant observations, evidence, gaps, questions, and 
 5. When changing a premise, inspect records in both active documents that cite it. Mark materially affected conclusions `needs review`, naming the changed premise. Follow affected conclusions onward only where the change matters — including roadmap tickets whose research basis changed. Do not invalidate the whole document or silently recompute another skill's assessment. Existing accepted decisions stay recorded while their applicability is reviewed. Working contributors flag affected durable records through linked review findings in discovery and state, then route reconciliation to `write-prd`; they do not acquire write authority over durable intent. Readers inspect these active review findings before relying on the affected durable conclusions.
 6. Record assessed coverage and omissions — per record, and aggregated in the `research-coverage` record when the run contributes research. A standalone run creates only the useful partial knowledge it can establish from supplied context, code, or evidence. Missing prior skill files never force a pipeline rerun; missing substantive evidence may still block a verdict or commitment. Record the precise question and continue independent analysis.
 7. Verify before reporting:
-   - Every record `<article>` has a document-unique id, a closed-list `data-kind`, and sits inside one of the shared sections; roadmap tickets also carry `data-ticket-type`.
+   - Every record `<article>` has a document-unique id, a closed-list `data-kind`, and sits inside one of the shared sections; roadmap tickets also carry `data-ticket-type`, and committed capabilities carry `data-commitment` (plus `data-depth` where it applies).
    - The `<nav>` index lists every present section and record; local record links (`#anchor`), promotion pointers, and spec/prototype file links resolve.
    - Observed, proposed, and accepted meanings stay distinct; closures are supported by evidence.
    - Every roadmap ticket links at least one research-basis record and at least one mission or vision.
@@ -212,7 +240,7 @@ PRD navigation uses `prd` for the reading index, and anchors to actual records f
 
 ## HTML presentation
 
-Use a readable, self-contained document: UTF-8, responsive viewport, title, visible update date, inline shared CSS once, semantic headings, lists, tables, links, and native `<details>`. All product facts must be readable from source HTML with JavaScript disabled. IDs, `data-kind`, and `data-ticket-type` are the reading contract; visual classes are not. Never store a second semantic copy in Markdown, embedded JSON, JavaScript state, or browser storage.
+Use a readable, self-contained document: UTF-8, responsive viewport, title, visible update date, inline shared CSS once, semantic headings, lists, tables, links, and native `<details>`. All product facts must be readable from source HTML with JavaScript disabled. IDs, `data-kind`, `data-ticket-type`, `data-commitment`, and `data-depth` are the reading contract; visual classes are not. Never store a second semantic copy in Markdown, embedded JSON, JavaScript state, or browser storage.
 
 Keep documents concise. Prefer a diagram, table, or chip row over prose where it carries the same meaning; every diagram gets an adjacent one-sentence takeaway. Navigation and concise summaries help humans. Collapsing content does not reduce agent context; agents locate relevant records before reading. Keep source formatted for targeted patches, with one record per readable block. Charts or diagrams must have adjacent textual meaning; render graph diagrams as inline SVG when available, or retain their readable diagram source with a text explanation. No remote dependency is required to read the document. Reuse its existing visual style instead of redesigning it on each skill run. Product mockups are separate, explicitly illustrative prototype artifacts, not a second memory store.
 

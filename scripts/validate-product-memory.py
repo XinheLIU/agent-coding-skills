@@ -14,6 +14,10 @@ system/skills-src/craft/context/init-context/references/product-memory.md:
   - a visible "Last updated" marker is present (warning if missing)
   - every roadmap-ticket <article> carries data-ticket-type="spec"|"prototype"
     (and only roadmap-tickets carry that attribute)
+  - capability <article> commitment attributes: data-commitment from the
+    closed list, data-depth tokens from the closed list, depth only on
+    committed/reduced records, and a named depth on every reduced record
+    (and only capabilities carry either attribute)
 
 Usage:
     python3 scripts/validate-product-memory.py <file.html> [<file2.html> ...]
@@ -49,6 +53,27 @@ RECORD_KINDS = {
     "metric",
 }
 
+# Set by define-outcomes on capability records. Commitment says whether the
+# product promises the capability; depth says how far it goes. The two are
+# orthogonal -- a capability can ship narrower than it was shaped.
+COMMITMENT_LEVELS = {
+    "committed",
+    "reduced",
+    "deferred",
+    "excluded",
+    "open",
+}
+
+DEPTH_VALUES = {
+    "full",
+    "narrowed",
+    "fixed",
+    "manual",
+}
+
+# Depth is meaningful only where something is actually being promised.
+DEPTH_BEARING_COMMITMENTS = {"committed", "reduced"}
+
 SECTION_IDS = {
     "overview",
     "roadmap",
@@ -70,8 +95,20 @@ class MemoryDocParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.all_ids: dict[str, int] = {}  # id -> first line seen
         self.duplicate_ids: list[tuple[str, int]] = []
-        # (line, id, data-kind, data-kind-reason, enclosing section id, data-ticket-type)
-        self.articles: list[tuple[int, str | None, str | None, str | None, str | None, str | None]] = []
+        # (line, id, data-kind, data-kind-reason, enclosing section id,
+        #  data-ticket-type, data-commitment, data-depth)
+        self.articles: list[
+            tuple[
+                int,
+                str | None,
+                str | None,
+                str | None,
+                str | None,
+                str | None,
+                str | None,
+                str | None,
+            ]
+        ] = []
         self.local_links: list[tuple[int, str]] = []  # (line, target id)
         self.text_chunks: list[str] = []
         self._section_stack: list[str | None] = []
@@ -101,6 +138,8 @@ class MemoryDocParser(HTMLParser):
                     attr_map.get("data-kind-reason"),
                     enclosing,
                     attr_map.get("data-ticket-type"),
+                    attr_map.get("data-commitment"),
+                    attr_map.get("data-depth"),
                 )
             )
         elif tag == "a":
@@ -139,7 +178,18 @@ def validate_file(path: Path) -> tuple[int, int]:
         errors += 1
 
     kinds_sorted = ", ".join(sorted(RECORD_KINDS))
-    for line, article_id, kind, kind_reason, section_id, ticket_type in parser.articles:
+    commitments_sorted = ", ".join(sorted(COMMITMENT_LEVELS))
+    depths_sorted = ", ".join(sorted(DEPTH_VALUES))
+    for (
+        line,
+        article_id,
+        kind,
+        kind_reason,
+        section_id,
+        ticket_type,
+        commitment,
+        depth,
+    ) in parser.articles:
         label = f'<article id="{article_id}">' if article_id else "<article> (no id)"
         if not article_id:
             report(line, "ERROR", "<article> without an id")
@@ -195,6 +245,62 @@ def validate_file(path: Path) -> tuple[int, int]:
                 f"{label} carries data-ticket-type but is not a roadmap-ticket",
             )
             warnings += 1
+
+        if kind == "capability":
+            if commitment is not None and commitment not in COMMITMENT_LEVELS:
+                report(
+                    line,
+                    "ERROR",
+                    f'{label} unknown data-commitment "{commitment}"; '
+                    f"closed list: {commitments_sorted}",
+                )
+                errors += 1
+            if depth is not None:
+                depth_tokens = depth.split()
+                unknown = [tok for tok in depth_tokens if tok not in DEPTH_VALUES]
+                if not depth_tokens:
+                    report(line, "ERROR", f"{label} empty data-depth")
+                    errors += 1
+                elif unknown:
+                    report(
+                        line,
+                        "ERROR",
+                        f'{label} unknown data-depth value(s) {", ".join(unknown)}; '
+                        f"closed list: {depths_sorted}",
+                    )
+                    errors += 1
+                if commitment not in DEPTH_BEARING_COMMITMENTS:
+                    held = (
+                        f'is "{commitment}"' if commitment else "is not set"
+                    )
+                    report(
+                        line,
+                        "ERROR",
+                        f"{label} carries data-depth but data-commitment "
+                        f"{held}; depth applies only to "
+                        f'{" and ".join(sorted(DEPTH_BEARING_COMMITMENTS))}',
+                    )
+                    errors += 1
+            elif commitment == "reduced":
+                report(
+                    line,
+                    "ERROR",
+                    f'{label} is data-commitment="reduced" without a data-depth; '
+                    "a reduction must name the depth it ships at",
+                )
+                errors += 1
+        else:
+            for attr_name, attr_value in (
+                ("data-commitment", commitment),
+                ("data-depth", depth),
+            ):
+                if attr_value is not None:
+                    report(
+                        line,
+                        "WARNING",
+                        f"{label} carries {attr_name} but is not a capability",
+                    )
+                    warnings += 1
 
     for line, target in parser.local_links:
         if target not in parser.all_ids:

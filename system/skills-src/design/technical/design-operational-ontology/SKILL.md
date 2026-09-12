@@ -219,7 +219,7 @@ Before delivery, verify:
 - Tradeoffs and unresolved facts are visible.
 - The first delivery is a runnable vertical slice, not an enterprise-wide taxonomy.
 
-If verification fails because a fact is missing, ask for that fact. If it fails because the design is weak, revise the design before presenting it. The delivered design feeds `engineering/feature/spec`.
+If verification fails because a fact is missing, ask for that fact. If it fails because the design is weak, revise the design before presenting it. The delivered design feeds `build/plan-implementation`.
 
 ## Example triggers
 

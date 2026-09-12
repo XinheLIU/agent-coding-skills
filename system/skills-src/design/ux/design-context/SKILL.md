@@ -36,7 +36,7 @@ Shared design understanding is a triad — `product.html` is **why**, `DESIGN.md
 Do NOT use when:
 
 - `DESIGN.md` exists and is current — downstream skills read it directly; re-run only to re-sync or migrate
-- You want to design user flows or screens — that's `/interaction-design`, which runs after this
+- You want to design user flows or screens — that's `/design-interaction-flow`, which runs after this
 - Only generating visual options on an existing structure — that's `/visual-design-variants`
 
 ## Inputs and Handoffs
@@ -48,7 +48,7 @@ Do NOT use when:
 - A user-supplied reference (site URL, brand name, screenshot) if offered in conversation
 
 **Downstream:**
-- `DESIGN.md` at project root (Current State, git-tracked) — the canonical **how**; feeds `/interaction-design`, `/visual-design-variants`, `/design-implement`, `spec`, and the `:root` token block of `docs/design/prototype.html`
+- `DESIGN.md` at project root (Current State, git-tracked) — the canonical **how**; feeds `/design-interaction-flow`, `/visual-design-variants`, `/design-implement`, `plan-implementation`, and the `:root` token block of `docs/design/prototype.html`
 - When an external ⑤ tool owns the DESIGN.md lifecycle (accepted in `capabilities.md`), this skill routes writes through it and reconciles the result; the file is canonical either way.
 
 ## Workflow
@@ -165,7 +165,7 @@ Report:
 
 > Design authority established.
 >
-> **A)** Run `/interaction-design` — define structure and states in the canonical prototype (Recommended for new features)
+> **A)** Run `/design-interaction-flow` — define structure and states in the canonical prototype (Recommended for new features)
 > **B)** Run `/visual-design-variants` — structure already locked, go straight to visuals
 > **C)** Done — I'll continue manually
 
@@ -208,7 +208,7 @@ Before writing `DESIGN.md`:
 - `docs/design/prototype.html` `:root` token block (sync only)
 
 **Feeds:**
-- `/interaction-design` (reads DESIGN.md constraints)
+- `/design-interaction-flow` (reads DESIGN.md constraints)
 - `/visual-design-variants` (applies DESIGN.md tokens)
 - `/design-implement` (production code uses DESIGN.md tokens)
 - `spec` (design constraints cited as input)

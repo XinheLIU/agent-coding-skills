@@ -26,18 +26,18 @@ Explore **visual directions** (colors, typography, visual weight) on an already-
 
 ## Critical Constraint
 
-**This skill CANNOT change interaction structure.** Button positions, navigation hierarchy, state transitions, and user flows are locked in the prototype section by `/interaction-design` (`data-structure="locked"`). Only visual properties vary.
+**This skill CANNOT change interaction structure.** Button positions, navigation hierarchy, state transitions, and user flows are locked in the prototype section by `/design-interaction-flow` (`data-structure="locked"`). Only visual properties vary.
 
 ## When to Use
 
-- After `/interaction-design` has locked wireframe sections in `docs/design/prototype.html`
+- After `/design-interaction-flow` has locked wireframe sections in `docs/design/prototype.html`
 - Design authority exists (`DESIGN.md` at project root)
 - User wants to see visual options before committing
 - Exploring visual hierarchy without changing interaction structure
 
 Do NOT use when:
-- No locked wireframe sections exist yet (run `/interaction-design` first)
-- Interaction structure needs changes (go back to `/interaction-design`)
+- No locked wireframe sections exist yet (run `/design-interaction-flow` first)
+- Interaction structure needs changes (go back to `/design-interaction-flow`)
 - No design authority exists yet (run `/design-context` or `/design-system-create` first)
 
 ## Inputs and Handoffs
@@ -64,7 +64,7 @@ Use coordinator-supplied paths and the active change identity; do not repeat pat
 
 The coordinator supplies the configured work root and exact active effort; never select the newest directory as identity.
 
-Then read the prototype and verify the target surfaces are ready: each section this effort styles must carry `data-structure="locked"`. A section still `open` goes back to `/interaction-design`. Note the in-scope `data-surface` slugs and confirm all five `data-state` blocks are present in each.
+Then read the prototype and verify the target surfaces are ready: each section this effort styles must carry `data-structure="locked"`. A section still `open` goes back to `/design-interaction-flow`. Note the in-scope `data-surface` slugs and confirm all five `data-state` blocks are present in each.
 
 If any check fails, **STOP** and report what's missing with the correct skill to run.
 

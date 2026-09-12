@@ -44,7 +44,7 @@ Do NOT use when:
 - User's stated design direction or preferences
 
 **Downstream:**
-- `DESIGN.md` at project root → feeds `interaction-design`, `visual-design-variants`, and `design-implement`
+- `DESIGN.md` at project root → feeds `design-interaction-flow`, `visual-design-variants`, and `design-implement`
 - System preview HTML → user approval gate
 
 ## Workflow
@@ -347,7 +347,7 @@ Report what was created:
 - `<work-root>/<effort>/design/system-preview.html` — Run Context, preview (can be deleted)
 
 Next steps:
-- Use `/interaction-design` to define structure and states in the canonical prototype, then `/visual-design-variants` for visual options
+- Use `/design-interaction-flow` to define structure and states in the canonical prototype, then `/visual-design-variants` for visual options
 - Use `/design-implement` to convert approved designs into production code
 - DESIGN.md is now the source of truth; refer to it in all visual work
 

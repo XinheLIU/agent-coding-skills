@@ -1,12 +1,14 @@
 # Quality · Testing
 
-Last updated: 2026-09-09
+Last updated: 2026-09-12
 
-Ensuring code does what it claims through automated verification and test coverage analysis.
+The skills from this sub-phase have been relocated.
 
-| Skill | Owns |
-| --- | --- |
-| `tdd` | Test-driven development workflow — write the failing test first, then make it pass; routes spec and quality review to `review-implementation-gaps` / `review-code-quality` rather than embedding its own |
-| `analyze-test-gaps` | Audit existing test coverage; identify untested paths and missing edge cases |
+| Skill | Moved to | New name |
+| --- | --- | --- |
+| `tdd` | `build/tdd` | `tdd` (unchanged) |
+| `analyze-test-gaps` | `test/analyze-test-gaps` | `analyze-test-gaps` (unchanged) |
 
-`tdd` drives criterion-based behavior slices and returns evidence and proposed reviews to the coordinator. Canonical ticket status stays in its tracker; final verification retains criteria, revision, environment, failures, and omissions in Change Context. `analyze-test-gaps` is a review tool used after the fact or before a large refactor.
+`tdd` moved to `build/` because test-driven development is part of the implementation loop, not a post-build quality step. `analyze-test-gaps` moved to `test/` because coverage audits and integration test gaps are addressed after build is complete.
+
+See [`build/README.md`](../../build/README.md) and [`workflows/test.md`](../../../workflows/test.md).

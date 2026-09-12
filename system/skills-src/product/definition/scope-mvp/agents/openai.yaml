@@ -1,5 +1,0 @@
-interface:
-  display_name: "Scope MVP"
-  short_description: "Triage a greenfield MVP into disciplined first-slice scope"
-policy:
-  allow_implicit_invocation: false

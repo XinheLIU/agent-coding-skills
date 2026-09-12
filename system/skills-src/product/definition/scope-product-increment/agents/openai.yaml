@@ -1,5 +1,0 @@
-interface:
-  display_name: "Scope Product Increment"
-  short_description: "Scope an existing-product increment"
-policy:
-  allow_implicit_invocation: false

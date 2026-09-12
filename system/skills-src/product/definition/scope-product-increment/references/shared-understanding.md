@@ -1,1 +1,0 @@
-../../../discovery/validate-demand/references/shared-understanding.md

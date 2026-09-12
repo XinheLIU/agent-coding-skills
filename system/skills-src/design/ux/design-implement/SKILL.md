@@ -66,7 +66,7 @@ If any prerequisite missing:
 - STOP and report which is missing
 - Guide user to run appropriate skill:
   - No prototype or section still at wireframe fidelity → run `/visual-design-variants`
-  - No section for this surface at all → run `/interaction-design`
+  - No section for this surface at all → run `/design-interaction-flow`
   - No design authority → run `/design-context` (or `/design-system-create` for from-scratch)
 
 ### Step 1: Read Context
@@ -223,7 +223,7 @@ Request an optional ③ method polish pass through the coordinator when it would
 Three limits bound what a polish pass may change:
 
 1. Visual values come from `DESIGN.md`. A polish pass may not introduce off-system colors or fonts.
-2. Structure is locked. Anything requiring a layout, navigation, or state-transition change routes back to `/interaction-design` — it does not go into the code here.
+2. Structure is locked. Anything requiring a layout, navigation, or state-transition change routes back to `/design-interaction-flow` — it does not go into the code here.
 3. Every applied fix gets one line in the component doc's `## Implementation Notes` (Step 6), naming what changed and why.
 
 Done when the pass, if selected, satisfies these limits; return the outcome to the coordinator.
