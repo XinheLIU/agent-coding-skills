@@ -1,8 +1,8 @@
 # Design · Technical
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
-System architecture and structural decisions — the load-bearing design choices that constrain implementation. Feeds `build/` implementation. Upstream: the product document resolved through `docs/agents/memory.md` and `state.md`, and `specs/<spec>.md` from the requirements sub-phase. Entry criteria live in [`../README.md`](../README.md).
+System architecture and structural decisions — the load-bearing design choices that constrain implementation. Feeds `build/` implementation. Domain-specific agent/LLM design skills are out of scope here; this phase covers general software architecture only. Upstream: the product document resolved through `docs/agents/memory.md` and `state.md`, and `specs/<spec>.md` from the requirements sub-phase. Entry criteria live in [`../README.md`](../README.md).
 
 ## The three-phase progression
 
@@ -39,17 +39,6 @@ Run `engineer-domain-model` first to settle shared vocabulary, then `harden-arch
 | `audit-architecture` | Assess existing architecture; identify structural debt and duplication; guides component extraction decisions |
 
 Run `audit-architecture` after 2–3 features have stabilized patterns, not before. Extraction requires evidence of 3+ uses; earlier extraction creates premature abstractions.
-
-## Agent/LLM projects (outside the standard SDLC loop)
-
-These two skills apply only when building agent or LLM-powered systems. They do not belong in the main technical design loop for standard software.
-
-| Skill | Owns |
-| --- | --- |
-| `design-agent-architecture` | LLM orchestration, tool calling, memory protocols, agent topology |
-| `design-operational-ontology` | Operational concepts, taxonomy, and shared vocabulary for a domain |
-
-Both skills offer an installed diagramming capability (a tool that renders a described structure into an exportable SVG, HTML, or image) and fall back to drawing inline. That offer is stateless: these skills hold no effort-scoped memory and write no capability record.
 
 ## Boundaries
 

@@ -1,8 +1,22 @@
 # Changelog
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 ## Unreleased
+
+### Agent/LLM design skills leave the SDLC suite
+
+`design-agent-architecture` and `design-operational-ontology` served narrow scenarios — LLM
+orchestration and domain operational ontologies — that the general technical design loop does
+not own. Sitting in `design/technical/` implied they were part of the standard SDLC path for
+every product. Both skills now live outside this repository and are maintained independently
+of the plugin.
+
+The technical phase covers general software architecture only. Updated:
+`design/technical/README.md` and `design/README.md` (Agent/LLM sections removed),
+`workflows/design.md`, `plan/write-prd` (the design gate routes agent and operational-loop
+products to `harden-architecture` and `engineer-domain-model`), `system/TODO.md`, and
+`catalog/skill-set.json`.
 
 ### Design memory becomes a triad: why / how / what
 

@@ -34,7 +34,7 @@
     {
       "id": "design/technical",
       "label": "Design · Technical",
-      "skills": ["explore-unknowns", "engineer-domain-model", "harden-architecture", "design-agent-architecture", "design-operational-ontology", "audit-architecture", "challenge-approach"]
+      "skills": ["explore-unknowns", "engineer-domain-model", "harden-architecture", "audit-architecture", "challenge-approach"]
     },
     {
       "id": "build",

@@ -1,6 +1,6 @@
 # Design
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
 How the product should work, at three levels: what capabilities it provides (requirements), how users experience it (UX), and how the system is structured under the hood (technical). Three sequential sub-phases with explicit boundaries and handoffs — run the full [`/design` workflow](../../workflows/design.md) or enter individual sub-phases directly.
 
@@ -51,10 +51,6 @@ Enter when the system's shape is undecided. Prerequisite: `specs/<spec>.md`; `do
 
 **Component extraction** (composable space — extract after 3+ proven uses):
 - `technical/audit-architecture` — assess existing architecture before refactoring; identifies duplication and extraction opportunities
-
-**Agent/LLM projects only** (outside the standard SDLC loop):
-- `technical/design-agent-architecture` — LLM orchestration, tool calling, memory patterns
-- `technical/design-operational-ontology` — knowledge representation, reasoning structures
 
 Skip to `build/` when `DESIGN.md` exists with settled module boundaries and interface contracts, vocabulary is stable, and the change fits the existing architecture.
 

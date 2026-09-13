@@ -123,8 +123,8 @@ The PRD fixes *what* to build. When *how it looks* or *how the system is shaped*
 | The destination is known but the route is foggy — multiple interdependent decisions, larger than one session | `design/technical/explore-unknowns` |
 | PRD terms have no agreed meaning, or a hard-to-reverse trade-off needs an ADR | `design/technical/engineer-domain-model` |
 | The feature strains existing module boundaries, or it is unclear where behavior belongs | `design/technical/harden-architecture` |
-| The product is an agent system | `design/technical/design-agent-architecture` |
-| The product is an operational decision loop | `design/technical/design-operational-ontology` |
+| The product is an agent system | `design/technical/harden-architecture`, plus `design-agent-architecture` when available (ships outside this plugin) |
+| The product is an operational decision loop | `design/technical/engineer-domain-model`, plus `design-operational-ontology` when available (ships outside this plugin) |
 | Only the implementation *approach* is open — product and experience are settled | `engineering/feature/brainstorm-feature` |
 | None of the above | `spec` directly |
 

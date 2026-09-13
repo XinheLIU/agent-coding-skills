@@ -66,10 +66,6 @@ accepted intent → [1] requirements → [2] UX design → [3] technical design 
 - `/audit-architecture` — assess existing architecture before refactoring decisions
 - `/challenge-approach` — adversarial review of design decisions; stress-test the plan
 
-**Skills (agent/LLM projects only — outside the standard SDLC loop):**
-- `/design-agent-architecture` — LLM orchestration, tool calling, memory
-- `/design-operational-ontology` — knowledge representation, reasoning structures
-
 **Three-phase progression (guidance embedded in skills, not separate sub-phases):**
 1. Prototype validation — spike unknowns (`/explore-unknowns`) before committing to full design
 2. Engineering hardening — `/engineer-domain-model` + `/harden-architecture` produce maintainable systems

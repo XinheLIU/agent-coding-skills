@@ -43,7 +43,6 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 - [ ] Resolve script paths through the plugin/skill root. Current DAG and UI/UX examples assume obsolete working-directory layouts.
 - [x] ~~Repair `ui-ux-pro-max` documentation~~ — Done 2026-08-17: the vendored copy was removed instead; layer-② dispatch to external knowledge skills now lives in `design/ux` pipeline skills, catalogued in `design/ux/README.md`.
 - [ ] Decide whether `review-architecture` is a generic reviewer or a data-platform reviewer; remove hardcoded ODS/DWD/APP, Hologres, MinIO, FastAPI, and Compose assumptions or rename it.
-- [ ] Narrow `design-agent-architecture` to authoring; keep review and documentation ownership in their dedicated skills.
 - [ ] Normalize skill descriptions to concise trigger and boundary text.
 - [ ] Generate or refresh `agents/openai.yaml` for all system skills.
 
