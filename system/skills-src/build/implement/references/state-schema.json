@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "implement run state",
+  "description": "Orchestration state for one implement run. Run Context: disposable after reconciliation. Canonical ticket status lives in the ticket files/tracker, not here.",
+  "type": "object",
+  "required": ["change_id", "started_at", "tickets"],
+  "properties": {
+    "change_id": { "type": "string" },
+    "started_at": { "type": "string", "format": "date-time" },
+    "tickets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status", "acceptance_criteria", "depends_on"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "status": { "enum": ["blocked", "ready", "in_progress", "done", "failed"] },
+          "acceptance_criteria": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Canonical criterion IDs from the spec"
+          },
+          "depends_on": { "type": "array", "items": { "type": "string" } },
+          "ticket_path": { "type": "string", "description": "docs/changes/<change-id>/tasks/<task-id>.md" },
+          "agent_ref": { "type": "string", "description": "Orchestrator handle from dispatch()" },
+          "workspace": { "type": "string", "description": "Worktree path, when isolated" },
+          "started_at": { "type": "string", "format": "date-time" },
+          "completed_at": { "type": "string", "format": "date-time" },
+          "evidence_path": { "type": "string", "description": "docs/changes/<change-id>/run/evidence/<ticket-id>.md" },
+          "failure": { "type": "string", "description": "Present when status is failed: what failed and where the evidence is" }
+        }
+      }
+    },
+    "frontier": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ticket IDs ready to dispatch now: all dependencies done, parallel-safety checked"
+    },
+    "parallel_safety": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "can_run_with": { "type": "array", "items": { "type": "string" } },
+          "reason": { "type": "string" }
+        }
+      },
+      "description": "Per-ticket concurrency verdicts with the rule that decided them"
+    },
+    "e2e_verification": {
+      "type": "object",
+      "properties": {
+        "status": { "enum": ["pending", "passed", "failed"] },
+        "command": { "type": "string" },
+        "evidence_path": { "type": "string" }
+      }
+    }
+  }
+}

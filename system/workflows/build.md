@@ -1,63 +1,54 @@
 # Build Workflow
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
-Implement features from settled requirements and engineering design. Produces working code with passing tests and a committed `plan.md` that records the approach before implementation begins.
+Implement a locked, verifiable change end-to-end. Starts after the spec phase; produces working code verified on the running system, with evidence.
 
 ```
-entry_artifact: specs/<spec>.md + DESIGN.md (technical decisions)
-exit_artifact:  plan.md (approved approach) + code changes + passing tests + state.md
-approval_gate:  User must approve plan.md before implementation; user approves risky changes during implementation
+entry_artifact: a verifiable change — spec section, user story, or bug report with acceptance criteria
+exit_artifact:  tickets + evidence under docs/changes/<change-id>/ + handoff envelope
+approval_gate:  criteria locked before dispatch; user approves ticket graph before parallel execution
 ```
 
 ## Overview
 
 ```
-spec + DESIGN.md → analyze → plan-implementation → [USER APPROVES plan.md]
-                                                    → break-into-tasks → tdd loop → handoff
+locked change → implement: gate → decompose into tickets → render DAG
+                → [user sees graph, goes AFK]
+                → parallel tdd dispatch via orchestrator → merge in dependency order
+                → end-to-end verification → handoff envelope
 ```
 
 ## Skill Sequence
 
-### 1. Understand the codebase
-- `/analyze` — read codebase context, identify affected surfaces, understand existing patterns before touching anything
+### 1. Enter with a verifiable change
+- `/implement` — the single entry point. Gates on acceptance criteria testable at code and experience level. Small gaps get one or two inline questions; real design work routes to `design/`.
 
-### 2. Optionally explore approaches
-- `/brainstorm-approaches` — when multiple valid implementation paths exist; skip for straightforward changes
+### 2. Decompose and visualize
+`implement` writes dependency-ordered tickets to `docs/changes/<change-id>/tasks/` and renders the interactive HTML DAG (`draw-portfolio-dag`). The user sees frontier/blocked/done before anything runs.
 
-### 3. Write the plan
-- `/plan-implementation` — read-only pass over codebase + spec + DESIGN.md; write `docs/changes/<change-id>/plan.md`
+### 3. Execute in parallel
+`implement` dispatches each safe frontier ticket to a `tdd` sub-agent through the orchestration protocol (herdr primary, in-process fallback), merges completed worktrees in dependency order, and re-renders the graph on every transition. Failed tickets keep their dependents blocked; independent work continues.
 
-The plan captures: problem statement, proposed approach (which modules, seams, patterns), ordered implementation steps, verification plan (unit + integration + manual), and risks/alternatives considered.
+### 4. Verify end to end
+Code-level green is not done: `implement` starts the system the way a user would and exercises the delivered behavior — browser, local run, or integration suite — recording commands and results as evidence.
 
-**User reviews and approves `plan.md` before any code is written.** This is the single approval gate for the whole feature.
-
-### 4. Break into tasks
-- `/break-into-tasks` — decompose the approved plan into incremental steps; each step should be independently testable
-
-### 5. Implement with TDD
-- `/tdd` — for each task: write failing test → implement minimum code to pass → refactor → repeat
-
-The TDD loop is part of build, not a separate test phase. Unit tests live here. Integration and coverage audits are the test phase's job.
-
-### 6. Hand off
-- `/handoff` — write `state.md` recording the current resume point, what was done, deviations from plan, and open items
+### 5. Return the envelope
+Every run ends with the shared handoff envelope: criterion → ticket → evidence → revision mapping, verification result, failures with blocking effects, next action.
 
 ## Entry Criteria
 
-- `specs/<spec>.md` with complete functional requirements and testable acceptance criteria.
-- `DESIGN.md` with module boundaries, interface specs, and ADRs (or explicit note that technical design was skipped and why).
-- `docs/agents/memory.md` exists.
+- A canonical change with testable acceptance criteria (existing spec, ticket, or explicit user intent locked through the gate).
+- Accepted design/contract references when the change depends on them.
 
 ## Exit Criteria
 
-- `docs/changes/<change-id>/plan.md` committed to branch, status updated to `implemented`.
-- All unit tests pass.
-- Deviations from plan are noted in plan.md's "Actual Implementation Notes" section.
-- `state.md` written for handoff.
+- Every criterion maps to a done ticket with evidence, or an explicit failure/omission with impact.
+- End-to-end verification recorded (pass, or failure with evidence).
+- Handoff envelope returned; tickets and evidence retained under `docs/changes/<change-id>/`.
 
 ## Handoff
 
-Passes code changes with passing unit tests to `/test`. The test phase audits coverage and adds integration/e2e tests; it does not redo unit tests already written here.
+Verified code changes go to `quality/review` (Standards and Spec axes) and `/test` for coverage audits and integration/e2e tests. Refactoring beyond the loop's own green-preserving cleanups belongs to `refactor-code`.
 
 Shared context coordination: [context-coordination.md](context-coordination.md)

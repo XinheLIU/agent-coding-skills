@@ -5,7 +5,7 @@ description: Maintain shared domain language and durable architectural decisions
 
 # Engineer Domain Model
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 ## Context contract
 
@@ -32,4 +32,4 @@ Update the glossary as soon as a term is resolved. Keep it implementation-free:
 Not: <explicitly rejected synonyms or meanings>.
 ```
 
-Offer an ADR only when the decision is hard to reverse, surprising without context, and selected through a real trade-off. Record context, decision, alternatives, consequences, and status. Create memory lazily and update its date; do not use the glossary as a spec or scratchpad. Resolved vocabulary and ADRs feed `plan-implementation` and `plan.md`; hand control back to the stage that raised the term.
+Offer an ADR only when the decision is hard to reverse, surprising without context, and selected through a real trade-off. Record context, decision, alternatives, consequences, and status. Create memory lazily and update its date; do not use the glossary as a spec or scratchpad. Resolved vocabulary and ADRs feed `build/implement` and its ticket decomposition; hand control back to the stage that raised the term.

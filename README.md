@@ -19,7 +19,7 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 
 | Component | Role |
 | --- | --- |
-| [`system/skills/`](system/skills/) | 51 flat symlinks (loader entry points) into `skills-src/` |
+| [`system/skills/`](system/skills/) | 47 flat symlinks (loader entry points) into `skills-src/` |
 | [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
 | [`system/memory/`](system/memory/) | Shared read/write protocol for core, human, optional wiki, and working memory |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
@@ -39,7 +39,7 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 | [`design/requirements/`](system/skills-src/design/requirements/) | 1 | WHAT the product provides: functional requirements and testable acceptance criteria. |
 | [`design/ux/`](system/skills-src/design/ux/) | 6 | HOW capabilities are delivered: interaction flows, visual system, unified design doc. |
 | [`design/technical/`](system/skills-src/design/technical/) | 12 | HOW to engineer them: domain model, architecture, ADRs, adversarial review. |
-| [`build/`](system/skills-src/build/) | 6 | Feature implementation: plan approval, TDD loop, handoff. |
+| [`build/`](system/skills-src/build/) | 2 | The implementation loop: ticket decomposition, parallel TDD orchestration, end-to-end verification. |
 | [`test/`](system/skills-src/test/) | 1 | Coverage audit and integration tests after build. |
 | [`maintain/`](system/skills-src/maintain/) | 1 | Incident diagnosis and autonomous fix loop. |
 | [`quality/review/`](system/skills-src/quality/review/) | 5 | Review pipeline: design doc → gap analysis → code quality → refactor. Cross-cutting. |
@@ -62,7 +62,7 @@ graph LR
     end
 
     subgraph BUILD["build/"]
-        PI[plan-implementation] --> TDD[tdd] --> HO[handoff]
+        IMP[implement] --> TDD[tdd]
     end
 
     subgraph TEST["test/"]
@@ -78,8 +78,8 @@ graph LR
     end
 
     PRD --> SR
-    HA --> PI
-    HO --> ATG
+    HA --> IMP
+    IMP --> ATG
     ATG --> DEP
     DEP --> DX
 

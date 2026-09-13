@@ -10,7 +10,7 @@ How the product should work, at three levels: what capabilities it provides (req
 | UX | HOW those capabilities are delivered (interaction + visual) | `ux/` |
 | Technical | HOW to engineer them (architecture, shared foundations, code modules, verification) | `technical/` |
 
-Requirements feed UX and technical design both. UX design feeds `build/plan-implementation` (design constraints) and production code via `ux/design-implement`. Technical design feeds `build/` and the implementation loop.
+Requirements feed UX and technical design both. UX design feeds `build/implement` (design constraints) and production code via `ux/design-implement`. Technical design feeds `build/` and the implementation loop.
 
 ## When to enter — and when to skip
 

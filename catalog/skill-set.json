@@ -39,7 +39,7 @@
     {
       "id": "build",
       "label": "Build",
-      "skills": ["analyze", "brainstorm-approaches", "plan-implementation", "break-into-tasks", "tdd", "handoff"]
+      "skills": ["implement", "tdd"]
     },
     {
       "id": "test",
