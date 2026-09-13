@@ -7,6 +7,8 @@ disable-model-invocation: true
 # Map Current Product
 
 Last updated: 2026-09-13
+
+Read the standalone [visual report contract](references/visual-report.md) before creating or extending `discovery.html`. This local reference is bundled with the skill; do not depend on `/meta` or another installed skill.
 ## Context contract
 
 ```yaml
@@ -123,7 +125,7 @@ If an improvement is already requested, hand off to `define-outcomes` after the 
 
 ## Output Format
 
-Enrich `<work-root>/<effort>/discovery.html` using the shared record contract. Load [the HTML presentation patterns](references/html-report.md) when creating or extending the baseline visuals. Reuse the document's style and navigation.
+Enrich `<work-root>/<effort>/discovery.html` using the shared record contract. Load [the HTML presentation patterns](references/html-report.md) and the standalone [visual report contract](references/visual-report.md) when creating or extending the baseline visuals. Reuse the document's style and navigation.
 
 - Update overview coverage: product surface inspected, source revision when available, and exclusions.
 - Create or enrich the effort's `research-coverage` record in the `research` section of `discovery.html`: aggregate assessed and not-assessed dimensions (platforms, roles, flows, data sources) across contributors, and state whether research is ready for roadmap decomposition — naming the blocking gaps or questions when it is not. This run's inspection updates the aggregate; it does not overwrite another contributor's recorded coverage.

@@ -13,7 +13,9 @@ description: >
 
 # Architecture Review
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
+
+Read the standalone [visual report contract](references/visual-report.md) before generating an HTML companion. This local reference is bundled with the skill; do not depend on `/meta` or another installed skill.
 
 ## Context contract
 
@@ -194,6 +196,8 @@ docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md
 ```
 
 Print the path back to the user when complete.
+
+When an HTML companion is requested or generated, use the local visual report contract: compact scorecard, one card per major finding or recommendation, diagrams for structural changes, collapsed evidence, and one anchored top recommendation. The Markdown report remains the canonical detailed artifact.
 
 ## Failure handling
 
