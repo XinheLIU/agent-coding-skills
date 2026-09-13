@@ -3,7 +3,7 @@ name: design-context
 description: "Establish or refresh this project's design authority — the root DESIGN.md that answers HOW the product looks. Adopt an existing DESIGN.md, import from a reference site or brand, fold in a legacy docs/design/system.md, or route to from-scratch creation. Run before any other UX skill; they all read DESIGN.md. Use when no design authority exists, when system.md needs migrating, or when DESIGN.md has drifted from its source."
 ---
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 ## Context contract
 
@@ -48,7 +48,7 @@ Do NOT use when:
 - A user-supplied reference (site URL, brand name, screenshot) if offered in conversation
 
 **Downstream:**
-- `DESIGN.md` at project root (Current State, git-tracked) — the canonical **how**; feeds `/design-interaction-flow`, `/visual-design-variants`, `/design-implement`, `plan-implementation`, and the `:root` token block of `docs/design/prototype.html`
+- `DESIGN.md` at project root (Current State, git-tracked) — the canonical **how**; feeds `/design-interaction-flow`, `/visual-design-variants`, `/design-implement`, `build/implement`, and the `:root` token block of `docs/design/prototype.html`
 - When an external ⑤ tool owns the DESIGN.md lifecycle (accepted in `capabilities.md`), this skill routes writes through it and reconciles the result; the file is canonical either way.
 
 ## Workflow

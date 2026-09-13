@@ -1,8 +1,8 @@
 # Build
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
-Implement features from settled requirements and engineering design. Consumes `specs/<spec>.md` and `DESIGN.md`; produces working code with passing unit tests and a committed `plan.md` that records the approach before implementation begins.
+The implementation loop. Starts **after** the spec phase with a locked, verifiable change — acceptance criteria testable at code level and at experience level (browser or local run) — and delivers working code verified end-to-end, with evidence. Design-phase work (intent exploration, spec authoring, architecture) lives in `design/`; code review and refactoring live in `quality/`.
 
 Read [the engineering memory contract](../craft/context/init-context/references/engineering-memory.md) for context ownership and update rules.
 
@@ -10,60 +10,38 @@ Read [the engineering memory contract](../craft/context/init-context/references/
 
 ```mermaid
 flowchart LR
-    SPEC[specs/<spec>.md] --> AN
-    DESIGN[DESIGN.md] --> AN
-    AN[analyze] --> PI[plan-implementation]
-    BA[brainstorm-approaches] -.->|optional| PI
-    PI --> GATE{user approves plan.md}
-    GATE --> BT[break-into-tasks]
-    BT --> TDD[tdd]
-    TDD -->|next criterion| TDD
-    TDD --> HO[handoff]
-    HO --> TEST(["test/analyze-test-gaps"])
+    SPEC[locked change + criteria] --> GATE{criteria verifiable?}
+    GATE -->|small gap| CLARIFY[1-2 inline questions]
+    GATE -->|design work| DESIGN(["route to design/"])
+    CLARIFY --> DECOMP
+    GATE -->|yes| DECOMP[decompose into tickets]
+    DECOMP --> DAG[render HTML DAG]
+    DAG --> ORCH[orchestrate frontier]
+    ORCH -->|dispatch| TDD[tdd sub-agents in parallel]
+    TDD -->|evidence| ORCH
+    ORCH --> E2E[end-to-end verification]
+    E2E --> ENV[handoff envelope]
+    ENV --> QUALITY(["quality/review"])
 ```
 
-Every feature gets a `plan.md` approved before a line of code is written. TDD happens inside the build loop, not in a separate phase.
-
-## Where to start
-
-| You have | Start with |
-| --- | --- |
-| A spec and DESIGN.md, ready to implement | `analyze` — understand affected surfaces first |
-| A spec but no clear approach | `brainstorm-approaches` — generate options, pick one |
-| An approved approach, need an ordered plan | `plan-implementation` — write plan.md |
-| An approved plan.md, need tasks | `break-into-tasks` |
-| A task with acceptance criteria | `tdd` — red/green/refactor |
-| Completed implementation, need handoff | `handoff` — write state.md |
+One user-facing entry point. The user states a verifiable requirement, optionally answers one or two clarifying questions, then goes AFK while parallel agents deliver the change.
 
 ## The skills
 
-**`analyze`** — reads the codebase to understand context before touching anything: which files are affected, what the existing patterns are, where the seams are. Produces a codebase snapshot for the plan. Run first, every time.
+**`implement`** — the delivery orchestrator and only entry point. Gates on verifiable acceptance criteria; decomposes any change — bootstrap, feature, or bugfix — into dependency-ordered tickets by understanding current state and desired state (no modes); renders the ticket DAG as interactive HTML; dispatches parallel `tdd` sub-agents through the orchestration protocol (herdr binding primary, in-process Agent tool fallback); verifies the result on the running system; returns the handoff envelope.
 
-**`brainstorm-approaches`** — generates two or three distinct implementation approaches with trade-offs when the right path isn't obvious. Keeps options honest: forces a comparison before committing. Skip for straightforward changes.
+**`tdd`** — the execution unit `implement` dispatches, one ticket at a time: write a failing test naming observable behavior, implement the minimum to pass, refactor keeping green, repeat per criterion. Never fabricates passing evidence. Returns criterion → test/evidence → revision mapping.
 
-**`plan-implementation`** — the read-only planning pass. Reads spec, DESIGN.md, and codebase analysis; writes `docs/changes/<change-id>/plan.md` with problem statement, proposed approach, ordered implementation steps, verification plan, and risks considered. Does not write a single line of implementation code. The user reviews and approves this artifact before any code is written.
+## Absorbed responsibilities
 
-**`break-into-tasks`** — decomposes the approved plan into independently testable incremental steps. Each task maps to one or more acceptance criteria from the spec. Produces a task list the TDD loop executes.
+Former standalone skills now live inside `implement`:
 
-**`tdd`** — executes one criterion-based red-green-refactor slice at a time. Writes a failing test naming observable behavior, implements the minimum code to pass, refactors while keeping tests green, repeats. Never fabricates passing evidence. Returns criterion → test/evidence → revision mapping for the coordinator.
+- Ticket decomposition and parallel boundaries (was `break-into-tasks`) — [decomposition rules](implement/references/decomposition-rules.md)
+- Greenfield bootstrap execution (was `bootstrap-project`) — the foundation is now *designed* by `design/technical/design-foundation` (five slices with binary gates) and *executed* here as an ordinary change; a worked example lives in the decomposition rules
+- The handoff envelope (was `handoff`) — the return protocol of every run, defined in [the shared protocol](../craft/context/init-context/references/PROTOCOL.md#handoff-envelope)
 
-**`handoff`** — writes `state.md` recording where the effort stands: what was done, which criteria are green, deviations from plan.md with rationale, open items, and next action. The resume point for a fresh session or the test phase.
+Design-phase skills formerly here (`brainstorm-approaches`, `plan-implementation`, `analyze`) were removed; their capabilities belong to the design phase.
 
-## plan.md as a durable artifact
+## Handoff to quality and test
 
-`plan.md` is committed to the feature branch before implementation begins. It is the approval gate. After implementation, the "Actual Implementation Notes" section records any deviations and why. Code review checks plan conformance: new files not in the plan, skipped steps, or a different approach all need explicit justification in the notes.
-
-## Handoff to test
-
-Build hands off code changes with passing unit tests to `/test`. The test phase audits coverage and adds integration/e2e tests; it does not redo unit tests already written here.
-
-## Typical workflows
-
-**Standard feature:**
-`analyze` → `plan-implementation` → [user approves plan.md] → `break-into-tasks` → `tdd` (repeat per task) → `handoff`
-
-**Uncertain approach:**
-`analyze` → `brainstorm-approaches` → `plan-implementation` → ... (same)
-
-**Resume from handoff:**
-Read `state.md` → continue from the next open task in `tdd`
+Build hands verified code changes to `quality/review` (Standards and Spec axes) and `/test`. The test phase audits coverage and adds integration/e2e tests; it does not redo unit tests written inside the loop.

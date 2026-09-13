@@ -1,6 +1,6 @@
 # Quality
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
 Correctness, clarity, and resilience across delivery. Skills in two lanes that run
 throughout the lifecycle, not after it: a review
@@ -71,7 +71,7 @@ Root-cause analysis and the fix loop live in `maintain/diagnose-incident` → `/
 - **Coverage audit and integration tests** belong to `test/analyze-test-gaps` — run after build is complete.
 - **Root-cause diagnosis** belongs to `maintain/diagnose-incident` — incident analysis feeds the autonomous maintenance loop.
 - **Architecture restructuring** belongs to `design/technical/audit-architecture`; `review-architecture` judges the design, it does not redesign it.
-- **Requirements** have one canonical source; `build/plan-implementation` consumes it, `build/break-into-tasks` proposes child tickets, `build/tdd` executes them, and `review-implementation-gaps` audits against them.
+- **Requirements** have one canonical source; `build/implement` consumes it, decomposes it into child tickets, and dispatches `build/tdd` to execute them; `review-implementation-gaps` audits against them.
 
 ## Typical workflows
 

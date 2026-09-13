@@ -36,4 +36,4 @@ Wayfinding resolves the route; the delivery workflow executes it.
 
 Work one frontier ticket per session unless the user authorizes independent tickets to run concurrently. Have the coordinator acquire the exclusive claim before work; retain the accepted answer, rationale and revisions in the decision ticket, and keep only a linked summary in `map.md`. Turn newly exposed uncertainty into tickets, then regenerate both roadmap views.
 
-The map is complete when no in-scope open decision remains. Hand canonical decision/requirement references and consumed revisions to `plan-implementation`; implementation requires a separate request or an explicit scope change.
+The map is complete when no in-scope open decision remains. Hand canonical decision/requirement references and consumed revisions to `build/implement`; implementation requires a separate request or an explicit scope change.

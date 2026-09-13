@@ -1,6 +1,6 @@
 # Design · UX
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
 How the UX design system in this repo is designed: the internal pipeline of stage skills, the six-layer model of external capabilities they dispatch to, and the contract between the two. For the detailed external-tool catalog — every tool, comparison tables, and workflow recipes — see [`external-skills.md`](external-skills.md). For step-by-step procedures, see [`workflows/design.md`](../../../workflows/design.md).
 
@@ -40,7 +40,7 @@ flowchart LR
     AUTH --> IXD
     IXD -->|structure locked| VDV
     VDV -->|styled section| IMPL
-    IMPL --> OUT(["build/plan-implementation"])
+    IMPL --> OUT(["build/implement"])
 
     AUTH -.->|tokens| VDV & IMPL
     PROTO[validate-prototype] -.->|one question, control returns| IXD & VDV

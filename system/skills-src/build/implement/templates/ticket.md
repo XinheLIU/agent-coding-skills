@@ -1,6 +1,6 @@
 # <Task ID>: <Independently deliverable outcome>
 
-Last updated: 2026-09-09
+Last updated: YYYY-MM-DD
 
 Parent: <canonical change ID and ticket link>
 Status: <tracker's domain status; this record is canonical only for this child>

@@ -1,11 +1,11 @@
 ---
 name: tdd
-description: Execute scoped implementation work through criterion-based red-green-refactor loops. Use for test-first feature work or behavior fixes. Return evidence and proposed transitions to the coordinator; reuse canonical tickets and the existing run plan.
+description: Execute one ticket through criterion-based red-green-refactor loops. The execution unit dispatched by implement — receives the ticket, its acceptance criteria, and prerequisite evidence; returns criterion → test/evidence → revision mapping. Start whole changes from implement, not here.
 ---
 
 # TDD Execution
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 ## Context contract
 
@@ -22,7 +22,7 @@ context:
 Shared semantics: [shared protocol](../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Every changed behavior gets a meaningful failing test before its implementation. Use the canonical task, criteria, accepted contracts, relevant failure history, code baseline, and environment supplied under [delivery](../../../workflows/feature-delivery.md) and [engineering context](../../craft/context/init-context/references/engineering-memory.md).
+Every changed behavior gets a meaningful failing test before its implementation. The dispatching [`implement`](../implement/SKILL.md) run acts as coordinator: it supplies the canonical ticket, criteria, accepted contracts, relevant failure history, code baseline, prerequisite evidence, and environment, and it owns scheduling, claims, and merges. Invoked standalone, the active agent plays that role under [delivery](../../../workflows/feature-delivery.md) and [engineering context](../../craft/context/init-context/references/engineering-memory.md).
 
 ## Prepare the behavior slice
 
