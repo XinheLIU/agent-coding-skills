@@ -1,11 +1,11 @@
 ---
 name: draw-portfolio-dag
-description: Render Markdown workstreams and dependency tickets as an interactive HTML DAG or Mermaid flowchart. Use for portfolio sequencing, frontier visibility, or cross-cutting ticket tags.
+description: Render Markdown workstreams and dependency tickets as an interactive HTML DAG or Mermaid flowchart. Use for portfolio sequencing, frontier visibility, cross-cutting ticket tags, or live progress rendering during an implement run.
 ---
 
 # Draw Portfolio DAG
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 ## Context contract
 
@@ -82,3 +82,7 @@ The bundled scanner supports only the documented legacy shape. For other tracker
 Markdown owns ticket status and dependency text. The overlay projects verified canonical edges the scanner cannot parse, plus presentation tags; it never owns dependency truth. Record input revisions and rederive the overlay when premises change. Generated HTML and Mermaid are views.
 
 Re-scan after ticket changes, then re-render. HTML drag positions persist in browser `localStorage`; `--storage-key` controls whether multiple outputs share that layout.
+
+## Live execution view
+
+An orchestrating run (`build/implement`) re-renders on every ticket transition so an open browser tab shows live progress. Its derived manifest adds two per-node fields the scanner never emits: `in_progress: true` renders the node yellow between frontier and done, and `agent: "<ref>"` renders a small agent label beside the node id. Keep `--storage-key` fixed across re-renders so the user's drag layout survives; a plain reload picks up the new state.
