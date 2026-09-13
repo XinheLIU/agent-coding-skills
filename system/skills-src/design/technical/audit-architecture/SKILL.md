@@ -7,6 +7,8 @@ description: Reconstruct current module boundaries, dependencies, coupling, and 
 
 Last updated: 2026-09-14
 
+Read the standalone [visual report contract](references/visual-report.md) before generating the companion HTML. This local reference is bundled with the skill; do not depend on `/meta` or another installed skill.
+
 ## Context contract
 
 ```yaml
@@ -169,7 +171,7 @@ Write canonical `docs/architecture/reviews/AUDIT.md`:
 2. [...]
 ```
 
-Generate a same-named self-contained HTML view with before/after diagrams showing current structure and target improvements. The HTML must cite its Markdown source and generation time. Keep the Markdown evidence-rich and the HTML concise.
+Generate a same-named HTML view using the local [visual report contract](references/visual-report.md), with before/after diagrams showing current structure and target improvements. The HTML must cite its Markdown source and generation time. Keep the Markdown evidence-rich and the HTML concise.
 
 ### Handoff
 

@@ -1,6 +1,8 @@
 # Baseline HTML Presentation
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
+
+For the compact card grammar, standalone packaging rule, and before/after visual budget, also read [the local visual report contract](visual-report.md). This document remains the product-memory-specific presentation guidance; the local contract supplies the portable visual rules.
 
 Read [the product memory contract](product-memory.md) first. The baseline enriches `discovery.html`; it does not own the document or produce a separate `current-product.html`. These patterns guide presentation of current behavior inside shared concepts. Preserve records, IDs, and styling already present.
 
@@ -69,7 +71,7 @@ Flex row: rounded boxes joined by SVG arrows, actor chip on the left, outcome bo
 - Status colors mean status only: emerald implemented, amber in-progress/opportunity, slate planned/question, red gap.
 - Module labels inside diagrams: small uppercase monospace text with modest letter spacing — schematic, not UI.
 - Keep diagrams under ~360px tall; wide ones scroll in their own overflow container, never the page.
-- Inline shared CSS once. Native `<details>`, anchors, and tables work without JavaScript. Do not add Tailwind/Mermaid CDN dependencies; use the shared document styling and inline visuals.
+- Inline shared CSS once. Native `<details>`, anchors, and tables work without JavaScript. Prefer Tailwind/Mermaid CDN dependencies for newly generated review-style visuals when the report environment permits. Preserve ordinary HTML labels and inline visuals as the fallback, and do not retrofit existing product-memory documents solely to change their styling.
 
 ## Tone
 
