@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-12
+Last updated: 2026-09-13
 
 A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system/); copied upstream material stays in the local, ignored `references/` workspace.
 
@@ -19,7 +19,7 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 
 | Component | Role |
 | --- | --- |
-| [`system/skills/`](system/skills/) | 48 flat symlinks (loader entry points) into `skills-src/` |
+| [`system/skills/`](system/skills/) | 51 flat symlinks (loader entry points) into `skills-src/` |
 | [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
 | [`system/memory/`](system/memory/) | Shared read/write protocol for core, human, optional wiki, and working memory |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
@@ -38,7 +38,7 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 | [`plan/`](system/skills-src/plan/) | 11 | Problem discovery through accepted product intent. Idea generation, demand validation, PRD. |
 | [`design/requirements/`](system/skills-src/design/requirements/) | 1 | WHAT the product provides: functional requirements and testable acceptance criteria. |
 | [`design/ux/`](system/skills-src/design/ux/) | 6 | HOW capabilities are delivered: interaction flows, visual system, unified design doc. |
-| [`design/technical/`](system/skills-src/design/technical/) | 7 | HOW to engineer them: domain model, architecture, ADRs, adversarial review. |
+| [`design/technical/`](system/skills-src/design/technical/) | 12 | HOW to engineer them: domain model, architecture, ADRs, adversarial review. |
 | [`build/`](system/skills-src/build/) | 6 | Feature implementation: plan approval, TDD loop, handoff. |
 | [`test/`](system/skills-src/test/) | 1 | Coverage audit and integration tests after build. |
 | [`maintain/`](system/skills-src/maintain/) | 1 | Incident diagnosis and autonomous fix loop. |

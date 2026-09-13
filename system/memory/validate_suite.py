@@ -91,8 +91,8 @@ def declaration_errors(text: str) -> list[str]:
 def validate(suite: Path = SUITE) -> list[str]:
     errors: list[str] = []
     skills = sorted((suite / "skills-src").rglob("SKILL.md"))
-    if len(skills) != 45:
-        errors.append(f"expected 45 source skills, found {len(skills)}")
+    if len(skills) != 53:
+        errors.append(f"expected 53 source skills, found {len(skills)}")
     for path in skills:
         text = path.read_text(encoding="utf-8")
         relative = path.relative_to(suite)
@@ -123,5 +123,5 @@ if __name__ == "__main__":
     findings = validate()
     for finding in findings:
         print(finding)
-    print(f"45 source skills, discovery symlinks, declarations, local links/anchors: {'FAIL' if findings else 'PASS'}")
+    print(f"53 source skills, discovery symlinks, declarations, local links/anchors: {'FAIL' if findings else 'PASS'}")
     sys.exit(bool(findings))
