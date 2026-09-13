@@ -10,6 +10,11 @@ The overlay file supplies anything the mechanical scan cannot infer:
   - tags:        {node_id: ["data", "deploy", ...]}  arbitrary small labels
   - tag_styles:  {tag_key: {"label": "DATA", "bg": "#5b21b6", "fg": "#fff"}}
 It is optional — omit --overlay to render the mechanically-scanned graph as-is.
+
+Derived manifests (e.g. from an implement run) may add per-node fields the
+scanner never emits:
+  - in_progress: true      renders the node yellow between frontier and done
+  - agent: "ref"           renders a small agent label beside the node id
 """
 import argparse
 import json
@@ -75,7 +80,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TITLE__</title>
 <style>
-:root{--done-bg:#d1e7dd;--done-bd:#0f5132;--frontier-bg:#ffe3c2;--frontier-bd:#c2540c;--todo-bg:#dbeafe;--todo-bd:#1d4ed8;}
+:root{--done-bg:#d1e7dd;--done-bd:#0f5132;--prog-bg:#fef9c3;--prog-bd:#a16207;--frontier-bg:#ffe3c2;--frontier-bd:#c2540c;--todo-bg:#dbeafe;--todo-bd:#1d4ed8;}
 *{box-sizing:border-box;}
 body{margin:0;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;background:#f4f5f7;color:#111;}
 #toolbar{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #d8dbe0;padding:10px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
@@ -99,8 +104,10 @@ svg#edges{position:absolute;top:0;left:0;pointer-events:none;overflow:visible;}
 .node .tags{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;}
 .tag{font-size:9px;font-weight:700;letter-spacing:.02em;padding:1px 5px;border-radius:8px;line-height:1.4;}
 .node.done{background:var(--done-bg);border-color:var(--done-bd);}
+.node.inprogress{background:var(--prog-bg);border-color:var(--prog-bd);}
 .node.frontier{background:var(--frontier-bg);border-color:var(--frontier-bd);}
 .node.todo{background:var(--todo-bg);border-color:var(--todo-bd);}
+.node .agent{font-weight:600;font-size:9px;opacity:.75;margin-left:6px;}
 </style>
 </head>
 <body>
@@ -109,6 +116,7 @@ svg#edges{position:absolute;top:0;left:0;pointer-events:none;overflow:visible;}
   <span class="sub">__WS_COUNT__ workstreams &middot; __NODE_COUNT__ tickets &middot; status from Markdown &middot; drag to rearrange</span>
   <div class="legend">
     <span><span class="swatch" style="background:var(--done-bg);border:1px solid var(--done-bd)"></span>Finished</span>
+    <span><span class="swatch" style="background:var(--prog-bg);border:1px solid var(--prog-bd)"></span>In progress</span>
     <span><span class="swatch" style="background:var(--frontier-bg);border:1px solid var(--frontier-bd)"></span>Frontier (ready now)</span>
     <span><span class="swatch" style="background:var(--todo-bg);border:1px solid var(--todo-bd)"></span>Todo (blocked)</span>
   </div>
@@ -145,6 +153,7 @@ function computeStatus(){
   const status = {};
   NODES.forEach(n=>{
     if (doneSet.has(n.id)) { status[n.id]="done"; return; }
+    if (n.in_progress) { status[n.id]="inprogress"; return; }
     const ready = n.deps.every(d=>doneSet.has(d));
     status[n.id] = ready ? "frontier" : "todo";
   });
@@ -218,7 +227,9 @@ function render(){
       const s = TAG_STYLES[t] || {label:t, bg:"#666", fg:"#fff"};
       return `<span class="tag" style="background:${s.bg};color:${s.fg};">${s.label}</span>`;
     }).join("");
-    el.innerHTML = '<div class="nid">'+n.id+'</div><div class="ntitle">'+n.title+'</div>'
+    el.innerHTML = '<div class="nid">'+n.id
+      + (n.agent ? '<span class="agent">&#9881; '+n.agent+'</span>' : '')
+      + '</div><div class="ntitle">'+n.title+'</div>'
       + (tags ? '<div class="tags">'+tags+'</div>' : '');
     el.title = "Status comes from Markdown. Drag to move.";
     canvas.appendChild(el);
@@ -317,6 +328,8 @@ def render_html(workstreams, nodes, title, storage_key, tag_styles_all):
                 "title": n["title"],
                 "deps": n["deps"],
                 "done": n["done"],
+                "in_progress": n.get("in_progress", False),
+                "agent": n.get("agent", ""),
                 "tags": n["tags"],
             }
             for n in nodes
