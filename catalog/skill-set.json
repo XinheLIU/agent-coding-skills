@@ -47,11 +47,6 @@
       "skills": ["analyze-test-gaps"]
     },
     {
-      "id": "deploy",
-      "label": "Deploy",
-      "skills": []
-    },
-    {
       "id": "maintain",
       "label": "Maintain",
       "skills": ["diagnose-incident", "triage"]
