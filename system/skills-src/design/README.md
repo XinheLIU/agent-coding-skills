@@ -1,6 +1,6 @@
 # Design
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
 How the product should work, at three levels: what capabilities it provides (requirements), how users experience it (UX), and how the system is structured under the hood (technical). Three sequential sub-phases with explicit boundaries and handoffs — run the full [`/design` workflow](../../workflows/design.md) or enter individual sub-phases directly.
 
@@ -8,7 +8,7 @@ How the product should work, at three levels: what capabilities it provides (req
 | --- | --- | --- |
 | Requirements | WHAT capabilities the product provides | `requirements/` |
 | UX | HOW those capabilities are delivered (interaction + visual) | `ux/` |
-| Technical | HOW to engineer them (domain model, architecture, ADRs) | `technical/` |
+| Technical | HOW to engineer them (architecture, shared foundations, code modules, verification) | `technical/` |
 
 Requirements feed UX and technical design both. UX design feeds `build/plan-implementation` (design constraints) and production code via `ux/design-implement`. Technical design feeds `build/` and the implementation loop.
 
@@ -39,18 +39,15 @@ UX skills operate on the whole product, not individual pages. One design documen
 
 ### Technical (`technical/`)
 
-Enter when the system's shape is undecided. Prerequisite: `specs/<spec>.md`; `docs/design/ux-design.html` strongly recommended. Skills follow a three-phase progression:
+Enter when the system's shape is undecided. Prerequisite: `specs/<spec>.md`; `docs/design/ux-design.html` strongly recommended.
 
-**Prototype validation** (problem space — is it worth building?):
-- `technical/explore-unknowns` — spike technical unknowns, map dependency-ordered decision tickets; run before committing to full design
+- `technical/audit-architecture` — reconstruct current architecture when brownfield evidence is unclear
+- `technical/design-architecture` — map features to modules and compare current, ideal, and feasible designs
+- `technical/design-foundation` — design libraries, SDKs, components, middleware, and infrastructure adapters
+- `technical/design-modules` — specify code contracts, directories, dependency rules, wiring, and migration
+- `technical/validate-codebase` — validate reachability and apply scoped cleanup after design or implementation
 
-**Engineering hardening** (solution space — can we maintain it long-term?):
-- `technical/engineer-domain-model` — entities, value objects, aggregates, bounded contexts; resolves overloaded terms and produces `CONTEXT.md` / ADRs
-- `technical/harden-architecture` — module boundaries, seams, deep modules, interface contracts; produces `DESIGN.md`
-- `technical/challenge-approach` — adversarial review of design decisions; stress-test before committing
-
-**Component extraction** (composable space — extract after 3+ proven uses):
-- `technical/audit-architecture` — assess existing architecture before refactoring; identifies duplication and extraction opportunities
+Use `plan/explore-unknowns` for multi-session decision wayfinding. Technical design handles NFR analysis, domain clarification, boundary refactoring, splitting, and design challenge inside the owning workflow node rather than exposing separate technical skills.
 
 Skip to `build/` when `DESIGN.md` exists with settled module boundaries and interface contracts, vocabulary is stable, and the change fits the existing architecture.
 

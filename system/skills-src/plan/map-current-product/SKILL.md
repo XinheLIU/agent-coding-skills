@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Map Current Product
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 ## Context contract
 
 ```yaml
@@ -35,7 +35,7 @@ Follow read–match–enrich–verify: create only missing records, preserve oth
 
 ## Boundary
 
-Map current behavior, not future scope. Do not validate demand, invent roadmap items, triage an MVP, or design an implementation. Synthesizing a candidate vision is inference about the intent already expressed by existing behavior and stated docs — it is a question for the user, not a roadmap item, and it authorizes no scope. If the request is architecture-only with no user-visible outcome, route to `design/technical/harden-architecture` or `design/technical/audit-architecture`.
+Map current behavior, not future scope. Do not validate demand, invent roadmap items, triage an MVP, or design an implementation. Synthesizing a candidate vision is inference about the intent already expressed by existing behavior and stated docs — it is a question for the user, not a roadmap item, and it authorizes no scope. If the request is architecture-only with no user-visible outcome, route to `design/technical/design-architecture` or `design/technical/audit-architecture`.
 
 ## Workflow
 
@@ -107,7 +107,7 @@ Skip the message when the run is non-interactive or the user asked for a pure au
 
 Record user-visible performance, permissions, recovery, accessibility, and integration behavior only where observed or promised, with environment/revision and evidence. Code modules and API/data paths are evidence pointers, not mandatory architecture assessments.
 
-If understanding a user outcome exposes a technical uncertainty, record the question and its blocking effect. Route cohesion/coupling, dependency cycles, API contracts, data-model design, or refactoring recommendations to `harden-architecture`, `audit-architecture`, or `review-architecture` when that analysis is requested. Do not infer demand or poor architecture from code inventory alone.
+If understanding a user outcome exposes a technical uncertainty, record the question and its blocking effect. Route cohesion/coupling, dependency cycles, API contracts, data-model design, or refactoring recommendations to `design-architecture`, `audit-architecture`, or `review-architecture` when that analysis is requested. Do not infer demand or poor architecture from code inventory alone.
 
 ### 8. Identify improvement candidates
 

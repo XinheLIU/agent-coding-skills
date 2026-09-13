@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-12
+Last updated: 2026-09-14
 
 This directory is the plugin and product. Its skills share a repository memory system: setup declares the paths and protocols once, then all skills coordinate through those artifacts across the six lifecycle phases.
 

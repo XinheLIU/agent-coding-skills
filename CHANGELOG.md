@@ -1,8 +1,16 @@
 # Changelog
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
 ## Unreleased
+
+### Technical design suite consolidation
+
+The technical design suite now exposes five workflow skills: `audit-architecture`,
+`design-architecture`, `design-foundation`, `design-modules`, and `validate-codebase`.
+NFR analysis and module-boundary refactoring are techniques within those owners rather than
+separate skills. `explore-unknowns`, `engineer-domain-model`, and `challenge-approach` moved to
+`plan`, `craft/context`, and `craft/meta` respectively while retaining their public skill names.
 
 ### Agent/LLM design skills leave the SDLC suite
 

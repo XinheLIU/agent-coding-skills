@@ -5,7 +5,7 @@ description: Map a multi-session effort into dependency-ordered decision tickets
 
 # Explore Unknowns
 
-Last updated: 2026-09-09
+Last updated: 2026-09-14
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Wayfinding resolves the route; the delivery workflow executes it.

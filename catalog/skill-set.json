@@ -19,7 +19,7 @@
     {
       "id": "plan",
       "label": "Plan",
-      "skills": ["brainstorm", "validate-demand", "map-current-product", "run-premortem", "ideate-product", "shape-solution", "define-outcomes", "design-experiment", "write-prd"]
+      "skills": ["brainstorm", "validate-demand", "map-current-product", "run-premortem", "ideate-product", "shape-solution", "define-outcomes", "design-experiment", "write-prd", "explore-unknowns"]
     },
     {
       "id": "design/requirements",
@@ -34,7 +34,7 @@
     {
       "id": "design/technical",
       "label": "Design · Technical",
-      "skills": ["explore-unknowns", "engineer-domain-model", "harden-architecture", "audit-architecture", "challenge-approach"]
+      "skills": ["audit-architecture", "design-architecture", "design-foundation", "design-modules", "validate-codebase"]
     },
     {
       "id": "build",
@@ -69,12 +69,12 @@
     {
       "id": "craft/context",
       "label": "Craft · Context",
-      "skills": ["init-context", "translate-agent-context", "sync-context"]
+      "skills": ["init-context", "translate-agent-context", "sync-context", "engineer-domain-model"]
     },
     {
       "id": "craft/meta",
       "label": "Craft · Meta",
-      "skills": ["research", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions"]
+      "skills": ["research", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions", "challenge-approach"]
     }
   ]
 }

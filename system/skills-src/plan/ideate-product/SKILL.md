@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Ideate Product
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
 ## Context contract
 
@@ -87,7 +87,7 @@ Existing-product routing overrides the greenfield table:
 | Existing-product improvement with weak or disputed evidence | `validate-demand` using active-product evidence (next if Green: `define-outcomes`) |
 | Existing-product improvement with baseline and evidence already clear | `define-outcomes` |
 | Existing-product improvement but solution shape is unclear or unduly constrained | `shape-solution` first, then `define-outcomes` |
-| Architecture refactor, cleanup, or internal redesign with no user outcome | `design/technical/harden-architecture` or `design/technical/audit-architecture` |
+| Architecture refactor, cleanup, or internal redesign with no user outcome | `design/technical/design-architecture` or `design/technical/audit-architecture` |
 
 | Situation | Route to |
 | --- | --- |

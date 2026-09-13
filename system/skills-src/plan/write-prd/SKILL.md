@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PRD Writer
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
 ## Context contract
 
@@ -120,11 +120,11 @@ The PRD fixes *what* to build. When *how it looks* or *how the system is shaped*
 | Open question after the PRD | Route to |
 | --- | --- |
 | Part 3 five-state specs are thin because layout, information hierarchy, or the visual system is undecided — or the effort is frontend-heavy with no design system | `design/ux/design-context` (then the UX pipeline — see `workflows/design.md`) |
-| The destination is known but the route is foggy — multiple interdependent decisions, larger than one session | `design/technical/explore-unknowns` |
-| PRD terms have no agreed meaning, or a hard-to-reverse trade-off needs an ADR | `design/technical/engineer-domain-model` |
-| The feature strains existing module boundaries, or it is unclear where behavior belongs | `design/technical/harden-architecture` |
-| The product is an agent system | `design/technical/harden-architecture`, plus `design-agent-architecture` when available (ships outside this plugin) |
-| The product is an operational decision loop | `design/technical/engineer-domain-model`, plus `design-operational-ontology` when available (ships outside this plugin) |
+| The destination is known but the route is foggy — multiple interdependent decisions, larger than one session | `plan/explore-unknowns` |
+| PRD terms have no agreed meaning, or a hard-to-reverse trade-off needs an ADR | `craft/context/engineer-domain-model` |
+| The feature strains existing module boundaries, or it is unclear where behavior belongs | `design/technical/design-architecture` |
+| The product is an agent system | `design/technical/design-architecture`, plus `design-agent-architecture` when available (ships outside this plugin) |
+| The product is an operational decision loop | `craft/context/engineer-domain-model`, plus `design-operational-ontology` when available (ships outside this plugin) |
 | Only the implementation *approach* is open — product and experience are settled | `engineering/feature/brainstorm-feature` |
 | None of the above | `spec` directly |
 

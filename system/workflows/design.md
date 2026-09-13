@@ -1,6 +1,6 @@
 # Design Workflow
 
-Last updated: 2026-09-12
+Last updated: 2026-09-14
 
 Transform accepted product intent into settled requirements, a unified UX design, and an engineering design. Three sequential sub-phases with clear boundaries: requirements define WHAT, UX defines HOW (delivery), technical defines HOW (engineering).
 
@@ -15,11 +15,11 @@ approval_gate:  User must approve all three layers before handoff to /build
 ```
 accepted intent → [1] requirements → [2] UX design → [3] technical design → /build
                       WHAT                HOW delivery    HOW engineering
-                  settle-requirements  design-context    explore-unknowns
-                                       validate-prototype engineer-domain-model
-                                       design-interaction-flow harden-architecture
-                                       visual-design-variants
-                                       design-implement
+                  settle-requirements  design-context    audit-architecture
+                                       validate-prototype design-architecture
+                                       design-interaction-flow design-foundation
+                                       visual-design-variants design-modules
+                                       design-implement  validate-codebase
 ```
 
 ## Sub-phase 1: Requirements (WHAT)
@@ -55,23 +55,20 @@ accepted intent → [1] requirements → [2] UX design → [3] technical design 
 
 ## Sub-phase 3: Technical (HOW engineering)
 
-**Goal:** Define how to engineer the capabilities. DDD-style progression from unknown territory through maintainable architecture to reusable components.
+**Goal:** Map accepted features to an implementable architecture, shared technical foundations, code modules, and verified wiring.
 
 **Entry:** `specs/<spec>.md` + `docs/design/ux-design.html`.
 
-**Skills (general SDLC, part of main loop):**
-- `/explore-unknowns` — spike technical unknowns before committing; map dependency-ordered decision tickets
-- `/engineer-domain-model` — entities, value objects, aggregates, bounded contexts; resolve overloaded terms
-- `/harden-architecture` — module boundaries, seams, deep modules, maintainability; produce `DESIGN.md` with ADRs
-- `/audit-architecture` — assess existing architecture before refactoring decisions
-- `/challenge-approach` — adversarial review of design decisions; stress-test the plan
+**Skills:**
+- `/audit-architecture` — reconstruct current structure when brownfield evidence is unclear
+- `/design-architecture` — map features to business modules and compare current, ideal, and feasible designs
+- `/design-foundation` — design libraries, SDKs, components, middleware, and infrastructure adapters for named consumers
+- `/design-modules` — specify code interfaces, types, directories, wiring, dependency rules, and migration
+- `/validate-codebase` — verify design and implementation reachability across routes, menus, exports, interfaces, and modules
 
-**Three-phase progression (guidance embedded in skills, not separate sub-phases):**
-1. Prototype validation — spike unknowns (`/explore-unknowns`) before committing to full design
-2. Engineering hardening — `/engineer-domain-model` + `/harden-architecture` produce maintainable systems
-3. Component extraction — `/audit-architecture` identifies reuse opportunities after 2–3 features stabilize
+The handoff is `requirement → capability/module → contract → code entry → verification evidence`. Greenfield uses a minimum real end-to-end path; brownfield includes migration and preservation evidence.
 
-**Exit:** `DESIGN.md` with ADRs, domain model, module boundaries, interface specs, and test strategy.
+**Exit:** technical design with architecture options, capability contracts, module contracts, wiring, gaps, and validation evidence.
 
 **Gate:** User approves DESIGN.md before handoff to /build.
 

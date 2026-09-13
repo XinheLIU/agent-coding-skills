@@ -1,8 +1,8 @@
 # Plan
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
-From raw idea or existing codebase to durable product intent an engineer can build against. Nine skills contribute to one shared product model through two lanes: greenfield creation and existing-product improvement.
+From raw idea or existing codebase to durable product intent an engineer can build against. Ten skills contribute to one shared product model through two lanes: greenfield creation and existing-product improvement.
 
 Read [the product memory contract](../craft/context/init-context/references/product-memory.md) for the record schema and update rules. The source contract lives with context initialization; each product skill exposes the same file through a local `references/product-memory.md` symlink so packaged copies can materialize it without separate maintained versions.
 
@@ -44,6 +44,7 @@ flowchart LR
 | A feature list to prioritize, cut, or reduce to an MVP | `define-outcomes` — commitment and depth |
 | A specific assumption to validate cheaply before committing | `design-experiment` |
 | A scoped plan you want to stress-test | `run-premortem` |
+| A multi-session effort with interdependent open decisions | `explore-unknowns` |
 | A Green demand verdict and nothing tracked yet | `write-prd` — early mode, Part 1 only |
 | No idea which of the above applies | `ideate-product` — it diagnoses and routes |
 
@@ -60,6 +61,8 @@ flowchart LR
 **`run-premortem`** — assumes the project has failed 6 months out, then works backward to root causes, scored risks, and prevention strategies. Lives in discovery but runs late in the pipeline — most effective after `define-outcomes` and immediately before `write-prd`. Also works standalone on any plan.
 
 **`ideate-product`** — the router. Diagnoses which question is actually open by reading the effort state and existing artifacts, then routes to the owning skill. Performs no analysis and owns no artifact.
+
+**`explore-unknowns`** — maps a multi-session effort into dependency-ordered decision tickets when the destination is known but the route is not. It coordinates decisions; domain skills still own their answers.
 
 ### Definition — what exactly are we building?
 

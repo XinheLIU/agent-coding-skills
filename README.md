@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-12
+Last updated: 2026-09-14
 
 A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system/); copied upstream material stays in the local, ignored `references/` workspace.
 
@@ -19,7 +19,7 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 
 | Component | Role |
 | --- | --- |
-| [`system/skills/`](system/skills/) | 48 flat symlinks (loader entry points) into `skills-src/` |
+| [`system/skills/`](system/skills/) | 47 flat symlinks (loader entry points) into `skills-src/` |
 | [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
 | [`system/memory/`](system/memory/) | Shared read/write protocol for core, human, optional wiki, and working memory |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
@@ -35,17 +35,17 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 
 | Phase | Skills | What it covers |
 | --- | --- | --- |
-| [`plan/`](system/skills-src/plan/) | 11 | Problem discovery through accepted product intent. Idea generation, demand validation, PRD. |
+| [`plan/`](system/skills-src/plan/) | 10 | Problem discovery through accepted product intent, including multi-session decision mapping. |
 | [`design/requirements/`](system/skills-src/design/requirements/) | 1 | WHAT the product provides: functional requirements and testable acceptance criteria. |
 | [`design/ux/`](system/skills-src/design/ux/) | 6 | HOW capabilities are delivered: interaction flows, visual system, unified design doc. |
-| [`design/technical/`](system/skills-src/design/technical/) | 7 | HOW to engineer them: domain model, architecture, ADRs, adversarial review. |
+| [`design/technical/`](system/skills-src/design/technical/) | 5 | HOW to engineer them: architecture, shared foundations, module contracts, and reachability. |
 | [`build/`](system/skills-src/build/) | 6 | Feature implementation: plan approval, TDD loop, handoff. |
 | [`test/`](system/skills-src/test/) | 1 | Coverage audit and integration tests after build. |
 | [`maintain/`](system/skills-src/maintain/) | 1 | Incident diagnosis and autonomous fix loop. |
 | [`quality/review/`](system/skills-src/quality/review/) | 5 | Review pipeline: design doc → gap analysis → code quality → refactor. Cross-cutting. |
 | [`quality/debugging/`](system/skills-src/quality/debugging/) | 2 | Triage and merge-conflict resolution. Cross-cutting. |
-| [`craft/context/`](system/skills-src/craft/context/) | 4 | Agent memory: init, sync, translate, manage. Cross-cutting. |
-| [`craft/meta/`](system/skills-src/craft/meta/) | 4 | Research, DAG rendering, skill authoring. Cross-cutting. |
+| [`craft/context/`](system/skills-src/craft/context/) | 5 | Agent memory, shared terminology, and durable architectural decisions. Cross-cutting. |
+| [`craft/meta/`](system/skills-src/craft/meta/) | 5 | Research, decision challenge, DAG rendering, and skill authoring. Cross-cutting. |
 
 `system/skills/` holds flat symlinks into `skills-src/` so the loader — which scans one level deep — can discover every skill while the source stays browsable by phase.
 
@@ -58,7 +58,7 @@ graph LR
     end
 
     subgraph DESIGN["design/"]
-        SR[settle-requirements] --> DI[design-interaction-flow] --> HA[harden-architecture]
+        SR[settle-requirements] --> DI[design-interaction-flow] --> DA[design-architecture]
     end
 
     subgraph BUILD["build/"]
@@ -78,7 +78,7 @@ graph LR
     end
 
     PRD --> SR
-    HA --> PI
+    DA --> PI
     HO --> ATG
     ATG --> DEP
     DEP --> DX

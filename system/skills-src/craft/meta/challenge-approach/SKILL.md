@@ -5,7 +5,7 @@ description: Resolve user-owned decisions one at a time. Use when choices that c
 
 # Challenge Approach
 
-Last updated: 2026-09-09
+Last updated: 2026-09-14
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [domain_owners]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../context/init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 1. Inspect the available context until every remaining blocker is a decision rather than a discoverable fact.
