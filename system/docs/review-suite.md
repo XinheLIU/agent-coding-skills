@@ -1,10 +1,10 @@
 # Code Review
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 [System home](../README.md) · [Workflows](../workflows/README.md) · [Organization report](organization-report.md)
 
-This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `review-architecture` and `review-code-quality` own domain review reasoning while the shared coordinator owns runtime orchestration; the gate chain `review-design-doc → review-implementation-gaps → review-code-quality` runs a change from plan to merge verdict, `analyze-test-gaps` audits whole-codebase test adequacy, and `refactor-code` is the corrective follow-up that acts on findings. `tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
+This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `acs-review-architecture` and `acs-review-code-quality` own domain review reasoning while the shared coordinator owns runtime orchestration; the gate chain `acs-review-design-doc → acs-review-implementation-gaps → acs-review-code-quality` runs a change from plan to merge verdict, `acs-analyze-test-gaps` audits whole-codebase test adequacy, and `acs-refactor-code` is the corrective follow-up that acts on findings. `acs-tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
 
 ## TL;DR — Which Skill?
 
@@ -15,20 +15,20 @@ This folder defines a technical review system with two primary orchestrators and
                 ┌───────────────┴───────────────┐
                 ▼                               ▼
          design / structure                code as written
-       /review-architecture              /review-code-quality
+       /acs-review-architecture              /acs-review-code-quality
                                                 │
                             ready to ship a PR? │ yes
                                                 ▼
                                         verdict + next steps
 ```
 
-- `review-architecture`: intent, boundaries, topology, contracts, and ADR quality.
-- `review-code-quality`: concrete defects, maintainability, tests, and merge readiness.
+- `acs-review-architecture`: intent, boundaries, topology, contracts, and ADR quality.
+- `acs-review-code-quality`: concrete defects, maintainability, tests, and merge readiness.
 - Cross-skill findings are routed via cross-reference sections, not mixed into the wrong skill.
 
 ## MECE Boundary
 
-| Concern | review-architecture | review-code-quality |
+| Concern | acs-review-architecture | acs-review-code-quality |
 |---|---|---|
 | Business intent, personas, golden paths | Yes | No |
 | Module decomposition, layering, runtime ownership | Yes | No |
@@ -44,11 +44,11 @@ This folder defines a technical review system with two primary orchestrators and
 | App security implementation bugs | No | Yes |
 | Test quality, code complexity, maintainability smells | No | Yes |
 
-Rule of thumb: `review-architecture` judges the system design; `review-code-quality` judges the code implementing that design.
+Rule of thumb: `acs-review-architecture` judges the system design; `acs-review-code-quality` judges the code implementing that design.
 
-## Skill 1: review-architecture
+## Skill 1: acs-review-architecture
 
-`review-architecture` proposes relevant aspect pairs (`explorer` then `reviewer`) and consolidates a design-level report. The coordinator handles authorized delegation or inline execution.
+`acs-review-architecture` proposes relevant aspect pairs (`explorer` then `reviewer`) and consolidates a design-level report. The coordinator handles authorized delegation or inline execution.
 
 ### Architecture Scope
 
@@ -70,7 +70,7 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 ### Architecture Pipeline
 
 ```text
-/review-architecture
+/acs-review-architecture
   -> choose aspects + scope
   -> run selected explorers in parallel
   -> run paired reviewers in parallel
@@ -82,9 +82,9 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 
 `docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md`
 
-## Skill 2: review-code-quality
+## Skill 2: acs-review-code-quality
 
-`review-code-quality` runs domain review subagents plus a standalone `code-reviewer`, then produces a merge verdict and prioritized next steps.
+`acs-review-code-quality` runs domain review subagents plus a standalone `code-reviewer`, then produces a merge verdict and prioritized next steps.
 
 ### Code Quality Scope
 
@@ -93,7 +93,7 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 - Supports three modes:
   - Mode A: recent changes (default).
   - Mode B: whole codebase against specs/rules.
-  - Mode C: drill-down from review-architecture output.
+  - Mode C: drill-down from acs-review-architecture output.
 - Always includes consolidation, confidence calibration, test-coverage gap analysis, and verdicting.
 
 ### Domain subagents
@@ -111,7 +111,7 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 ### Code Quality Pipeline
 
 ```text
-/review-code-quality
+/acs-review-code-quality
   -> pick mode + scope + domains + spec source
   -> run explorers in parallel
   -> run paired reviewers in parallel
@@ -127,13 +127,13 @@ Rule of thumb: `review-architecture` judges the system design; `review-code-qual
 
 ### Retired: request-code-review
 
-The former `request-code-review` skill (pre-commit verification pipeline) is folded into `review-code-quality`: its pre-commit triggers ("verify my changes", "review before commit/merge") and its static security greps now live there. Its auto-fix loop, stash-based test baseline, and auto-commit behavior were dropped by design — this system never commits without explicit user authority.
+The former `request-code-review` skill (pre-commit verification pipeline) is folded into `acs-review-code-quality`: its pre-commit triggers ("verify my changes", "review before commit/merge") and its static security greps now live there. Its auto-fix loop, stash-based test baseline, and auto-commit behavior were dropped by design — this system never commits without explicit user authority.
 
 ## Standalone Agent: tdd-builder
 
 `tdd-builder` is not part of either review pipeline. It is an orchestration agent for new features using strict test-first delivery.
 
-- Sequence: `brainstorm-feature` (when needed) -> `spec` (reuse canonical requirements) -> direct planning -> `tasks` (criterion-based checks). Planning and execution are workflow stages, not missing skill invocations.
+- Sequence: `acs-brainstorm` (when needed) → `acs-settle-requirements` (reuse canonical requirements) → `acs-plan-delivery` → `acs-implement` / `acs-tdd` (criterion-based execution). The coordinator selects verified host capabilities or executes serially.
 - Optional execution loop: red -> green -> refactor.
 - Enforces story-by-story progression and blocks code-before-test behavior.
 
@@ -164,8 +164,8 @@ Operational defaults:
 
 Use cross-reference routing when a finding belongs to the other skill:
 
-- Design-level issue found during `review-code-quality` -> reference `review-architecture` with aspect hint (`business`, `application`, `data`, `technology`, `deploy`, `adr`).
-- Code-level issue found during `review-architecture` -> reference `review-code-quality` with domain hint (`api`, `db`, `auth`, `reliability`, `performance`, `security`, `code-reviewer`).
+- Design-level issue found during `acs-review-code-quality` -> reference `acs-review-architecture` with aspect hint (`business`, `application`, `data`, `technology`, `deploy`, `adr`).
+- Code-level issue found during `acs-review-architecture` -> reference `acs-review-code-quality` with domain hint (`api`, `db`, `auth`, `reliability`, `performance`, `security`, `code-reviewer`).
 
 This keeps findings MECE and avoids duplicate or contradictory reporting.
 
@@ -186,10 +186,10 @@ Route cross-domain findings via references  File findings on the wrong side
 
 | Skill | Artifact path |
 |---|---|
-| `review-architecture` | `docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md` |
-| `review-code-quality` | `docs/eng-reviews/next-steps-<branch>-<YYYYMMDD-HHMM>.md` |
+| `acs-review-architecture` | `docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md` |
+| `acs-review-code-quality` | `docs/eng-reviews/next-steps-<branch>-<YYYYMMDD-HHMM>.md` |
 
-Preserve established artifact homes; new local change evidence defaults to `docs/changes/<change-id>/verification/`. Each report includes canonical change/task, criterion/contract references, consumed revisions, environment assumptions, failures/omissions, and actionable next steps. Standards and Spec verdicts remain separate. Use the [shared handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope) and [coordinator](../workflows/context-coordination.md).
+Preserve established artifact homes; new local change evidence defaults to `docs/changes/<change-id>/verification/`. Each report includes canonical change/task, criterion/contract references, consumed revisions, environment assumptions, failures/omissions, and actionable next steps. Standards and Spec verdicts remain separate. Use the [shared handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope) and [coordinator](../workflows/context-coordination.md).
 
 ## Pointers
 

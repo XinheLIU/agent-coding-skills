@@ -1,8 +1,10 @@
 # Context Coordination
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
-The active agent performs this coordinator role under the [shared protocol](../skills-src/craft/context/init-context/references/PROTOCOL.md), including when invoking a skill standalone. This is a written Harness contract, not a new executable service. Domain skills return results and proposed transitions; the coordinator applies shared state changes through capabilities actually available in the session.
+The active agent performs this coordinator role under the [shared protocol](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md), including when invoking a skill standalone. This is a written Harness contract, not a new executable service. Domain skills return results and proposed transitions; the coordinator applies shared state changes through capabilities actually available in the session.
+
+The [harness architecture](../docs/harness-architecture.md) defines source identity, standalone packaging, and the boundary with Codex, Claude Code, Pi, OpenCode, and DeepSeek harness adapters. Keep domain procedures and shared state semantics here; put host APIs, invocation syntax, worker executables, and lifecycle integrations in their binding. A plugin manifest alone does not establish runtime support.
 
 ## Assemble only the needed context
 

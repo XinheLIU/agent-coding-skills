@@ -2,7 +2,7 @@
 """Validate product-memory HTML documents (discovery.html / product.html).
 
 Checks the structural contract defined in
-system/skills-src/craft/context/init-context/references/product-memory.md:
+system/skills-src/craft/context/acs-init-context/references/product-memory.md:
 
   - every <article> has a non-empty, document-unique id
   - every <article> has a data-kind from the closed list; an unknown kind
@@ -53,7 +53,7 @@ RECORD_KINDS = {
     "metric",
 }
 
-# Set by define-outcomes on capability records. Commitment says whether the
+# Set by acs-define-outcomes on capability records. Commitment says whether the
 # product promises the capability; depth says how far it goes. The two are
 # orthogonal -- a capability can ship narrower than it was shaped.
 COMMITMENT_LEVELS = {

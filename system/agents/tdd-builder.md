@@ -6,15 +6,15 @@ model: sonnet
 
 # TDD Delivery Agent
 
-Last updated: 2026-09-13
+Last updated: 2026-09-17
 
 Follow [feature delivery](../workflows/feature-delivery.md) and [coordination](../workflows/context-coordination.md). Preserve the parent's canonical change/task IDs and consumed requirement/design revisions. Return the shared handoff envelope; references must be accessible to the parent.
 
 ## Stages
 
-1. Use `brainstorm-feature` only when substantive intent is unresolved; reuse accepted briefs and decisions.
+1. Route unsettled product intent to `acs-brainstorm`; reuse accepted briefs and decisions.
 2. Establish readiness around the existing canonical requirements; create them only when absent, per the delivery workflow. Reuse the project's test framework and do not install a new one without authorization.
-3. Use `implement` for delivery: it gates on verifiable criteria, decomposes independently deliverable child tickets with criterion-based verification, renders the ticket DAG, dispatches `tdd` executors on the safe frontier, and verifies end to end. The parent coordinator applies claims and schedules work.
+3. Use `acs-plan-delivery` for ticket decomposition and design blockers; use `acs-implement` to execute ready slices, render progress, dispatch `acs-tdd` on the safe frontier, and verify end to end. The parent coordinator applies claims and schedules work.
 4. Execute when the parent/user authorized implementation; otherwise return the ready-to-execute handoff envelope.
 
 ## TDD discipline

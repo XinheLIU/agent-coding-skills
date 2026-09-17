@@ -1,12 +1,12 @@
 # Agent Coding System
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
 This directory is the plugin and product. Its skills share a repository memory system: setup declares the paths and protocols once, then all skills coordinate through those artifacts across the six lifecycle phases.
 
 ## System model
 
-The [shared protocol](skills-src/craft/context/init-context/references/PROTOCOL.md) defines four lifecycles: North Star, Current State, Change Context, and Run Context. Product records retain their HTML format; engineering tickets and specs keep Markdown or established tracker homes. One canonical ticket/spec connects all contributions.
+The [shared protocol](skills-src/craft/context/acs-init-context/references/PROTOCOL.md) defines four lifecycles: North Star, Current State, Change Context, and Run Context. Product records retain their HTML format; engineering tickets and specs keep Markdown or established tracker homes. One canonical ticket/spec connects all contributions.
 
 [Workflow coordination](workflows/context-coordination.md) resolves paths and identity, assembles relevant context, binds available runtime capabilities, serializes contributions, tracks freshness, and cleans up reconciled scratch. Skills retain domain reasoning and evidence interpretation.
 
@@ -24,18 +24,20 @@ The [shared protocol](skills-src/craft/context/init-context/references/PROTOCOL.
 | [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin manifest |
 | [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest |
 
-## Workflow entry points
+## Workflow navigation
 
-Six verbs cover the full lifecycle — use these as the primary entry points:
+Six workflow documents cover the lifecycle. They are navigation and sequencing guidance, not installed commands or router skills:
 
 - [Plan](workflows/plan.md) — turn uncertain concepts into accepted product intent
 - [Design](workflows/design.md) — settle requirements, UX, and technical architecture (three sub-phases: requirements → UX → technical)
-- [Build](workflows/build.md) — implement features with plan approval, TDD, and handoff
+- [Build](workflows/build.md) — plan delivery from Product or Design, then execute ready slices with TDD and verification
 - [Test](workflows/test.md) — audit coverage and add integration tests after build
 - [Deploy](workflows/deploy.md) — release to staging and production with evidence
 - [Maintain](workflows/maintain.md) — diagnose incidents and close the loop autonomously for in-band fixes
 
-`init-context` sets up memory state and `sync-context` reconciles it. `handoff` carries pointers into a fresh session. `engineer-domain-model` owns the shared glossary and ADRs.
+`acs-init-context` sets up memory state and `acs-sync-context` reconciles it. The shared handoff envelope carries pointers into a fresh session. `acs-engineer-domain-model` owns the shared glossary and ADRs. `acs-manage-context` retains the explicit-only compatibility routing behavior under the new namespace.
+
+The [harness architecture](docs/harness-architecture.md) separates domain skills, coordination, and host adapters. Public skill IDs are identical across plugin and planned standalone distributions; see the [migration table](docs/skill-name-migration.md). Individual skill directories still depend on shared files outside their package and have not passed standalone isolation acceptance.
 
 Legacy workflows are retained for backward compatibility: [ideas](workflows/ideas.md), [feature-delivery](workflows/feature-delivery.md), [testing](workflows/testing.md), [debugging](workflows/debugging.md).
 

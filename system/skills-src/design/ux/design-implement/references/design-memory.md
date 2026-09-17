@@ -1,1 +1,0 @@
-../../../../craft/context/init-context/references/design-memory.md

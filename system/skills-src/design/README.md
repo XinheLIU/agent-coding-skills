@@ -1,8 +1,8 @@
 # Design
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
-How the product should work, at three levels: what capabilities it provides (requirements), how users experience it (UX), and how the system is structured under the hood (technical). Three sequential sub-phases with explicit boundaries and handoffs — run the full [`/design` workflow](../../workflows/design.md) or enter individual sub-phases directly.
+How the product should work, at three levels: what capabilities it provides (requirements), how users experience it (UX), and how the system is structured under the hood (technical). Three sequential sub-phases with explicit boundaries and handoffs — run the full [`design` workflow](../../workflows/design.md) or enter individual sub-phases directly.
 
 | Sub-phase | Defines | Directory |
 | --- | --- | --- |
@@ -10,11 +10,11 @@ How the product should work, at three levels: what capabilities it provides (req
 | UX | HOW those capabilities are delivered (interaction + visual) | `ux/` |
 | Technical | HOW to engineer them (architecture, shared foundations, code modules, verification) | `technical/` |
 
-Requirements feed UX and technical design both. UX design feeds `build/implement` (design constraints) and production code via `ux/design-implement`. Technical design feeds `build/` and the implementation loop.
+Requirements feed UX and technical design both. UX and technical design feed `build/acs-plan-delivery` with accepted artifacts, revisions, and unresolved blockers; `acs-implement` consumes the resulting ready slices. UX also feeds production code via `ux/acs-design-implement`. Existing accepted designs can satisfy a slice without rerunning every sub-phase.
 
 ## When to enter — and when to skip
 
-Entered from [`/plan`](../../workflows/plan.md) when `product.html` has accepted intent. The three sub-phases run sequentially; each produces a durable artifact the next consumes.
+Entered from [`plan`](../../workflows/plan.md) when `product.html` has accepted intent. The three sub-phases run sequentially; each produces a durable artifact the next consumes.
 
 ### Requirements (`requirements/`)
 
@@ -22,7 +22,7 @@ Enter when accepted product intent exists but functional requirements and testab
 
 - `requirements/settle-requirements` — define what capabilities the product provides: observable behavior per actor and condition, acceptance criteria in Given/When/Then form, explicit scope boundary. Output: `specs/<spec>.md`.
 
-Skip requirements when an existing canonical spec already covers the change. Route scope changes back to `/plan`, not here.
+Skip requirements when an existing canonical spec already covers the change. Route scope changes back to `plan`, not here.
 
 ### UX (`ux/`)
 
@@ -32,7 +32,7 @@ Enter when what the user sees or navigates is undecided. Prerequisite: `specs/<s
 - `ux/validate-prototype` — validate whether a design approach is worth building; throwaway variants, decision recorded, control returns
 - `ux/design-interaction-flow` — flows, layout, information hierarchy, or five-state coverage undecided; locks wireframe sections in the canonical prototype
 - `ux/visual-design-variants` — structure locked, visual direction open; merges the winner as the styled section
-- `ux/design-implement` — styled section approved, needs production code
+- `ux/acs-design-implement` — styled section approved, needs production code
 - Full pipeline doc: [`workflows/design.md`](../../workflows/design.md); UX system + external dispatch: [`ux/README.md`](ux/README.md); external tool catalog: [`ux/external-skills.md`](ux/external-skills.md)
 
 UX skills operate on the whole product, not individual pages. One design document (`docs/design/ux-design.html`) encodes the complete product vision; sections transition from wireframe → styled → implemented as gates are passed.
@@ -47,7 +47,7 @@ Enter when the system's shape is undecided. Prerequisite: `specs/<spec>.md`; `do
 - `technical/design-modules` — specify code contracts, directories, dependency rules, wiring, and migration
 - `technical/validate-codebase` — validate reachability and apply scoped cleanup after design or implementation
 
-Use `plan/explore-unknowns` for multi-session decision wayfinding. Technical design handles NFR analysis, domain clarification, boundary refactoring, splitting, and design challenge inside the owning workflow node rather than exposing separate technical skills.
+Use `plan/acs-explore-unknowns` for multi-session decision wayfinding. Technical design handles NFR analysis, domain clarification, boundary refactoring, splitting, and design challenge inside the owning workflow node rather than exposing separate technical skills.
 
 Skip to `build/` when `DESIGN.md` exists with settled module boundaries and interface contracts, vocabulary is stable, and the change fits the existing architecture.
 

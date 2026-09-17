@@ -1,47 +1,40 @@
 # Build
 
-Last updated: 2026-09-13
+Last updated: 2026-09-17
 
-The implementation loop. Starts **after** the spec phase with a locked, verifiable change — acceptance criteria testable at code level and at experience level (browser or local run) — and delivers working code verified end-to-end, with evidence. Design-phase work (intent exploration, spec authoring, architecture) lives in `design/`; code review and refactoring live in `quality/`.
+Plan delivery from accepted Product or Design inputs, then execute the ready slices. Planning and implementation are independently callable; an implementation request can invoke planning when its tickets are missing or stale.
 
-Read [the engineering memory contract](../craft/context/init-context/references/engineering-memory.md) for context ownership and update rules.
-
-## The loop
+Read the [engineering memory contract](../craft/context/acs-init-context/references/engineering-memory.md) for context ownership and update rules.
 
 ```mermaid
 flowchart LR
-    SPEC[locked change + criteria] --> GATE{criteria verifiable?}
-    GATE -->|small gap| CLARIFY[1-2 inline questions]
-    GATE -->|design work| DESIGN(["route to design/"])
-    CLARIFY --> DECOMP
-    GATE -->|yes| DECOMP[decompose into tickets]
-    DECOMP --> DAG[render HTML DAG]
-    DAG --> ORCH[orchestrate frontier]
-    ORCH -->|dispatch| TDD[tdd sub-agents in parallel]
-    TDD -->|evidence| ORCH
-    ORCH --> E2E[end-to-end verification]
-    E2E --> ENV[handoff envelope]
-    ENV --> QUALITY(["quality/review"])
+    PRODUCT[Accepted product scope] --> PLAN[acs-plan-delivery]
+    DESIGN[Accepted requirements and designs] --> PLAN
+    PLAN -->|concrete blockers| DESIGN
+    PLAN --> TICKETS[Canonical tickets and dependencies]
+    TICKETS --> DAG[acs-draw-portfolio-dag renderer]
+    PLAN --> REPORT[delivery-plan.html: plan and DAG]
+    DAG --> REPORT
+    TICKETS -->|ready implementation slices| IMPLEMENT[acs-implement]
+    IMPLEMENT --> TDD[acs-tdd]
+    TDD --> IMPLEMENT
+    IMPLEMENT -->|status and evidence| TICKETS
+    IMPLEMENT -->|scope or dependency changes| PLAN
+    IMPLEMENT --> VERIFY[End-to-end verification and handoff]
 ```
 
-One user-facing entry point. The user states a verifiable requirement, optionally answers one or two clarifying questions, then goes AFK while parallel agents deliver the change.
+## Skills and ownership
 
-## The skills
+- **[acs-plan-delivery](acs-plan-delivery/SKILL.md)** owns decomposition, design blockers, dependency validation, criterion coverage, and reconciliation across sessions. After scope confirmation it generates and opens one HTML plan with an embedded DAG; `acs-draw-portfolio-dag` remains the reusable renderer. Planning-ready accepted scope is sufficient to start; execution readiness is checked per slice. Planning alone does not dispatch implementation.
+- **[acs-implement](acs-implement/SKILL.md)** reuses the graph or invokes `acs-plan-delivery` when needed, checks readiness and claims, dispatches safe implementation tickets, reconciles execution evidence, and verifies delivered behavior. It refreshes the graph on status changes.
+- **[acs-tdd](acs-tdd/SKILL.md)** executes one criterion-backed slice and returns test/evidence/revision mappings.
 
-**`implement`** — the delivery orchestrator and only entry point. Gates on verifiable acceptance criteria; decomposes any change — bootstrap, feature, or bugfix — into dependency-ordered tickets by understanding current state and desired state (no modes); renders the ticket DAG as interactive HTML; dispatches parallel `tdd` sub-agents through the orchestration protocol (herdr binding primary, in-process Agent tool fallback); verifies the result on the running system; returns the handoff envelope.
+Specs own requirements, tickets own durable status/dependencies/readiness, and the coordinator owns claims and scheduling. DAG files are generated views. Write conflicts constrain concurrent execution without becoming artificial dependency edges.
 
-**`tdd`** — the execution unit `implement` dispatches, one ticket at a time: write a failing test naming observable behavior, implement the minimum to pass, refactor keeping green, repeat per criterion. Never fabricates passing evidence. Returns criterion → test/evidence → revision mapping.
+## Retained capabilities
 
-## Absorbed responsibilities
+- Former `break-into-tasks` decomposition now belongs to [acs-plan-delivery's rules](acs-plan-delivery/references/decomposition-rules.md).
+- Greenfield foundations are designed by `design/technical/acs-design-foundation`, then planned and executed as ordinary changes; the rules include a bootstrap example.
+- Every handoff uses the [shared envelope](../craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope).
 
-Former standalone skills now live inside `implement`:
-
-- Ticket decomposition and parallel boundaries (was `break-into-tasks`) — [decomposition rules](implement/references/decomposition-rules.md)
-- Greenfield bootstrap execution (was `bootstrap-project`) — the foundation is now *designed* by `design/technical/design-foundation` (five slices with binary gates) and *executed* here as an ordinary change; a worked example lives in the decomposition rules
-- The handoff envelope (was `handoff`) — the return protocol of every run, defined in [the shared protocol](../craft/context/init-context/references/PROTOCOL.md#handoff-envelope)
-
-Design-phase skills formerly here (`brainstorm-approaches`, `plan-implementation`, `analyze`) were removed; their capabilities belong to the design phase.
-
-## Handoff to quality and test
-
-Build hands verified code changes to `quality/review` (Standards and Spec axes) and `/test`. The test phase audits coverage and adds integration/e2e tests; it does not redo unit tests written inside the loop.
+Verified code goes to `quality/review` and `test`. Product and Design retain ownership of substantive scope, behavior, and contract decisions.

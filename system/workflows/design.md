@@ -1,25 +1,25 @@
 # Design Workflow
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
 Transform accepted product intent into settled requirements, a unified UX design, and an engineering design. Three sequential sub-phases with clear boundaries: requirements define WHAT, UX defines HOW (delivery), technical defines HOW (engineering).
 
 ```
 entry_artifact: docs/product/<product>/product.html (accepted intent)
 exit_artifact:  specs/<spec>.md + docs/design/ux-design.html + DESIGN.md
-approval_gate:  User must approve all three layers before handoff to /build
+approval_gate:  Necessary decisions accepted per slice before execution; existing approvals persist
 ```
 
 ## Overview
 
 ```
-accepted intent → [1] requirements → [2] UX design → [3] technical design → /build
+accepted intent → [1] requirements → [2] UX design → [3] technical design → acs-plan-delivery
                       WHAT                HOW delivery    HOW engineering
-                  settle-requirements  design-context    audit-architecture
-                                       validate-prototype design-architecture
-                                       design-interaction-flow design-foundation
-                                       visual-design-variants design-modules
-                                       design-implement  validate-codebase
+                  acs-settle-requirements  acs-design-context    acs-audit-architecture
+                                       acs-validate-prototype acs-design-architecture
+                                       acs-design-interaction-flow acs-design-foundation
+                                       acs-visual-design-variants acs-design-modules
+                                       acs-design-implement  acs-validate-codebase
 ```
 
 ## Sub-phase 1: Requirements (WHAT)
@@ -29,7 +29,7 @@ accepted intent → [1] requirements → [2] UX design → [3] technical design 
 **Entry:** Accepted intent records in `product.html`.
 
 **Skills:**
-- `/settle-requirements` — functional requirements, acceptance criteria, scope boundary
+- `/acs-settle-requirements` — functional requirements, acceptance criteria, scope boundary
   
 **Exit:** `specs/<spec>.md` with complete functional requirements and testable criteria.
 
@@ -42,12 +42,12 @@ accepted intent → [1] requirements → [2] UX design → [3] technical design 
 **Entry:** `specs/<spec>.md` from sub-phase 1.
 
 **Skills:**
-- `/design-context` — inspect whole product vision, establish design authority, produce root `DESIGN.md`
-- `/validate-prototype` — validate whether a design approach is worth building (problem space)
-- `/design-interaction-flow` — user journeys, state transitions, interaction model
-- `/visual-design-variants` — visual layer, typography, color, spacing based on `DESIGN.md`
-- `/design-system-create` — reusable design patterns when duplication is visible (3+ uses)
-- `/design-implement` — final prototype/design doc; merges all prior design work
+- `/acs-design-context` — inspect whole product vision, establish design authority, produce root `DESIGN.md`
+- `/acs-validate-prototype` — validate whether a design approach is worth building (problem space)
+- `/acs-design-interaction-flow` — user journeys, state transitions, interaction model
+- `/acs-visual-design-variants` — visual layer, typography, color, spacing based on `DESIGN.md`
+- `/acs-design-system-create` — reusable design patterns when duplication is visible (3+ uses)
+- `/acs-design-implement` — final prototype/design doc; merges all prior design work
 
 **Exit:** `docs/design/ux-design.html` — a single openable document encoding the whole product design, with sections transitioning from wireframe → styled → implemented as gates are passed.
 
@@ -60,17 +60,17 @@ accepted intent → [1] requirements → [2] UX design → [3] technical design 
 **Entry:** `specs/<spec>.md` + `docs/design/ux-design.html`.
 
 **Skills:**
-- `/audit-architecture` — reconstruct current structure when brownfield evidence is unclear
-- `/design-architecture` — map features to business modules and compare current, ideal, and feasible designs
-- `/design-foundation` — design libraries, SDKs, components, middleware, and infrastructure adapters for named consumers
-- `/design-modules` — specify code interfaces, types, directories, wiring, dependency rules, and migration
-- `/validate-codebase` — verify design and implementation reachability across routes, menus, exports, interfaces, and modules
+- `/acs-audit-architecture` — reconstruct current structure when brownfield evidence is unclear
+- `/acs-design-architecture` — map features to business modules and compare current, ideal, and feasible designs
+- `/acs-design-foundation` — design libraries, SDKs, components, middleware, and infrastructure adapters for named consumers
+- `/acs-design-modules` — specify code interfaces, types, directories, wiring, dependency rules, and migration
+- `/acs-validate-codebase` — verify design and implementation reachability across routes, menus, exports, interfaces, and modules
 
 The handoff is `requirement → capability/module → contract → code entry → verification evidence`. Greenfield uses a minimum real end-to-end path; brownfield includes migration and preservation evidence.
 
 **Exit:** technical design with architecture options, capability contracts, module contracts, wiring, gaps, and validation evidence.
 
-**Gate:** User approves DESIGN.md before handoff to /build.
+**Gate:** Relevant technical decisions must be accepted before dependent slices execute. Their tickets may be planned earlier.
 
 ## Entry Criteria
 
@@ -82,10 +82,12 @@ The handoff is `requirement → capability/module → contract → code entry �
 - `specs/<spec>.md`: complete functional requirements with testable acceptance criteria.
 - `docs/design/ux-design.html`: unified design doc encoding whole product vision.
 - `DESIGN.md`: ADRs, domain model, module boundaries, interface specs.
-- All three layers reviewed and approved by user.
+- Relevant layers reviewed and accepted for the scope being handed off; existing substantive decisions satisfy the gate. Remaining questions identify the slices they block.
 
 ## Handoff
 
-Passes specs + UX design + DESIGN.md to `/build`. The build workflow reads DESIGN.md for engineering decisions and specs for acceptance criteria.
+Pass the canonical change ID, spec/criterion references, relevant UX and technical decisions/contracts, consumed revisions, migration/preservation constraints, and remaining blockers to [acs-plan-delivery](../skills-src/build/acs-plan-delivery/SKILL.md). It generates or refreshes the same `delivery-plan.html` with the plan and embedded DAG, then opens it. Link authoritative artifacts rather than copying them into tickets.
+
+A request from `acs-plan-delivery` can target one missing decision. Resolve it with accepted artifact/evidence references and return to the existing graph; the planner reassesses affected slices. Independent ready slices can proceed while this design work remains open.
 
 Shared context coordination: [context-coordination.md](context-coordination.md)

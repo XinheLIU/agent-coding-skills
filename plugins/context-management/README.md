@@ -1,14 +1,16 @@
 # Context Management Plugin
 
-Last updated: 2026-08-26
+Last updated: 2026-09-17
 
-This is the small, portable context-management set extracted from the coding system:
+This is the context-management development subpackage extracted from the coding system:
 
-- `init-context` — initialize repository memory routing and layers
-- `sync-context` — detect and repair context drift
-- `translate-agent-context` — port runtime-specific context surfaces
+- `acs-init-context` — initialize repository memory routing and layers
+- `acs-sync-context` — detect and repair context drift
+- `acs-translate-agent-context` — port runtime-specific context surfaces
 
-The three skills are materialized here for standalone publishing. The canonical source remains under `system/skills-src/craft/context/`; run `scripts/build-context-plugin.py --output <directory>` to refresh another standalone copy after source changes.
+The three skills are materialized here from `system/skills-src/craft/context/`; run `scripts/build-context-plugin.py --output <directory>` to generate a development copy, then refresh the checked-in skill resources from that output. Source content remains canonical. `system/memory/validate_suite.py --inventory-only` checks that these resources agree with the source.
+
+This builder dereferences resource symlinks, including shared directories. It does not yet close and rewrite all package-external Markdown dependencies. Neither this subpackage nor one copied skill directory is certified for standalone installation. See the [harness architecture](../../system/docs/harness-architecture.md#standalone-package-contract).
 
 Runtime entry points:
 
@@ -16,10 +18,11 @@ Runtime entry points:
 Claude Code       .claude-plugin/plugin.json
 Codex             .codex-plugin/plugin.json
 Pi                package.json (`pi.skills`)
-DeepSeek Harness  .dsh/skills/ or .agents/skills/
+OpenCode          adapter not implemented
+DeepSeek Harness  adapter not implemented
 ```
 
-DeepSeek Harness needs no native Cordis code for this set: copy the generated `skills/` directory into `.dsh/skills/` or `.agents/skills/`.
+These are checked-in discovery surfaces, not verified runtime parity. DeepSeek harness support requires checking the actual host and version; do not infer discovery paths from its model provider. User-skill installation follows skills-manager and does not recreate the retired `.agents/skills` directory.
 
 ## Design Principles
 

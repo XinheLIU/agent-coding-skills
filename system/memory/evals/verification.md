@@ -1,13 +1,15 @@
 # Context Protocol Verification
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
+
+This records the historical 2026-09-09 context-protocol verification. Skill paths were updated for the ACS namespace migration; historical counts and results below are not a current suite verdict. See the [current migration baseline](../../docs/skill-name-migration.md#verification-baseline).
 
 Change: suite-context-lifecycle-2026-09-09
 Scope: this suite's 45 source skills, shared contracts, workflows, guides, and agent handoffs. Requirements are the user-supplied “Context protocol for your coding suite” implementation plan; this record retains implementation and verification evidence, not a second requirements document.
 
 ## Result
 
-The [protocol](../../skills-src/craft/context/init-context/references/PROTOCOL.md) now defines four lifecycles, one canonical change/spec, scoped freshness, serialized contributions, and retention. [Coordination](../../workflows/context-coordination.md) owns context assembly and runtime operations. Product/Design authority and source formats remain intact; accepted rationale survives before component documentation. [Delivery](../../workflows/feature-delivery.md) defines direct planning/execution without unavailable skills. Testing, Refactoring, and Operations link criterion/preservation/release evidence to the same change.
+The [protocol](../../skills-src/craft/context/acs-init-context/references/PROTOCOL.md) now defines four lifecycles, one canonical change/spec, scoped freshness, serialized contributions, and retention. [Coordination](../../workflows/context-coordination.md) owns context assembly and runtime operations. Product/Design authority and source formats remain intact; accepted rationale survives before component documentation. [Delivery](../../workflows/feature-delivery.md) defines direct planning/execution without unavailable skills. Testing, Refactoring, and Operations link criterion/preservation/release evidence to the same change.
 
 ## Structural and executable checks
 
@@ -18,7 +20,7 @@ Environment: local macOS, existing Python 3 standard library and system Ruby/Psy
 | `python3 system/memory/validate_suite.py` | PASS: 45 source skills, six-field declarations, loader symlinks, suite-local Markdown links and anchors |
 | Ruby/Psych `YAML.safe_load` over all skill frontmatter and context blocks | PASS: 45 valid names/descriptions and six array-valued context fields |
 | `python3 -m unittest discover -s system/memory/evals -p 'test_*.py' -v` | PASS: 6 positive/negative fixtures for declarations, identity links, and cleanup retention |
-| `python3 -m unittest discover -s system/skills-src/craft/meta/draw-portfolio-dag/tests -p 'test_*.py' -v` | PASS: existing scan/render test, including status/dependency mapping and read-only generated views |
+| `python3 -m unittest discover -s system/skills-src/craft/meta/acs-draw-portfolio-dag/tests -p 'test_*.py' -v` | PASS: existing scan/render test, including status/dependency mapping and read-only generated views |
 | Existing `scripts/validate-product-memory.py` against the independent fixture's product HTML | PASS: 0 errors, 0 warnings |
 | Edited Markdown dates, JSON parsing, `git diff --check`, scope audit | PASS: dates current; only suite files changed; unrelated pre-existing untracked files preserved |
 
@@ -39,7 +41,7 @@ An independent agent executed synthetic EXP-42 delivery/reconciliation in isolat
 | Release artifact identity | A rebuilt digest remained not released / needs review; same source revision did not inherit old artifact verification |
 | Missing skills and handoff references | Direct planning/execution used workflow contracts; 40 checked suite references resolved; revised analyze accepted canonical inputs without literal three-file requirements |
 
-The forward test caught a remaining literal-file requirement in `analyze`; it was removed and the agent verified the correction. YAML parsing also caught an existing unquoted colon in `refactor-code`'s description; quoting repaired it without changing intent.
+The forward test caught a remaining literal-file requirement in `analyze`; it was removed and the agent verified the correction. YAML parsing also caught an existing unquoted colon in `acs-refactor-code`'s description; quoting repaired it without changing intent.
 
 These are instruction/artifact tests with synthetic code, verification, and release evidence. Actual Git worktree mechanics, production code behavior, deployments, and atomic concurrent locking were not exercised. No executable Harness or deployment integration was added. The scenario intentionally left changed CSV verification, a disputed assessor conclusion, and new-artifact checks unresolved; it correctly did not label them ready.
 

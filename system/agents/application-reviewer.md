@@ -8,10 +8,10 @@ model: sonnet
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 # Application Architecture Reviewer
 
@@ -28,7 +28,7 @@ First message MUST contain `application-explorer` output. If missing, STOP and r
 
 - Missing input → STOP.
 - Explorer `NOT DETECTED` → emit a no-findings stub and exit.
-- Code-level defect spotted → cross-reference to `review-code-quality`, do NOT flag here.
+- Code-level defect spotted → cross-reference to `acs-review-code-quality`, do NOT flag here.
 
 ## Focus Areas
 
@@ -67,7 +67,7 @@ First message MUST contain `application-explorer` output. If missing, STOP and r
 - Stack-fit issues → `technology-reviewer`
 - Compose topology / exposure → `deploy-reviewer`
 - Cross-cutting decision validation → `adr-reviewer`
-- All implementation defects → `review-code-quality`
+- All implementation defects → `acs-review-code-quality`
 
 ## Confidence
 
@@ -93,7 +93,7 @@ First message MUST contain `application-explorer` output. If missing, STOP and r
 - ...
 
 ### Cross-Reference Recommendations
-- [→ data-architecture-reviewer / deploy-reviewer / review-code-quality] ...
+- [→ data-architecture-reviewer / deploy-reviewer / acs-review-code-quality] ...
 
 ### Summary
 - Modules reviewed: X
@@ -104,6 +104,6 @@ First message MUST contain `application-explorer` output. If missing, STOP and r
 
 ## Guidelines
 
-- Judge structure and contracts. Implementation goes to `review-code-quality`.
+- Judge structure and contracts. Implementation goes to `acs-review-code-quality`.
 - Cite file:line for every finding.
 - Severity-first, confidence-gated.

@@ -1,8 +1,8 @@
 # Visual Report Contract
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
-Use this contract for static HTML reports that explain findings, candidates, or capabilities. The report must work when its owning skill is installed alone; packaged skills carry a local copy of this reference and must only link to it relatively.
+Use this contract for static HTML reports that explain findings, candidates, capabilities, architecture options, or refactoring deltas. The report must work when its owning skill is installed alone; packaged skills carry a local copy of this reference and must only link to it relatively.
 
 ## Reading order
 
@@ -16,30 +16,34 @@ Do not lead with an essay. The first viewport should tell the reader what matter
 
 ## Card contract
 
-Each candidate or capability card contains:
+Each finding, candidate, capability, option, or module card contains:
 
 1. short title and status badge;
 2. involved files or records in monospace;
-3. a dominant before/after visual;
+3. a dominant current/target (before/after) visual;
 4. one-sentence problem;
 5. one-sentence solution or observed behavior;
 6. up to four short wins, each naming the concrete gain;
-7. an optional decision, ADR, or uncertainty callout.
+7. an adjacent one-sentence visual takeaway;
+8. an optional decision, ADR, or uncertainty callout;
+9. collapsed evidence with file/line or record anchors.
 
 The visual carries the explanation. If the diagram needs a paragraph, redraw it. Keep diagrams roughly 320–360px tall and vary patterns: Mermaid flow/sequence graphs for relationships, hand-built boxes and arrows for seams, cross-sections for shallow layers, mass diagrams for interface versus implementation, and call-graph collapse for repeated delegation.
 
 ## Visual and runtime rules
 
-- Use Tailwind CDN for layout and Mermaid CDN for graph-shaped diagrams when the generated report environment permits network access.
+- Use inline CSS and inline SVG as the portability baseline. Mermaid is optional progressive enhancement for graph-shaped diagrams when the generated report environment permits network access.
 - Keep labels and basic structure in ordinary HTML so the report remains readable if a CDN or Mermaid render fails.
 - Use one accent color, red only for leakage/problems, amber only for warnings, and dark emphasis for deep modules or recommendations.
 - Put long evidence, open questions, and implementation detail behind native `<details>` elements.
 - Every diagram has an adjacent one-sentence takeaway.
 - Every report ends with one anchored top recommendation or next decision.
+- Every structural card has a current/target comparison. If comparison is not meaningful, state why on the card.
+- Keep roadmap and implementation sequencing artifacts distinct from finding reports; do not use a roadmap as an audit companion.
 
 ## Portability
 
-The owning skill must reference `references/visual-report.md`, never `/meta`, another skill, or a suite-level path. The repository may maintain a canonical copy under `craft/meta/references/`, but packaging materializes a local copy beside each consumer. A standalone install must contain every file named by the skill.
+The owning skill must reference `references/visual-report.md`, never `/meta`, another skill, or a suite-level path. The repository may maintain a canonical copy under `craft/meta/references/`, but packaging materializes a local copy beside each consumer. A standalone install must contain every file named by the skill. Local copies may adapt terminology, but must retain the required card, visual, fallback, provenance, and quality clauses.
 
 ## Quality gates
 
@@ -47,4 +51,5 @@ The owning skill must reference `references/visual-report.md`, never `/meta`, an
 - Internal card and recommendation links resolve.
 - Visible prose stays concise; detailed evidence remains reachable.
 - Markdown sources and product-memory records remain authoritative.
+- Inline SVG includes accessible `<title>` and `<desc>` elements; ordinary HTML labels preserve meaning if scripts or CDNs fail.
 - Changed Markdown files carry a current `Last updated` line near the top.

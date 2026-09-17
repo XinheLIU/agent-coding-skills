@@ -1,54 +1,32 @@
 # Build Workflow
 
-Last updated: 2026-09-13
+Last updated: 2026-09-17
 
-Implement a locked, verifiable change end-to-end. Starts after the spec phase; produces working code verified on the running system, with evidence.
+Turn accepted scope into a delivery graph, and execute the ready implementation slices when authorized.
 
-```
-entry_artifact: a verifiable change — spec section, user story, or bug report with acceptance criteria
-exit_artifact:  tickets + evidence under docs/changes/<change-id>/ + handoff envelope
-approval_gate:  criteria locked before dispatch; user approves ticket graph before parallel execution
-```
-
-## Overview
-
-```
-locked change → implement: gate → decompose into tickets → render DAG
-                → [user sees graph, goes AFK]
-                → parallel tdd dispatch via orchestrator → merge in dependency order
-                → end-to-end verification → handoff envelope
+```text
+entry_artifact: accepted product scope or accepted requirements/designs, with canonical references
+planning_exit: canonical tickets + dependencies + readiness + open delivery-plan.html with embedded DAG
+execution_exit: delivered-scope evidence + remaining blockers + handoff envelope
+execution_gate: testable criteria, current necessary decisions, satisfied prerequisites, and execution authorization
 ```
 
-## Skill Sequence
+## Plan or resume delivery
 
-### 1. Enter with a verifiable change
-- `/implement` — the single entry point. Gates on acceptance criteria testable at code and experience level. Small gaps get one or two inline questions; real design work routes to `design/`.
+Use [acs-plan-delivery](../skills-src/build/acs-plan-delivery/SKILL.md) to break a change into tickets or reconcile an existing graph. Product can hand off accepted scope before every design question is settled. Design can hand off a complete design or one resolved blocker. Inputs are reused by canonical ID and revision.
 
-### 2. Decompose and visualize
-`implement` writes dependency-ordered tickets to `docs/changes/<change-id>/tasks/` and renders the interactive HTML DAG (`draw-portfolio-dag`). The user sees frontier/blocked/done before anything runs.
+The planner records independently verifiable slices and concrete design blockers, validates dependencies and coverage, and uses `acs-draw-portfolio-dag` to generate the [combined HTML delivery plan](../skills-src/build/acs-plan-delivery/references/delivery-report.md). It opens that report as the planning handoff. Design tickets route to their specialist; ready implementation slices can advance independently. A planning-only request ends with the report and next action.
 
-### 3. Execute in parallel
-`implement` dispatches each safe frontier ticket to a `tdd` sub-agent through the orchestration protocol (herdr primary, in-process fallback), merges completed worktrees in dependency order, and re-renders the graph on every transition. Failed tickets keep their dependents blocked; independent work continues.
+## Execute ready slices
 
-### 4. Verify end to end
-Code-level green is not done: `implement` starts the system the way a user would and exercises the delivered behavior — browser, local run, or integration suite — recording commands and results as evidence.
+Use [acs-implement](../skills-src/build/acs-implement/SKILL.md) for authorized delivery. It invokes `acs-plan-delivery` only when tickets are absent or materially stale, then checks per-ticket readiness and prerequisite evidence. Show the graph before dispatch; reuse authorization already given for implementation.
 
-### 5. Return the envelope
-Every run ends with the shared handoff envelope: criterion → ticket → evidence → revision mapping, verification result, failures with blocking effects, next action.
+The coordinator acquires claims and checks shared-write/contract risks before dispatching `acs-tdd` executors. Logical independence alone does not establish safe parallelism. `acs-implement` merges completed work in dependency order, records canonical status/evidence, and refreshes the same HTML plan and DAG, reloading the open report. Design blockers, failures, and stale decisions keep only dependent work blocked.
 
-## Entry Criteria
+## Verify and hand off
 
-- A canonical change with testable acceptance criteria (existing spec, ticket, or explicit user intent locked through the gate).
-- Accepted design/contract references when the change depends on them.
+Exercise delivered behavior on the running system, retaining criterion → ticket → check/evidence → revision mappings. Report undelivered scope and blockers explicitly; child completion never implies parent completion. Return scope/dependency changes to `acs-plan-delivery`, and code ready for assessment to `quality/review` and `test`.
 
-## Exit Criteria
-
-- Every criterion maps to a done ticket with evidence, or an explicit failure/omission with impact.
-- End-to-end verification recorded (pass, or failure with evidence).
-- Handoff envelope returned; tickets and evidence retained under `docs/changes/<change-id>/`.
-
-## Handoff
-
-Verified code changes go to `quality/review` (Standards and Spec axes) and `/test` for coverage audits and integration/e2e tests. Refactoring beyond the loop's own green-preserving cleanups belongs to `refactor-code`.
+Planning is complete when accepted scope is accounted for, all graph references resolve, readiness/blockers are explicit, and the rendered view matches canonical tickets. Execution is complete only for the verified scope; code-level green alone is insufficient.
 
 Shared context coordination: [context-coordination.md](context-coordination.md)

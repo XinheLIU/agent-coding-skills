@@ -1,5 +1,7 @@
 # Context Management Refactoring Summary
 
+Last updated: 2026-09-17
+
 **Date:** 2026-08-25
 
 ## Problem Statement
@@ -56,7 +58,7 @@ The original three-layer structure had several issues:
 - ✓ ADR-FORMAT.md (2.7KB) — 1-3 sentence decisions
 - ✓ CONTEXT-FORMAT.md (2.2KB) — tight terminology definitions
 
-**Removed Phase 4 from init-context:**
+**Removed Phase 4 from acs-init-context:**
 - No longer generates agent-behavior rules files
 - Removed entire `rules/` directory (5 files, ~25KB)
 
@@ -78,14 +80,14 @@ The original three-layer structure had several issues:
 
 ### Updated Skills
 
-**init-context:**
+**acs-init-context:**
 - Phase 0: Inspect (unchanged)
 - Phase 1: Routing config and working memory (unchanged)
 - Phase 2: Human-layer docs (WHY only) — simplified to AGENTS.md, README.md, CONTEXT.md (lazy), ADRs (lazy)
 - Phase 3: Code index (unchanged)
 - ~~Phase 4: Agent-behavior rules~~ (removed)
 
-**sync-context:**
+**acs-sync-context:**
 - Job A: Human-layer routing (fast + full) — checks only WHY docs, flags WHAT/HOW docs for deletion
 - Job B: Code index freshness (full only) — unchanged
 - Job C: Working-memory maintenance (full only) — unchanged
@@ -93,17 +95,17 @@ The original three-layer structure had several issues:
 ### Benefits
 
 1. **MECE achieved** — Human = WHY only, Code Index = WHAT/HOW, no overlap
-2. **Lighter maintenance** — sync-context checks routing + ADRs, not comprehensive docs
+2. **Lighter maintenance** — acs-sync-context checks routing + ADRs, not comprehensive docs
 3. **Less drift** — agents derive WHAT/HOW from code, don't maintain parallel documentation
 4. **Aligned with Matt's principle** — document decisions and constraints, not current state
-5. **Faster setup** — init-context creates 3 files instead of 7+
+5. **Faster setup** — acs-init-context creates 3 files instead of 7+
 6. **Clearer contract** — "does this document a decision or describe current state?" determines the layer
 
 ## Migration Path
 
 For existing repos using the old structure:
 
-1. Run `/sync-context --full` — it will flag ARCHITECTURE.md, CONVENTIONS.md, TECH_DECISIONS.md, QUALITY.md for deletion
+1. Run `/acs-sync-context --full` — it will flag ARCHITECTURE.md, CONVENTIONS.md, TECH_DECISIONS.md, QUALITY.md for deletion
 2. Extract any unique rationale from those files into ADRs before deletion
 3. Delete the flagged files
 4. Agents will now read code structure directly instead of maintaining parallel docs

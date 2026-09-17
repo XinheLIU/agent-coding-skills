@@ -7,10 +7,14 @@ memory/evals require an isolated agent run; this script does not execute them.
 """
 from __future__ import annotations
 
+import argparse
+import json
 import re
 import sys
+from collections import Counter
 from html.parser import HTMLParser
 from pathlib import Path
+from typing import TypedDict
 from urllib.parse import unquote
 
 SUITE = Path(__file__).resolve().parents[1]
@@ -18,6 +22,96 @@ FIELDS = {"requires", "retrieves", "produces", "updates", "invalidates", "handof
 FENCE = re.compile(r"^```[^\n]*\n.*?^```[ \t]*$", re.MULTILINE | re.DOTALL)
 LINK = re.compile(r"(?<!!)\[[^\]]*\]\(([^)]+)\)")
 SELECTOR = re.compile(r"[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)*\Z")
+
+
+class Category(TypedDict):
+    id: str
+    skills: list[str]
+
+
+class Catalog(TypedDict):
+    schemaVersion: int
+    id: str
+    sourcePattern: str
+    categories: list[Category]
+
+
+class Plugin(TypedDict):
+    name: str
+    skills: str
+
+
+def inventory_errors(suite: Path = SUITE) -> list[str]:
+    """Compare public identities with actual source, discovery and catalog paths."""
+    errors: list[str] = []
+    sources = sorted((suite / "skills-src").rglob("SKILL.md"))
+    names = [path.parent.name for path in sources]
+    if not names:
+        errors.append("no source skills discovered")
+    for name, count in Counter(names).items():
+        if count > 1:
+            errors.append(f"duplicate source skill: {name}")
+    for source in sources:
+        name = source.parent.name
+        relative = source.relative_to(suite)
+        frontmatter = re.match(r"\A---\n(.*?)\n---\n", source.read_text(), re.DOTALL)
+        if not re.fullmatch(r"acs-[a-z0-9]+(?:-[a-z0-9]+)*", name) or len(name) > 64:
+            errors.append(f"{relative}: skill ID must use the acs- namespace (max 64 characters)")
+        if not frontmatter or not re.search(rf"^name: {re.escape(name)}$", frontmatter[1], re.MULTILINE) or not re.search(r"^description: .+", frontmatter[1], re.MULTILINE):
+            errors.append(f"{relative}: invalid name/description")
+        discovery = suite / "skills" / name
+        if not discovery.is_symlink() or discovery.resolve() != source.parent.resolve():
+            errors.append(f"{relative}: discovery entry must symlink to this source")
+    discovery_root = suite / "skills"
+    entries = list(discovery_root.iterdir()) if discovery_root.is_dir() else []
+    for entry in entries:
+        if entry.name not in names:
+            errors.append(f"skills/{entry.name}: unexpected discovery entry")
+
+    catalog_path = suite.parent / "catalog/skill-set.json"
+    try:
+        catalog: Catalog = json.loads(catalog_path.read_text())
+        if catalog["schemaVersion"] != 1 or catalog["id"] != "agent-coding-skills":
+            errors.append("catalog: unsupported schema or product identity")
+        catalog_names: list[str] = []
+        for category in catalog["categories"]:
+            for name in category["skills"]:
+                catalog_names.append(name)
+                target = suite.parent / catalog["sourcePattern"].replace("{category}", category["id"]).replace("{skill}", name)
+                if target not in sources:
+                    errors.append(f"catalog: {name} does not resolve to a canonical source")
+        for name, count in Counter(catalog_names).items():
+            if count > 1:
+                errors.append(f"catalog: duplicate skill {name}")
+        for name in sorted(set(names) - set(catalog_names)):
+            errors.append(f"catalog: missing skill {name}")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        errors.append(f"catalog: cannot read inventory: {error}")
+
+    for host in ("codex", "claude"):
+        path = suite / f".{host}-plugin/plugin.json"
+        try:
+            plugin: Plugin = json.loads(path.read_text())
+            if plugin["name"] != "agent-coding-skills" or (suite / plugin["skills"]).resolve() != discovery_root.resolve():
+                errors.append(f"{path.relative_to(suite)}: plugin identity or skill root differs")
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            errors.append(f"{path.relative_to(suite)}: invalid manifest: {error}")
+
+    context_root = suite.parent / "plugins/context-management/skills"
+    if context_root.is_dir():
+        expected = {"acs-init-context", "acs-sync-context", "acs-translate-agent-context"}
+        if {entry.name for entry in context_root.iterdir()} != expected:
+            errors.append("context subpackage: unexpected skill inventory")
+        for name in sorted(expected):
+            canonical = suite / "skills-src/craft/context" / name
+            generated = context_root / name
+            for source in canonical.rglob("*"):
+                if not source.is_file() or "__pycache__" in source.parts or source.suffix == ".pyc":
+                    continue
+                copy = generated / source.relative_to(canonical)
+                if not copy.is_file() or copy.read_bytes() != source.read_bytes():
+                    errors.append(f"context subpackage: stale or missing resource {name}/{source.relative_to(canonical)}")
+    return errors
 
 
 class HtmlAnchors(HTMLParser):
@@ -88,24 +182,16 @@ def declaration_errors(text: str) -> list[str]:
     return errors
 
 
-def validate(suite: Path = SUITE) -> list[str]:
-    errors: list[str] = []
+def validate(suite: Path = SUITE, *, inventory_only: bool = False) -> list[str]:
+    errors = inventory_errors(suite)
+    if inventory_only:
+        return errors
     skills = sorted((suite / "skills-src").rglob("SKILL.md"))
-    if len(skills) != 45:
-        errors.append(f"expected 45 source skills, found {len(skills)}")
     for path in skills:
         text = path.read_text(encoding="utf-8")
         relative = path.relative_to(suite)
         for error in declaration_errors(text):
             errors.append(f"{relative}: {error}")
-        frontmatter = re.match(r"\A---\n(.*?)\n---\n", text, re.DOTALL)
-        if not frontmatter:
-            errors.append(f"{relative}: missing frontmatter")
-        elif not re.search(rf"^name: {re.escape(path.parent.name)}$", frontmatter[1], re.MULTILINE) or not re.search(r"^description: .+", frontmatter[1], re.MULTILINE):
-            errors.append(f"{relative}: invalid name/description")
-        discovery = suite / "skills" / path.parent.name
-        if not discovery.is_symlink() or discovery.resolve() != path.parent.resolve():
-            errors.append(f"{relative}: discovery entry must symlink to this source")
     excluded = {"IMPLEMENTATION-SUMMARY.md", "MEMORY-ENHANCEMENT-ANALYSIS.md"}
     for path in suite.rglob("*"):
         if path.is_symlink():
@@ -120,8 +206,13 @@ def validate(suite: Path = SUITE) -> list[str]:
 
 
 if __name__ == "__main__":
-    findings = validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--inventory-only", action="store_true", help="Check source, discovery, catalog, manifests and context package identity only")
+    args = parser.parse_args()
+    findings = validate(inventory_only=args.inventory_only)
     for finding in findings:
         print(finding)
-    print(f"45 source skills, discovery symlinks, declarations, local links/anchors: {'FAIL' if findings else 'PASS'}")
+    count = sum(1 for _ in (SUITE / "skills-src").rglob("SKILL.md"))
+    checks = "inventory" if args.inventory_only else "inventory, declarations, local links/anchors"
+    print(f"{count} source skills; {checks}: {'FAIL' if findings else 'PASS'}")
     sys.exit(bool(findings))

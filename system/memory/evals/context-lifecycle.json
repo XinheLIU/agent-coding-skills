@@ -1,13 +1,13 @@
 {
   "name": "context-lifecycle-handoffs",
-  "last_updated": "2026-09-09",
+  "last_updated": "2026-09-17",
   "description": "Behavioral scenarios for isolated forward-testing. Expected outcomes are evaluated from artifacts/actions; validate_suite.py checks structure only and is not a Harness.",
   "evals": [
     {
       "id": "cold-session",
       "skills": [
-        "spec",
-        "handoff"
+        "acs-settle-requirements",
+        "acs-sync-context"
       ],
       "setup": "Two products and three scratch runs exist. User names EXP-42 whose ticket links req-v3 and D-4; unrelated billing records exist.",
       "prompt": "Prepare the active change for implementation in a cold session.",
@@ -16,9 +16,9 @@
     {
       "id": "one-source-through-delivery",
       "skills": [
-        "write-prd",
-        "spec",
-        "tasks"
+        "acs-write-prd",
+        "acs-settle-requirements",
+        "acs-plan-delivery"
       ],
       "setup": "EXP-42 already links specs/export.md with FR-7/AC-9, accepted D-4, and an existing independently deliverable child EXP-42-A.",
       "prompt": "Prepare delivery and decompose the remaining independent slice, then repeat unchanged.",
@@ -27,9 +27,8 @@
     {
       "id": "accepted-rationale-cleanup",
       "skills": [
-        "visual-design-variants",
-        "handoff",
-        "sync-context"
+        "acs-visual-design-variants",
+        "acs-sync-context"
       ],
       "setup": "Accepted prototype section export has D-4 rationale only in scratch; code later lands with criterion evidence.",
       "prompt": "Retain the choice now, hand it off, and clean finished execution scratch after landing.",
@@ -38,7 +37,7 @@
     {
       "id": "scoped-invalidation",
       "skills": [
-        "sync-context"
+        "acs-sync-context"
       ],
       "setup": "AC-9 evidence and D-4 depend on API-2 v1. API-2 v2 changes export semantics. BILL-2 uses API-9 unchanged.",
       "prompt": "Reconcile the changed contract.",
@@ -47,8 +46,8 @@
     {
       "id": "verification-context",
       "skills": [
-        "analyze-test-gaps",
-        "review-code-quality"
+        "acs-analyze-test-gaps",
+        "acs-review-code-quality"
       ],
       "setup": "AC-9 passes at code abc123/staging-v4; AC-10 was not run; a new config staging-v5 changes callbacks.",
       "prompt": "Are we ready to release?",
@@ -57,7 +56,7 @@
     {
       "id": "refactor-state",
       "skills": [
-        "refactor-code"
+        "acs-refactor-code"
       ],
       "setup": "EXP-42 refactor moves export scheduling across a module boundary; AC-9 behavior is unchanged; ADR-3 states the old boundary.",
       "prompt": "Refactor and preserve behavior.",
@@ -66,7 +65,7 @@
     {
       "id": "release-artifact",
       "skills": [
-        "handoff"
+        "acs-sync-context"
       ],
       "setup": "Verification covers artifact sha256:42 at abc123, staging-v4; release candidate sha256:43 was rebuilt with new config.",
       "prompt": "Prepare release evidence and next action using existing deployment tooling.",
@@ -75,8 +74,8 @@
     {
       "id": "concurrent-reconciliation",
       "skills": [
-        "tasks",
-        "shape-solution"
+        "acs-plan-delivery",
+        "acs-shape-solution"
       ],
       "setup": "A patch and claim request were prepared at v1. Current record v2 adds privacy constraint and another answer. Task already claimed by agent-A.",
       "prompt": "Reconcile the contribution and claim the task for agent-B.",
@@ -85,7 +84,7 @@
     {
       "id": "product-observation-boundary",
       "skills": [
-        "map-current-product"
+        "acs-map-current-product"
       ],
       "setup": "Code/tests establish admin web export completion, partial mobile behavior, and no demand interviews. Repository has tightly coupled internals.",
       "prompt": "Map the current product without an architecture review.",
@@ -94,11 +93,11 @@
     {
       "id": "missing-stage-capability",
       "skills": [
-        "spec",
-        "tasks",
-        "tdd"
+        "acs-settle-requirements",
+        "acs-plan-delivery",
+        "acs-tdd"
       ],
-      "setup": "Only suite skills are installed; no plan/implement skill or Agent tool exists. Accepted requirements and approach are available.",
+      "setup": "Only acs-settle-requirements, acs-plan-delivery, and acs-tdd are available; acs-implement and delegation are unavailable. Accepted requirements and approach are available.",
       "prompt": "Deliver the approved change with tests.",
       "expected_output": "Active agent performs workflow planning/execution directly with existing tools; reuse canonical tickets/run plan and criterion-based checks. Never invoke missing skills or require delegation; unresolved substantive blockers remain explicit."
     }

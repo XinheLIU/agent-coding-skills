@@ -1,11 +1,11 @@
 # Craft: Meta
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
 | Skill | Use it for |
 | --- | --- |
-| `research` | Resolve an external technical fact with cited primary evidence |
-| `draw-portfolio-dag` | Render Markdown ticket dependencies as HTML or Mermaid |
-| `challenge-approach` | Resolve user-owned decisions that evidence cannot settle |
-| `writing-great-skills` | Author or revise a predictable system skill |
-| `review-agent-instructions` | Review or update `AGENTS.md` and `CLAUDE.md` |
+| `acs-research` | Resolve an external technical fact with cited primary evidence |
+| `acs-draw-portfolio-dag` | Render Markdown ticket dependencies as HTML or Mermaid |
+| `acs-challenge-approach` | Resolve user-owned decisions that evidence cannot settle |
+| `acs-writing-great-skills` | Author or revise a predictable system skill |
+| `acs-review-agent-instructions` | Review or update `AGENTS.md` and `CLAUDE.md` |

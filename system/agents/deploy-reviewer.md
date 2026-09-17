@@ -8,10 +8,10 @@ model: sonnet
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 # Deploy Architecture Reviewer
 
@@ -28,7 +28,7 @@ First message MUST contain `deploy-explorer` output. If missing, STOP:
 
 - Missing input → STOP.
 - Explorer `NOT DETECTED` → no-findings stub, exit.
-- Code-level secret-handling / runtime bugs → cross-reference to `review-code-quality`. Do NOT flag here.
+- Code-level secret-handling / runtime bugs → cross-reference to `acs-review-code-quality`. Do NOT flag here.
 
 ## Focus Areas
 
@@ -72,7 +72,7 @@ First message MUST contain `deploy-explorer` output. If missing, STOP:
 - Schema ownership → `data-architecture-reviewer`
 - Stack fit / scaling cliffs → `technology-reviewer`
 - Implicit cross-cutting decisions → `adr-reviewer`
-- TLS verification flags inside code, secrets committed to code, dep CVEs → `review-code-quality` (security)
+- TLS verification flags inside code, secrets committed to code, dep CVEs → `acs-review-code-quality` (security)
 
 ## Confidence
 
@@ -98,7 +98,7 @@ First message MUST contain `deploy-explorer` output. If missing, STOP:
 - ...
 
 ### Cross-Reference Recommendations
-- [→ technology-reviewer / adr-reviewer / review-code-quality (security)] ...
+- [→ technology-reviewer / adr-reviewer / acs-review-code-quality (security)] ...
 
 ### Summary
 - Services reviewed: X | Networks: Y | Volumes: Z

@@ -7,10 +7,10 @@ model: haiku
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 You are an ADR specialist surfacing cross-cutting architectural decisions and their evidence.
 
@@ -34,7 +34,7 @@ You are an ADR specialist surfacing cross-cutting architectural decisions and th
 - Schema ownership → `data-architecture-explorer`
 - Stack choices → `technology-explorer` (unless they're explicitly an ADR)
 - Compose / deploy → `deploy-explorer`
-- Code-level defects → `review-code-quality`
+- Code-level defects → `acs-review-code-quality`
 
 Note: The same decision may legitimately surface in two aspects (e.g., "single-process CLI" is both a `technology` and `adr` concern). Use the `adr` aspect to *judge whether the decision is stated and still holds*, not to re-summarize the tech stack.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Materialize the portable context-management plugin from canonical sources."""
+"""Materialize context plugin development resources; not standalone certification."""
 
 from __future__ import annotations
 
@@ -11,21 +11,16 @@ from pathlib import Path
 
 
 SKILLS = {
-    "init-context": Path("system/skills-src/craft/context/init-context"),
-    "sync-context": Path("system/skills-src/craft/context/sync-context"),
-    "translate-agent-context": Path("system/skills-src/craft/context/translate-agent-context"),
+    "acs-init-context": Path("system/skills-src/craft/context/acs-init-context"),
+    "acs-sync-context": Path("system/skills-src/craft/context/acs-sync-context"),
+    "acs-translate-agent-context": Path("system/skills-src/craft/context/acs-translate-agent-context"),
 }
 
 
 def copy_tree(source_root: Path, destination_root: Path) -> None:
-    for source in source_root.rglob("*"):
-        relative = source.relative_to(source_root)
-        destination = destination_root / relative
-        if source.is_dir():
-            destination.mkdir(parents=True, exist_ok=True)
-        else:
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(source, destination)
+    # Dereference shared files AND directory links (for example index-tools).
+    shutil.copytree(source_root, destination_root, dirs_exist_ok=True,
+                    symlinks=False, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
 
 
 def main() -> None:

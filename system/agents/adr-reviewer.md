@@ -8,10 +8,10 @@ model: sonnet
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 # ADR Reviewer
 
@@ -28,7 +28,7 @@ First message MUST contain `adr-explorer` output. If missing, STOP:
 
 - Missing input → STOP.
 - Explorer `NOT DETECTED` → no-findings stub, exit.
-- Code-level defect spotted → cross-reference to `review-code-quality`. Do NOT flag here.
+- Code-level defect spotted → cross-reference to `acs-review-code-quality`. Do NOT flag here.
 
 ## Focus Areas
 
@@ -59,7 +59,7 @@ Assign each decision a status:
 - Schema-level decisions → `data-architecture-reviewer` (cross-reference only; ADR judgment stays here)
 - Stack-fit issues → `technology-reviewer`
 - Topology / exposure issues → `deploy-reviewer`
-- Code-level defects of any kind → `review-code-quality`
+- Code-level defects of any kind → `acs-review-code-quality`
 
 ## Confidence
 
@@ -97,7 +97,7 @@ Status legend: Sound | Reconsider | Missing-but-needed | Drifted | Stale
 - ...
 
 ### Cross-Reference Recommendations
-- [→ application-reviewer / data-architecture-reviewer / deploy-reviewer / review-code-quality] ...
+- [→ application-reviewer / data-architecture-reviewer / deploy-reviewer / acs-review-code-quality] ...
 
 ### Summary
 - Decisions reviewed: X

@@ -1,6 +1,6 @@
 # Deploy Workflow
 
-Last updated: 2026-09-12
+Last updated: 2026-09-17
 
 Release passing changes to staging and production with recorded evidence and a rollback plan.
 
@@ -25,7 +25,7 @@ Check `docs/operations/environments.md` for the target environment's constraints
 
 ### 2. Check the release gate
 All of the following must be true before deploying:
-- Full test suite green (from `/test` phase)
+- Full test suite green (from `test` phase)
 - Required approvals obtained (PR review, if applicable)
 - No blocking issues open against this change
 - Branch is up to date with the target base branch
@@ -53,7 +53,7 @@ Update `docs/operations/releases.md` with:
 - Rollback procedure (specific command or steps to undo)
 
 ### 8. Rollback (if needed)
-If post-deploy issues are detected, execute the rollback procedure recorded in step 7. After rollback, record the rollback event in `docs/operations/releases.md` and pass the incident to `/maintain` for diagnosis.
+If post-deploy issues are detected, execute the rollback procedure recorded in step 7. After rollback, record the rollback event in `docs/operations/releases.md` and pass the incident to `maintain` for diagnosis.
 
 ## Entry Criteria
 
@@ -70,6 +70,6 @@ If post-deploy issues are detected, execute the rollback procedure recorded in s
 
 ## Handoff
 
-Passes release record to `/maintain`. The maintain workflow monitors the deployed version and closes the loop on any post-deploy incidents.
+Passes release record to `maintain`. The maintain workflow monitors the deployed version and closes the loop on any post-deploy incidents.
 
 Shared context coordination: [context-coordination.md](context-coordination.md)

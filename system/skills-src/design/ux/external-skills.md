@@ -1,6 +1,6 @@
 # External UI/UX Skills — Reference Book
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 A detailed catalog and comparison of the external UI/UX skill ecosystem. This is the reference behind the six capability layers the internal pipeline dispatches to — for the system architecture, dispatch points, and reconciliation contract, see [`README.md`](README.md); for pipeline procedures, see [`workflows/design.md`](../../../workflows/design.md).
 
@@ -142,7 +142,7 @@ What belongs in each layer — and what doesn't:
 **What:** Design intelligence / knowledge retrieval skill. Database of 84 styles, color palettes, font pairings, product types, UX guidelines, chart types, icons across 22+ stacks. Query it to look up valid choices or generate a design system.
 **Outputs:** `design-system/MASTER.md` + per-page override files.
 **Best for:** Any UI where you need to look up a credible style/palette/typography decision fast.
-**Invoke:** install per its repo instructions (external skill, not vendored here); `/design-system-create` dispatches to layer-② skills like this one when installed
+**Invoke:** install per its repo instructions (external skill, not vendored here); `/acs-design-system-create` dispatches to layer-② skills like this one when installed
 
 ---
 
@@ -347,7 +347,7 @@ spacing:
 | Open Design | Local GUI workspace | Your coding agent ([CC], [CD], Cursor, OpenCode) | HTML, dashboards, slides, images, video, PDF, PPTX | You want a design-tool GUI, not a chat loop |
 | Google Stitch | Skill suite + MCP | Google Stitch generation API | Screen generation, variants, design → code | You're already in the Google Stitch ecosystem |
 
-**vs. notes:** The axis is *where the pixels come from*. Huashu renders from its own local template library (60 HTML-native styles) — fully offline, brand persisted in `brand-spec.md`, and its brief → 3-directions → pick-one workflow maps directly onto `visual-design-variants`. Open Design is a *workspace* — the agent is the engine, the tool is the environment around it. Stitch delegates generation to Google's backend via MCP, which means setup cost plus an external dependency, in exchange for a hosted generation model. For pipeline dispatch, Huashu is the lowest-friction ⑥; Stitch is only worth it if the team already pays the MCP cost.
+**vs. notes:** The axis is *where the pixels come from*. Huashu renders from its own local template library (60 HTML-native styles) — fully offline, brand persisted in `brand-spec.md`, and its brief → 3-directions → pick-one workflow maps directly onto `acs-visual-design-variants`. Open Design is a *workspace* — the agent is the engine, the tool is the environment around it. Stitch delegates generation to Google's backend via MCP, which means setup cost plus an external dependency, in exchange for a hosted generation model. For pipeline dispatch, Huashu is the lowest-friction ⑥; Stitch is only worth it if the team already pays the MCP cost.
 
 #### [`Huashu Design`](https://github.com/alchaincyf/huashu-design)
 **What:** HTML-native design production tool. Directly produces: clickable App/Web prototypes, HTML slides, editable PPTX, animations, MP4/GIF, infographics, PDF/PNG/SVG, design variants. Has actual template assets (60 HTML-native styles: 20 web / 20 PPT / 20 infographic) and starter components.

@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
 A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system/); copied upstream material stays in the local, ignored `references/` workspace.
 
@@ -12,14 +12,16 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 ```
 
 1. Run `/agent-coding-skills:setup` in the target repository — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
-2. Use the six lifecycle verbs to move through the SDLC: `/plan` → `/design` → `/build` → `/test` → `/deploy` → `/maintain`.
-3. Invoke individual skills by name for focused work (`/brainstorm`, `/engineer-domain-model`, `/tdd`, etc.). The six verbs are routers; skills are the units of work.
+2. Follow the [lifecycle workflows](system/workflows/README.md): plan → design → build → test → deploy → maintain. These are workflow documents, not installed commands or router skills.
+3. Select a skill by its public ID (`acs-brainstorm`, `acs-engineer-domain-model`, `acs-tdd`, etc.), using the host's invocation syntax and plugin namespace.
+
+All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See the [name migration](system/docs/skill-name-migration.md) and [portable harness architecture](system/docs/harness-architecture.md).
 
 ## Architecture
 
 | Component | Role |
 | --- | --- |
-| [`system/skills/`](system/skills/) | 43 flat symlinks (loader entry points) into `skills-src/` |
+| [`system/skills/`](system/skills/) | Flat symlinks (loader entry points) into `skills-src/` |
 | [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
 | [`system/memory/`](system/memory/) | Shared read/write protocol for core, human, optional wiki, and working memory |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
@@ -33,19 +35,19 @@ Markdown is the semantic source of truth. HTML is a maintained human view for ar
 
 Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly to the lifecycle verbs; one is cross-cutting.
 
-| Phase | Skills | What it covers |
-| --- | --- | --- |
-| [`plan/`](system/skills-src/plan/) | 10 | Problem discovery through accepted product intent, including multi-session decision mapping. |
-| [`design/requirements/`](system/skills-src/design/requirements/) | 1 | WHAT the product provides: functional requirements and testable acceptance criteria. |
-| [`design/ux/`](system/skills-src/design/ux/) | 6 | HOW capabilities are delivered: interaction flows, visual system, unified design doc. |
-| [`design/technical/`](system/skills-src/design/technical/) | 5 | HOW to engineer them: architecture, shared foundations, module contracts, and reachability. |
-| [`build/`](system/skills-src/build/) | 2 | The implementation loop: ticket decomposition, parallel TDD orchestration, end-to-end verification. |
-| [`test/`](system/skills-src/test/) | 1 | Coverage audit and integration tests after build. |
-| [`maintain/`](system/skills-src/maintain/) | 1 | Incident diagnosis and autonomous fix loop. |
-| [`quality/review/`](system/skills-src/quality/review/) | 5 | Review pipeline: design doc → gap analysis → code quality → refactor. Cross-cutting. |
-| [`quality/debugging/`](system/skills-src/quality/debugging/) | 2 | Triage and merge-conflict resolution. Cross-cutting. |
-| [`craft/context/`](system/skills-src/craft/context/) | 5 | Agent memory, shared terminology, and durable architectural decisions. Cross-cutting. |
-| [`craft/meta/`](system/skills-src/craft/meta/) | 5 | Research, decision challenge, DAG rendering, and skill authoring. Cross-cutting. |
+| Phase | What it covers |
+| --- | --- |
+| [`plan/`](system/skills-src/plan/) | Problem discovery through accepted product intent, including multi-session decision mapping. |
+| [`design/requirements/`](system/skills-src/design/requirements/) | Functional requirements and testable acceptance criteria. |
+| [`design/ux/`](system/skills-src/design/ux/) | Interaction flows, visual system, unified design doc. |
+| [`design/technical/`](system/skills-src/design/technical/) | Architecture, shared foundations, module contracts, and reachability. |
+| [`build/`](system/skills-src/build/) | Delivery planning, ticket DAGs, TDD execution, and verification. |
+| [`test/`](system/skills-src/test/) | Coverage audit and integration tests after build. |
+| [`maintain/`](system/skills-src/maintain/) | Incident diagnosis and fix loop. |
+| [`quality/review/`](system/skills-src/quality/review/) | Design review, gap analysis, code quality, and refactoring. |
+| [`quality/debugging/`](system/skills-src/quality/debugging/) | Triage and merge-conflict resolution. |
+| [`craft/context/`](system/skills-src/craft/context/) | Agent memory, terminology, decisions, and the explicit-only compatibility router. |
+| [`craft/meta/`](system/skills-src/craft/meta/) | Research, decision challenge, DAG rendering, and skill authoring. |
 
 `system/skills/` holds flat symlinks into `skills-src/` so the loader — which scans one level deep — can discover every skill while the source stays browsable by phase.
 
@@ -54,19 +56,19 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 ```mermaid
 graph LR
     subgraph PLAN["plan/"]
-        BR[brainstorm] --> VD[validate-demand] --> SS[shape-solution] --> PRD[write-prd]
+        BR[acs-brainstorm] --> VD[acs-validate-demand] --> SS[acs-shape-solution] --> PRD[acs-write-prd]
     end
 
     subgraph DESIGN["design/"]
-        SR[settle-requirements] --> DI[design-interaction-flow] --> DA[design-architecture]
+        SR[acs-settle-requirements] --> DI[acs-design-interaction-flow] --> DA[acs-design-architecture]
     end
 
     subgraph BUILD["build/"]
-        IMP[implement] --> TDD[tdd]
+        PD[acs-plan-delivery] --> IMP[acs-implement] --> TDD[acs-tdd]
     end
 
     subgraph TEST["test/"]
-        ATG[analyze-test-gaps]
+        ATG[acs-analyze-test-gaps]
     end
 
     subgraph DEPLOY["deploy/"]
@@ -74,18 +76,20 @@ graph LR
     end
 
     subgraph MAINTAIN["maintain/"]
-        DX[diagnose-incident] --> DEP
+        DX[acs-diagnose-incident] --> DEP
     end
 
     PRD --> SR
-    DA --> IMP
+    PRD --> PD
+    DA --> PD
+    PD -->|design blockers| SR
     IMP --> ATG
     ATG --> DEP
     DEP --> DX
 
     subgraph CRAFT["craft/ (cross-cutting)"]
-        IC[init-context]
-        MC[manage-context]
+        IC[acs-init-context]
+        MC[acs-manage-context]
     end
 
     style PLAN fill:#eef6ff,stroke:#5b8def
@@ -101,7 +105,9 @@ graph LR
 
 This repository publishes skill-set metadata through [`catalog/skill-set.json`](catalog/skill-set.json). The shared frontend and cross-repository catalog live in [Agent Skills](https://github.com/XinheLIU/agent-skills); this repository is the source of truth for the Coding Skills product and its releases.
 
-For manual or cross-runtime installation, copy the skill's real directory from `system/skills-src/<phase>/<skill>/`. Each skill is self-contained: it carries its own `references/` (including the shared memory protocol at [`craft/context/init-context/references/PROTOCOL.md`](system/skills-src/craft/context/init-context/references/PROTOCOL.md)) and refers to sibling skills by name.
+The full source tree currently supplies shared protocols, workflows, role prompts, and resource symlinks. Copying one skill directory alone can leave missing dependencies. Individually installable packages are the next delivery milestone, subject to the [standalone package contract](system/docs/harness-architecture.md#standalone-package-contract); they are not yet verified standalone distributions.
+
+Run `python3 system/memory/validate_suite.py --inventory-only` to verify and count source skills, loader entries, catalog records, and the context subpackage. The full command also audits context declarations and local Markdown links.
 
 ## Development boundary
 

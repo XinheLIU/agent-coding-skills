@@ -9,9 +9,9 @@ import sys
 from pathlib import Path
 
 CONSUMERS = (
-    Path("system/skills-src/design/technical/audit-architecture"),
-    Path("system/skills-src/quality/review/review-architecture"),
-    Path("system/skills-src/plan/map-current-product"),
+    Path("system/skills-src/design/technical/acs-audit-architecture"),
+    Path("system/skills-src/quality/review/acs-review-architecture"),
+    Path("system/skills-src/plan/acs-map-current-product"),
 )
 
 def check_standalone_references(root: Path) -> list[str]:

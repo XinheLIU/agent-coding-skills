@@ -8,10 +8,10 @@ model: sonnet
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 # Technology Architecture Reviewer
 
@@ -28,7 +28,7 @@ First message MUST contain `technology-explorer` output. If missing, STOP:
 
 - Missing input → STOP.
 - Explorer `NOT DETECTED` → no-findings stub, exit.
-- Code-level perf / security smells → cross-reference to `review-code-quality`. Do NOT flag here.
+- Code-level perf / security smells → cross-reference to `acs-review-code-quality`. Do NOT flag here.
 
 ## Focus Areas
 
@@ -65,7 +65,7 @@ First message MUST contain `technology-explorer` output. If missing, STOP:
 - Schema design and ownership → `data-architecture-reviewer`
 - Compose, networks, secret stores at infra layer → `deploy-reviewer`
 - Implicit cross-cutting decisions → `adr-reviewer`
-- Concrete dep CVEs, code-level perf bugs, individual misconfigs → `review-code-quality`
+- Concrete dep CVEs, code-level perf bugs, individual misconfigs → `acs-review-code-quality`
 
 ## Confidence
 
@@ -91,7 +91,7 @@ First message MUST contain `technology-explorer` output. If missing, STOP:
 - ...
 
 ### Cross-Reference Recommendations
-- [→ application-reviewer / deploy-reviewer / adr-reviewer / review-code-quality] ...
+- [→ application-reviewer / deploy-reviewer / adr-reviewer / acs-review-code-quality] ...
 
 ### Summary
 - Stack elements reviewed: X

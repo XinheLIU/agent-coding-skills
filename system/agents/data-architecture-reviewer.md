@@ -8,10 +8,10 @@ model: sonnet
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 # Data Architecture Reviewer
 
@@ -28,7 +28,7 @@ First message MUST contain `data-architecture-explorer` output. If missing, STOP
 
 - Missing input → STOP.
 - Explorer `NOT DETECTED` → no-findings stub, exit.
-- Code-level / SQL defect spotted → cross-reference to `review-code-quality` (db domain). Do not flag here.
+- Code-level / SQL defect spotted → cross-reference to `acs-review-code-quality` (db domain). Do not flag here.
 
 ## Focus Areas
 
@@ -67,7 +67,7 @@ First message MUST contain `data-architecture-explorer` output. If missing, STOP
 - DB engine / storage choice rationale → `technology-reviewer`
 - Volume topology, backups, RPO/RTO at infra layer → `deploy-reviewer`
 - Implicit cross-cutting decisions → `adr-reviewer`
-- SQL injection, missing indexes, query smells, migration-runner code → `review-code-quality`
+- SQL injection, missing indexes, query smells, migration-runner code → `acs-review-code-quality`
 
 ## Confidence
 
@@ -93,7 +93,7 @@ First message MUST contain `data-architecture-explorer` output. If missing, STOP
 - ...
 
 ### Cross-Reference Recommendations
-- [→ application-reviewer / adr-reviewer / review-code-quality (db)] ...
+- [→ application-reviewer / adr-reviewer / acs-review-code-quality (db)] ...
 
 ### Summary
 - Schemas reviewed: X | Tables reviewed: Y

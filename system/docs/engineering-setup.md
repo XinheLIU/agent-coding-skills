@@ -1,6 +1,6 @@
 # Engineering Setup
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 **Lifecycle stage 3.** Engineering Setup covers everything needed to make a codebase ready for reliable agent-assisted delivery. Its scope spans three sub-areas:
 
@@ -18,17 +18,17 @@ In agentic coding, **context is the bottleneck**. Too little context leads to ha
 
 ## The Core Framework
 
-The [shared protocol](../skills-src/craft/context/init-context/references/PROTOCOL.md) defines North Star, Current State, Change Context, and Run Context. Code indexes are derived views. The [coordinator](../workflows/context-coordination.md) owns context assembly, runtime bindings, claims, transitions, and cleanup; domain skills own facts and judgments.
+The [shared protocol](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md) defines North Star, Current State, Change Context, and Run Context. Code indexes are derived views. The [coordinator](../workflows/context-coordination.md) owns context assembly, runtime bindings, claims, transitions, and cleanup; domain skills own facts and judgments.
 
-`sync-context` reconciles drift and routes affected conclusions to their owners. Keep accepted requirements/designs and compact final evidence after completion; remove only reconciled execution material. Current-state summaries explain applicable behavior/boundaries with source revisions, while ADRs and change records retain historical rationale.
+`acs-sync-context` reconciles drift and routes affected conclusions to their owners. Keep accepted requirements/designs and compact final evidence after completion; remove only reconciled execution material. Current-state summaries explain applicable behavior/boundaries with source revisions, while ADRs and change records retain historical rationale.
 
-Instruction-file content is maintained by `review-agent-instructions`; runtime parity by `translate-agent-context`. Other documentation capabilities are optional and must be available before invocation.
+Instruction-file content is maintained by `acs-review-agent-instructions`; runtime parity by `acs-translate-agent-context`. Other documentation capabilities are optional and must be available before invocation.
 
 ---
 
 ## Skills
 
-### [init-context](../skills/init-context/SKILL.md)
+### [acs-init-context](../skills/acs-init-context/SKILL.md)
 
 The one-time setup entry point for the whole collection. Writes `docs/agents/memory.md` and initializes the configured memory layers.
 
@@ -36,11 +36,11 @@ The one-time setup entry point for the whole collection. Writes `docs/agents/mem
 
 **Phase B (sync)** — runs when routing exists. Detects drift across domain records, derived indexes, and Run Context, then makes narrow factual corrections or reports structural work for the owning capability. Distinguishes drift (fix the doc) from a constraint violation (fix the code).
 
-Protocol spec at [`init-context/references/PROTOCOL.md`](../skills/init-context/references/PROTOCOL.md). Triggers: "set up context management", "the docs are stale", "sync the context", run after a merge or before a handoff.
+Protocol spec at [`acs-init-context/references/PROTOCOL.md`](../skills/acs-init-context/references/PROTOCOL.md). Triggers: "set up context management", "the docs are stale", "sync the context", run after a merge or before a handoff.
 
 ### Documentation and indexing capabilities
 
-Documentation-tree scaffolding is separate from this small context set. `init-context` initializes routing and `sync-context` reports drift without claiming ownership of project documentation.
+Documentation-tree scaffolding is separate from this small context set. `acs-init-context` initializes routing and `acs-sync-context` reports drift without claiming ownership of project documentation.
 
 ### Code indexing
 
@@ -50,11 +50,11 @@ Code indexing is also separate. The context set records the configured index loc
 
 The prose wiki skills live in [learning-os](https://github.com/XinheLIU/learning-os). `llm-wiki-init` scaffolds the schema, index, and append-only log; `llm-wiki-ingest` distills one source through capture → extract → discuss → write, keeping raw files immutable and hashed; `llm-wiki-lint` audits broken wikilinks, orphans, source drift, contested claims, and tag sprawl. Triggers: "start a knowledge base", "ingest this into my wiki", "lint the wiki".
 
-### [review-agent-instructions](../skills/review-agent-instructions/SKILL.md)
+### [acs-review-agent-instructions](../skills/acs-review-agent-instructions/SKILL.md)
 
 Write and maintain the repository's agent instruction file — `CLAUDE.md` or `AGENTS.md`, whichever is present — and keep it wired to the memory system. Triages before reading: **intake** folds one post-incident lesson into the section that owns it, **review** rewrites a file whose shape has decayed, **wire memory** restores the startup sequence, memory-routing pointer, and Context Files triggers. Judges against five principles (index plus common sense, earned by experience, checkable, alternatives not just prohibitions, room to grow) under a ~200/220-line budget. Triggers: "review CLAUDE.md", "review AGENTS.md", "shrink CLAUDE.md / AGENTS.md", "add this lesson to CLAUDE.md", "the agent keeps ignoring CLAUDE.md".
 
-### [translate-agent-context](../skills/translate-agent-context/SKILL.md)
+### [acs-translate-agent-context](../skills/acs-translate-agent-context/SKILL.md)
 
 Cross-runtime parity. Preserves behavior while translating instructions, skills, commands, hooks, roles, and context between any agent runtimes or host applications. Classifies each target by its actual discovery, tool, delegation, persistence, permission, enforcement, and timing capabilities before choosing a native binding. Triggers: "port agent setup", "sync runtime instructions", "translate slash commands", "make these skills work in another agent", "set up cross-runtime parity".
 
@@ -93,11 +93,11 @@ set -e
 # Trigger only when context-bearing files are staged.
 if git diff --cached --name-only | grep -qE '(CLAUDE\.md|AGENTS\.md|docs/.*\.md)'; then
   # Claude project — review CLAUDE.md
-  claude -p "Use review-agent-instructions to audit CLAUDE.md and referenced docs. Report findings only — do not write."
+  claude -p "Use acs-review-agent-instructions to audit CLAUDE.md and referenced docs. Report findings only — do not write."
 
   # Codex / OpenCode project — review AGENTS.md
-  # codex exec "Use review-agent-instructions to audit AGENTS.md and referenced docs. Report findings only."
-  # opencode run "Use review-agent-instructions to audit AGENTS.md. Report only."
+  # codex exec "Use acs-review-agent-instructions to audit AGENTS.md and referenced docs. Report findings only."
+  # opencode run "Use acs-review-agent-instructions to audit AGENTS.md. Report only."
 fi
 ```
 
@@ -111,16 +111,16 @@ If your repo uses [`pre-commit`](https://pre-commit.com), add a local hook in `.
 repos:
   - repo: local
     hooks:
-      - id: review-agent-instructions
+      - id: acs-review-agent-instructions
         name: Claude — audit CLAUDE.md
-        entry: claude -p "Use review-agent-instructions to audit and report only."
+        entry: claude -p "Use acs-review-agent-instructions to audit and report only."
         language: system
         files: ^(CLAUDE\.md|docs/.*\.md)$
         stages: [pre-commit]
 
-      - id: review-agent-instructions
+      - id: acs-review-agent-instructions
         name: Codex — audit AGENTS.md
-        entry: codex exec "Use review-agent-instructions to audit AGENTS.md and report only."
+        entry: codex exec "Use acs-review-agent-instructions to audit AGENTS.md and report only."
         language: system
         files: ^(AGENTS\.md|docs/.*\.md)$
         stages: [pre-commit]
@@ -158,7 +158,7 @@ Hook script at `.claude/hooks/pre-commit.sh` (`chmod +x`):
 # Stdin is JSON; tool_input.command holds the actual git command.
 COMMAND=$(jq -r '.tool_input.command')
 
-claude -p "Use review-agent-instructions to audit CLAUDE.md and referenced docs against the staged commit: $COMMAND. Report only."
+claude -p "Use acs-review-agent-instructions to audit CLAUDE.md and referenced docs against the staged commit: $COMMAND. Report only."
 
 # Exit 0 = allow commit. Exit 2 = block. Anything else = non-blocking error.
 exit 0
@@ -170,12 +170,12 @@ Reference: [Claude Code hooks docs](https://code.claude.com/docs/en/hooks.md).
 
 | Runtime | Skill | Method |
 |---|---|---|
-| Claude (project) | `review-agent-instructions` | C — fires only when Claude commits, no extra latency for human commits |
-| Codex / OpenCode | `review-agent-instructions` | A or B — these runtimes lack a native PreToolUse hook surface; use git's |
+| Claude (project) | `acs-review-agent-instructions` | C — fires only when Claude commits, no extra latency for human commits |
+| Codex / OpenCode | `acs-review-agent-instructions` | A or B — these runtimes lack a native PreToolUse hook surface; use git's |
 | Cross-team / shared repos | any | B — versioned with the repo so every contributor shares the hooks |
 | Personal-only quick setup | any | A — fastest, no shared config |
 
-`extract-rules` and `translate-agent-context` are **not** good fits for per-commit hooks — both are periodic audits (when conventions drift, when porting between runtimes, when onboarding). Run them manually.
+`extract-rules` and `acs-translate-agent-context` are **not** good fits for per-commit hooks — both are periodic audits (when conventions drift, when porting between runtimes, when onboarding). Run them manually.
 
 ---
 
@@ -196,7 +196,7 @@ Copy or symlink skills/instructions to each agent's configuration paths.
 | **Gemini CLI** | `~/.gemini/system.md` | `.gemini/system.md` (or `GEMINI_SYSTEM_MD` env) |
 | **GitHub Copilot** | - | `.github/copilot-instructions.md` |
 
-> For an AGENTS.md-based runtime, run `review-agent-instructions` to audit content shape and `extract-rules` to extract rules into the right home (inline AGENTS.md or `docs/conventions/`). To port a Claude setup over to one of these runtimes, run `translate-agent-context`.
+> For an AGENTS.md-based runtime, run `acs-review-agent-instructions` to audit content shape and `extract-rules` to extract rules into the right home (inline AGENTS.md or `docs/conventions/`). To port a Claude setup over to one of these runtimes, run `acs-translate-agent-context`.
 
 ---
 

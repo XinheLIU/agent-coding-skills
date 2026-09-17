@@ -11,65 +11,60 @@
   "install": "/plugin install agent-coding-skills@agent-coding-skills",
   "categories": [
     {
-      "id": "lifecycle",
-      "label": "SDLC Lifecycle",
-      "description": "Six entry points for the full software development lifecycle",
-      "skills": ["plan", "design", "build", "test", "deploy", "maintain"]
-    },
-    {
       "id": "plan",
       "label": "Plan",
-      "skills": ["brainstorm", "validate-demand", "map-current-product", "run-premortem", "ideate-product", "shape-solution", "define-outcomes", "design-experiment", "write-prd", "explore-unknowns"]
+      "skills": ["acs-brainstorm", "acs-validate-demand", "acs-map-current-product", "acs-run-premortem", "acs-ideate-product", "acs-shape-solution", "acs-define-outcomes", "acs-design-experiment", "acs-write-prd", "acs-explore-unknowns"]
     },
     {
       "id": "design/requirements",
       "label": "Design · Requirements",
-      "skills": ["settle-requirements"]
+      "skills": ["acs-settle-requirements"]
     },
     {
       "id": "design/ux",
       "label": "Design · UX",
-      "skills": ["design-context", "design-system-create", "design-interaction-flow", "visual-design-variants", "design-implement", "validate-prototype"]
+      "skills": ["acs-design-context", "acs-design-system-create", "acs-design-interaction-flow", "acs-visual-design-variants", "acs-design-implement", "acs-validate-prototype"]
     },
     {
       "id": "design/technical",
       "label": "Design · Technical",
-      "skills": ["audit-architecture", "design-architecture", "design-foundation", "design-modules", "validate-codebase"]
+      "skills": ["acs-audit-architecture", "acs-design-architecture", "acs-design-foundation", "acs-design-modules", "acs-validate-codebase"]
     },
     {
       "id": "build",
       "label": "Build",
-      "skills": ["implement", "tdd"]
+      "skills": ["acs-plan-delivery", "acs-implement", "acs-tdd"]
     },
     {
       "id": "test",
       "label": "Test",
-      "skills": ["analyze-test-gaps"]
+      "skills": ["acs-analyze-test-gaps"]
     },
     {
       "id": "maintain",
       "label": "Maintain",
-      "skills": ["diagnose-incident", "triage"]
+      "skills": ["acs-diagnose-incident"]
     },
     {
       "id": "quality/review",
       "label": "Quality · Review",
-      "skills": ["review-architecture", "review-design-doc", "review-implementation-gaps", "review-code-quality", "refactor-code"]
+      "skills": ["acs-review-architecture", "acs-review-design-doc", "acs-review-implementation-gaps", "acs-review-code-quality", "acs-refactor-code"]
     },
     {
       "id": "quality/debugging",
       "label": "Quality · Debugging",
-      "skills": ["resolving-merge-conflicts"]
+      "skills": ["acs-triage", "acs-resolving-merge-conflicts"]
     },
     {
       "id": "craft/context",
       "label": "Craft · Context",
-      "skills": ["init-context", "translate-agent-context", "sync-context", "engineer-domain-model"]
+      "description": "Shared context capabilities, including the explicit-only acs-manage-context compatibility router.",
+      "skills": ["acs-init-context", "acs-translate-agent-context", "acs-sync-context", "acs-engineer-domain-model", "acs-manage-context"]
     },
     {
       "id": "craft/meta",
       "label": "Craft · Meta",
-      "skills": ["research", "draw-portfolio-dag", "writing-great-skills", "review-agent-instructions", "challenge-approach"]
+      "skills": ["acs-research", "acs-draw-portfolio-dag", "acs-writing-great-skills", "acs-review-agent-instructions", "acs-challenge-approach"]
     }
   ]
 }

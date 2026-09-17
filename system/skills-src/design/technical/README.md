@@ -1,6 +1,6 @@
 # Design · Technical
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
 Technical design turns accepted feature requirements into an architecture that can be implemented, evolved, and checked. It covers two related shapes of work:
 
@@ -35,7 +35,7 @@ flowchart TD
     FOUND --> MOD
 
     MOD --> PRE[Validate design reachability]
-    PRE --> BUILD[Build / implement]
+    PRE --> BUILD[Build / acs-implement]
     BUILD --> POST[Validate implementation reachability]
     POST --> CLEAN[Scoped cleanup + context reconciliation]
 
@@ -55,29 +55,29 @@ flowchart TD
 
 | Node | Use it when | It owns | It hands off |
 | --- | --- | --- | --- |
-| `audit-architecture` | Brownfield behavior, dependencies, or compatibility are unclear | Current modules, entry points, coupling, shared capabilities, constraints, evidence | Current-state map and ranked design questions |
-| `design-architecture` | Features need a system shape or existing boundaries need reconsideration | Feature-to-module map, capability consumers, alternatives, selected target, gaps | Stable architecture and capability IDs |
-| `design-foundation` | A library, SDK, component, middleware, or infrastructure adapter is introduced, changed, or adopted | Consumer scenarios, public contract, lifecycle, failure behavior, packaging form, real verification path | Foundation contracts and optional bootstrap/adoption criteria |
-| `design-modules` | Architecture must become code structure | Responsibilities, interfaces, types, directories, dependency direction, registration and migrations | Implementation-ready module and wiring contracts |
-| `validate-codebase` | Design or implementation needs proof of connectedness | Route/menu/export/interface/module reachability, alignment findings, scoped repairs, evidence | Build tasks, tests, or context reconciliation |
+| `acs-audit-architecture` | Brownfield behavior, dependencies, or compatibility are unclear | Current modules, entry points, coupling, shared capabilities, constraints, evidence | Current-state map and ranked design questions |
+| `acs-design-architecture` | Features need a system shape or existing boundaries need reconsideration | Feature-to-module map, capability consumers, alternatives, selected target, gaps | Stable architecture and capability IDs |
+| `acs-design-foundation` | A library, SDK, component, middleware, or infrastructure adapter is introduced, changed, or adopted | Consumer scenarios, public contract, lifecycle, failure behavior, packaging form, real verification path | Foundation contracts and optional bootstrap/adoption criteria |
+| `acs-design-modules` | Architecture must become code structure | Responsibilities, interfaces, types, directories, dependency direction, registration and migrations | Implementation-ready module and wiring contracts |
+| `acs-validate-codebase` | Design or implementation needs proof of connectedness | Route/menu/export/interface/module reachability, alignment findings, scoped repairs, evidence | Build tasks, tests, or context reconciliation |
 
-For a decision route that spans sessions or has independent prerequisites, leave technical design and use `plan/explore-unknowns`. NFR analysis, domain clarification, module splitting, boundary repair, and adversarial challenge are techniques inside the owning node, not standalone technical skills.
+For a decision route that spans sessions or has independent prerequisites, leave technical design and use `plan/acs-explore-unknowns`. NFR analysis, domain clarification, module splitting, boundary repair, and adversarial challenge are techniques inside the owning node, not standalone technical skills.
 
 ## Greenfield route
 
-Greenfield work starts from requirements and designs the first useful system shape. `design-architecture` assigns every accepted feature an owner and identifies only the foundations needed by the first real end-to-end scenario. `design-foundation` then chooses the smallest delivery form: local module, package/library, component, middleware, or service.
+Greenfield work starts from requirements and designs the first useful system shape. `acs-design-architecture` assigns every accepted feature an owner and identifies only the foundations needed by the first real end-to-end scenario. `acs-design-foundation` then chooses the smallest delivery form: local module, package/library, component, middleware, or service.
 
 When a runnable skeleton is needed, the foundation spec may include five optional slices: minimal scaffold, encapsulated infrastructure, declared module positions, one real full-link path, and one-command startup. A complete set of empty placeholders is not required; a 501 response proves registration only. The acceptance gate is a real scenario traversing the selected foundation and business module contracts.
 
 ## Brownfield route
 
-Brownfield work begins with `audit-architecture` only when current behavior or constraints cannot be established cheaply from the repository. The audit distinguishes:
+Brownfield work begins with `acs-audit-architecture` only when current behavior or constraints cannot be established cheaply from the repository. The audit distinguishes:
 
 1. **Current architecture** — what imports, routes, registrations, and runtime paths actually do.
 2. **Ideal architecture** — the clean structure we would choose with freedom to reorganize.
 3. **Feasible target** — the evolution worth making now, including compatibility, migration, and operational cost.
 
-`design-architecture` records the gap between these three views. `design-modules` preserves observable behavior with characterization evidence, facades, adapters, staged caller migration, and rollback points where required. Existing libraries should be adopted directly when their contract is sufficient; extraction or replacement needs named consumers and measurable benefit.
+`acs-design-architecture` records the gap between these three views. `acs-design-modules` preserves observable behavior with characterization evidence, facades, adapters, staged caller migration, and rollback points where required. Existing libraries should be adopted directly when their contract is sufficient; extraction or replacement needs named consumers and measurable benefit.
 
 ## Foundation design rules
 
@@ -104,7 +104,7 @@ Shared technical capability must not become a dumping-ground `common` module. A 
 
 Every module contract names one responsibility, its callers, public interface, invariants and failures, owned types, dependencies, registration point, and test surface. Routes, menus, commands, jobs, public exports, dependency injection, middleware order, and dynamic registration are included whenever they participate in the requirement path.
 
-`validate-codebase` traces each requirement and contract through its entry point, registration, interface, owning module, adapter, and test. It classifies rows as `REACHABLE`, `PARTIAL`, `MISSING`, `DIVERGENT`, or `UNASSESSED`. It can repair broken wiring, stale links, missing exports, obsolete local guidance, and redundant documentation within scope; design changes return to the design owner.
+`acs-validate-codebase` traces each requirement and contract through its entry point, registration, interface, owning module, adapter, and test. It classifies rows as `REACHABLE`, `PARTIAL`, `MISSING`, `DIVERGENT`, or `UNASSESSED`. It can repair broken wiring, stale links, missing exports, obsolete local guidance, and redundant documentation within scope; design changes return to the design owner.
 
 ## Artifacts and handoff
 

@@ -8,10 +8,10 @@ model: sonnet
 
 ## Context handoff
 
-Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
+Use the coordinator-supplied [handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): canonical change/task identity, bounded scope, accessible references and consumed revisions, delta/accepted decisions, unresolved questions/blocking effects, and next action. Read only relevant domain context. Return source-backed findings with criterion/contract IDs where applicable and explicit omissions; do not update another domain's verdict or dispatch follow-up work. The [coordinator](../workflows/context-coordination.md) owns runtime binding, shared writes, and freshness propagation.
 
 
-Last updated: 2026-09-09
+Last updated: 2026-09-17
 
 # Business Architecture Reviewer
 
@@ -33,7 +33,7 @@ Your first user message MUST contain the output of `business-explorer`. If missi
   **Status**: No documented business intent; cannot judge alignment.
   ```
   and exit.
-- **Code-level defect spotted** → do NOT flag here. Record under *Cross-reference recommendations* with `→ review-code-quality`.
+- **Code-level defect spotted** → do NOT flag here. Record under *Cross-reference recommendations* with `→ acs-review-code-quality`.
 
 ## Focus Areas
 
@@ -65,7 +65,7 @@ Your first user message MUST contain the output of `business-explorer`. If missi
 - Stack choice / scaling fit → `technology-reviewer`
 - Compose / network / exposure issues → `deploy-reviewer`
 - Implicit or missing ADRs → `adr-reviewer`
-- Anything code-level (handler bugs, missing validation, perf smells) → `review-code-quality`
+- Anything code-level (handler bugs, missing validation, perf smells) → `acs-review-code-quality`
 
 ## Confidence
 
@@ -93,7 +93,7 @@ Your first user message MUST contain the output of `business-explorer`. If missi
 - ...
 
 ### Cross-Reference Recommendations
-- [→ application-reviewer / data-architecture-reviewer / review-code-quality] ...
+- [→ application-reviewer / data-architecture-reviewer / acs-review-code-quality] ...
 
 ### Summary
 - Capabilities reviewed: X
