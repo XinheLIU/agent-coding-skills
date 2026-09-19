@@ -7,7 +7,7 @@ description: Reconstruct current module boundaries, dependencies, coupling, and 
 
 Last updated: 2026-09-17
 
-Read [the visual report contract](references/visual-report.md) and [the HTML report format](references/HTML-REPORT.md) before generating the companion. These local references are bundled with the skill; do not depend on `/meta` or another installed skill.
+Read [the visual report contract](references/visual-report.md) and [the HTML report format](references/HTML-REPORT.md) before generating the companion. For complex multi-dimensional analysis with substantial findings across multiple architectural concerns, reference `craft/meta/references/tabbed-discovery-report.md` for the tabbed HTML output protocol. These local references are bundled with the skill; do not depend on `/meta` or another installed skill.
 
 ## Context contract
 

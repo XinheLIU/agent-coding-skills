@@ -158,7 +158,7 @@ After the last group passes, recompute the same metrics from step 2 for the same
 
 Include a visual structural delta for cross-file refactors: removed shallow modules, new seams, moved ownership, and preserved behavior. Use inline SVG first, retain ordinary HTML fallback labels, and link each visual claim to preservation evidence.
 
-Use the local [visual report contract](references/visual-report.md) and the *Report format* below. Be honest about debt that was deferred — do not claim wins you did not achieve.
+Use the local [visual report contract](references/visual-report.md) and the *Report format* below. For complex multi-dimensional refactoring with substantial before/after comparisons across multiple architectural concerns, reference `craft/meta/references/tabbed-discovery-report.md` for the tabbed HTML output protocol. Be honest about debt that was deferred — do not claim wins you did not achieve.
 
 ## Refactoring catalog
 

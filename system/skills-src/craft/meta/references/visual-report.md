@@ -1,8 +1,14 @@
 # Visual Report Contract
 
-Last updated: 2026-09-14
+Last updated: 2026-09-19
 
 Use this contract for static HTML reports that explain findings, candidates, capabilities, architecture options, or refactoring deltas. The report must work when its owning skill is installed alone; packaged skills carry a local copy of this reference and must only link to it relatively.
+
+## When to use tabbed layout
+
+For complex multi-dimensional analysis with 3+ major architectural concerns, substantial revision history, nested options requiring sub-navigation, or before/after comparisons across multiple dimensions, use a tabbed layout instead of the flat card structure. See [tabbed-discovery-report.md](tabbed-discovery-report.md) for the complete protocol.
+
+Simple findings (1-5 cards, single dimension) remain card-based without tabs.
 
 ## Reading order
 
