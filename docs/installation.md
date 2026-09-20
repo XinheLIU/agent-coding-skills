@@ -25,6 +25,93 @@ After installation, run a one-time repository setup to write `docs/agents/memory
 /acs-init-context
 ```
 
+
+## Install from GitHub (any agent)
+
+If your agent supports loading skills from a local directory, clone the repo once and point the agent at it. No npm registry or marketplace needed.
+
+```bash
+git clone https://github.com/XinheLIU/agent-coding-skills.git ~/skills/agent-coding-skills
+```
+
+Then install individual plugins:
+
+```bash
+npx skills install ~/skills/agent-coding-skills/plugins/acs-plan -g
+npx skills install ~/skills/agent-coding-skills/plugins/acs-build -g
+# etc.
+```
+
+Or install the full monolith:
+
+```bash
+npx skills install ~/skills/agent-coding-skills/system -g
+```
+
+To stay current, pull and reinstall:
+
+```bash
+cd ~/skills/agent-coding-skills && git pull
+npx skills install ~/skills/agent-coding-skills/plugins/acs-build -g --force
+```
+
+To pin a specific release:
+
+```bash
+git clone --branch v0.3.0 https://github.com/XinheLIU/agent-coding-skills.git ~/skills/agent-coding-skills
+```
+
+---
+
+## Test locally before installing
+
+Verify a plugin is well-formed before installing it globally.
+
+**Check structure:**
+
+```bash
+# Each skill must have a SKILL.md
+find plugins/acs-build/skills -name "SKILL.md" | sort
+
+# Each plugin must have a plugin.json
+cat plugins/acs-build/.claude-plugin/plugin.json
+```
+
+**Dry-run install:**
+
+```bash
+npx skills install ./plugins/acs-build --dry-run
+```
+
+**Smoke-test a single skill** by loading it into a scratch project:
+
+```bash
+mkdir /tmp/acs-test && cd /tmp/acs-test
+git init && echo "# test" > README.md
+
+# Install the plugin locally (project scope only)
+npx skills install /path/to/agent-coding-skills/plugins/acs-context
+
+# Then in the agent: /acs-init-context
+# Expected: creates docs/agents/memory.md
+```
+
+**Validate protocol references resolve:**
+
+```bash
+cd /path/to/agent-coding-skills
+python3 scripts/validate-protocols.py
+```
+
+**Check no stale cross-plugin links:**
+
+```bash
+grep -r "acs-protocols\|acs-quality\|acs-craft" plugins/ --include="*.md" -l
+# Expected: no output
+```
+
+---
+
 ---
 
 ## Claude Code
@@ -199,6 +286,38 @@ Or point at the monolith:
 ```
 
 Pi extension packaging (`pi.skills` with a published npm path) is a planned milestone tracked in [`system/docs/harness-architecture.md`](system/docs/harness-architecture.md#standalone-package-contract).
+
+---
+
+## DeepSeek harness
+
+DeepSeek is a model provider, not a host agent. To use ACS skills with a DeepSeek-backed session, install into whatever harness or runner is wrapping the model — the skills work the same regardless of the underlying model.
+
+**Via OpenCode with a DeepSeek backend:**
+
+OpenCode supports model routing. Set up OpenCode pointing at DeepSeek, then install skills as normal:
+
+```bash
+# ~/.config/opencode/config.json — set your model to deepseek
+cp -r /path/to/agent-coding-skills/plugins/acs-build ~/.config/opencode/skills/
+cp -r /path/to/agent-coding-skills/plugins/acs-test  ~/.config/opencode/skills/
+```
+
+**Via a custom runner (herdr or similar):**
+
+If you use a dispatch harness that spawns an agent subprocess with a chosen model, point that runner at the skills directory and pass the skill name as a prompt prefix. Example with herdr:
+
+```bash
+# Start an agent with DeepSeek as the worker
+herdr agent start deepseek-coder
+
+# Prompt it with a skill
+herdr agent prompt <agent> "Load acs-review-code-quality. Review the diff in the current branch."
+```
+
+The ACS harness contract is model-neutral: skills declare context requirements in YAML, not model-specific syntax. Any host that can load a SKILL.md and follow its instructions will work.
+
+**Note:** ACS uses protocol references like `protocol:acs:skill-declarations` that assume a skill-aware host can resolve them. A generic chat interface that just reads raw Markdown will see those as unresolved links. Use a harness that understands the plugin format, not a bare chat window.
 
 ---
 
