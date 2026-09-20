@@ -1,0 +1,5 @@
+interface:
+  display_name: "Validate Demand"
+  short_description: "Grade product-demand evidence and issue a go/no-go verdict"
+policy:
+  allow_implicit_invocation: false

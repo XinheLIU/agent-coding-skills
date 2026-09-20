@@ -1,0 +1,5 @@
+interface:
+  display_name: "Shape Solution"
+  short_description: "Shape a validated demand or baseline into a concrete solution"
+policy:
+  allow_implicit_invocation: false

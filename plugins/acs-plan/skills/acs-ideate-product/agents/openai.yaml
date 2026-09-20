@@ -1,0 +1,5 @@
+interface:
+  display_name: "Ideate Product"
+  short_description: "Route a product effort to the right next step"
+policy:
+  allow_implicit_invocation: false

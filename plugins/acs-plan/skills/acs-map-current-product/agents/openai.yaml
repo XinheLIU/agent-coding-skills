@@ -1,0 +1,5 @@
+interface:
+  display_name: "Map Current Product"
+  short_description: "Map current product behavior"
+policy:
+  allow_implicit_invocation: false

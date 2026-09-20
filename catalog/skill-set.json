@@ -4,7 +4,7 @@
   "title": "Agent Coding System",
   "tagline": "Plan, design, build, test, deploy, and maintain software with shared agent memory.",
   "description": "A coordinated engineering system covering the full AI-native SDLC: product discovery, requirements, UX and technical design, feature delivery, testing, deployment, and autonomous maintenance.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": "https://github.com/XinheLIU/agent-coding-skills",
   "accent": "rust",
   "sourcePattern": "system/skills-src/{category}/{skill}/SKILL.md",
@@ -13,58 +13,113 @@
     {
       "id": "plan",
       "label": "Plan",
-      "skills": ["acs-brainstorm", "acs-validate-demand", "acs-map-current-product", "acs-run-premortem", "acs-ideate-product", "acs-shape-solution", "acs-define-outcomes", "acs-design-experiment", "acs-write-prd", "acs-explore-unknowns"]
+      "skills": [
+        "acs-brainstorm",
+        "acs-validate-demand",
+        "acs-map-current-product",
+        "acs-run-premortem",
+        "acs-ideate-product",
+        "acs-shape-solution",
+        "acs-define-outcomes",
+        "acs-design-experiment",
+        "acs-write-prd",
+        "acs-explore-unknowns"
+      ]
     },
     {
       "id": "design/requirements",
-      "label": "Design · Requirements",
-      "skills": ["acs-settle-requirements"]
+      "label": "Design \u00b7 Requirements",
+      "skills": [
+        "acs-settle-requirements"
+      ]
     },
     {
       "id": "design/ux",
-      "label": "Design · UX",
-      "skills": ["acs-design-context", "acs-design-system-create", "acs-design-interaction-flow", "acs-visual-design-variants", "acs-design-implement", "acs-validate-prototype"]
+      "label": "Design \u00b7 UX",
+      "skills": [
+        "acs-design-context",
+        "acs-design-system-create",
+        "acs-design-interaction-flow",
+        "acs-visual-design-variants",
+        "acs-design-implement",
+        "acs-validate-prototype"
+      ]
     },
     {
       "id": "design/technical",
-      "label": "Design · Technical",
-      "skills": ["acs-audit-architecture", "acs-design-architecture", "acs-design-foundation", "acs-design-modules", "acs-validate-codebase"]
+      "label": "Design \u00b7 Technical",
+      "skills": [
+        "acs-audit-architecture",
+        "acs-design-architecture",
+        "acs-design-foundation",
+        "acs-design-modules",
+        "acs-validate-codebase"
+      ]
     },
     {
       "id": "build",
       "label": "Build",
-      "skills": ["acs-plan-delivery", "acs-implement", "acs-tdd"]
+      "skills": [
+        "acs-plan-delivery",
+        "acs-implement",
+        "acs-tdd"
+      ]
     },
     {
       "id": "test",
       "label": "Test",
-      "skills": ["acs-analyze-test-gaps"]
+      "skills": [
+        "acs-analyze-test-gaps"
+      ]
     },
     {
       "id": "maintain",
       "label": "Maintain",
-      "skills": ["acs-diagnose-incident"]
+      "skills": [
+        "acs-diagnose-incident"
+      ]
     },
     {
-      "id": "quality/review",
-      "label": "Quality · Review",
-      "skills": ["acs-review-architecture", "acs-review-design-doc", "acs-review-implementation-gaps", "acs-review-code-quality", "acs-refactor-code"]
+      "id": "test/review",
+      "label": "Test \u00b7 Review",
+      "skills": [
+        "acs-review-architecture",
+        "acs-review-design-doc",
+        "acs-review-implementation-gaps",
+        "acs-review-code-quality",
+        "acs-refactor-code"
+      ]
     },
     {
-      "id": "quality/debugging",
-      "label": "Quality · Debugging",
-      "skills": ["acs-triage", "acs-resolving-merge-conflicts"]
+      "id": "test/debugging",
+      "label": "Test \u00b7 Debugging",
+      "skills": [
+        "acs-triage",
+        "acs-resolving-merge-conflicts"
+      ]
     },
     {
-      "id": "craft/context",
-      "label": "Craft · Context",
+      "id": "context",
+      "label": "Context",
       "description": "Shared context capabilities, including the explicit-only acs-manage-context compatibility router.",
-      "skills": ["acs-init-context", "acs-translate-agent-context", "acs-sync-context", "acs-engineer-domain-model", "acs-manage-context"]
+      "skills": [
+        "acs-init-context",
+        "acs-translate-agent-context",
+        "acs-sync-context",
+        "acs-engineer-domain-model",
+        "acs-manage-context"
+      ]
     },
     {
-      "id": "craft/meta",
-      "label": "Craft · Meta",
-      "skills": ["acs-research", "acs-draw-portfolio-dag", "acs-writing-great-skills", "acs-review-agent-instructions", "acs-challenge-approach"]
+      "id": "authoring",
+      "label": "Authoring",
+      "skills": [
+        "acs-research",
+        "acs-draw-portfolio-dag",
+        "acs-writing-great-skills",
+        "acs-review-agent-instructions",
+        "acs-challenge-approach"
+      ]
     }
   ]
 }
