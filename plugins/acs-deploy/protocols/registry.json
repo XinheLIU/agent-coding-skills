@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "namespace": "acs",
+  "protocols": {
+    "skill-declarations": {
+      "id": "protocol:acs:skill-declarations",
+      "title": "Skill Context Declaration Contract",
+      "canonical": "protocols/skill-declarations.md",
+      "anchor": "#skill-declarations",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "context-coordination": {
+      "id": "protocol:acs:context-coordination",
+      "title": "Context Coordination Workflow",
+      "canonical": "protocols/context-coordination.md",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "orchestration": {
+      "id": "protocol:acs:orchestration",
+      "title": "Implementation Orchestration Protocol",
+      "canonical": "protocols/orchestration.md",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "design-memory": {
+      "id": "protocol:acs:design-memory",
+      "title": "Design Domain Memory Contract",
+      "canonical": "protocols/design-memory.md",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "engineering-memory": {
+      "id": "protocol:acs:engineering-memory",
+      "title": "Engineering Domain Memory Contract",
+      "canonical": "protocols/engineering-memory.md",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "operations-memory": {
+      "id": "protocol:acs:operations-memory",
+      "title": "Operations Domain Memory Contract",
+      "canonical": "protocols/operations-memory.md",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "product-memory": {
+      "id": "protocol:acs:product-memory",
+      "title": "Product Domain Memory Contract",
+      "canonical": "protocols/product-memory.md",
+      "version": "1.0.0",
+      "status": "stable"
+    }
+  }
+}

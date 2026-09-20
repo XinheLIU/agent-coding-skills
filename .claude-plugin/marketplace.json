@@ -4,9 +4,49 @@
   "owner": { "name": "Xinhe LIU", "url": "https://github.com/XinheLIU" },
   "plugins": [
     {
+      "name": "acs-plan",
+      "source": "./plugins/acs-plan",
+      "description": "Product discovery, ideation, and requirements skills for the ACS suite."
+    },
+    {
+      "name": "acs-design",
+      "source": "./plugins/acs-design",
+      "description": "UX and technical design skills for the ACS suite."
+    },
+    {
+      "name": "acs-build",
+      "source": "./plugins/acs-build",
+      "description": "Delivery planning, implementation, and TDD skills for the ACS suite."
+    },
+    {
+      "name": "acs-test",
+      "source": "./plugins/acs-test",
+      "description": "Verification, review, debugging, and test-gap analysis skills for the ACS suite."
+    },
+    {
+      "name": "acs-deploy",
+      "source": "./plugins/acs-deploy",
+      "description": "Deployment, release, and governance skills for the ACS suite."
+    },
+    {
+      "name": "acs-maintain",
+      "source": "./plugins/acs-maintain",
+      "description": "Incident diagnosis, monitoring, and operations skills for the ACS suite."
+    },
+    {
+      "name": "acs-context",
+      "source": "./plugins/acs-context",
+      "description": "Context lifecycle management for agent coordination."
+    },
+    {
+      "name": "acs-authoring",
+      "source": "./plugins/acs-authoring",
+      "description": "Meta-skills for writing skills, reviewing instructions, research, and decision-making."
+    },
+    {
       "name": "agent-coding-skills",
       "source": "./system",
-      "description": "ACS coding skills with shared memory, context management, product ideation, delivery, testing, and debugging workflows."
+      "description": "ACS monolith — equivalent to installing all acs-* plugins together."
     }
   ]
 }

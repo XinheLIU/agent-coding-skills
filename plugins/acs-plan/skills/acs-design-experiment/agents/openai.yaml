@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Experiment"
+  short_description: "Design a bounded experiment to resolve a named uncertainty cheaply"
+policy:
+  allow_implicit_invocation: false

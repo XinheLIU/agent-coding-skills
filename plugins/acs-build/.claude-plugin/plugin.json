@@ -1,0 +1,12 @@
+{
+  "name": "acs-build",
+  "version": "1.0.0",
+  "description": "Delivery planning, implementation, and test-gap analysis skills for the ACS suite.",
+  "author": {
+    "name": "Xinhe LIU",
+    "url": "https://github.com/XinheLIU"
+  },
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "license": "MIT",
+  "skills": "./skills/"
+}

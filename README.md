@@ -1,17 +1,22 @@
 # Agent Coding System
 
-Last updated: 2026-09-17
+Last updated: 2026-09-20
+
+Inspired by the [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) from Anthropic.
 
 A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system/); copied upstream material stays in the local, ignored `references/` workspace.
 
 ## Quick start
 
+**Claude Code:**
 ```bash
 /plugin marketplace add XinheLIU/agent-coding-skills
 /plugin install agent-coding-skills@agent-coding-skills
 ```
 
-1. Run `/agent-coding-skills:setup` in the target repository — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
+For Codex, OpenCode, Cursor, Pi, and multi-agent setups see [docs/installation.md](docs/installation.md).
+
+1. Run `/acs-init-context` in the target repository — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
 2. Follow the [lifecycle workflows](system/workflows/README.md): plan → design → build → test → deploy → maintain. These are workflow documents, not installed commands or router skills.
 3. Select a skill by its public ID (`acs-brainstorm`, `acs-engineer-domain-model`, `acs-tdd`, etc.), using the host's invocation syntax and plugin namespace.
 
@@ -42,12 +47,13 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 | [`design/ux/`](system/skills-src/design/ux/) | Interaction flows, visual system, unified design doc. |
 | [`design/technical/`](system/skills-src/design/technical/) | Architecture, shared foundations, module contracts, and reachability. |
 | [`build/`](system/skills-src/build/) | Delivery planning, ticket DAGs, TDD execution, and verification. |
-| [`test/`](system/skills-src/test/) | Coverage audit and integration tests after build. |
+| [`test/`](system/skills-src/test/) | Coverage audit, review, debugging, and integration tests after build. |
+| [`deploy/`](system/skills-src/deploy/) | Release, governance, and PR review. _(planned)_ |
 | [`maintain/`](system/skills-src/maintain/) | Incident diagnosis and fix loop. |
-| [`quality/review/`](system/skills-src/quality/review/) | Design review, gap analysis, code quality, and refactoring. |
-| [`quality/debugging/`](system/skills-src/quality/debugging/) | Triage and merge-conflict resolution. |
-| [`craft/context/`](system/skills-src/craft/context/) | Agent memory, terminology, decisions, and the explicit-only compatibility router. |
-| [`craft/meta/`](system/skills-src/craft/meta/) | Research, decision challenge, DAG rendering, and skill authoring. |
+| [`test/review/`](system/skills-src/test/review/) | Design review, gap analysis, code quality, and refactoring. |
+| [`test/debugging/`](system/skills-src/test/debugging/) | Triage and merge-conflict resolution. |
+| [`context/`](system/skills-src/context/) | Agent memory, terminology, decisions, and the explicit-only compatibility router. |
+| [`authoring/`](system/skills-src/authoring/) | Research, decision challenge, DAG rendering, and skill authoring. |
 
 `system/skills/` holds flat symlinks into `skills-src/` so the loader — which scans one level deep — can discover every skill while the source stays browsable by phase.
 
@@ -87,7 +93,7 @@ graph LR
     ATG --> DEP
     DEP --> DX
 
-    subgraph CRAFT["craft/ (cross-cutting)"]
+    subgraph CONTEXT["context/ + authoring/"]
         IC[acs-init-context]
         MC[acs-manage-context]
     end
@@ -98,7 +104,7 @@ graph LR
     style TEST fill:#fff4e8,stroke:#e8923f
     style DEPLOY fill:#fef9e8,stroke:#c8a228
     style MAINTAIN fill:#fdf0f0,stroke:#c85a5a
-    style CRAFT fill:#f5f5f5,stroke:#999
+    style CONTEXT fill:#f5f5f5,stroke:#999
 ```
 
 ## Public catalog

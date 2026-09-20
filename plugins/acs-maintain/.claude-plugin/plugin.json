@@ -1,0 +1,12 @@
+{
+  "name": "acs-maintain",
+  "version": "0.3.0",
+  "description": "Incident diagnosis, monitoring, and operations skills for the ACS suite.",
+  "author": {
+    "name": "Xinhe LIU",
+    "url": "https://github.com/XinheLIU"
+  },
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "license": "MIT",
+  "skills": "./skills/"
+}
