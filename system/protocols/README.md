@@ -257,6 +257,5 @@ python3 scripts/validate-protocols.py
 
 ## See Also
 
-- [Skill Name Migration](../docs/skill-name-migration.md) — Historical ACS namespace migration
 - [Harness Architecture](../docs/harness-architecture.md) — Runtime integration boundaries
 - [Build Catalog Script](../../scripts/build-catalog.mjs) — Catalog generation with protocol resolution

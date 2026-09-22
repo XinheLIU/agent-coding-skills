@@ -16,7 +16,7 @@ The existing-product lane adapts selected principles from [`product-on-purpose/p
 
 ## Matt Pocock skills
 
-The adapted skills listed in [the organization report](docs/organization-report.md) were influenced by [`mattpocock/skills`](https://github.com/mattpocock/skills), licensed under the MIT License.
+The adapted skills listed in the organization report were influenced by [`mattpocock/skills`](https://github.com/mattpocock/skills), licensed under the MIT License.
 
 - Revision `2ab958093e83e0ec752e6c1c5932da465bf23e0c`: `grill-me`, `grill-with-docs`, `grilling`, `to-spec`, `to-tickets`.
 - Revision `ed37663cc5fbef691ddfecd080dff42f7e7e350d`: the other 17 audited skills.
