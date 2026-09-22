@@ -1,0 +1,9 @@
+{
+  "name": "acs-design",
+  "version": "0.4.0",
+  "description": "ACS design phase - requirements, UX, architecture",
+  "main": "catalog/skill-set.json",
+  "keywords": ["agent", "coding", "design", "architecture", "ux"],
+  "dependencies": { "acs-context": "^0.4.0" },
+  "peerDependencies": { "acs-plan": "^0.4.0" }
+}

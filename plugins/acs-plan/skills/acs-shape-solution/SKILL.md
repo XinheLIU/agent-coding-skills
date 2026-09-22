@@ -20,7 +20,7 @@ context:
   handoff_to: [product, design]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Three narrative outputs plus the scenarios they imply — for new ideas and already-mapped
@@ -44,7 +44,7 @@ Full framework detail, examples, and failure modes: [references/framework.md](re
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../../protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read users/problems, demand assessments, current capabilities and coverage, gaps, and accepted decisions. Enrich shared personas and capabilities with proposed behavior and scenarios; reuse established answers.

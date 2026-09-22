@@ -1,0 +1,25 @@
+{
+  "name": "acs-build",
+  "version": "0.4.0",
+  "phase": "build",
+  "skills": [
+    {
+      "name": "acs-plan-delivery",
+      "phase": "build",
+      "path": "skills/acs-plan-delivery/SKILL.md",
+      "description": "Turn accepted product scope or designs into delivery tickets and an openable HTML plan with an embedded DAG. Use after scope confirmation, to break a substantial change into smaller tickets, or to reconcile dependencies and readiness as decisions and execution change."
+    },
+    {
+      "name": "acs-implement",
+      "phase": "build",
+      "path": "skills/acs-implement/SKILL.md",
+      "description": "Deliver a verifiable change end-to-end using dependency-ordered tickets from acs-plan-delivery, criterion-based execution, and running-system verification. Use for accepted bootstrap, feature, or bugfix scope; execute serially or through authorized host delegation."
+    },
+    {
+      "name": "acs-tdd",
+      "phase": "build",
+      "path": "skills/acs-tdd/SKILL.md",
+      "description": "Execute one ticket through criterion-based red-green-refactor loops, directly or dispatched by acs-implement. Receives acceptance criteria and prerequisite evidence; returns criterion → test/evidence → revision mapping. Whole-change delivery starts from acs-implement."
+    }
+  ]
+}

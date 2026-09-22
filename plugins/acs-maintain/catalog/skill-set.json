@@ -1,0 +1,11 @@
+{
+  "name": "acs-maintain",
+  "version": "0.4.0",
+  "skills": [
+    {
+      "id": "acs-diagnose-incident",
+      "phase": "maintain",
+      "description": "Diagnose hard bugs and performance regressions through a red-capable feedback loop, evidence log, and regression test. Use when behavior is broken, intermittent, slow, or resistant to an obvious fix."
+    }
+  ]
+}

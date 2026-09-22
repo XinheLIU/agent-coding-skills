@@ -17,14 +17,14 @@ context:
   handoff_to: [interaction_design, visual_design]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 # Design Context
 
 Establish the design authority every other UX skill depends on: a canonical `DESIGN.md` at the project root.
 
-Shared design understanding is a triad — `product.html` is **why**, `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** ([../../protocols/design-memory.md](../../protocols/design-memory.md)). This skill owns the **how**. It resolves design authority from whatever exists — a `DESIGN.md` already at the root, a reference site or brand, a legacy `docs/design/system.md`, or nothing — and leaves one canonical `DESIGN.md` behind. It does not design; it decides authority.
+Shared design understanding is a triad — `product.html` is **why**, `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** ([references/design-memory.md](references/design-memory.md)). This skill owns the **how**. It resolves design authority from whatever exists — a `DESIGN.md` already at the root, a reference site or brand, a legacy `docs/design/system.md`, or nothing — and leaves one canonical `DESIGN.md` behind. It does not design; it decides authority.
 
 ## When to Use
 
@@ -171,11 +171,11 @@ Report:
 
 ## Accepted decision handoff
 
-At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](../../protocols/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 
-Full contract: [../../protocols/design-memory.md](../../protocols/design-memory.md).
+Full contract: [references/design-memory.md](references/design-memory.md).
 
 
 Use coordinator-supplied paths and the active change identity; do not repeat path discovery.

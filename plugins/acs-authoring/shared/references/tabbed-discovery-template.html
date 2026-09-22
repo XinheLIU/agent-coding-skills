@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discovery Report — Tabbed Template</title>
+<style>
+/* CSS Variables for light/dark mode */
+:root {
+  --bg: #fbfaf8;
+  --fg: #1c1917;
+  --mut: #78716c;
+  --line: #e7e5e4;
+  --acc: #6366f1;
+  --problem: #dc2626;
+  --warn: #d97706;
+  --ok: #16a34a;
+  --neutral: #64748b;
+  --code-bg: #f5f5f4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1917;
+    --fg: #fafaf9;
+    --mut: #a8a29e;
+    --line: #44403c;
+    --acc: #818cf8;
+    --problem: #f87171;
+    --warn: #fbbf24;
+    --ok: #4ade80;
+    --neutral: #94a3b8;
+    --code-bg: #292524;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 ui-sans-serif, -apple-system, system-ui, sans-serif;
+  padding: 0;
+}
+
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.3em;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 1.8em 0 0.8em;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.4em 0 0.6em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0.8em 0 0.4em;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--mut);
+}
+
+p {
+  margin: 0.6em 0;
+}
+
+.subtitle {
+  color: var(--mut);
+  font-size: 0.9rem;
+  margin: 0 0 2em;
+}
+
+/* Metrics Card */
+.metrics-card {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.2em 1.5em;
+  margin: 0 0 2em;
+}
+
+.metrics-row {
+  display: flex;
+  gap: 2em;
+  flex-wrap: wrap;
+  margin-bottom: 0.8em;
+}
+
+.metric {
+  flex: 0 1 auto;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--acc);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mut);
+  margin-top: 0.2em;
+}
+
+.status-row {
+  display: flex;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.2em 0.65em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.badge-problem { background: var(--problem); color: white; }
+.badge-warn { background: var(--warn); color: white; }
+.badge-ok { background: var(--ok); color: white; }
+.badge-neutral { background: var(--neutral); color: white; }
+.badge-high { background: var(--problem); color: white; }
+.badge-medium { background: var(--warn); color: white; }
+.badge-low { background: var(--neutral); color: white; }
+.badge-decided { background: var(--ok); color: white; }
+.badge-pending { background: var(--neutral); color: white; }
+.badge-ready { background: var(--ok); color: white; }
+.badge-blocked { background: var(--problem); color: white; }
+
+/* Tabs */
+.tabs {
+  margin: 2em 0;
+}
+
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--line);
+  margin-bottom: 2em;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--mut);
+  font: inherit;
+  font-weight: 600;
+  padding: 0.7em 1.5em;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--fg);
+  background: var(--code-bg);
+}
+
+.tab-btn.active {
+  color: var(--acc);
+  border-bottom-color: var(--acc);
+}
+
+.tab-btn:focus {
+  outline: 2px solid var(--acc);
+  outline-offset: -2px;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Sub-tabs (nested) */
+.sub-tabs {
+  margin: 1.5em 0;
+}
+
+.sub-tab-nav {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 1.5em;
+  flex-wrap: wrap;
+}
+
+.sub-tab-btn {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  color: var(--mut);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.sub-tab-btn:hover {
+  color: var(--fg);
+  border-color: var(--acc);
+}
+
+.sub-tab-btn.active {
+  background: var(--acc);
+  color: white;
+  border-color: var(--acc);
+}
+
+.sub-tab-panel {
+  display: none;
+}
+
+.sub-tab-panel.active {
+  display: block;
+}
+
+/* Comparison Card */
+.comparison-card {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--problem);
+  border-radius: 6px;
+  padding: 1.5em;
+  margin: 1.5em 0;
+}
+
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em;
+  margin: 1.2em 0;
+}
+
+@media (max-width: 640px) {
+  .comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
+.before, .after {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+}
+
+.before h4 { color: var(--problem); }
+.after h4 { color: var(--ok); }
+
+.diagram {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+  padding: 0.5em;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  background: var(--bg);
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.8em 1em;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+.cost, .gain {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 0.5em 0.8em;
+  border-radius: 4px;
+}
+
+.cost {
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--problem);
+}
+
+.gain {
+  background: rgba(22, 163, 74, 0.1);
+  color: var(--ok);
+}
+
+/* Decision Callout */
+.decision-callout {
+  background: var(--code-bg);
+  border: 1px solid var(--acc);
+  border-left: 4px solid var(--acc);
+  border-radius: 6px;
+  padding: 1.2em 1.5em;
+  margin: 1.5em 0;
+}
+
+.decision-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.8em;
+}
+
+.decision-icon {
+  font-size: 1.3rem;
+}
+
+.decision-body p {
+  margin: 0.5em 0;
+}
+
+.timing {
+  font-size: 0.9rem;
+  color: var(--mut);
+  font-style: italic;
+  margin-top: 0.8em;
+}
+
+/* Timeline */
+.timeline {
+  margin: 2em 0;
+}
+
+.timeline-step {
+  display: flex;
+  gap: 1.5em;
+  margin: 1.5em 0;
+  position: relative;
+}
+
+.timeline-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 42px;
+  bottom: -24px;
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline-marker {
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--acc);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+  z-index: 1;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-top: 0.3em;
+}
+
+.timeline-content h4 {
+  margin-top: 0;
+  color: var(--fg);
+  text-transform: none;
+  font-size: 1rem;
+}
+
+.timeline-content p {
+  color: var(--mut);
+  font-size: 0.9rem;
+  margin: 0.4em 0 0.6em;
+}
+
+/* Details/Summary */
+details {
+  margin: 1em 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.8em 1em;
+  background: var(--bg);
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--acc);
+  user-select: none;
+}
+
+summary::-webkit-details-marker {
+  color: var(--acc);
+}
+
+details[open] summary {
+  margin-bottom: 0.8em;
+  padding-bottom: 0.8em;
+  border-bottom: 1px solid var(--line);
+}
+
+details ul {
+  padding-left: 1.5em;
+  margin: 0.5em 0 0;
+}
+
+details li {
+  margin: 0.4em 0;
+}
+
+/* List styles */
+ul, ol {
+  padding-left: 1.5em;
+}
+
+li {
+  margin: 0.3em 0;
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- Header: Title + Subtitle -->
+<h1>Discovery Report Template</h1>
+<p class="subtitle">Last updated: 2026-09-19 · Example tabbed structure</p>
+
+<!-- Metrics Card: At-a-glance summary -->
+<div class="metrics-card">
+  <div class="metrics-row">
+    <div class="metric">
+      <div class="metric-value">193 → 60</div>
+      <div class="metric-label">Lines reduced</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">16 → 1</div>
+      <div class="metric-label">Write paths</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">4 / 4</div>
+      <div class="metric-label">Layers affected</div>
+    </div>
+  </div>
+  <div class="status-row">
+    <span class="badge badge-problem">4 problems</span>
+    <span class="badge badge-decided">3 decided</span>
+    <span class="badge badge-pending">2 undecided</span>
+  </div>
+</div>
+
+<!-- Tab Interface -->
+<div class="tabs" role="tablist">
+  <nav class="tab-nav">
+    <button class="tab-btn active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="problems-panel"
+            id="tab-problems"
+            data-tab="problems">
+      Problems
+    </button>
+    <button class="tab-btn"
+            role="tab"
+            aria-selected="false"
+            aria-controls="design-panel"
+            id="tab-design"
+            data-tab="design">
+      Design
+    </button>
+    <button class="tab-btn"
+            role="tab"
+            aria-selected="false"
+            aria-controls="migration-panel"
+            id="tab-migration"
+            data-tab="migration">
+      Migration
+    </button>
+  </nav>
+
+  <!-- Tab 1: Problems -->
+  <div class="tab-panel active"
+       id="problems-panel"
+       role="tabpanel"
+       aria-labelledby="tab-problems">
+
+    <h2>Identified Problems</h2>
+    <p>Current architecture has 4 structural issues across the layering boundary.</p>
+
+    <!-- Example Problem Card 1 -->
+    <div class="comparison-card">
+      <h3>
+        Problem 1: Schema Leak
+        <span class="badge badge-high">High</span>
+      </h3>
+
+      <div class="comparison">
+        <div class="before">
+          <h4>Current ❌</h4>
+          <svg class="diagram" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="260" height="40" fill="none" stroke="#dc2626" stroke-width="2"/>
+            <text x="140" y="35" text-anchor="middle" fill="currentColor" font-size="14" font-weight="600">SKILL.md (193 lines)</text>
+            <rect x="10" y="70" width="260" height="40" fill="none" stroke="#78716c" stroke-width="1"/>
+            <text x="140" y="95" text-anchor="middle" fill="currentColor" font-size="14">CLI</text>
+            <path d="M 80 50 L 80 70" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowred)"/>
+            <text x="85" y="65" fill="#dc2626" font-size="11">leak</text>
+            <defs>
+              <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+              </marker>
+            </defs>
+          </svg>
+          <pre><code>// 120 lines of schema in SKILL.md
+statuses: ["planned", "active", ...]
+projectNatures: [...]
+codeFormats: [...]</code></pre>
+          <p class="cost">Cost: Goes stale after DB migration, no type safety</p>
+        </div>
+
+        <div class="after">
+          <h4>Target ✅</h4>
+          <svg class="diagram" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="260" height="40" fill="none" stroke="#16a34a" stroke-width="2"/>
+            <text x="140" y="35" text-anchor="middle" fill="currentColor" font-size="14" font-weight="600">SKILL.md (60 lines)</text>
+            <rect x="10" y="70" width="260" height="40" fill="none" stroke="#16a34a" stroke-width="2"/>
+            <text x="140" y="95" text-anchor="middle" fill="currentColor" font-size="14">CLI (schema describe)</text>
+            <path d="M 140 50 L 140 70" stroke="#16a34a" stroke-width="2" marker-end="url(#arrowgreen)"/>
+            <defs>
+              <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a"/>
+              </marker>
+            </defs>
+          </svg>
+          <pre><code>// Skill fetches live schema
+horizon schema describe --output json
+// Returns: {statuses, natures, ...}</code></pre>
+          <p class="gain">Gain: Single source of truth, always current, type-safe</p>
+        </div>
+      </div>
+
+      <details class="evidence">
+        <summary>Evidence (3 files affected)</summary>
+        <ul>
+          <li><code>project-manager/SKILL.md:45-165</code> — 120 lines of enumerated schema</li>
+          <li><code>projectPlanCommands.ts</code> — validation duplicates schema definitions</li>
+          <li><code>worklogCommands.ts</code> — status checks hardcoded from SKILL.md</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- Placeholder for Problems 2-4 -->
+    <div class="comparison-card">
+      <h3>
+        Problem 2: Aggregation Logic Leak
+        <span class="badge badge-medium">Medium</span>
+      </h3>
+      <p>Placeholder: CLI pulls full project graph + people, then triages in-memory. Should be server-side derived views.</p>
+    </div>
+
+    <div class="comparison-card">
+      <h3>
+        Problem 3: Consent Leaks to Prose
+        <span class="badge badge-high">High</span>
+      </h3>
+      <p>Placeholder: <code>--yes</code> is a token the model can type. Not real consent.</p>
+    </div>
+
+    <div class="comparison-card">
+      <h3>
+        Problem 4: No Batch Writes
+        <span class="badge badge-high">High</span>
+      </h3>
+      <p>Placeholder: Version increments after each write. Second command in a batch is always stale.</p>
+    </div>
+
+  </div>
+
+  <!-- Tab 2: Design -->
+  <div class="tab-panel"
+       id="design-panel"
+       role="tabpanel"
+       aria-labelledby="tab-design"
+       hidden>
+
+    <h2>Target Design</h2>
+    <p>Refactor into 4 layers by authority, with purpose-specific CLI surfaces and unified change-set writes.</p>
+
+    <!-- Nested Sub-tabs for Design Options -->
+    <div class="sub-tabs">
+      <nav class="sub-tab-nav" role="tablist">
+        <button class="sub-tab-btn active" role="tab" data-subtab="cli-read">CLI Read</button>
+        <button class="sub-tab-btn" role="tab" data-subtab="cli-write">CLI Write</button>
+        <button class="sub-tab-btn" role="tab" data-subtab="skill">Skill Layer</button>
+        <button class="sub-tab-btn" role="tab" data-subtab="harness">Harness</button>
+      </nav>
+
+      <div class="sub-tab-panel active" id="cli-read" role="tabpanel">
+        <h3>CLI Read: Answer-Shaped Views</h3>
+        <p><strong>Principle:</strong> CLI returns "me/project/team最近在忙什么" as a complete answer, not raw rows for the model to infer from.</p>
+        <pre><code>horizon report me --since 4w
+horizon report project &lt;ref&gt;
+horizon report person &lt;ref&gt; --since 4w
+horizon report team --week current</code></pre>
+        <p>Server derives signals (overdue, no_worklog_3w) once. Model narrates, doesn't judge thresholds.</p>
+      </div>
+
+      <div class="sub-tab-panel" id="cli-write" role="tabpanel" hidden>
+        <h3>CLI Write: Single Change-Set Pipeline</h3>
+        <p><strong>Principle:</strong> One change-set file covers all CRUD ops. One version check, one consent, one audit record.</p>
+        <pre><code>horizon plan diff --project &lt;ref&gt; --change-set cs.json
+horizon plan preview --project &lt;ref&gt; --change-set cs.json
+horizon plan apply --project &lt;ref&gt; --change-set cs.json \
+  --preview-fingerprint &lt;fp&gt; --consent &lt;token&gt;</code></pre>
+        <p>Replaces 16 individual write paths. Batch edits now expressible.</p>
+      </div>
+
+      <div class="sub-tab-panel" id="skill" role="tabpanel" hidden>
+        <h3>Skill Layer: Intent Only, Zero Facts</h3>
+        <p><strong>Principle:</strong> SKILL.md contains no value that migration could change.</p>
+        <pre><code>horizon schema describe --output json
+→ {statuses, projectNatures, codeFormats, ...}</code></pre>
+        <p>Skill fetches schema on demand. 193-line SKILL.md → 60 lines.</p>
+      </div>
+
+      <div class="sub-tab-panel" id="harness" role="tabpanel" hidden>
+        <h3>Harness: Unforgeable Consent</h3>
+        <p><strong>Principle:</strong> Harness is the only layer that can distinguish "user said yes" from "model said user said yes".</p>
+        <p><code>plan preview</code> returns <code>consentChallenge</code>. <code>plan apply</code> requires <code>--consent &lt;token&gt;</code> from harness approval flow.</p>
+        <p>Model can pass token but cannot mint it.</p>
+      </div>
+    </div>
+
+    <!-- Decision History Callout -->
+    <div class="decision-callout">
+      <div class="decision-header">
+        <span class="decision-icon">📍</span>
+        <strong>Decision (2026-09-17):</strong> Single skill, not 4 separate skills
+      </div>
+      <div class="decision-body">
+        <p><strong>Context:</strong> impeccable v3.0 merged 17 skills → 1. Same judgment criteria apply here.</p>
+        <details>
+          <summary>Rationale (4 criteria matched)</summary>
+          <ul>
+            <li><strong>Description conflict:</strong> "what did I do last week" would trigger both <code>horizon-report</code> and <code>horizon-worklog-entry</code></li>
+            <li><strong>Implicit state handoff:</strong> <code>preview → fingerprint → apply</code> is a stale-able snapshot chain (like critique→polish)</li>
+            <li><strong>Shared reference:</strong> <code>cli-contract.md</code> needed by all 4 proposed skills</li>
+            <li><strong>Enumerable commands:</strong> <code>auth/context/report/plan/worklogs</code> fit a Commands table perfectly</li>
+          </ul>
+        </details>
+        <p class="timing">Timing: routing散文 currently in only 1 SKILL.md, not yet copied 20 times — right moment to consolidate</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tab 3: Migration -->
+  <div class="tab-panel"
+       id="migration-panel"
+       role="tabpanel"
+       aria-labelledby="tab-migration"
+       hidden>
+
+    <h2>Migration Path</h2>
+    <p>5 steps, ordered by dependency. Steps 1-2 and 3-4 can run in parallel.</p>
+
+    <div class="timeline">
+      <div class="timeline-step">
+        <div class="timeline-marker">1</div>
+        <div class="timeline-content">
+          <h4><code>horizon schema describe</code> + strip enums from SKILL.md</h4>
+          <p>Stops schema drift immediately. No server changes needed.</p>
+          <span class="badge badge-ready">Ready</span>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-marker">2</div>
+        <div class="timeline-content">
+          <h4><code>horizon report *</code> + purpose-specific server reads</h4>
+          <p>Unlocks all read诉求. Depends on Phase 2 of improvement-plan (already accepted).</p>
+          <span class="badge badge-blocked">Needs API</span>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-marker">3</div>
+        <div class="timeline-content">
+          <h4>Change-set <code>plan diff/preview/apply</code></h4>
+          <p>Unlocks batch writes. Existing verbs become sugar (compile to single-op change-sets).</p>
+          <span class="badge badge-ready">Ready</span>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-marker">4</div>
+        <div class="timeline-content">
+          <h4>Consent challenge + harness capability fixtures</h4>
+          <p>Closes <code>--yes</code> gap. Harness without <code>consent.redeem</code> gets reads + <code>plan diff</code> only.</p>
+          <span class="badge badge-pending">Design</span>
+        </div>
+      </div>
+
+      <div class="timeline-step">
+        <div class="timeline-marker">5</div>
+        <div class="timeline-content">
+          <h4>Rewrite Skills, retire <code>manage.ts</code> service-token path</h4>
+          <p>After new CLI面 proven, replace old skill and remove direct-write backdoor.</p>
+          <span class="badge badge-pending">Later</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</main>
+
+<script>
+(function() {
+  'use strict';
+
+  // Main tabs
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  function activateTab(targetId) {
+    tabs.forEach(tab => {
+      const isActive = tab.dataset.tab === targetId;
+      tab.classList.toggle('active', isActive);
+      tab.setAttribute('aria-selected', isActive);
+    });
+
+    panels.forEach(panel => {
+      const isActive = panel.id === targetId + '-panel';
+      panel.classList.toggle('active', isActive);
+      panel.hidden = !isActive;
+    });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      activateTab(tab.dataset.tab);
+    });
+
+    // Keyboard navigation
+    tab.addEventListener('keydown', (e) => {
+      const tabArray = Array.from(tabs);
+      const currentIndex = tabArray.indexOf(tab);
+
+      let targetIndex = currentIndex;
+      if (e.key === 'ArrowRight') targetIndex = (currentIndex + 1) % tabs.length;
+      if (e.key === 'ArrowLeft') targetIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      if (e.key === 'Home') targetIndex = 0;
+      if (e.key === 'End') targetIndex = tabs.length - 1;
+
+      if (targetIndex !== currentIndex) {
+        e.preventDefault();
+        tabArray[targetIndex].focus();
+        activateTab(tabArray[targetIndex].dataset.tab);
+      }
+    });
+  });
+
+  // Initialize: activate first tab
+  if (tabs.length > 0) activateTab(tabs[0].dataset.tab);
+
+  // Sub-tabs
+  const subTabs = document.querySelectorAll('.sub-tab-btn');
+  const subPanels = document.querySelectorAll('.sub-tab-panel');
+
+  function activateSubTab(targetId) {
+    subTabs.forEach(tab => {
+      const isActive = tab.dataset.subtab === targetId;
+      tab.classList.toggle('active', isActive);
+    });
+
+    subPanels.forEach(panel => {
+      const isActive = panel.id === targetId;
+      panel.classList.toggle('active', isActive);
+      panel.hidden = !isActive;
+    });
+  }
+
+  subTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      activateSubTab(tab.dataset.subtab);
+    });
+  });
+
+  // Initialize: activate first sub-tab
+  if (subTabs.length > 0) activateSubTab(subTabs[0].dataset.subtab);
+
+  // Optional: URL hash navigation
+  if (window.location.hash) {
+    const hashTab = window.location.hash.slice(1);
+    if (document.getElementById(hashTab + '-panel')) {
+      activateTab(hashTab);
+    }
+  }
+})();
+</script>
+
+</body>
+</html>

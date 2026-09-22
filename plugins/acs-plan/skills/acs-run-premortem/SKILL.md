@@ -20,18 +20,18 @@ context:
   handoff_to: [product, design, operations]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Run a 6-phase "project autopsy" starting from an assumed total failure, then produce a
 risk analysis that enriches shared HTML product memory. The autopsy is a dialogue: the
 user holds context the records do not, and the output is a reading of the risks that the
 user has confirmed or explicitly disputed — not a list the model believes is true.
-Questioning and confirmation follow [the shared-understanding protocol](../acs-validate-demand/references/shared-understanding.md).
+Questioning and confirmation follow [the shared-understanding protocol](references/shared-understanding.md).
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../../protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read the supplied plan or existing scope, relevant demand evidence, capabilities, gaps, and risks. Enrich existing failure scenarios before adding new ones. Hypothetical failures and quotes are exercises, never observed evidence.
@@ -147,7 +147,7 @@ Examples of the required format:
 
 ## Phase 6: Enrich shared risks
 
-Before persisting, run the close from `../acs-validate-demand/references/shared-understanding.md`: state what the
+Before persisting, run the close from `references/shared-understanding.md`: state what the
 autopsy established, what remains assumption, and where the user disputed a score or a
 cause — and apply their corrections. Confirmed and disputed readings are recorded
 distinctly; a disputed risk carries both readings.

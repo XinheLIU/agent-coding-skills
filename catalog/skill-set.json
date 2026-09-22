@@ -4,7 +4,7 @@
   "title": "Agent Coding System",
   "tagline": "Plan, design, build, test, deploy, and maintain software with shared agent memory.",
   "description": "A coordinated engineering system covering the full AI-native SDLC: product discovery, requirements, UX and technical design, feature delivery, testing, deployment, and autonomous maintenance.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": "https://github.com/XinheLIU/agent-coding-skills",
   "accent": "rust",
   "sourcePattern": "system/skills-src/{category}/{skill}/SKILL.md",
@@ -120,6 +120,68 @@
         "acs-review-agent-instructions",
         "acs-challenge-approach"
       ]
+    }
+  ],
+  "plugins": [
+    {
+      "name": "acs-context",
+      "version": "0.4.0",
+      "description": "ACS foundational context and memory infrastructure",
+      "phase": "context",
+      "skillCount": 5,
+      "dependencies": []
+    },
+    {
+      "name": "acs-plan",
+      "version": "0.4.0",
+      "description": "ACS planning phase - discovery, validation, PRD generation",
+      "phase": "plan",
+      "skillCount": 10,
+      "dependencies": ["acs-context"]
+    },
+    {
+      "name": "acs-design",
+      "version": "0.4.0",
+      "description": "ACS design phase - requirements, UX, architecture",
+      "phase": "design",
+      "skillCount": 12,
+      "dependencies": ["acs-context"],
+      "peerDependencies": ["acs-plan"]
+    },
+    {
+      "name": "acs-build",
+      "version": "0.4.0",
+      "description": "ACS build phase - delivery planning, TDD, implementation",
+      "phase": "build",
+      "skillCount": 3,
+      "dependencies": ["acs-context"],
+      "peerDependencies": ["acs-design"]
+    },
+    {
+      "name": "acs-test",
+      "version": "0.4.0",
+      "description": "ACS test phase - coverage, review, debugging",
+      "phase": "test",
+      "skillCount": 8,
+      "dependencies": ["acs-context"],
+      "peerDependencies": ["acs-build"]
+    },
+    {
+      "name": "acs-maintain",
+      "version": "0.4.0",
+      "description": "ACS maintain phase - incident diagnosis and fixes",
+      "phase": "maintain",
+      "skillCount": 1,
+      "dependencies": ["acs-context"],
+      "peerDependencies": ["acs-test"]
+    },
+    {
+      "name": "acs-authoring",
+      "version": "0.4.0",
+      "description": "ACS meta-tooling - research, DAG visualization, skill development",
+      "phase": "authoring",
+      "skillCount": 5,
+      "dependencies": ["acs-context"]
     }
   ]
 }

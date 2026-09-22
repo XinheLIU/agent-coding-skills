@@ -20,7 +20,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Design the cheapest credible way to resolve a specific product uncertainty. The output is an experiment design — not a product definition. After the experiment runs, its evidence returns to `acs-shape-solution` if it changes the target experience, or to `acs-define-outcomes` if the solution holds but a commitment needs adjustment.

@@ -1,0 +1,63 @@
+{
+  "name": "acs-test",
+  "version": "0.4.0",
+  "phase": "test",
+  "skills": [
+    {
+      "name": "acs-analyze-test-gaps",
+      "path": "skills/acs-analyze-test-gaps",
+      "phase": "test",
+      "category": "coverage",
+      "description": "Audit a codebase's test adequacy from the perspective of business-critical paths, not file/line coverage. Produces three linked evidence sections or artifacts across four steps: `critical-paths.md` (what should be tested), `test-status.md` (what is tested + a one-shot run health snapshot), and `test-gaps.md` (a focused P0/P1 list, max 20 items, ~5–10 P0s). Triggers: \"audit our tests\", \"are our tests good enough\", \"test gap analysis\", \"before we refactor X is the test net strong enough\", \"test health check\", \"what tests are missing\", \"review test coverage by business flow\". Use this instead of per-file coverage tools when the question is \"do tests protect the flows that actually matter?\". MECE with `code-reviewer` (which scores diff-level test quality) and `acs-review-code-quality` (which gates a PR)."
+    },
+    {
+      "name": "acs-refactor-code",
+      "path": "skills/acs-refactor-code",
+      "phase": "test",
+      "category": "review",
+      "description": "Improve existing code without changing behavior, at two depths. Depth 1 — quick polish of recently modified code — renames vague identifiers, flattens nesting with early returns, drops redundant wrappers and dead comments, aligns with the repo's style guide; applied directly, verified by tests. Depth 2 — structural refactor — extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units; workflow is scope confirmation → baseline metrics → ranked proposal → user approval → grouped edits with tests between groups → re-measured before/after report. Triggers: \"refactor\", \"simplify\", \"polish\", \"clean up what I just wrote\", \"reduce duplication\", \"break up this class\". Tests are the safety net; behavior must not change."
+    },
+    {
+      "name": "acs-review-architecture",
+      "path": "skills/acs-review-architecture",
+      "phase": "test",
+      "category": "review",
+      "description": "Run a comprehensive architecture review across TOGAF 4A (Business / Application / Data / Technology), Deploy, and ADR aspects, by orchestrating per-aspect explore/review subagent pairs in parallel. Asks the user which aspects and scope to cover, then consolidates findings into one design-level report with per-aspect detail and an ADR ledger. Use when the user says \"architecture review\", \"arch review\", \"audit architecture\", \"review the design\", or wants a holistic design-quality read on the codebase. Boundary: this skill judges the system's design. Code-level defects (handler bugs, query smells, missing timeouts, perf hotspots, test gaps) belong to `acs-review-code-quality`."
+    },
+    {
+      "name": "acs-review-code-quality",
+      "path": "skills/acs-review-code-quality",
+      "phase": "test",
+      "category": "review",
+      "description": "Run a production-readiness code review. Orchestrates domain subagent pairs (api, db, auth, reliability, performance, security, code-reviewer) in parallel when available; falls back to inline review when they aren't. Produces confidence-calibrated findings, a test-coverage diagram, a prioritized next-steps plan (CRITICAL → IMPORTANT → NICE-TO-HAVE), and a merge verdict. Findings are tagged on two axes — Standards (code vs this repo's conventions and quality bar) and Spec (code vs what the plan/issue asked for) — reported separately, never reranked against each other. Supports three modes: (A) recent-changes via git diff [default], (B) whole codebase vs spec/rules, (C) drill-down after an architecture review. Triggers: \"review my code\", \"code review\", \"review this PR\", \"review recent changes\", \"review against spec\", \"verify my changes\", \"review before commit/merge\", \"drill into arch review\", \"what should I work on next\", \"ready for PR?\". Consumes a matching change/revision gap-analysis artifact from acs-review-implementation-gaps when present."
+    },
+    {
+      "name": "acs-review-design-doc",
+      "path": "skills/acs-review-design-doc",
+      "phase": "test",
+      "category": "review",
+      "description": "Engineering review of a design doc (DESIGN.md, docs/plans/*.md) BEFORE any code is written. Catches scope creep, implicit assumptions, missing failure modes, and overcomplexity in the plan itself. Use this skill whenever the user asks to \"review the plan\", \"review my DESIGN.md\", \"check my design doc\", \"is the plan ready\", or mentions they are about to start coding from a plan/spec document. Also use proactively when the user shares a design doc and is about to start implementation — catching plan-stage issues is 10x cheaper than finding them after code is written."
+    },
+    {
+      "name": "acs-review-implementation-gaps",
+      "path": "skills/acs-review-implementation-gaps",
+      "phase": "test",
+      "category": "review",
+      "description": "Compare the current codebase against a design doc (DESIGN.md, docs/plans/*.md) and produce a structured gap analysis — what's complete, partial, missing, divergent, or unexpected scope creep. Use this skill whenever the user asks \"what's left to do\", \"gap analysis\", \"am I done with the plan\", \"compare code to the plan\", or \"what did I miss from the design\". Also use when a plan is partway implemented and the user is about to continue — knowing the current gap map prevents re-implementing finished work or skipping unfinished work. Writes a machine-readable-ish artifact that the acs-review-code-quality skill auto-consumes."
+    },
+    {
+      "name": "acs-resolving-merge-conflicts",
+      "path": "skills/acs-resolving-merge-conflicts",
+      "phase": "test",
+      "category": "debugging",
+      "description": "Resolve an in-progress Git merge or rebase from both sides' documented intent. Use only when conflict markers or Git state show an active conflict operation."
+    },
+    {
+      "name": "acs-triage",
+      "path": "skills/acs-triage",
+      "phase": "test",
+      "category": "debugging",
+      "description": "Move incoming issues or external pull requests through a configured triage state machine and persist durable agent briefs. Use for unlabeled requests, needs-info follow-up, or selecting agent-ready work."
+    }
+  ]
+}
