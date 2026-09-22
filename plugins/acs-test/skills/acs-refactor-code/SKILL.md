@@ -17,7 +17,7 @@ context:
   handoff_to: [testing, design, code_review]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 # Refactor Code
@@ -26,7 +26,7 @@ You improve the internal structure of existing code while keeping every external
 
 ## Context and preservation contract
 
-Read [engineering context](../../protocols/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
+Read [engineering context](../../../craft/context/acs-init-context/references/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
 
 Capture before/after source revisions or diff identities and equivalent checks/environment. Return `change.preservation_evidence`: invariant/criterion → before/after check → result, structural delta, omissions, and next action. If module boundaries or dependency rules change, update the configured System State with current evidence and amend or supersede applicable ADRs while preserving history. When another owner must author an amendment, return a blocking handoff until it is reconciled. If architecture is unchanged, record that assessment without creating an empty ADR. External behavior changes return to Product/Design for scope resolution.
 

@@ -20,7 +20,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Product ideation has two lanes: greenfield creation and existing-product improvement. Most
@@ -55,7 +55,7 @@ architecture refactor or code-quality cleanup.
 
 ## Step 1: Read shared product knowledge
 
-Read [the product memory contract](../../protocols/product-memory.md), `docs/agents/memory.md`, and active `state.md`. Resolve the durable `product.html` and working `discovery.html` through their pointers; read legacy documents when those remain canonical. Follow relevant record anchors and inspect their evidence, authority, coverage, and review state. This skill reads records and routes; it does not update product findings.
+Read [the product memory contract](references/product-memory.md), `docs/agents/memory.md`, and active `state.md`. Resolve the durable `product.html` and working `discovery.html` through their pointers; read legacy documents when those remain canonical. Follow relevant record anchors and inspect their evidence, authority, coverage, and review state. This skill reads records and routes; it does not update product findings.
 
 | Knowledge needed | Ready when |
 | --- | --- |

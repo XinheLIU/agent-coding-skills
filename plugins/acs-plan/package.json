@@ -1,0 +1,9 @@
+{
+  "name": "acs-plan",
+  "version": "0.4.0",
+  "description": "ACS planning phase - discovery, validation, PRD generation",
+  "main": "catalog/skill-set.json",
+  "keywords": ["agent", "coding", "planning", "prd", "discovery"],
+  "dependencies": { "acs-context": "^0.4.0" },
+  "peerDependencies": {}
+}

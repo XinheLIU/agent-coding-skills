@@ -29,7 +29,7 @@ context:
   handoff_to: [design, refactoring, code_review]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 You are running a holistic architecture review. Your job is **not** to do the reviews yourself — per-aspect explore/review subagent pairs do. Your job is to collect user intent, dispatch subagents in parallel, and consolidate findings into a design-level report.

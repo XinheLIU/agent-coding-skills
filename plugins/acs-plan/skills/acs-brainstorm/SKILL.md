@@ -20,7 +20,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Turn an ambiguous idea into a Jobs-to-be-Done brief through natural Socratic conversation.
@@ -35,7 +35,7 @@ This skill adapts the Socratic conversation pattern from [Jesse Hattabaugh's sup
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../../protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read existing users/problems, demand findings, relevant capabilities, and any selected idea. Enrich the same persona and problem records; keep feature suggestions proposed and link their unresolved questions.

@@ -19,10 +19,10 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Wayfinding resolves broad uncertainty. For accepted scope that needs delivery slices and specific design blockers, use `acs-plan-delivery`; share existing decision tickets between the two skills.
+Wayfinding resolves broad uncertainty. For accepted scope that needs delivery slices and specific design blockers, use [acs-plan-delivery](../../build/acs-plan-delivery/SKILL.md); share existing decision tickets between the two skills.
 
 ## Chart
 

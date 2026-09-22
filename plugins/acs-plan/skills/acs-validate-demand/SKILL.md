@@ -19,7 +19,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Decide whether a product idea has real demand behind it, and say so plainly.
@@ -32,7 +32,7 @@ Be direct. A clear Red that redirects a month of work is worth more than a hedge
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../../protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read the target problem and actor, existing demand assessments, relevant current behavior, and evidence. Add support or contradictions to existing records; distinguish a code observation from evidence of user demand.

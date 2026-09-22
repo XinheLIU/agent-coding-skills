@@ -1,0 +1,62 @@
+{
+  "name": "acs-authoring",
+  "version": "0.4.0",
+  "phase": "authoring",
+  "skills": [
+    {
+      "id": "acs-challenge-approach",
+      "name": "acs-challenge-approach",
+      "phase": "authoring",
+      "path": "skills/acs-challenge-approach/SKILL.md",
+      "description": "Resolve user-owned decisions one at a time. Use when choices that cannot be discovered from the environment block an idea, plan, design, triage brief, or wayfinder ticket.",
+      "dependencies": {
+        "required": ["acs-init-context"],
+        "optional": []
+      }
+    },
+    {
+      "id": "acs-draw-portfolio-dag",
+      "name": "acs-draw-portfolio-dag",
+      "phase": "authoring",
+      "path": "skills/acs-draw-portfolio-dag/SKILL.md",
+      "description": "Render Markdown workstreams and dependency tickets as an interactive HTML DAG or Mermaid flowchart. Use for portfolio sequencing, frontier visibility, cross-cutting ticket tags, or live progress rendering during an implement run.",
+      "dependencies": {
+        "required": ["acs-init-context"],
+        "optional": []
+      }
+    },
+    {
+      "id": "acs-research",
+      "name": "acs-research",
+      "phase": "authoring",
+      "path": "skills/acs-research/SKILL.md",
+      "description": "Resolve an external technical fact blocking an engineering decision, specification, diagnosis, or implementation, with cited primary evidence. Use for bounded engineering questions unavailable in the repository; learning-oriented synthesis and original research belong to the user's research workflow.",
+      "dependencies": {
+        "required": ["acs-init-context"],
+        "optional": []
+      }
+    },
+    {
+      "id": "acs-review-agent-instructions",
+      "name": "acs-review-agent-instructions",
+      "phase": "authoring",
+      "path": "skills/acs-review-agent-instructions/SKILL.md",
+      "description": "Review or update a repository's AGENTS.md or CLAUDE.md. Use to encode one incident lesson, repair instruction hierarchy and pointers, prune ineffective guidance, or reconnect shared-context routing; use acs-translate-agent-context for runtime migration.",
+      "dependencies": {
+        "required": ["acs-init-context"],
+        "optional": []
+      }
+    },
+    {
+      "id": "acs-writing-great-skills",
+      "name": "acs-writing-great-skills",
+      "phase": "authoring",
+      "path": "skills/acs-writing-great-skills/SKILL.md",
+      "description": "Author or revise a predictable system skill. Use when defining a skill's invocation boundary, procedure, references, completion criteria, or shared-memory contract.",
+      "dependencies": {
+        "required": ["acs-init-context"],
+        "optional": []
+      }
+    }
+  ]
+}

@@ -19,7 +19,7 @@ context:
   handoff_to: [visual_design, product, implementation]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Design the **how users interact** before the **how it looks**. Define information architecture, user flows, and all interaction states (loading, empty, error, success, partial) through low-fidelity wireframes.
@@ -538,11 +538,11 @@ docs/design/prototype.html      # Canonical prototype — wireframe sections, lo
 
 ## Accepted decision handoff
 
-At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](../../protocols/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 
-Full contract: [../../protocols/design-memory.md](../../protocols/design-memory.md).
+Full contract: [references/design-memory.md](references/design-memory.md).
 
 
 Use coordinator-supplied paths and the active change identity; do not repeat path discovery.

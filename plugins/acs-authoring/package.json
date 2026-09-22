@@ -1,0 +1,9 @@
+{
+  "name": "acs-authoring",
+  "version": "0.4.0",
+  "description": "ACS meta-tooling - research, DAG visualization, skill development",
+  "main": "catalog/skill-set.json",
+  "keywords": ["agent", "coding", "authoring", "meta", "tooling"],
+  "dependencies": { "acs-context": "^0.4.0" },
+  "peerDependencies": {}
+}

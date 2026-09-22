@@ -20,14 +20,14 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../../protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy migration. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
+Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy migration. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
 
 
 Resolve the product through user paths, `docs/agents/memory.md`, and active `state.md`. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.
@@ -115,7 +115,7 @@ remain open.
 
 ## Design and delivery handoff
 
-Once the user has confirmed scope for a concrete change and its canonical records are saved, invoke `acs-plan-delivery` as the default handoff. Supply the change ID, accepted outcomes/priorities, spec and decision references/revisions, and remaining questions. It generates and opens `docs/changes/<change-id>/delivery-plan.html` with the plan and embedded DAG. Reuse existing confirmation; a second request to draw the graph is unnecessary. For consolidation-only requests or unsettled product scope, return the Product report and open questions. Planning does not imply execution readiness.
+Once the user has confirmed scope for a concrete change and its canonical records are saved, invoke [acs-plan-delivery](../../build/acs-plan-delivery/SKILL.md) as the default handoff. Supply the change ID, accepted outcomes/priorities, spec and decision references/revisions, and remaining questions. It generates and opens `docs/changes/<change-id>/delivery-plan.html` with the plan and embedded DAG. Reuse existing confirmation; a second request to draw the graph is unnecessary. For consolidation-only requests or unsettled product scope, return the Product report and open questions. Planning does not imply execution readiness.
 
 The PRD fixes *what* to build. The delivery plan exposes missing design as blockers and routes affected scope through the specialists below. Resolve broad uncertainty first when useful slices cannot yet be identified. Pick the row that matches the largest remaining open question:
 

@@ -19,10 +19,10 @@ context:
   handoff_to: [testing, code_review, coordinator]
 ```
 
-Shared semantics: [shared protocol](../../protocols/skill-declarations.md); shared execution: [Coordination](../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Every changed behavior gets a meaningful failing test before its implementation. The dispatching [`acs-implement`](../acs-implement/SKILL.md) run acts as coordinator: it supplies the canonical ticket, criteria, accepted contracts, relevant failure history, code baseline, prerequisite evidence, and environment, and it owns scheduling, claims, and merges. Invoked standalone, the active agent plays that role under [delivery](../../workflows/feature-delivery.md) and [engineering context](../../protocols/engineering-memory.md).
+Every changed behavior gets a meaningful failing test before its implementation. The dispatching [`acs-implement`](../acs-implement/SKILL.md) run acts as coordinator: it supplies the canonical ticket, criteria, accepted contracts, relevant failure history, code baseline, prerequisite evidence, and environment, and it owns scheduling, claims, and merges. Invoked standalone, the active agent plays that role under [delivery](../../../workflows/feature-delivery.md) and [engineering context](../../craft/context/acs-init-context/references/engineering-memory.md).
 
 ## Prepare the behavior slice
 

@@ -1,0 +1,9 @@
+{
+  "name": "acs-build",
+  "version": "0.4.0",
+  "description": "ACS build phase - delivery planning, TDD, implementation",
+  "main": "catalog/skill-set.json",
+  "keywords": ["agent", "coding", "build", "tdd", "delivery"],
+  "dependencies": { "acs-context": "^0.4.0" },
+  "peerDependencies": { "acs-design": "^0.4.0" }
+}
