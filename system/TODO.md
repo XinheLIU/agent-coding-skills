@@ -13,7 +13,7 @@ This list separates adaptation work inherited from Matt’s model from cleanup r
 - [ ] Implement and behaviorally verify Codex, Claude Code, Pi, OpenCode, and DeepSeek harness adapters against the same capability contract.
 - [ ] Add executable scheduling, recovery, or lifecycle enforcement only where demonstrated workflows need it.
 
-See [harness architecture](docs/harness-architecture.md) and [migration/baseline findings](docs/skill-name-migration.md).
+See [harness architecture](docs/harness-architecture.md).
 
 ## P0 — Catalog/discovery drift
 

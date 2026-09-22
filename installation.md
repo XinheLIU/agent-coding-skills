@@ -366,4 +366,3 @@ npx skills install ./plugins/acs-build -g --force
 # repeat for each installed plugin
 ```
 
-See [MIGRATION.md](../MIGRATION.md) for breaking changes between versions.

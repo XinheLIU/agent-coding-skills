@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-17
 
-This records the historical 2026-09-09 context-protocol verification. Skill paths were updated for the ACS namespace migration; historical counts and results below are not a current suite verdict. See the [current migration baseline](../../docs/skill-name-migration.md#verification-baseline).
+This records the historical 2026-09-09 context-protocol verification. Skill paths were updated for the ACS namespace migration; historical counts and results below are not a current suite verdict. The migration is complete; this record stands as a historical snapshot only.
 
 Change: suite-context-lifecycle-2026-09-09
 Scope: this suite's 45 source skills, shared contracts, workflows, guides, and agent handoffs. Requirements are the user-supplied “Context protocol for your coding suite” implementation plan; this record retains implementation and verification evidence, not a second requirements document.
@@ -17,9 +17,9 @@ Environment: local macOS, existing Python 3 standard library and system Ruby/Psy
 
 | Check | Result |
 | --- | --- |
-| `python3 system/memory/validate_suite.py` | PASS: 45 source skills, six-field declarations, loader symlinks, suite-local Markdown links and anchors |
+| `python3 system/evals/validate_suite.py` | PASS: 45 source skills, six-field declarations, loader symlinks, suite-local Markdown links and anchors |
 | Ruby/Psych `YAML.safe_load` over all skill frontmatter and context blocks | PASS: 45 valid names/descriptions and six array-valued context fields |
-| `python3 -m unittest discover -s system/memory/evals -p 'test_*.py' -v` | PASS: 6 positive/negative fixtures for declarations, identity links, and cleanup retention |
+| `python3 -m unittest discover -s system/evals/evals -p 'test_*.py' -v` | PASS: 6 positive/negative fixtures for declarations, identity links, and cleanup retention |
 | `python3 -m unittest discover -s system/skills-src/craft/meta/acs-draw-portfolio-dag/tests -p 'test_*.py' -v` | PASS: existing scan/render test, including status/dependency mapping and read-only generated views |
 | Existing `scripts/validate-product-memory.py` against the independent fixture's product HTML | PASS: 0 errors, 0 warnings |
 | Edited Markdown dates, JSON parsing, `git diff --check`, scope audit | PASS: dates current; only suite files changed; unrelated pre-existing untracked files preserved |

@@ -14,13 +14,13 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 /plugin install agent-coding-skills@agent-coding-skills
 ```
 
-For Codex, OpenCode, Cursor, Pi, and multi-agent setups see [docs/installation.md](docs/installation.md).
+For Codex, OpenCode, Cursor, Pi, and multi-agent setups see [installation.md](installation.md).
 
 1. Run `/acs-init-context` in the target repository — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
 2. Follow the [lifecycle workflows](system/workflows/README.md): plan → design → build → test → deploy → maintain. These are workflow documents, not installed commands or router skills.
 3. Select a skill by its public ID (`acs-brainstorm`, `acs-engineer-domain-model`, `acs-tdd`, etc.), using the host's invocation syntax and plugin namespace.
 
-All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See the [name migration](system/docs/skill-name-migration.md) and [portable harness architecture](system/docs/harness-architecture.md).
+All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See the [portable harness architecture](system/docs/harness-architecture.md).
 
 ## Architecture
 
@@ -28,7 +28,7 @@ All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See th
 | --- | --- |
 | [`system/skills/`](system/skills/) | Flat symlinks (loader entry points) into `skills-src/` |
 | [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
-| [`system/memory/`](system/memory/) | Shared read/write protocol for core, human, optional wiki, and working memory |
+| [`system/evals/`](system/evals/) | Shared read/write protocol for core, human, optional wiki, and working memory |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
 | [`system/commands/`](system/commands/) | Claude Code entry points, including one-time repository setup |
 | [`system/agents/`](system/agents/) | Shared specialist agents used by review and delivery skills |
@@ -113,7 +113,7 @@ This repository publishes skill-set metadata through [`catalog/skill-set.json`](
 
 The full source tree currently supplies shared protocols, workflows, role prompts, and resource symlinks. Copying one skill directory alone can leave missing dependencies. Individually installable packages are the next delivery milestone, subject to the [standalone package contract](system/docs/harness-architecture.md#standalone-package-contract); they are not yet verified standalone distributions.
 
-Run `python3 system/memory/validate_suite.py --inventory-only` to verify and count source skills, loader entries, catalog records, and the context subpackage. The full command also audits context declarations and local Markdown links.
+Run `python3 system/evals/validate_suite.py --inventory-only` to verify and count source skills, loader entries, catalog records, and the context subpackage. The full command also audits context declarations and local Markdown links.
 
 ## Development boundary
 
@@ -124,4 +124,4 @@ Run `python3 system/memory/validate_suite.py --inventory-only` to verify and cou
 
 ## Status
 
-Core lifecycle phases (plan, design, build) are mature. Test and maintain phases have initial skills; deploy phase workflows are written but deploy skills are planned. See [`system/TODO.md`](system/TODO.md) for the prioritized work and [the organization report](system/docs/organization-report.md) for the inventory.
+Core lifecycle phases (plan, design, build) are mature. Test and maintain phases have initial skills; deploy phase workflows are written but deploy skills are planned. See [`system/TODO.md`](system/TODO.md) for the prioritized work for the inventory.

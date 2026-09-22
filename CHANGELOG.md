@@ -199,7 +199,7 @@ Clarified the four-layer memory contract so the Human/Working split is a content
 
 **Design-layer routing arrives ahead of its skills.** The memory config gained a `Design docs:` line (`docs/design/`) and the routing template gained a Design Workflow section applying the same split: the design system and component docs are tracked Human-layer reference material, while HTML variant exploration under `.scratch/<effort>/designs/` is disposable scaffolding that production code supersedes. The design skills themselves are not in this change — only the memory contract they will write against.
 
-**Files changed:** `system/memory/README.md`, `manage-context/SKILL.md`, `manage-context/references/PROTOCOL.md`, all seven product `SKILL.md` files, `product/README.md`, `system/workflows/ideas.md`, `system/workflows/feature-delivery.md`, `system/README.md`, `system/docs/organization-report.md`, `write-prd/references/prd-principles.md`, two reference files carrying the rename.
+**Files changed:** `system/evals/README.md`, `manage-context/SKILL.md`, `manage-context/references/PROTOCOL.md`, all seven product `SKILL.md` files, `product/README.md`, `system/workflows/ideas.md`, `system/workflows/feature-delivery.md`, `system/README.md`, `system/docs/organization-report.md`, `write-prd/references/prd-principles.md`, two reference files carrying the rename.
 
 
 ### Context management

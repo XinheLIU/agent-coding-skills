@@ -8,7 +8,7 @@ ACS has one set of domain skills and shared context contracts. Its delivery targ
 
 `system/skills-src/` owns skill content. A package directory and its frontmatter `name` use the same `acs-<name>` ID; `system/skills/` exposes exactly one symlink per source package. The catalog describes that inventory and is checked against it. The plugin ID remains `agent-coding-skills`.
 
-The host adds its own invocation syntax or plugin qualification around the ID. Neither `/`, `$`, nor a host/plugin namespace becomes part of `name`. The [migration table](skill-name-migration.md) is documentation, not an alias registry. External skill names and protocol selectors such as `research.question` remain unchanged.
+The host adds its own invocation syntax or plugin qualification around the ID. Neither `/`, `$`, nor a host/plugin namespace becomes part of `name`. The migration table is documentation, not an alias registry. External skill names and protocol selectors such as `research.question` remain unchanged.
 
 | Component | Owns | Uses |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ These statuses describe checked-in surfaces, not proven runtime parity.
 
 A DeepSeek model provider is not itself a host adapter. Host discovery and lifecycle behavior must be checked against the actual harness. The [herdr/Claude example](runtime-bindings/herdr.md) is an optional documented binding whose CLI syntax requires verification; it is not the portable default.
 
-The current Codex validator rejects ten existing `disable-model-invocation: true` declarations in the main suite, both before and after the namespace migration. This is a known packaging compatibility gap, not permission to change their invocation policy. The context subpackage passes manifest/skill validation; neither result establishes runtime parity. See the [verification baseline](skill-name-migration.md#verification-baseline).
+The current Codex validator rejects ten existing `disable-model-invocation: true` declarations in the main suite, both before and after the namespace migration. This is a known packaging compatibility gap, not permission to change their invocation policy. The context subpackage passes manifest/skill validation; neither result establishes runtime parity. See the verification baseline.
 
 ## Standalone package contract
 

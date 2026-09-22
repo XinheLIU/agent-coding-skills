@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-17
 
-[System home](../README.md) · [Workflows](../workflows/README.md) · [Organization report](organization-report.md)
+[System home](../README.md) · [Workflows](../workflows/README.md)
 
 This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `acs-review-architecture` and `acs-review-code-quality` own domain review reasoning while the shared coordinator owns runtime orchestration; the gate chain `acs-review-design-doc → acs-review-implementation-gaps → acs-review-code-quality` runs a change from plan to merge verdict, `acs-analyze-test-gaps` audits whole-codebase test adequacy, and `acs-refactor-code` is the corrective follow-up that acts on findings. `acs-tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
 

@@ -37,7 +37,7 @@ Six workflow documents cover the lifecycle. They are navigation and sequencing g
 
 `acs-init-context` sets up memory state and `acs-sync-context` reconciles it. The shared handoff envelope carries pointers into a fresh session. `acs-engineer-domain-model` owns the shared glossary and ADRs. `acs-manage-context` retains the explicit-only compatibility routing behavior under the new namespace.
 
-The [harness architecture](docs/harness-architecture.md) separates domain skills, coordination, and host adapters. Public skill IDs are identical across plugin and planned standalone distributions; see the [migration table](docs/skill-name-migration.md). Individual skill directories still depend on shared files outside their package and have not passed standalone isolation acceptance.
+The [harness architecture](docs/harness-architecture.md) separates domain skills, coordination, and host adapters. Public skill IDs are identical across plugin and planned standalone distributions. Individual skill directories still depend on shared files outside their package and have not passed standalone isolation acceptance.
 
 Legacy workflows are retained for backward compatibility: [ideas](workflows/ideas.md), [feature-delivery](workflows/feature-delivery.md), [testing](workflows/testing.md), [debugging](workflows/debugging.md).
 
