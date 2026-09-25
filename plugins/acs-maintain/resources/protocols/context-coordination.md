@@ -9,7 +9,7 @@ canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/prot
 
 Last updated: 2026-09-25
 
-The active agent performs this coordinator role under the [shared protocol](../skills-src/context/acs-init-context/references/PROTOCOL.md), including when invoking a skill standalone. This is a written Harness contract, not a new executable service. Domain skills return results and proposed transitions; the coordinator applies shared state changes through capabilities actually available in the session.
+The active agent performs this coordinator role under the [shared protocol](skill-declarations.md), including when invoking a skill standalone. This is a written Harness contract, not a new executable service. Domain skills return results and proposed transitions; the coordinator applies shared state changes through capabilities actually available in the session.
 
 The [harness architecture](../docs/harness-architecture.md) defines source identity, standalone packaging, and the boundary with Codex, Claude Code, Pi, OpenCode, and DeepSeek harness adapters. Keep domain procedures and shared state semantics here; put host APIs, invocation syntax, worker executables, and lifecycle integrations in their binding. A plugin manifest alone does not establish runtime support.
 

@@ -20,7 +20,7 @@ context:
   handoff_to: [product, design, operations]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Run a 6-phase "project autopsy" starting from an assumed total failure, then produce a
@@ -31,7 +31,7 @@ Questioning and confirmation follow [the shared-understanding protocol](../acs-b
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../acs-brainstorm/references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](../../resources/protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read the supplied plan or existing scope, relevant demand evidence, capabilities, gaps, and risks. Enrich existing failure scenarios before adding new ones. Hypothetical failures and quotes are exercises, never observed evidence.

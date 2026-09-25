@@ -34,7 +34,9 @@ def link_errors(path: Path, boundary: Path, *, isolated: bool = False) -> list[s
         if not target.is_relative_to(boundary.resolve()):
             if isolated:
                 errors.append(f"reference escapes package: {reference}")
-            continue  # External source provenance is not a runtime dependency.
+                continue
+            if target.is_relative_to(boundary.resolve().parent / "references"):
+                continue  # Optional source provenance may be absent.
         if not target.exists():
             errors.append(f"broken reference: {reference}")
         elif fragment and target.is_file() and target.suffix in {".md", ".html"}:

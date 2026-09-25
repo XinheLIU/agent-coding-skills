@@ -17,14 +17,14 @@ context:
   handoff_to: [interaction_design, visual_design]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 # Design Context
 
 Establish the design authority every other UX skill depends on: a canonical `DESIGN.md` at the project root.
 
-Shared design understanding is a triad — `product.html` is **why**, `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** ([references/design-memory.md](references/design-memory.md)). This skill owns the **how**. It resolves design authority from whatever exists — a `DESIGN.md` already at the root, a reference site or brand, a legacy `docs/design/system.md`, or nothing — and leaves one canonical `DESIGN.md` behind. It does not design; it decides authority.
+Shared design understanding is a triad — `product.html` is **why**, `DESIGN.md` is **how**, `docs/design/prototype.html` is **what** ([references/design-memory.md](../../resources/protocols/design-memory.md)). This skill owns the **how**. It resolves design authority from whatever exists — a `DESIGN.md` already at the root, a reference site or brand, a legacy `docs/design/system.md`, or nothing — and leaves one canonical `DESIGN.md` behind. It does not design; it decides authority.
 
 ## When to Use
 
@@ -171,11 +171,11 @@ Report:
 
 ## Accepted decision handoff
 
-Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](references/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](../../resources/protocols/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 
-Full contract: [references/design-memory.md](references/design-memory.md).
+Full contract: [references/design-memory.md](../../resources/protocols/design-memory.md).
 
 
 Use coordinator-supplied paths and the active change identity; do not repeat path discovery.

@@ -1,6 +1,6 @@
 ---
 name: acs-sync-context
-description: Detect and repair shared-context drift after setup. Use for broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state; use acs-init-context when routing is absent.
+description: Inspect or repair shared-context drift. Use for broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state; if routing is absent, inspect explicit sources read-only or use acs-init-context when setup is needed.
 ---
 
 # Sync Context

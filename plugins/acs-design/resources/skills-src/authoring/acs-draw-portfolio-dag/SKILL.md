@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Resolve `SKILL_DIR` as this skill's directory and call its scripts by absolute path.

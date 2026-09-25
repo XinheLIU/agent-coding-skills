@@ -1,13 +1,13 @@
 ---
 protocol: acs:skill-declarations
-version: 1.1.0
+version: 1.2.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/skill-declarations.md
 ---
 
 # Shared Context Protocol
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 This is the suite's canonical lifecycle, identity, ownership, and handoff contract. Domain contracts specialize artifact meaning; workflows coordinate execution. It applies to standalone skills as well as composed workflows.
 
@@ -20,11 +20,17 @@ This is the suite's canonical lifecycle, identity, ownership, and handoff contra
 
 Persistent records have three purposes, not three additional storage layers:
 
-- **Intent** (formerly North Star): mission, vision, principles, non-goals.
-- **Current** (formerly Current State): evidenced behavior, applicable design rules, system boundaries and operational constraints, with relevant revision/environment.
-- **Changes** (formerly Change Context): canonical tickets/specs, proposed or accepted designs/contracts, decisions, verification and release evidence.
+- **Intent**: mission, vision, principles, non-goals.
+- **Current**: evidenced behavior, applicable design rules, system boundaries and operational constraints, with relevant revision/environment.
+- **Changes**: canonical tickets/specs, proposed or accepted designs/contracts, decisions, verification and release evidence.
 
-**Run Context means Working Memory.** Existing selectors and lifecycle labels remain compatible aliases. Working may be saved to disk; Persistent does not mean accepted or implemented. Save a proposal with `proposed` status before formal review, cross-run handoff, or downstream reliance. Record domain status separately from retention and freshness.
+Three questions decide where a record belongs:
+
+1. Serves only this run's continuation, with no independent value after it ends → Working.
+2. A later task, collaborator, or decision will reference it → Persistent, with an explicit domain status (`proposed`, `accepted`, `rejected`, …).
+3. Reconstructible entirely from already-recorded sources → a derived view, not memory.
+
+Working may be saved to disk; Persistent does not mean accepted or implemented. Save a proposal with `proposed` status before formal review, cross-run handoff, or downstream reliance. Record domain status separately from retention and freshness.
 
 Classify records by ownership and future use, never by file extension or directory. A file may contain several Persistent purposes. `product.html` owns canonical product records; accepted prototypes own design intent and exact visual content. Preserve their versions and necessary assets. Code, schemas, tests and configuration establish executable facts; accepted intent does not establish shipped behavior.
 
@@ -94,6 +100,35 @@ These are semantic selectors, not literal paths or mandatory skill names. Domain
 
 Skills may be owners, record-level contributors, consumers, or transient operations. Ownership concerns facts and contribution authority, not exclusive ownership of an entire shared file. Keep domain reasoning, evidence interpretation, validation, and operational constraints inside the skill. Keep path/identity resolution, context assembly, runtime bindings, scheduling, claims, coordinated writes, freshness propagation, and cleanup in the coordinator. See [workflow coordination](context-coordination.md). Presenter owns reading order, visual comparisons and source/status display; domain skills retain conclusions, recommendations and evidence interpretation. Artifact retention follows the roles above and domain contracts; individual skills resolve paths through the coordinator rather than inventing their own memory formats.
 
+## Handoff consumers
+
+`handoff_to` uses the selectors below. The coordinator resolves each consumer to an available capability; a selector does not authorize dispatch. Context setup, synchronization, translation, and their compatibility router return control to `coordinator`.
+
+| Selector | Consumer |
+| --- | --- |
+| `coordinator` | Runtime coordination and context routing |
+| `domain_owners` | Owners of the affected records |
+| `requesting_domain` | Domain that requested this operation |
+| `product` | Product intent and requirements owner |
+| `design` | Relevant design owner |
+| `design.ux` | UX design owner |
+| `design.technical` | Technical design owner |
+| `design_architecture` | Architecture design capability |
+| `design_foundation` | Technical foundation design capability |
+| `design_modules` | Module design capability |
+| `interaction_design` | Interaction design capability |
+| `visual_design` | Visual design capability |
+| `implementation` | Implementation owner |
+| `delivery_planning` | Delivery planning capability |
+| `testing` | Testing owner |
+| `code_review` | Code review capability |
+| `refactoring` | Refactoring owner |
+| `validate_codebase` | Codebase validation capability |
+| `operations` | DevOps / CI-CD owner |
+| `release` | Release capability within Operations |
+| `sync_context` | Context synchronization capability |
+| `skill_validation` | Skill authoring validation capability |
+
 ## Domain ownership
 
 | Domain | Owns / produces | Reads | Downstream evidence | Invalidated by |
@@ -138,3 +173,7 @@ Before removing Working Memory:
 5. Remove only reconciled execution plans, scratch, claims, temporary excerpts, raw outputs, and session handoffs, and repair routing.
 
 Completion compacts Persistent Changes; it does not delete requirements, accepted decisions, or final evidence by default. An archive is optional under repository retention rules. Do not promote an execution transcript wholesale. Preserve user-authored content, update Markdown dates and HTML record dates, and never store secrets or unnecessary personal data in shared context.
+
+## Compatibility aliases
+
+Older records and selectors may use earlier names; treat them as the same concepts, not additional layers: **North Star** means Intent, **Current State** means Current, **Change Context** means Changes, and **Run Context** means Working Memory. Existing selectors and lifecycle labels remain compatible aliases.

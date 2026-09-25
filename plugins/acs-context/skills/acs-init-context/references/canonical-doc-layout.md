@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-25
 
-[PROTOCOL.md](PROTOCOL.md#two-memories-and-a-presenter) defines Working/Persistent Memory and Presenter. This guide maps artifact roles to homes; it does not define another layer system. Preserve configured paths and formats.
+[PROTOCOL.md](../../../resources/protocols/skill-declarations.md#two-memories-and-a-presenter) defines Working/Persistent Memory and Presenter. This guide maps artifact roles to homes; it does not define another layer system. Preserve configured paths and formats.
 
 | Artifact role | Memory / home |
 | --- | --- |

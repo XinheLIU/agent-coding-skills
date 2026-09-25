@@ -19,12 +19,12 @@ context:
   handoff_to: [requesting_domain]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 A prototype is **throwaway code that answers a question**. The question decides the shape: a hand-driven harness for a state model ([LOGIC.md](references/LOGIC.md)), or competing renderings of one surface ([UI.md](references/UI.md)).
 
-Do not confuse this with `docs/design/prototype.html`, the canonical prototype owned by the pipeline stages ([references/design-memory.md](../acs-design-context/references/design-memory.md)). Exploration is Working Memory; save the exact candidate and dependencies before formal review. A candidate or screenshot relied on by a decision becomes retained evidence. The stage that raised the question reconciles accepted intent into the canonical prototype.
+Do not confuse this with `docs/design/prototype.html`, the canonical prototype owned by the pipeline stages ([references/design-memory.md](../../resources/protocols/design-memory.md)). Exploration is Working Memory; save the exact candidate and dependencies before formal review. A candidate or screenshot relied on by a decision becomes retained evidence. The stage that raised the question reconciles accepted intent into the canonical prototype.
 
 ## Pick a branch
 
@@ -126,7 +126,7 @@ Create a throwaway route following the project's routing convention. Name it obv
 
 ## Shared Memory Contract
 
-Full contract: [references/design-memory.md](../acs-design-context/references/design-memory.md).
+Full contract: [references/design-memory.md](../../resources/protocols/design-memory.md).
 
 
 Read `docs/agents/memory.md`, the configured run recovery entry, and the artifact that raised the question (a question or journey/scope record in `discovery.html`, a `map.md` decision ticket, or a `design-system/pages/<page>.md` spec). Write only the question, variants tested, evidence from user feedback, verdict, and pointer to the throwaway branch. Return the verdict and evidence to the domain owner/coordinator. Before formal review, save candidate content and evidence as proposed Persistent Memory. Record the actual feedback against its subject, reviewed revision, outcome, scope, basis, and source; retain consequential rationale and alternatives before dependent handoff. Resume the requesting stage through the common handoff envelope.

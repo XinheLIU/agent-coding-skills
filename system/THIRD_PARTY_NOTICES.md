@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ## Context and presentation architecture
 
@@ -61,7 +61,7 @@ Existing skill packages may contain their own licenses or metadata. Their proven
 
 The prose wiki capability (`llm-wiki-init`, `llm-wiki-ingest`, `llm-wiki-lint`) now lives in [learning-os](https://github.com/XinheLIU/learning-os). Those skills adapt the LLM Wiki discipline from Andrej Karpathy's LLM Wiki approach (MIT). This system routes to them rather than maintaining a local copy.
 
-`acs-init-context` documents and invokes the external indexers listed in [`references/index-tools/external-tools.md`](skills-src/context/acs-init-context/references/index-tools/external-tools.md) without vendoring their code: [`codemap`](https://github.com/JordanCoin/codemap), [`codegraph`](https://github.com/colbymchenry/codegraph), `graphify` (published as `graphifyy`), and [`GitNexus`](https://github.com/abhigyanpatwari/GitNexus). Each remains under its own upstream license and is invoked as an installed tool.
+`acs-init-context` documents and invokes the external indexers listed in its `references/index-tools/external-tools.md` without vendoring their code: [`codemap`](https://github.com/JordanCoin/codemap), [`codegraph`](https://github.com/colbymchenry/codegraph), `graphify` (published as `graphifyy`), and [`GitNexus`](https://github.com/abhigyanpatwari/GitNexus). Each remains under its own upstream license and is invoked as an installed tool.
 
 ## Product-ideation adaptations
 

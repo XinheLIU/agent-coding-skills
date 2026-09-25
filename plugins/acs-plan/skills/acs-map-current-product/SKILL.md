@@ -22,14 +22,14 @@ context:
   handoff_to: [product, design]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Extract the current product from the code, docs, and tests before proposing anything new. The output is a source-backed baseline: who can do what today, what is partly built, what is only planned, and where the product surface has gaps.
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../acs-brainstorm/references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](../../resources/protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read product intent, relevant capabilities, gaps, and questions before inspecting code. Record the inspected product surface and revision where available. Enrich existing subjects with observed behavior; preserve proposed behavior and accepted intent as separate facts.

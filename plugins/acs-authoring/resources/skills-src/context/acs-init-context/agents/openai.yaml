@@ -1,5 +1,0 @@
-interface:
-  display_name: "Init Context"
-  short_description: "Initialize shared agent context when docs/agents/memory.md is absent or routing ..."
-policy:
-  allow_implicit_invocation: false

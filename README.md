@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 Inspired by the [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) from Anthropic.
 
@@ -35,9 +35,55 @@ All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See th
 | [`system/agents/`](system/agents/) | Shared specialist agents used by review and delivery skills |
 | [`system/docs/`](system/docs/) | Human-facing catalog, organization report, and retained domain guides |
 
-The accepted [Context design: two memories and one Presenter](system/docs/context-memory-presenter-proposal.md) separates run-scoped **Working Memory** from cross-run **Persistent Memory** (Intent, Current, Changes). The [Presenter](system/protocols/presenter.md) builds human reading and review views from versioned records; review decisions return to Persistent Memory. One configured checkpoint resumes each run.
+## Memory system
 
-Artifact ownership determines authority, not file extension. Product HTML records and accepted visual prototypes remain canonical persistent artifacts. Reports, code maps, and dependency roadmaps are derived views; removing a view must not lose facts or decisions. Skills hand off canonical references and revisions, with an optional human view.
+Skills coordinate through two memories and one Presenter. Domain skills own judgment; the active agent, acting as **coordinator**, resolves paths and applies writes; the **Presenter** turns versioned records into human views. Review feedback flows back as a decision on a specific record and revision — never as page state.
+
+```mermaid
+graph LR
+    SKILL[Domain skill] -->|results, proposals| COORD[Coordinator<br/>the active agent]
+
+    subgraph WORKING["Working Memory — one run"]
+        STATE["state.md — the single recovery entry"]
+        SCRATCH["plans · claims · drafts · raw output"]
+    end
+
+    subgraph PERSISTENT["Persistent Memory — across runs"]
+        INTENT["Intent<br/>mission · principles · non-goals"]
+        CURRENT["Current<br/>evidenced state · design rules"]
+        CHANGES["Changes<br/>tickets · specs · decisions · evidence"]
+    end
+
+    subgraph VIEWS["Derived views — rebuildable, own no facts"]
+        VIEW["reports · delivery DAGs · code maps"]
+    end
+
+    COORD -->|checkpoint| WORKING
+    COORD -->|save by ownership| PERSISTENT
+    PERSISTENT --> PRESENTER[Presenter]
+    WORKING -.->|labelled run state| PRESENTER
+    PRESENTER --> VIEW
+    VIEW --> HUMAN[Human review]
+    HUMAN -->|feedback on record + revision| COORD
+
+    style WORKING fill:#fff4e8,stroke:#e8923f
+    style PERSISTENT fill:#eafaf0,stroke:#3fae6a
+    style VIEWS fill:#f5f5f5,stroke:#999
+```
+
+Three questions place any record: *serves only this run* → Working; *a later task or decision will cite it* → Persistent, with its own status (`proposed` is valid); *reconstructible from recorded sources* → a view. Ownership decides, not file extension: `product.html` and accepted `prototype.html` are canonical persistent artifacts even though they are HTML; reports are derived even when they carry a `.md`.
+
+The contracts layer so each file answers one question:
+
+| Layer | Answers | Read |
+| --- | --- | --- |
+| L0 Memory model | What memory exists, how records gain identity, freshness, and retention | [skill-declarations.md](system/protocols/skill-declarations.md) |
+| L1 Domain records | Which records each domain owns and what their statuses mean | [product](system/protocols/product-memory.md) · [design](system/protocols/design-memory.md) · [engineering](system/protocols/engineering-memory.md) · [operations](system/protocols/operations-memory.md) |
+| L2 Formats | How records serialize | [html-records.md](system/protocols/html-records.md) · [working-memory.md](system/skills-src/context/acs-init-context/references/working-memory.md) · [ADR](system/skills-src/context/acs-init-context/references/ADR-FORMAT.md) / [CONTEXT](system/skills-src/context/acs-init-context/references/CONTEXT-FORMAT.md) templates |
+| L3 Presenter | How humans read and review, and how feedback is reconciled | [presenter.md](system/protocols/presenter.md) → [visual report](system/skills-src/authoring/references/visual-report.md) · [tabbed report](system/skills-src/authoring/references/tabbed-discovery-report.md) |
+| L4 Runtime | How the coordinator assembles context, serializes writes, and dispatches work | [context-coordination.md](system/protocols/context-coordination.md) · [orchestration.md](system/protocols/orchestration.md) |
+
+Start at the [protocols index](system/protocols/README.md); the accepted [design rationale](system/docs/context-memory-presenter-proposal.md) explains the trade-offs. In a target repository, `/acs-init-context` writes `docs/agents/memory.md` (routing), keeps run scratch under `.scratch/<run-id>/`, and records local changes under `docs/changes/<change-id>/`.
 
 ## Skill organization
 

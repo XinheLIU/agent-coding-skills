@@ -19,7 +19,7 @@ context:
   handoff_to: [design_foundation, design_modules, validate_codebase]
 ```
 
-Shared semantics: [memory and handoff protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
+Shared semantics: [memory and handoff protocol](../../resources/protocols/skill-declarations.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
 Read the requirement criteria and inspect the relevant repository slice. For greenfield, establish the minimum structure that supports the accepted features. For brownfield, distinguish what exists from what is intended before proposing change.
 

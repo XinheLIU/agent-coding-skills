@@ -19,7 +19,7 @@ context:
   handoff_to: [implementation, testing, sync_context]
 ```
 
-Shared semantics: [memory and handoff protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
+Shared semantics: [memory and handoff protocol](../../resources/protocols/skill-declarations.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
 Check the selected design before build and the actual implementation after build. Trace each requirement through its entry point (route, menu, command, job, or public export), registration, interface, owning module, adapter, and test. Verify dependency direction, middleware order, error and permission paths, and dynamic registration where applicable.
 

@@ -26,6 +26,20 @@ validator = load("validate_protocols", REPOSITORY / "scripts/validate-protocols.
 
 
 class PackageTests(unittest.TestCase):
+    def test_individual_skill_survives_copy_without_plugin(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            output = root / "export"
+            source = REPOSITORY / "system/skills-src/context/acs-init-context"
+            builder.build_standalone_skill(REPOSITORY / "system", output, source)
+            installed = root / "pi/skills/acs-init-context"
+            shutil.copytree(output, installed)
+            shutil.rmtree(output)
+            self.assertTrue((installed / "SKILL.md").is_file())
+            self.assertEqual(validator.validate_package(installed), [])
+            for path in (installed / "SKILL.md", installed / "references/PROTOCOL.md"):
+                self.assertIn("context-coordination.md", path.read_text())
+
     def test_transitive_resources_survive_source_removal_and_relocation(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -64,6 +78,14 @@ class PackageTests(unittest.TestCase):
             result = subprocess.run([sys.executable, str(script)], cwd=relocated,
                                     check=True, text=True, capture_output=True)
             self.assertEqual(result.stdout.strip(), "self-contained")
+
+    def test_source_audit_rejects_missing_reference_outside_suite(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            suite = Path(temporary) / "system"
+            suite.mkdir()
+            path = suite / "SKILL.md"
+            path.write_text("[Coordination](../workflows/context-coordination.md)\n")
+            self.assertTrue(validator.link_errors(path, suite))
 
     def test_package_audit_rejects_link_escape_and_missing_transitive_resource(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

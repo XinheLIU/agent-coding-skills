@@ -6,7 +6,19 @@ How to install ACS plugins in Claude Code, Codex, OpenCode, Cursor, and Pi.
 
 The active marketplace offers the monolith plus `acs-plan`, `acs-design`, `acs-build`, `acs-quality`, `acs-craft`, and the optional legacy `acs-protocols` package. Existing `acs-context`, `acs-test`, `acs-maintain`, and `acs-authoring` directories remain available as phase packages from a local checkout. Deployment has a workflow but no dedicated skill plugin.
 
-Install the **entire generated plugin directory**, including `skills/` and `resources/`. Each package embeds its referenced contracts and procedures; no context or protocol peer plugin is required. A loader or installer that copies only individual skill directories must also preserve their linked resources; package validation does not prove every third-party installer does so.
+For plugin loaders, install the **entire generated plugin directory**, including `skills/` and `resources/`. Each package embeds its referenced contracts and procedures; no context or protocol peer plugin is required.
+
+For installers that copy individual skill folders (including skills-manager), export self-contained skills first. Use a new output directory on each build:
+
+```bash
+python3 scripts/build-plugins.py --standalone --output /tmp/acs-standalone
+# Install the selected exported skill with your manager, for example:
+skills-manager-cli skills install /tmp/acs-standalone/acs-init-context --local
+```
+
+Each exported skill contains its linked protocols, workflows, and companion resources. Copy the entire exported skill directory. Raw `system/skills-src/` directories and individual `plugins/*/skills/` directories depend on files outside themselves and cannot be installed by copying those directories alone. The plugin-path examples below require a loader that retains the whole plugin; with a folder-copying installer, substitute the standalone export instead.
+
+For an existing managed skill, inspect its recorded source and use the manager's update/replacement flow to preserve its identity, presets, and deployments. A Git update cannot fetch uncommitted local fixes. Keep a local export at a persistent path if it will be the source of future managed updates.
 
 Skills use explicit inputs or existing canonical homes. Run `/acs-init-context` only when project routing needs configuration. `docs/agents/memory.md` is a routing index for Working/Persistent Memory and one recovery entry per run, not a shared facts file. See the [accepted Context design](system/docs/context-memory-presenter-proposal.md) and [Presenter contract](system/protocols/presenter.md).
 

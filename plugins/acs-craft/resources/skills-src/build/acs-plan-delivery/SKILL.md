@@ -19,7 +19,7 @@ context:
   handoff_to: [design, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../../skills/acs-init-context/references/PROTOCOL.md#skill-declarations); shared writes and claims: [Coordination](../../../protocols/context-coordination.md). Existing authorization persists. A planning request authorizes the plan, not implementation. Working Memory holds run recovery; Persistent Memory holds reusable domain records, including proposed review inputs. Save referenced conclusions before formal review or dependent handoff. For human-facing reports and review feedback, use [Presenter](../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared writes and claims: [Coordination](../../../protocols/context-coordination.md). Existing authorization persists. A planning request authorizes the plan, not implementation. Working Memory holds run recovery; Persistent Memory holds reusable domain records, including proposed review inputs. Save referenced conclusions before formal review or dependent handoff. For human-facing reports and review feedback, use [Presenter](../../../protocols/presenter.md); views carry source revisions and never own domain facts.
 
 ## Enter from Product or Design
 

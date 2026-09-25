@@ -9,7 +9,7 @@ canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/prot
 
 Last updated: 2026-09-25
 
-Use the [protocol](PROTOCOL.md) for lifecycle, identity, relationships, freshness, and coordination. This contract defines Implementation, Testing, and Refactoring artifact roles. Requirements, tickets, proposed/accepted contracts and concise evidence are Persistent Changes. Execution steps, claims, scheduler state and raw logs are Working; delivery reports and DAGs are derived [Presenter](../../../resources/protocols/presenter.md) views. Resolve all run paths and the one recovery entry through configuration.
+Use the [protocol](../../../resources/protocols/skill-declarations.md) for lifecycle, identity, relationships, freshness, and coordination. This contract defines Implementation, Testing, and Refactoring artifact roles. Requirements, tickets, proposed/accepted contracts and concise evidence are Persistent Changes. Execution steps, claims, scheduler state and raw logs are Working; delivery reports and DAGs are derived [Presenter](../../../resources/protocols/presenter.md) views. Resolve all run paths and the one recovery entry through configuration.
 
 ## Implementation
 

@@ -17,7 +17,7 @@ context:
   handoff_to: [testing, design, code_review]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 # Refactor Code
@@ -26,7 +26,7 @@ You improve the internal structure of existing code while keeping every external
 
 ## Context and preservation contract
 
-Read [engineering context](../../resources/skills-src/context/acs-init-context/references/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
+Read [engineering context](../../resources/protocols/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
 
 Capture before/after source revisions or diff identities and equivalent checks/environment. Return `change.preservation_evidence`: invariant/criterion → before/after check → result, structural delta, omissions, and next action. If module boundaries or dependency rules change, update the configured System State with current evidence and amend or supersede applicable ADRs while preserving history. When another owner must author an amendment, return a blocking handoff until it is reconciled. If architecture is unchanged, record that assessment without creating an empty ADR. External behavior changes return to Product/Design for scope resolution.
 

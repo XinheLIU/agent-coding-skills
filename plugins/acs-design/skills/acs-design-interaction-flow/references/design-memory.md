@@ -1,19 +1,19 @@
 ---
 protocol: acs:design-memory
-version: 1.1.0
+version: 1.2.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/design-memory.md
 ---
 
 # Design Memory Contract
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 Design skills contribute to one shared design understanding. A skill owns its reasoning method, not the understanding itself. Read this contract before reading or updating design memory. It also applies when a skill runs standalone.
 
 ## Lifecycle and authority
 
-The [shared protocol](../../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md) defines Working and Persistent Memory, relationships, freshness and handoffs. Applicable DESIGN.md rules belong to Persistent Current; technical contracts, proposed designs, prototype sections and consequential decisions belong to Persistent Changes. Product records may also contain Intent. All link the same canonical change and requirement/criterion IDs. Prototypes preserve design intent; code establishes actual behavior.
+The [shared protocol](../../../resources/protocols/skill-declarations.md) defines Working and Persistent Memory, relationships, freshness and handoffs. Applicable DESIGN.md rules belong to Persistent Current; technical contracts, proposed designs, prototype sections and consequential decisions belong to Persistent Changes. Product records may also contain Intent. All link the same canonical change and requirement/criterion IDs. Prototypes preserve design intent; code establishes actual behavior.
 
 Before formal review or downstream reliance, save the proposal and exact visual artifacts as `proposed` Persistent records. Follow [Presenter](../../../resources/protocols/presenter.md#review-reconciliation) when receiving feedback: bind acceptance to the reviewed subject, version and scope, retain retrievable content/assets, and deduplicate actual feedback. A prototype's layout and interactions are domain meaning, not a disposable report. Presenter may display them but cannot regenerate an accepted version as a substitute for retaining it.
 
@@ -25,7 +25,7 @@ Shared design understanding is three durable documents, answering three differen
 
 | Question | Document | What it holds | Owned by |
 | --- | --- | --- | --- |
-| **Why** | `<product-docs>/<product-slug>/product.html` | Product intent: personas, problems, capabilities, journeys, scope. See [product-memory.md](../../../resources/skills-src/context/acs-init-context/references/product-memory.md). | Product skills. When no product docs exist, `acs-map-current-product` infers the baseline from the repo. |
+| **Why** | `<product-docs>/<product-slug>/product.html` | Product intent: personas, problems, capabilities, journeys, scope. See [product-memory.md](../../../resources/protocols/product-memory.md). | Product skills. When no product docs exist, `acs-map-current-product` infers the baseline from the repo. |
 | **How** | `DESIGN.md` at the project root | Design authority: visual tokens in YAML frontmatter (colors, typography, spacing, radius, motion), plus prose — aesthetic rationale, component foundations, accessibility rules, provenance. | `acs-design-context` (native), or an accepted external ⑤ acs-design-context capability. |
 | **What** | `docs/design/prototype.html` | The canonical prototype: rendered structure and visuals per surface, all five states switchable, fidelity and lock markers, links back to the why. | The pipeline stage whose gate the change passed through. |
 
@@ -43,7 +43,7 @@ MECE guides the boundary, not a hard constraint: a fact needed after the effort 
 
 ## The canonical prototype
 
-`docs/design/prototype.html` is one self-contained, git-tracked HTML file. It needs no build step and opens from `file://`. Format contract:
+`docs/design/prototype.html` is one self-contained, git-tracked HTML document under the [HTML record format](../../../resources/protocols/html-records.md); its stable identity, self-containment, and closed-attribute discipline (including `data-attr-reason`) come from that format. Design-specific vocabulary:
 
 - **One `<section>` per surface** (a screen, page, or self-contained component), carrying:
   - `data-surface="<kebab-slug>"` — stable identity, preserved across edits
@@ -55,8 +55,6 @@ MECE guides the boundary, not a hard constraint: a fact needed after the effort 
 - **All five states rendered** inside each section as `data-state="loading | empty | error | success | partial"` blocks, driven by one shared state switcher (floating control, keyboard-accessible). Five-state coverage is checked by the presence of the five blocks, not by prose.
 - **Every visual value is a CSS custom property** declared at `:root` with a provenance comment naming `DESIGN.md` and the consumed token revision plus the date it was last synced; the date alone does not prove freshness. At `wireframe` fidelity, sections use only the grayscale wireframe palette; token properties apply from `styled` onward.
 - **Implemented sections** additionally carry `data-component="<source-path>"` and `data-component-doc="docs/design/components/<name>.md"`.
-
-Do not invent additional lifecycle attributes; if a section genuinely needs one, add a `data-attr-reason` stating why so review flags it.
 
 ## Fidelity and locking
 

@@ -1,6 +1,6 @@
 ---
 name: acs-init-context
-description: Initialize shared agent context when docs/agents/memory.md is absent or routing was lost. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use acs-sync-context for later drift.
+description: Initialize shared agent context when setup is requested or missing/lost routing blocks a required persistent write. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use acs-sync-context for drift inspection.
 ---
 
 # Init Context
@@ -19,10 +19,10 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Set up routing for Working and Persistent Memory under the model in [the protocol](references/PROTOCOL.md). Do not define another layer scheme.
+Set up routing for Working and Persistent Memory under the model in [the protocol](../../resources/protocols/skill-declarations.md). Do not define another layer scheme.
 
 `AGENTS.md` and `docs/agents/memory.md` are routing indexes. They point at canonical sources instead of copying their contents.
 
@@ -44,8 +44,8 @@ Reuse settled choices. Resolve only these missing values:
 - **Change records:** preserve the canonical ticket/spec home; new local changes use tracked `docs/changes/<change-id>/`. Keep canonical ticket ID distinct from branch/run identity.
 - **Operations:** link relevant environment/build/deploy constraints and existing release-evidence homes; load the Operations contract only when needed.
 - **Active effort:** explicit user selection, current branch mapping, or a documented repository rule.
-- **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](references/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
-- **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](references/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `acs-design-context` migrates it — not an incidental setup action.
+- **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](../../resources/protocols/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
+- **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](../../resources/protocols/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `acs-design-context` migrates it — not an incidental setup action.
 - **Domain memory:** one root `CONTEXT.md` by default; use a context map only when distinct bounded contexts already exist.
 - **Code index:** disabled by default; offer it only when repository scale makes repeated source search materially expensive.
 

@@ -1,13 +1,13 @@
 ---
 protocol: acs:design-memory
-version: 1.1.0
+version: 1.2.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/design-memory.md
 ---
 
 # Design Memory Contract
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 Design skills contribute to one shared design understanding. A skill owns its reasoning method, not the understanding itself. Read this contract before reading or updating design memory. It also applies when a skill runs standalone.
 
@@ -43,7 +43,7 @@ MECE guides the boundary, not a hard constraint: a fact needed after the effort 
 
 ## The canonical prototype
 
-`docs/design/prototype.html` is one self-contained, git-tracked HTML file. It needs no build step and opens from `file://`. Format contract:
+`docs/design/prototype.html` is one self-contained, git-tracked HTML document under the [HTML record format](html-records.md); its stable identity, self-containment, and closed-attribute discipline (including `data-attr-reason`) come from that format. Design-specific vocabulary:
 
 - **One `<section>` per surface** (a screen, page, or self-contained component), carrying:
   - `data-surface="<kebab-slug>"` — stable identity, preserved across edits
@@ -55,8 +55,6 @@ MECE guides the boundary, not a hard constraint: a fact needed after the effort 
 - **All five states rendered** inside each section as `data-state="loading | empty | error | success | partial"` blocks, driven by one shared state switcher (floating control, keyboard-accessible). Five-state coverage is checked by the presence of the five blocks, not by prose.
 - **Every visual value is a CSS custom property** declared at `:root` with a provenance comment naming `DESIGN.md` and the consumed token revision plus the date it was last synced; the date alone does not prove freshness. At `wireframe` fidelity, sections use only the grayscale wireframe palette; token properties apply from `styled` onward.
 - **Implemented sections** additionally carry `data-component="<source-path>"` and `data-component-doc="docs/design/components/<name>.md"`.
-
-Do not invent additional lifecycle attributes; if a section genuinely needs one, add a `data-attr-reason` stating why so review flags it.
 
 ## Fidelity and locking
 

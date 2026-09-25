@@ -1,6 +1,6 @@
 ---
 name: acs-init-context
-description: Initialize shared agent context when docs/agents/memory.md is absent or routing was lost. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use acs-sync-context for later drift.
+description: Initialize shared agent context when setup is requested or missing/lost routing blocks a required persistent write. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use acs-sync-context for drift inspection.
 ---
 
 # Init Context

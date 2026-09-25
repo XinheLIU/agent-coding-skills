@@ -19,7 +19,7 @@ context:
   handoff_to: [delivery_planning, code_review, release]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 Accept an authorized change, prepare or reuse its graph, then execute ready implementation tickets; other slices may still await design. Its input is a locked, verifiable change — a user story with test scenarios, a spec section with criteria, a bug report with reproduction steps, or a bootstrap request backed by accepted technical decisions. Its output is working code, verified end-to-end on the running system, with evidence.
 
@@ -52,7 +52,7 @@ Resume through the coordinator-configured recovery entry, default `<work-root>/<
 4. Collect completed execution evidence; reconcile contributions in dependency order, merging worktrees only within Git authorization; update state and re-render the graph.
 5. A failed ticket is marked failed with its evidence — its dependents stay blocked, everything else continues. Report failures in the envelope; the user retries specific tickets.
 
-Dispatch, await, collect, and reclaim are the four operations of [the orchestration protocol](references/orchestration-protocol.md). Bind them to verified host capabilities when delegating; otherwise execute serially with the same evidence contract. Scheduler details are Working Memory and derive ticket status from canonical tickets. Update the sole recovery entry with the next action; do not maintain another independent continuation state. Retain criterion-linked verification and consequential failures in Persistent Memory before handoff or run cleanup.
+Dispatch, await, collect, and reclaim are the four operations of [the orchestration protocol](../../resources/protocols/orchestration.md). Bind them to verified host capabilities when delegating; otherwise execute serially with the same evidence contract. Scheduler details are Working Memory and derive ticket status from canonical tickets. Update the sole recovery entry with the next action; do not maintain another independent continuation state. Retain criterion-linked verification and consequential failures in Persistent Memory before handoff or run cleanup.
 
 ## Verify end to end
 
@@ -62,4 +62,4 @@ Code-level green is not done. Start the system the way a user would (documented 
 
 ## Return the envelope
 
-Return the [shared handoff envelope](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): criterion → ticket → evidence → revision mapping, end-to-end verification result, failed tickets with blocking effects, and the single next action. Code review and refactoring belong to the quality suite (`acs-review-code-quality`, `acs-refactor-code`); no commit or release is implied.
+Return the [shared handoff envelope](../../resources/protocols/skill-declarations.md#handoff-envelope): criterion → ticket → evidence → revision mapping, end-to-end verification result, failed tickets with blocking effects, and the single next action. Code review and refactoring belong to the quality suite (`acs-review-code-quality`, `acs-refactor-code`); no commit or release is implied.

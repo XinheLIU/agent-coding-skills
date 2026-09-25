@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-25
 
-This preserves the earlier herdr/Claude delivery example as a host-specific binding of the [four orchestration operations](../../../skills/acs-implement/references/orchestration-protocol.md). It is not the default host, an installed runtime integration, or verified CLI syntax.
+This preserves the earlier herdr/Claude delivery example as a host-specific binding of the [four orchestration operations](../../protocols/orchestration.md). It is not the default host, an installed runtime integration, or verified CLI syntax.
 
 Use only when the session has herdr, the selected worker executable, authorized delegation, and suitable isolated workspaces. Consult the installed `herdr <subcommand> --help` before mapping operations; discover the executable rather than assuming a user-home path. The example selects Claude Code; another supported worker is an adapter choice.
 

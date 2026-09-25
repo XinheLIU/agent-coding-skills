@@ -20,6 +20,17 @@ class DeclarationTests(unittest.TestCase):
         ) + "```\n"
         self.assertEqual(validator.declaration_errors(declaration), [])
 
+    def test_handoff_must_name_a_defined_consumer(self) -> None:
+        declaration = "```yaml\ncontext:\n" + "".join(
+            f"  {field}: []\n" for field in sorted(validator.FIELDS)
+        ) + "```\n"
+        for selector in ("context_management", "unknown_consumer"):
+            with self.subTest(selector=selector):
+                self.assertTrue(validator.declaration_errors(
+                    declaration.replace("handoff_to: []", f"handoff_to: [{selector}]")))
+        self.assertEqual(validator.declaration_errors(
+            declaration.replace("handoff_to: []", "handoff_to: [coordinator]")), [])
+
     def test_duplicate_field_cannot_hide_missing_field(self) -> None:
         declaration = "```yaml\ncontext:\n" + "".join(
             f"  {field}: []\n" for field in sorted(validator.FIELDS)
@@ -37,6 +48,14 @@ class DeclarationTests(unittest.TestCase):
 
 
 class RetentionReferencesTests(unittest.TestCase):
+    def test_missing_link_outside_suite_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder) / "system"
+            root.mkdir()
+            skill = root / "SKILL.md"
+            skill.write_text("[Coordination](../workflows/context-coordination.md)\n")
+            self.assertTrue(validator.reference_errors(skill, root))
+
     def test_retained_change_is_readable_without_run_scratch(self) -> None:
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

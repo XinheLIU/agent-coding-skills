@@ -1,15 +1,15 @@
 ---
 protocol: acs:presenter
-version: 1.0.0
+version: 1.1.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/presenter.md
 ---
 
 # Presenter and Human Review
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
-Use this contract when preparing a human reading/review view, receiving feedback on a view, or retaining reviewed evidence. It specializes the [memory and ownership protocol](../skills-src/context/acs-init-context/references/PROTOCOL.md); it adds neither a service nor an approval gate.
+Use this contract when preparing a human reading/review view, receiving feedback on a view, or retaining reviewed evidence. It specializes the [memory and ownership protocol](skill-declarations.md); it adds neither a service nor an approval gate.
 
 ## Interface and ownership
 
@@ -19,7 +19,18 @@ present(references, focus) -> view_reference
 
 `references` identify accessible canonical records and consumed revisions. `focus` names what the reader needs to understand or decide. Domain skills supply conclusions, evidence, options, recommendations and unresolved questions. The coordinator resolves sources and saves necessary records. Presenter controls reading order, information density, comparison and visual expression.
 
-Presenter preserves substantive meaning, recommendation order, uncertainty, blocking effects and domain status. Missing reasoning returns to its domain owner. It cannot accept a proposal, change ticket status or infer authorization. Simple results use text/Markdown; use HTML when diagrams, comparisons or progress benefit from it. Follow the shared [visual report format](../../skills/acs-map-current-product/references/visual-report.md) for a derived HTML companion. No separate Presenter skill is required for domain work or text delivery.
+Presenter preserves substantive meaning, recommendation order, uncertainty, blocking effects and domain status. Missing reasoning returns to its domain owner. It cannot accept a proposal, change ticket status or infer authorization. No separate Presenter skill is required for domain work or text delivery.
+
+## Templates
+
+Simple results use text/Markdown; use HTML when diagrams, comparisons or progress benefit from it. All shared display templates live under `skills-src/authoring/references/`:
+
+| Template | Use when |
+| --- | --- |
+| [Visual report](../../skills/acs-map-current-product/references/visual-report.md) | The default derived HTML companion: header, overview, finding cards, evidence, footer |
+| [Tabbed discovery report](../skills-src/authoring/references/tabbed-discovery-report.md) | Complex multi-dimensional analysis: 3+ major concerns, revision history, nested options, multi-dimension before/after |
+
+Per-skill `HTML-REPORT.md` references only add that skill's content requirements; display rules stay in these shared templates. Canonical memory documents (`product.html`, `prototype.html`) are not Presenter views; their serialization is the [HTML record format](html-records.md).
 
 ## Generate a view
 

@@ -33,7 +33,7 @@ context:
   handoff_to: [implementation, testing, operations]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 You are a staff engineer running a production-readiness review. Two jobs:
@@ -163,7 +163,7 @@ Cite the spec line for each finding. If a gap-analysis artifact from `acs-review
 
 ## Evidence identity
 
-Use [engineering context](../../resources/skills-src/context/acs-init-context/references/engineering-memory.md). Retain change/task ID, criteria and contract revisions, reviewed code/diff revision, environment assumptions, failures, skipped checks, omissions, and separate Standards/Spec readiness. A static code review cannot stand in for executed acceptance evidence. Changed relevant inputs mark affected conclusions for review.
+Use [engineering context](../../resources/protocols/engineering-memory.md). Retain change/task ID, criteria and contract revisions, reviewed code/diff revision, environment assumptions, failures, skipped checks, omissions, and separate Standards/Spec readiness. A static code review cannot stand in for executed acceptance evidence. Changed relevant inputs mark affected conclusions for review.
 
 ## Step 3 — Test coverage gap
 

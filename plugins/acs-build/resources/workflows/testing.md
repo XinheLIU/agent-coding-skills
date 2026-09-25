@@ -10,6 +10,6 @@ codebase-design identifies the public seam
   → acs-analyze-test-gaps audits critical behavior coverage
 ```
 
-Tests observe behavior through agreed public seams and canonical acceptance criteria. Use [engineering context](../skills-src/context/acs-init-context/references/engineering-memory.md): retain criterion → test/evidence → revision mappings, environment assumptions, failures, skips, omissions, and scoped readiness. Planning/raw output is Run Context; final evidence is Change Context. Canonical ticket status stays in its tracker.
+Tests observe behavior through agreed public seams and canonical acceptance criteria. Use [engineering context](../protocols/engineering-memory.md): retain criterion → test/evidence → revision mappings, environment assumptions, failures, skips, omissions, and scoped readiness. Planning/raw output is Run Context; final evidence is Change Context. Canonical ticket status stays in its tracker.
 
 The [coordinator](../protocols/context-coordination.md) records evidence and propagates scoped freshness; Testing determines its meaning. Missing criteria block readiness claims while independent baseline analysis can continue. Changed code/contracts/environment require affected checks to be reassessed.

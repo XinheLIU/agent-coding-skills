@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-25
 
-Use the lifecycle and retention rules in [PROTOCOL.md](../../acs-init-context/references/PROTOCOL.md). This reference defines recoverable run state; Persistent proposals, decisions and evidence live separately in established tracker/document homes, defaulting to tracked `docs/changes/<change-id>/` for new local-only changes.
+Use the lifecycle and retention rules in [PROTOCOL.md](../../../resources/protocols/skill-declarations.md). This reference defines recoverable run state; Persistent proposals, decisions and evidence live separately in established tracker/document homes, defaulting to tracked `docs/changes/<change-id>/` for new local-only changes.
 
 ## Shape
 

@@ -20,7 +20,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Product ideation has two lanes: greenfield creation and existing-product improvement. Most
@@ -55,7 +55,7 @@ architecture refactor or code-quality cleanup.
 
 ## Step 1: Read shared product knowledge
 
-Read [the product memory contract](../acs-brainstorm/references/product-memory.md), `docs/agents/memory.md`, and configured run recovery entry. Resolve the durable `product.html` and working `discovery.html` through their pointers; read legacy documents when those remain canonical. Follow relevant record anchors and inspect their evidence, authority, coverage, and review state. This skill reads records and routes; it does not update product findings.
+Read [the product memory contract](../../resources/protocols/product-memory.md), `docs/agents/memory.md`, and configured run recovery entry. Resolve the durable `product.html` and working `discovery.html` through their pointers; read legacy documents when those remain canonical. Follow relevant record anchors and inspect their evidence, authority, coverage, and review state. This skill reads records and routes; it does not update product findings.
 
 | Knowledge needed | Ready when |
 | --- | --- |

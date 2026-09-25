@@ -4,7 +4,7 @@ Last updated: 2026-09-25
 
 This reference condenses the full PRD framework for use by the `acs-write-prd` skill. Read this when
 you need to understand the "why" behind the output format, or when making judgment calls about
-structure, depth, and quality bar. The parts below are a reading order over shared records; [the product memory contract](../../acs-brainstorm/references/product-memory.md) governs persistence, partial readiness, and enrichment.
+structure, depth, and quality bar. The parts below are a reading order over shared records; [the product memory contract](../../../resources/protocols/product-memory.md) governs persistence, partial readiness, and enrichment.
 
 ---
 
@@ -180,4 +180,4 @@ When using this PRD as input for an AI coding agent:
 4. Point the configured run recovery entry at the configured `product.html#prd` and relevant requirement anchors. Legacy PRDs remain readable until migrated under the product contract.
 5. Update affected records and a dated change note when accepted intent changes; mark dependent conclusions for review where needed.
 
-The product document contains tracked North Star, Current State, and Change Context records under the shared protocol. Promotion preserves essential evidence and rationale there before working conclusions become pointers. Templates above describe content quality; [the product memory contract](../../acs-brainstorm/references/product-memory.md) governs HTML persistence, partial knowledge, shared records, and authority.
+The product document contains tracked North Star, Current State, and Change Context records under the shared protocol. Promotion preserves essential evidence and rationale there before working conclusions become pointers. Templates above describe content quality; [the product memory contract](../../../resources/protocols/product-memory.md) governs HTML persistence, partial knowledge, shared records, and authority.

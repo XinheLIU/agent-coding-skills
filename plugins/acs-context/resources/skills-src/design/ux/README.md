@@ -6,7 +6,7 @@ How the UX design system in this repo is designed: the internal pipeline of stag
 
 ## What this phase owns
 
-UX design turns PRD intent into implemented components. Shared design understanding is a **triad** (contract: [Design memory](../../../../skills/acs-init-context/references/design-memory.md), symlinked into each skill's `references/`):
+UX design turns PRD intent into implemented components. Shared design understanding is a **triad** (contract: [Design memory](../../../protocols/design-memory.md), symlinked into each skill's `references/`):
 
 | Question | Document | Holds |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ Two hard sequencing rules, both machine-checkable in the design doc:
 1. **Interaction before visuals** — structure (what/where/when) is designed and locked (`data-structure="locked"`) before color, typography, or polish. `acs-visual-design-variants` may not move buttons, navigation, or state transitions; a structural change reopens the section through `acs-design-interaction-flow`.
 2. **One canonical token source** — root `DESIGN.md` is the only how downstream skills read for visual values. `acs-design-context` decides what feeds it (adopt, extract, migrate, or create) and keeps the design doc's `:root` token block in sync.
 
-Lifecycle and retention follow [the shared protocol](../../../../skills/acs-init-context/references/PROTOCOL.md), with artifact roles in [the Design contract](../../../../skills/acs-init-context/references/design-memory.md). Persistent Memory retains proposed designs before formal review and accepted prototype intent, exact reviewed versions, decisions, and applicable rules. Working Memory holds run exploration until reconciliation. [Presenter](../../../protocols/presenter.md) renders derived review views; canonical prototype HTML remains a Persistent artifact.
+Lifecycle and retention follow [the shared protocol](../../../protocols/skill-declarations.md), with artifact roles in [the Design contract](../../../protocols/design-memory.md). Persistent Memory retains proposed designs before formal review and accepted prototype intent, exact reviewed versions, decisions, and applicable rules. Working Memory holds run exploration until reconciliation. [Presenter](../../../protocols/presenter.md) renders derived review views; canonical prototype HTML remains a Persistent artifact.
 
 ## The six-layer external model
 

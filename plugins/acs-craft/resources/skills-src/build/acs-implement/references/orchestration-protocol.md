@@ -34,7 +34,7 @@ Without worktree isolation, shared-write risks serialize work. Parallel dispatch
 
 ## State lifecycle
 
-Resolve the run directory and its single recovery entry from memory configuration under the [shared protocol](../../../../../skills/acs-init-context/references/PROTOCOL.md#repository-configuration-and-resolution). The default entry is `<work-root>/<run-id>/state.md`; it owns one next action, blockers, canonical references and consumed revisions.
+Resolve the run directory and its single recovery entry from memory configuration under the [shared protocol](../../../../protocols/skill-declarations.md#repository-configuration-and-resolution). The default entry is `<work-root>/<run-id>/state.md`; it owns one next action, blockers, canonical references and consumed revisions.
 
 An optional `<work-root>/<run-id>/execution.json` ([schema](state-schema.json)) stores subordinate scheduler details: agent references, timestamps, evidence pointers and a derived frontier. The recovery entry links it. Its per-ticket statuses are scheduler observations derived from canonical tickets, never independent project status. Update affected scheduler observations and the recovery entry together on each transition, then refresh the derived DAG when useful.
 
@@ -46,4 +46,4 @@ A failed or blocked-and-stuck agent fails its ticket: record the evidence trail,
 
 ## Handoff envelope
 
-The run's return value is the [shared handoff envelope](../../../../../skills/acs-init-context/references/PROTOCOL.md#handoff-envelope) — the retired standalone `handoff` skill's format, now produced by every `acs-implement` run: canonical change identity, criterion → ticket → evidence → revision mapping, end-to-end verification result, unresolved questions with blocking effects, and one executable next action.
+The run's return value is the [shared handoff envelope](../../../../protocols/skill-declarations.md#handoff-envelope) — the retired standalone `handoff` skill's format, now produced by every `acs-implement` run: canonical change identity, criterion → ticket → evidence → revision mapping, end-to-end verification result, unresolved questions with blocking effects, and one executable next action.

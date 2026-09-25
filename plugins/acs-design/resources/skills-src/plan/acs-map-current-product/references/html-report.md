@@ -4,7 +4,7 @@ Last updated: 2026-09-17
 
 For the compact card grammar, standalone packaging rule, and before/after visual budget, also read [the local visual report contract](../../../../../skills/acs-audit-architecture/references/visual-report.md). This document remains the product-memory-specific presentation guidance; the local contract supplies the portable visual rules.
 
-Read [the product memory contract](../../../context/acs-init-context/references/product-memory.md) first. The baseline enriches `discovery.html`; it does not own the document or produce a separate `current-product.html`. These patterns guide presentation of current behavior inside shared concepts. Preserve records, IDs, and styling already present.
+Read [the product memory contract](../../../../protocols/product-memory.md) first. The baseline enriches `discovery.html`; it does not own the document or produce a separate `current-product.html`. These patterns guide presentation of current behavior inside shared concepts. Preserve records, IDs, and styling already present.
 
 Use the contract's semantic scaffold and shared navigation. Map the snapshot and candidate visions to `overview`, roles to `users-problems`, stories and flows to `capabilities-journeys`, findings to `gaps-opportunities`, unknowns to `questions-assumptions`, and NFR observations to `risks-measures`. The baseline summary's coverage pills stay in the overview; the aggregated `research-coverage` record with the roadmap-readiness statement lives in the `research` section. Evidence lives in linked records or native details. A module map is explanatory material attached to relevant capability records, not a competing inventory.
 

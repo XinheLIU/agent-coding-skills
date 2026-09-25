@@ -1,6 +1,6 @@
 # Portable ACS Harness
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ACS has one set of domain skills and shared context contracts. Generated plugins materialize their transitive resource closure with the same public skill IDs. Context coordination and Presenter are written procedures executed by the active agent; this change adds no scheduler or host SDK integration.
 
@@ -17,11 +17,11 @@ The host adds its own invocation syntax or plugin qualification around the ID. N
 | Presenter | Reading order, comparisons and review views over versioned records | Domain judgments and the shared Presenter contract |
 | Host adapter | Discovery, invocation syntax, tool calls, questions, delegation, workspace isolation, lifecycle events | Host APIs and the neutral procedure/role prompts |
 
-The [shared protocol](../../skills/acs-init-context/references/PROTOCOL.md) remains authoritative for context and state ownership. The [coordinator](../protocols/context-coordination.md) remains authoritative for execution coordination. This document defines packaging and adapter boundaries, not a second protocol or task database.
+The [shared protocol](../protocols/skill-declarations.md) remains authoritative for context and state ownership. The [coordinator](../protocols/context-coordination.md) remains authoritative for execution coordination. This document defines packaging and adapter boundaries, not a second protocol or task database.
 
 ## Host capability boundary
 
-Discover capabilities from the actual session and host documentation, using the existing [capability profile](../../skills/acs-translate-agent-context/references/agent-surface.md#capability-profile). Record verified availability and restrictions for skill loading, file/tool access, questions, delegation, workspace isolation, lifecycle events, persistence, and enforcement. Unknown capability support needs verification; a host or model name alone is not evidence.
+Discover capabilities from the actual session and host documentation, using the existing capability profile in `acs-translate-agent-context`'s `references/agent-surface.md`. Record verified availability and restrictions for skill loading, file/tool access, questions, delegation, workspace isolation, lifecycle events, persistence, and enforcement. Unknown capability support needs verification; a host or model name alone is not evidence.
 
 Domain procedures request capabilities rather than naming `AskUserQuestion`, `Task`, a preferred model, or a host executable. Adapters resolve those requests to available tools. Shared role prompts stay outside host-specific control flow. Ordinary host permission rules and the user's existing authorization continue to apply.
 

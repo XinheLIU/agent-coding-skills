@@ -19,7 +19,7 @@ context:
   handoff_to: [visual_design, product, implementation]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Design the **how users interact** before the **how it looks**. Define information architecture, user flows, and all interaction states (loading, empty, error, success, partial) through low-fidelity wireframes.
@@ -538,11 +538,11 @@ docs/design/prototype.html      # Canonical prototype — wireframe sections, lo
 
 ## Accepted decision handoff
 
-Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](../acs-design-context/references/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](../../resources/protocols/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 
-Full contract: [references/design-memory.md](../acs-design-context/references/design-memory.md).
+Full contract: [references/design-memory.md](../../resources/protocols/design-memory.md).
 
 
 Use coordinator-supplied paths and the active change identity; do not repeat path discovery.

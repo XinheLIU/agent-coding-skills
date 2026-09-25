@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-25
 
-状态：已于 2026-09-25 获用户接受并授权实施。本文保留设计理由；执行规则以 [共享记忆协议](../skills-src/context/acs-init-context/references/PROTOCOL.md)、[协调协议](../protocols/context-coordination.md)和 [Presenter 契约](../protocols/presenter.md)为准。既有规范文档按实际需要迁移，不批量改变格式。
+状态：已于 2026-09-25 获用户接受并授权实施。本文保留设计理由；执行规则以 [共享记忆协议](../protocols/skill-declarations.md)、[协调协议](../protocols/context-coordination.md)和 [Presenter 契约](../protocols/presenter.md)为准。既有规范文档按实际需要迁移，不批量改变格式。
 
 ## 结论
 
@@ -213,4 +213,4 @@ Presenter 的重建条件更简单：规范来源仍存在且版本可识别。�
 
 官方网页于本次研究实际读取；OpenSpec / Superpowers 的观察针对上述本地固定版本。外部方案未作为依赖安装或执行。
 
-现有实现中，[交付报告契约](../skills-src/build/acs-plan-delivery/references/delivery-report.md)及 `render_dag.py` 已实践「规范 Ticket → 派生 HTML」。这是 Presenter 可复用的起点；[Product](../skills-src/context/acs-init-context/references/product-memory.md) 和 [Design](../../skills/acs-design-context/references/design-memory.md) 则证明必须保留规范 HTML 与视觉 artifact 的例外。
+现有实现中，[交付报告契约](../skills-src/build/acs-plan-delivery/references/delivery-report.md)及 `render_dag.py` 已实践「规范 Ticket → 派生 HTML」。这是 Presenter 可复用的起点；[Product](../protocols/product-memory.md) 和 [Design](../protocols/design-memory.md) 则证明必须保留规范 HTML 与视觉 artifact 的例外。

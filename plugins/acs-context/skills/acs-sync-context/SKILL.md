@@ -1,6 +1,6 @@
 ---
 name: acs-sync-context
-description: Detect and repair shared-context drift after setup. Use for broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state; use acs-init-context when routing is absent.
+description: Inspect or repair shared-context drift. Use for broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state; if routing is absent, inspect explicit sources read-only or use acs-init-context when setup is needed.
 ---
 
 # Sync Context
@@ -19,10 +19,10 @@ context:
   handoff_to: [domain_owners, coordinator]
 ```
 
-Shared semantics: [shared protocol](../acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Use the [protocol](../acs-init-context/references/PROTOCOL.md) and [document layout](../acs-init-context/references/canonical-doc-layout.md) for routing, freshness, ownership, and retention. When routing is absent, use `acs-init-context`; read-only inspection may proceed from explicit sources.
+Use the [protocol](../../resources/protocols/skill-declarations.md) and [document layout](../acs-init-context/references/canonical-doc-layout.md) for routing, freshness, ownership, and retention. When routing is absent, use `acs-init-context`; read-only inspection may proceed from explicit sources.
 
 ## Modes
 
@@ -46,8 +46,8 @@ Current-state architecture, conventions, and runbooks may explain present truth 
 - Proposed records required for review or downstream work already live in Persistent Memory; persistence does not imply acceptance.
 - Review decisions bind actual feedback to subject, revision and scope; exact reviewed content/assets remain retrievable and duplicate feedback is a no-op under [Presenter](../../resources/protocols/presenter.md).
 - Generated views can be rebuilt from declared sources. Query an enabled code index against source or refresh it using its recorded command.
-- Product HTML is a semantic source under [the Product contract](../acs-init-context/references/product-memory.md), not a generated view; preserve record IDs, authority, and active review findings.
-- Design acceptance preserved consequential rationale under [the Design contract](../acs-init-context/references/design-memory.md), independently of component documentation.
+- Product HTML is a semantic source under [the Product contract](../../resources/protocols/product-memory.md), not a generated view; preserve record IDs, authority, and active review findings.
+- Design acceptance preserved consequential rationale under [the Design contract](../../resources/protocols/design-memory.md), independently of component documentation.
 - Final verification identifies criteria, code/diff revision, environment, failures, omissions, and release references where applicable.
 
 ## Completion retention

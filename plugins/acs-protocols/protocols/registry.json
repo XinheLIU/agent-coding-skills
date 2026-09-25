@@ -7,7 +7,7 @@
       "title": "Skill Context Declaration Contract",
       "canonical": "protocols/skill-declarations.md",
       "anchor": "#skill-declarations",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "status": "stable"
     },
     "context-coordination": {
@@ -28,7 +28,7 @@
       "id": "protocol:acs:design-memory",
       "title": "Design Domain Memory Contract",
       "canonical": "protocols/design-memory.md",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "status": "stable"
     },
     "engineering-memory": {
@@ -49,14 +49,21 @@
       "id": "protocol:acs:product-memory",
       "title": "Product Domain Memory Contract",
       "canonical": "protocols/product-memory.md",
-      "version": "1.1.0",
+      "version": "1.2.0",
+      "status": "stable"
+    },
+    "html-records": {
+      "id": "protocol:acs:html-records",
+      "title": "HTML Record Format",
+      "canonical": "protocols/html-records.md",
+      "version": "1.0.0",
       "status": "stable"
     },
     "presenter": {
       "id": "protocol:acs:presenter",
       "title": "Presenter and Human Review Contract",
       "canonical": "protocols/presenter.md",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "status": "stable"
     }
   }

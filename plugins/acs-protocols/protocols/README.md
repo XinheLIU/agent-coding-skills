@@ -1,19 +1,37 @@
 # Shared Protocols
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 `system/protocols/` is the canonical source of shared memory, ownership and handoff contracts. Skills own domain reasoning; the active coordinator resolves and reconciles records; Presenter organizes human reading. The [accepted design](../resources/docs/context-memory-presenter-proposal.md) explains the two-memory model and its trade-offs.
 
-| Contract | Read when |
-| --- | --- |
-| [Shared Context](skill-declarations.md) | Declaring inputs/outputs, classifying records, resolving identity, handing off or cleaning up |
-| [Coordination](context-coordination.md) | Assembling context, serializing contributions, resuming a run or routing review |
-| [Presenter](presenter.md) | Producing a human view, reconciling feedback or retaining reviewed content |
-| [Product](product-memory.md) | Reading or changing product records, requirements or product decisions |
-| [Design](design-memory.md) | Changing design authority, contracts, prototypes or design decisions |
-| [Engineering](engineering-memory.md) | Planning, implementing, testing or retaining verification evidence |
-| [Operations](operations-memory.md) | Recording runtime constraints, release evidence or operational decisions |
-| [Orchestration](orchestration.md) | Dispatching and reconciling implementation work |
+The contracts layer cleanly; each file stays in its layer:
+
+```text
+L0  Memory model      Working | Persistent{Intent, Current, Changes} | derived views,
+                      plus identity, freshness and retention — skill-declarations.md
+L1  Domain records    which records exist, ownership, status semantics — product/design/
+                      engineering/operations-memory.md (format-free)
+L2  Formats           how records serialize — html-records.md; run-state, CONTEXT and
+                      ADR templates under acs-init-context/references/
+L3  Presenter         derived human views and review reconciliation — presenter.md,
+                      indexing the shared report templates
+L4  Runtime           coordination, claims, orchestration, six-field declarations —
+                      context-coordination.md, orchestration.md
+```
+
+A domain contract never teaches HTML; a format file never defines ownership; a Presenter view never owns facts.
+
+| Contract | Layer | Read when |
+| --- | --- | --- |
+| [Shared Context](skill-declarations.md) | L0/L4 | Declaring inputs/outputs, classifying records, resolving identity, handing off or cleaning up |
+| [Coordination](context-coordination.md) | L4 | Assembling context, serializing contributions, resuming a run or routing review |
+| [Presenter](presenter.md) | L3 | Producing a human view, reconciling feedback or retaining reviewed content |
+| [HTML records](html-records.md) | L2 | Writing or retrieving canonical HTML memory documents |
+| [Product](product-memory.md) | L1 | Reading or changing product records, requirements or product decisions |
+| [Design](design-memory.md) | L1 | Changing design authority, contracts, prototypes or design decisions |
+| [Engineering](engineering-memory.md) | L1 | Planning, implementing, testing or retaining verification evidence |
+| [Operations](operations-memory.md) | L1 | Recording runtime constraints, release evidence or operational decisions |
+| [Orchestration](orchestration.md) | L4 | Dispatching and reconciling implementation work |
 
 ## Source references and distribution
 

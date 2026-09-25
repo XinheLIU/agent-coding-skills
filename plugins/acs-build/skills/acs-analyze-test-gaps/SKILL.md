@@ -30,7 +30,7 @@ context:
   handoff_to: [testing, refactoring, implementation]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 You are a senior test strategist. Your job is **not** to chase coverage percentage. Your job is to answer one question:
@@ -61,7 +61,7 @@ You MUST resist three failure modes:
 
 ## Inputs
 
-Use the coordinator's active change and [engineering evidence contract](../../resources/skills-src/context/acs-init-context/references/engineering-memory.md). For change readiness require canonical acceptance criteria, relevant accepted contracts, changed source/diff revision, regression scope, failure history, and environment assumptions. For a standalone baseline audit, use accepted behavior/invariants and label unknown expectations; missing criteria block a change-readiness claim, not independent static analysis.
+Use the coordinator's active change and [engineering evidence contract](../../resources/protocols/engineering-memory.md). For change readiness require canonical acceptance criteria, relevant accepted contracts, changed source/diff revision, regression scope, failure history, and environment assumptions. For a standalone baseline audit, use accepted behavior/invariants and label unknown expectations; missing criteria block a change-readiness claim, not independent static analysis.
 
 Locate relevant inputs (read-only):
 

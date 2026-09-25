@@ -19,7 +19,7 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Wayfinding resolves broad uncertainty. For accepted scope that needs delivery slices and specific design blockers, use [acs-plan-delivery](../../build/acs-plan-delivery/SKILL.md) (reference procedure; capability not installed); share existing decision tickets between the two skills.

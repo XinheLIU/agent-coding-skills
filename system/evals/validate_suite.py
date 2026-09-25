@@ -146,8 +146,8 @@ def reference_errors(path: Path, boundary: Path) -> list[str]:
             continue
         file_part, _, fragment = raw.partition("#")
         target = (path.parent / unquote(file_part)).resolve() if file_part else path.resolve()
-        if not target.is_relative_to(boundary.resolve()):
-            continue  # External provenance is outside this suite's reference audit.
+        if target.is_relative_to(boundary.resolve().parent / "references"):
+            continue  # Optional read-only provenance may be absent from a clone.
         if not target.exists():
             errors.append(f"broken reference: {reference}")
         elif fragment and target.is_file() and target.suffix in {".md", ".html"}:
@@ -162,6 +162,9 @@ def declaration_errors(text: str) -> list[str]:
         return [f"expected one context declaration, found {len(blocks)}"]
     errors: list[str] = []
     seen: set[str] = set()
+    protocol = (SUITE / "protocols/skill-declarations.md").read_text()
+    consumers = protocol.split("## Handoff consumers\n", 1)[1].split("\n## ", 1)[0]
+    handoff_consumers = set(re.findall(r"^\| `([^`]+)` \|", consumers, re.MULTILINE))
     for line in blocks[0].splitlines()[1:]:
         match = re.fullmatch(r"  ([a-z_]+): \[([^\[\]]*)\]", line)
         if not match:
@@ -172,6 +175,10 @@ def declaration_errors(text: str) -> list[str]:
             errors.append(f"duplicate context field: {field}")
         seen.add(field)
         selectors = [value.strip() for value in values.split(",")] if values.strip() else []
+        if field == "handoff_to":
+            unknown = sorted(set(selectors) - handoff_consumers)
+            if unknown:
+                errors.append(f"undefined handoff consumers: {unknown}")
         if len(selectors) != len(set(selectors)) or any(not SELECTOR.fullmatch(v) for v in selectors):
             errors.append(f"invalid or duplicate selectors: {field}")
     if seen != FIELDS:

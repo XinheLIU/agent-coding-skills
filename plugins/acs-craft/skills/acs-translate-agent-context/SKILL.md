@@ -26,7 +26,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 Translate required behavior, not filenames or brand-specific conventions. The source remains available until its destination exists and passes an equivalent check.

@@ -1,6 +1,6 @@
 # acs-craft
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 Context lifecycle and authoring skills for the ACS suite.
 

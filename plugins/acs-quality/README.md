@@ -1,6 +1,6 @@
 # acs-quality
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.
 

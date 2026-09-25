@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PRD Writer
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ## Context contract
 
@@ -20,14 +20,14 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
+Shared semantics: [shared protocol](../../resources/protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.
 
 ## Shared Memory Contract
 
-Read [the product memory contract](../acs-brainstorm/references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy migration. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
+Read [the product memory contract](../../resources/protocols/product-memory.md) before persistence. It defines record identity, enrichment, authority, and legacy migration; [promotion and roadmap](references/promotion-and-roadmap.md) sequences the promotion workflow this skill owns. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
 
 
 Resolve the product through user paths, `docs/agents/memory.md`, and configured run recovery entry. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.

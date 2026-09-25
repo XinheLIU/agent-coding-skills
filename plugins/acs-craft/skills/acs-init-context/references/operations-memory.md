@@ -9,7 +9,7 @@ canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/prot
 
 Last updated: 2026-09-25
 
-The active coordinator and Operations skills use the project's existing CI/CD commands or authorized provider capabilities. This contract defines its handoff boundary under the [shared protocol](PROTOCOL.md); it does not introduce a deployment framework. Environment/runbook facts are Persistent Current; release decisions and compact evidence are Persistent Changes. Execution logs and transient rollout checks are Working. Human reports use [Presenter](../../../resources/protocols/presenter.md); they do not own release status or authorization.
+The active coordinator and Operations skills use the project's existing CI/CD commands or authorized provider capabilities. This contract defines its handoff boundary under the [shared protocol](../../../resources/protocols/skill-declarations.md); it does not introduce a deployment framework. Environment/runbook facts are Persistent Current; release decisions and compact evidence are Persistent Changes. Execution logs and transient rollout checks are Working. Human reports use [Presenter](../../../resources/protocols/presenter.md); they do not own release status or authorization.
 
 ## Persistent Current
 
