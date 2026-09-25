@@ -1,0 +1,5 @@
+interface:
+  display_name: "Review Architecture"
+  short_description: "Run a comprehensive architecture review across TOGAF 4A (Business / Application ..."
+policy:
+  allow_implicit_invocation: false

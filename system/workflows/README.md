@@ -1,8 +1,8 @@
 # Workflows
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
-Workflows compose skills around the [shared memory protocol](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md). Skills provide focused behavior; workflows own sequencing, approval gates, and state transitions.
+Workflows compose skills around the [shared memory protocol](../protocols/skill-declarations.md). Skills provide focused behavior; workflows own sequencing, approval gates, and state transitions.
 
 ## Six Lifecycle Phases
 

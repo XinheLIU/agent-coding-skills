@@ -1,56 +1,50 @@
 {
   "name": "acs-plan",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "skills": [
     {
       "id": "acs-brainstorm",
-      "phase": "plan",
-      "description": "Turn an ambiguous idea into a Jobs-to-be-Done brief through Socratic dialogue. Use when the user shares a vague idea, asks \"what should I build\", wants to explore a concept, or needs requirements discovery."
+      "path": "skills/acs-brainstorm/SKILL.md"
     },
     {
       "id": "acs-define-outcomes",
-      "phase": "plan",
-      "description": "Turn a chosen solution into verifiable product commitments — for new products, existing-product increments, and ambitious redesigns alike. Use when defining what success looks like, specifying observable acceptance criteria, deciding which capabilities are committed, reduced, deferred, or excluded, prioritizing or cutting scope, or producing the outcome contracts design and engineering build against."
+      "path": "skills/acs-define-outcomes/SKILL.md"
     },
     {
       "id": "acs-design-experiment",
-      "phase": "plan",
-      "description": "Design a bounded experiment to resolve a named, falsifiable uncertainty cheaply. Invoked explicitly — not as a default scoping step — when a specific assumption can be tested before committing to the full solution. The experiment scope never becomes the product scope."
+      "path": "skills/acs-design-experiment/SKILL.md"
     },
     {
       "id": "acs-explore-unknowns",
-      "phase": "plan",
-      "description": "Map a multi-session effort into dependency-ordered decision tickets. Use when the destination is known but the route is unclear, or independent decisions can proceed concurrently."
+      "path": "skills/acs-explore-unknowns/SKILL.md"
     },
     {
       "id": "acs-ideate-product",
-      "phase": "plan",
-      "description": "Route a product effort to the right next step. Use when the user has an idea, feature request, existing codebase, request for user stories from code, existing-product improvement, or stalled discovery effort and it is not obvious which question is still open."
+      "path": "skills/acs-ideate-product/SKILL.md"
     },
     {
       "id": "acs-map-current-product",
-      "phase": "plan",
-      "description": "Map what an existing codebase already does as a product baseline. Use when the user asks what an app/codebase/product does, wants user stories from existing code, inherits a repo, audits implemented versus planned product behavior, or needs a baseline before improving an existing product."
+      "path": "skills/acs-map-current-product/SKILL.md"
     },
     {
       "id": "acs-run-premortem",
-      "phase": "plan",
-      "description": "Stress-test a plan by assuming it has already failed. Use when the user wants a pre-mortem, risk analysis, \"what could go wrong\" review, or devil's-advocate pass on any project or idea."
+      "path": "skills/acs-run-premortem/SKILL.md"
+    },
+    {
+      "id": "acs-settle-requirements",
+      "path": "skills/acs-settle-requirements/SKILL.md"
     },
     {
       "id": "acs-shape-solution",
-      "phase": "plan",
-      "description": "Turn a validated demand or current-product baseline into a concrete solution with understood target experience, connected journeys, required capabilities, and a resolved product form and data basis. Use when defining what a product or feature should do from the user's side — including ambitious redesigns of existing products. For user stories from existing code without prior discovery, use acs-map-current-product first."
+      "path": "skills/acs-shape-solution/SKILL.md"
     },
     {
       "id": "acs-validate-demand",
-      "phase": "plan",
-      "description": "Grade the evidence behind a product claim and issue a go/no-go verdict. Use when the user asks to validate an idea, critique a concept, check product-market fit, validate an active-product improvement, or decide whether something is worth building."
+      "path": "skills/acs-validate-demand/SKILL.md"
     },
     {
       "id": "acs-write-prd",
-      "phase": "plan",
-      "description": "Consolidate shared product knowledge into a durable HTML product document with a PRD reading view, or reconcile an accepted increment into it. Use when the user asks to write a PRD, preserve validated product intent, consolidate requirements, or update an existing PRD without regenerating it."
+      "path": "skills/acs-write-prd/SKILL.md"
     }
   ]
 }

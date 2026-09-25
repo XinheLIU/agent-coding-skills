@@ -2,8 +2,6 @@
   "name": "acs-maintain",
   "version": "0.4.0",
   "description": "ACS maintain phase - incident diagnosis and fixes",
-  "main": "catalog/skill-set.json",
-  "keywords": ["agent", "coding", "maintenance", "incident", "debugging"],
-  "dependencies": { "acs-context": "^0.4.0" },
-  "peerDependencies": { "acs-test": "^0.4.0" }
+  "license": "MIT",
+  "main": "catalog/skill-set.json"
 }

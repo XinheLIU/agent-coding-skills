@@ -1,13 +1,13 @@
 # HTML Delivery Report
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
-The user receives one `docs/changes/<change-id>/delivery-plan.html` after accepted scope has been decomposed. Preserve an established report location on resumed work. `acs-plan-delivery` owns the plan; `acs-draw-portfolio-dag` renders it and can refresh progress without repeating planning.
+The user receives one `docs/changes/<change-id>/delivery-plan.html` after accepted scope has been decomposed. Preserve an established report location on resumed work. `acs-plan-delivery` owns domain scope, decomposition, blockers, and recommendations; [Presenter](../../../resources/protocols/presenter.md) owns display and review semantics. `acs-draw-portfolio-dag` renders the derived view and can refresh progress without repeating planning.
 
 ## Generate
 
 1. Scan canonical tickets with `acs-draw-portfolio-dag/scripts/scan_tasks.py`. Include prerequisite changes for cross-change edges; keep qualified IDs. For an existing tracker, derive the same manifest from its canonical records. Report nodes retain `ticket_type`, `readiness`, `scope`, `inputs`, `verification`, `blockers`, and `evidence` as plain text alongside IDs, dependencies, status, and source revisions.
-2. Prepare a derived `plan.json` in the configured Run Context. Summarize accepted source records; retain scope and substantive decisions in their canonical homes. Required fields:
+2. Prepare a derived `plan.json` in the configured Working Memory. Summarize accepted source records; retain scope and substantive decisions in their canonical homes. Required fields:
 
    ```json
    {
@@ -31,7 +31,9 @@ The user receives one `docs/changes/<change-id>/delivery-plan.html` after accept
      -o "docs/changes/<change-id>/delivery-plan.html"
    ```
 
-   `RUN_DIR` is the resolved Run Context directory. The renderer embeds the report, graph, styles, and scripts into one file; no server or network dependency is required. Ticket details remain readable without JavaScript. Mermaid and graph-only HTML remain available for other callers.
+   `RUN_DIR` is the resolved Working Memory directory. The renderer embeds the report, graph, styles, and scripts into one file; no server or network dependency is required. Ticket details remain readable without JavaScript. Mermaid and graph-only HTML remain available for other callers.
+
+The HTML is a Human Review View, not a memory source. Preserve proposed plan decisions in canonical records before formal review; use those records and their revisions for feedback. Retain a reviewed snapshot only when its presentation influenced the decision.
 
 ## Present and refresh
 

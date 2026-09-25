@@ -114,7 +114,7 @@ def render_plan(plan: DeliveryPlan, nodes: list[TicketNode], output_dir: Path) -
 <h3>{escape(node["id"])} — {escape(node["title"])}</h3><p>{labels[status]} · {escape(metadata)}</p>
 <p class="ticket-scope">{escape(node.get("scope", ""))}</p><p>Prerequisites: {dependencies}</p>
 <details><summary>Checks, blockers &amp; evidence</summary>{details}
-<p>{source_link}</p><code>{escape(node.get("source_revision", ""))}</code></details></article>''')
+<p>{source_link}</p><code>{escape(node.get("source_revision") or "Revision unavailable — re-scan before review")}</code></details></article>''')
     sources = "".join(
         f'<li><a href="{safe_href(source["href"])}">{escape(source["label"])}</a> '
         f'<code>{escape(source["revision"])}</code></li>' for source in plan["sources"]
@@ -351,7 +351,7 @@ function render(){
       + '</div><div class="ntitle">'+esc(n.title)+'</div>'
       + (tags ? '<div class="tags">'+tags+'</div>' : '');
     el.title = "Source: " + (n.source_file || "manifest") + "\n"
-      + (n.source_revision || "") + "\n" + (n.status_raw || "")
+      + (n.source_revision || "Revision unavailable — re-scan before review") + "\n" + (n.status_raw || "")
       + (n.unresolved_dep_text ? "\nUnresolved: " + n.unresolved_dep_text : "");
     canvas.appendChild(el);
     attachDrag(el, n.id);

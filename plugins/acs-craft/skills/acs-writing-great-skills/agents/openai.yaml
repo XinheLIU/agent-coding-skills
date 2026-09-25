@@ -1,0 +1,5 @@
+interface:
+  display_name: "Writing Great Skills"
+  short_description: "Author or revise a predictable system skill. Use when defining a skill's invocat..."
+policy:
+  allow_implicit_invocation: false

@@ -1,5 +1,5 @@
 interface:
   display_name: "Write PRD"
-  short_description: "Consolidate product knowledge into a durable PRD document"
+  short_description: "Consolidate shared product knowledge into a durable HTML product document with a..."
 policy:
   allow_implicit_invocation: false

@@ -3,7 +3,7 @@ name: acs-review-design-doc
 description: Engineering review of a design doc (DESIGN.md, docs/plans/*.md) BEFORE any code is written. Catches scope creep, implicit assumptions, missing failure modes, and overcomplexity in the plan itself. Use this skill whenever the user asks to "review the plan", "review my DESIGN.md", "check my design doc", "is the plan ready", or mentions they are about to start coding from a plan/spec document. Also use proactively when the user shares a design doc and is about to start implementation — catching plan-stage issues is 10x cheaper than finding them after code is written.
 ---
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -17,7 +17,7 @@ context:
   handoff_to: [design, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 
 # Engineering Plan Review

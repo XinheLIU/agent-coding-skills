@@ -1,4 +1,4 @@
 interface:
   display_name: "Review Agent Instructions"
-  short_description: "Write and maintain CLAUDE.md or AGENTS.md — fold in a lesson, review shape, or wire it to memory"
+  short_description: "Review or update a repository's AGENTS.md or CLAUDE.md. Use to encode one incide..."
   default_prompt: "Use $acs-review-agent-instructions on AGENTS.md or CLAUDE.md. Choose the narrowest mode: encode one incident lesson, review the full file, or repair shared-context routing. Use $acs-translate-agent-context when the defect is cross-runtime parity."

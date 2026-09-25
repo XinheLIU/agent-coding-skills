@@ -1,6 +1,6 @@
 {
   "name": "context-lifecycle-handoffs",
-  "last_updated": "2026-09-17",
+  "last_updated": "2026-09-25",
   "description": "Behavioral scenarios for isolated forward-testing. Expected outcomes are evaluated from artifacts/actions; validate_suite.py checks structure only and is not a Harness.",
   "evals": [
     {
@@ -100,6 +100,56 @@
       "setup": "Only acs-settle-requirements, acs-plan-delivery, and acs-tdd are available; acs-implement and delegation are unavailable. Accepted requirements and approach are available.",
       "prompt": "Deliver the approved change with tests.",
       "expected_output": "Active agent performs workflow planning/execution directly with existing tools; reuse canonical tickets/run plan and criterion-based checks. Never invoke missing skills or require delegation; unresolved substantive blockers remain explicit."
+    },
+    {
+      "id": "one-recovery-entry",
+      "skills": [
+        "acs-init-context",
+        "acs-implement",
+        "acs-sync-context"
+      ],
+      "setup": "The project config chooses .work/export/state.md as its recovery entry. It links EXP-42, exact spec/design revisions, a blocker, next action, and execution.json as scheduler detail. An older docs/changes/EXP-42/run/state.json disagrees.",
+      "prompt": "Resume EXP-42 in a new session without reading previous chat or the HTML report.",
+      "expected_output": "Resolve the configured entry, load only its canonical references, check revisions and reconcile the stale internal detail against canonical ticket evidence. Do not treat an unconfigured historical state.json as a second authority or scan for newest scratch. Preserve active recovery state."
+    },
+    {
+      "id": "review-version-binding",
+      "skills": [
+        "acs-visual-design-variants",
+        "acs-sync-context"
+      ],
+      "setup": "DESIGN-7 r2 is durably proposed. A view labels r2. User accepted only export interaction at r2 with feedback F-19; implementation and deployment authorization are absent. Source changes materially to r3 before feedback is reconciled.",
+      "prompt": "Record the review outcome and prepare the next handoff.",
+      "expected_output": "Retain an r2-scoped acceptance with actual feedback source and accessible exact reviewed content; mark affected r3 applicability needs review, preserve unaffected decisions, do not invent implementation authorization. Handoff references canonical records rather than report as requirements."
+    },
+    {
+      "id": "feedback-deduplication",
+      "skills": [
+        "acs-sync-context"
+      ],
+      "setup": "D-12 already records feedback F-19 for DESIGN-7 r2. A different concurrent feedback F-20 requests a keyboard fix; current record is newer than the agent cache.",
+      "prompt": "Reconcile F-19 again, then the keyboard feedback.",
+      "expected_output": "Reread current record; F-19 causes no duplicate or overwrite. Preserve F-20 and distinct scope with its source, route substantive revision to owner. Acknowledge only actual feedback and retain exact reviewed basis."
+    },
+    {
+      "id": "presenter-delete-and-rebuild",
+      "skills": [
+        "acs-plan-delivery",
+        "acs-draw-portfolio-dag"
+      ],
+      "setup": "Canonical spec/tickets/decisions exist with recorded revisions. delivery-plan.html is a derived view; run JSON contains render input only.",
+      "prompt": "Delete the report, rebuild it from canonical sources, finish the run, and remove eligible Working files.",
+      "expected_output": "Report rebuild leaves spec/ticket/decision bytes unchanged; recreated view lists source revisions and current blockers. After cleanup, retained records resolve without Working, with final evidence and reviewed content still accessible. Active or abandoned-but-unreconciled scratch is not deleted."
+    },
+    {
+      "id": "html-artifact-boundary",
+      "skills": [
+        "acs-sync-context",
+        "acs-validate-prototype"
+      ],
+      "setup": "product.html owns product records. Accepted prototype.html r2 and assets carry exact reviewed layout. discovery.html has both disposable notes and an unresolved proposal sent to review yesterday.",
+      "prompt": "Clean completed Working and removable Human Review Views.",
+      "expected_output": "Keep canonical product HTML and exact accepted prototype/assets. Preserve the still-referenced proposal as proposed Persistent Memory before removing exploration; do not equate HTML with derived view or proposed with Working. Rendering-only changes do not invalidate semantic decisions, but reviewed prototype layout changes do."
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "name": "acs-context",
+  "version": "0.4.0",
+  "description": "ACS foundational context and memory infrastructure",
+  "author": {
+    "name": "Xinhe LIU",
+    "url": "https://github.com/XinheLIU"
+  },
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "license": "MIT",
+  "skills": "./skills/"
+}

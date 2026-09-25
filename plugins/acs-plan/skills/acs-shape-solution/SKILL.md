@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Shape Solution
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [product, design]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Three narrative outputs plus the scenarios they imply — for new ideas and already-mapped
@@ -44,7 +44,7 @@ Full framework detail, examples, and failure modes: [references/framework.md](re
 
 ## Shared Memory Contract
 
-Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](../acs-brainstorm/references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read users/problems, demand assessments, current capabilities and coverage, gaps, and accepted decisions. Enrich shared personas and capabilities with proposed behavior and scenarios; reuse established answers.

@@ -1,156 +1,148 @@
 #!/usr/bin/env python3
-"""Validate protocol registry and references in skills.
-
-Checks:
-1. All protocol:* references in SKILL.md files exist in registry
-2. All protocol files referenced in registry exist on disk
-3. All protocols have valid frontmatter (protocol, version, status)
-4. No remaining relative paths to shared contracts (../../PROTOCOL.md style)
-"""
+"""Check protocol registry, concrete source links, and isolated package closure."""
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE = ROOT / "system"
 PLUGINS = ROOT / "plugins"
-PROTOCOL_REF = re.compile(r'protocol:acs:([a-z][a-z0-9-]*)')
-MD_LINK = re.compile(r'\[[^\]]*\]\(([^)#]+)(#[^)]*)?\)')
+sys.path.insert(0, str(SUITE / "evals"))
+from validate_suite import FENCE, LINK, anchors
+
+PROTOCOL_REF = re.compile(r"protocol:acs:([a-z][a-z0-9-]*)")
+BUILT_PLUGINS = {"acs-protocols", "acs-plan", "acs-design", "acs-build", "acs-quality", "acs-craft", "acs-context", "acs-authoring", "acs-test", "acs-maintain"}
 
 
-def validate_protocols() -> list[str]:
-    """Validate protocol system integrity."""
+def link_errors(path: Path, boundary: Path, *, isolated: bool = False) -> list[str]:
     errors: list[str] = []
-
-    # Load registry
-    registry_path = SUITE / "protocols/registry.json"
-    try:
-        registry = json.loads(registry_path.read_text())
-    except (OSError, json.JSONDecodeError) as e:
-        errors.append(f"Cannot load registry: {e}")
-        return errors
-
-    if registry.get("schemaVersion") != 1 or registry.get("namespace") != "acs":
-        errors.append("Invalid registry schema or namespace")
-
-    protocols = registry.get("protocols", {})
-
-    # Check all protocol files exist and have valid frontmatter
-    for name, spec in protocols.items():
-        protocol_file = SUITE / spec["canonical"]
-        if not protocol_file.exists():
-            errors.append(f"Protocol file missing: {spec['canonical']}")
+    content = FENCE.sub("", path.read_text())
+    for reference in LINK.findall(content):
+        raw = reference.strip().split(' "', 1)[0]
+        if raw.startswith("protocol:"):
+            errors.append(f"unresolved logical reference: {reference}")
             continue
-
-        content = protocol_file.read_text()
-        frontmatter_match = re.match(r'^---\n(.*?)\n---\n', content, re.DOTALL)
-        if not frontmatter_match:
-            errors.append(f"{spec['canonical']}: missing frontmatter")
+        if re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:", raw) or any(c in raw for c in "<>{}*"):
             continue
-
-        frontmatter = frontmatter_match.group(1)
-        if f"protocol: acs:{name}" not in frontmatter:
-            errors.append(f"{spec['canonical']}: protocol ID mismatch (expected acs:{name})")
-        if "version:" not in frontmatter:
-            errors.append(f"{spec['canonical']}: missing version")
-        if "status:" not in frontmatter:
-            errors.append(f"{spec['canonical']}: missing status")
-
-    # Check all protocol references in skills resolve
-    skills = sorted((SUITE / "skills-src").rglob("SKILL.md"))
-    for skill_path in skills:
-        content = skill_path.read_text()
-        for match in PROTOCOL_REF.finditer(content):
-            protocol_name = match.group(1)
-            if protocol_name not in protocols:
-                rel_path = skill_path.relative_to(SUITE)
-                errors.append(f"{rel_path}: references unknown protocol:acs:{protocol_name}")
-
-    # Check for remaining old-style relative references
-    OLD_PATTERNS = [
-        (r'\.\./\.\./.*?/references/PROTOCOL\.md', 'references/PROTOCOL.md'),
-        (r'\.\./\.\./.*?/workflows/context-coordination\.md', 'workflows/context-coordination.md'),
-        (r'references/product-memory\.md(?!\s*\))', 'references/product-memory.md (should use protocol)'),
-        (r'references/design-memory\.md(?!\s*\))', 'references/design-memory.md (should use protocol)'),
-        (r'references/engineering-memory\.md(?!\s*\))', 'references/engineering-memory.md (should use protocol)'),
-    ]
-
-    for skill_path in skills:
-        content = skill_path.read_text()
-        for pattern, description in OLD_PATTERNS:
-            if re.search(pattern, content):
-                rel_path = skill_path.relative_to(SUITE)
-                errors.append(f"{rel_path}: still contains old reference pattern: {description}")
-
+        file_part, _, fragment = raw.partition("#")
+        target = (path.parent / unquote(file_part)).resolve() if file_part else path.resolve()
+        if not target.is_relative_to(boundary.resolve()):
+            if isolated:
+                errors.append(f"reference escapes package: {reference}")
+            continue  # External source provenance is not a runtime dependency.
+        if not target.exists():
+            errors.append(f"broken reference: {reference}")
+        elif fragment and target.is_file() and target.suffix in {".md", ".html"}:
+            if unquote(fragment) not in anchors(target):
+                errors.append(f"missing anchor: {reference}")
     return errors
 
 
-# Plugins built by scripts/build-plugins.py from skills-src. Other
-# directories under plugins/ (e.g. a hand-maintained snapshot) are not this
-# script's responsibility — their links are reported as warnings, not
-# failures, so pre-existing issues there don't block this suite's validation.
-BUILT_PLUGINS = {"acs-protocols", "acs-plan", "acs-design", "acs-build", "acs-quality", "acs-craft"}
+def validate_protocols(suite: Path = SUITE) -> list[str]:
+    errors: list[str] = []
+    try:
+        registry = json.loads((suite / "protocols/registry.json").read_text())
+    except (OSError, ValueError) as error:
+        return [f"Cannot load registry: {error}"]
+    if registry.get("schemaVersion") != 1 or registry.get("namespace") != "acs":
+        errors.append("Invalid registry schema or namespace")
+    protocols = registry.get("protocols", {})
+    for name, spec in protocols.items():
+        if spec.get("id") != f"protocol:acs:{name}":
+            errors.append(f"{name}: registry ID mismatch")
+        path = (suite / spec["canonical"]).resolve()
+        if not path.is_relative_to((suite / "protocols").resolve()):
+            errors.append(f"{name}: canonical protocol escapes protocol directory")
+            continue
+        if not path.is_file():
+            errors.append(f"Protocol file missing: {spec['canonical']}")
+            continue
+        match = re.match(r"^---\n(.*?)\n---\n", path.read_text(), re.DOTALL)
+        if not match:
+            errors.append(f"{spec['canonical']}: missing frontmatter")
+            continue
+        for field, expected in (("protocol", f"acs:{name}"), ("version", spec.get("version")), ("status", spec.get("status"))):
+            actual = re.search(rf"^{field}: (.+)$", match[1], re.MULTILINE)
+            if not expected or not actual or actual[1] != expected:
+                errors.append(f"{spec['canonical']}: {field} differs from registry")
+        if spec.get("anchor", "").lstrip("#") and spec["anchor"].lstrip("#") not in anchors(path):
+            errors.append(f"{spec['canonical']}: registry anchor missing: {spec['anchor']}")
+    for directory in ("skills-src", "protocols", "workflows"):
+        for path in sorted((suite / directory).rglob("*.md")):
+            if not path.exists():
+                errors.append(f"{path.relative_to(suite)}: broken resource symlink")
+                continue
+            for error in link_errors(path.resolve(), suite):
+                errors.append(f"{path.relative_to(suite)}: {error}")
+    return errors
 
 
-def validate_built_plugins() -> tuple[list[str], list[str]]:
-    """End-to-end check: every relative link in a built plugin's SKILL.md
-    must resolve to a real file on disk. Catches broken rewrites that
-    validate_protocols() cannot see, since it only checks skills-src (which
-    still uses protocol:acs:* logical IDs, not resolved relative paths).
+def validate_package(package: Path) -> list[str]:
+    """Audit every copied instruction, not just discovered SKILL entrypoints."""
+    errors: list[str] = []
+    for path in sorted(package.rglob("*")):
+        if path.is_symlink():
+            errors.append(f"{path.relative_to(package)}: package must materialize symlinks")
+        elif path.suffix == ".md":
+            errors.extend(f"{path.relative_to(package)}: {error}" for error in link_errors(path, package, isolated=True))
+    for path in package.glob(".*-plugin/plugin.json"):
+        manifest = json.loads(path.read_text())
+        if manifest.get("peerDependencies") or manifest.get("dependencies"):
+            errors.append(f"{path.relative_to(package)}: package still requires companion plugins")
+        if "skills" in manifest:
+            skills = (package / manifest["skills"]).resolve()
+            if not skills.is_relative_to(package.resolve()) or not skills.is_dir():
+                errors.append(f"{path.relative_to(package)}: invalid discovery root")
+    package_json = package / "package.json"
+    if package_json.is_file():
+        manifest = json.loads(package_json.read_text())
+        if manifest.get("dependencies") or manifest.get("peerDependencies"):
+            errors.append("package.json: package still requires companion plugins")
+        catalog_path = package / manifest.get("main", "catalog/skill-set.json")
+        if not catalog_path.is_file():
+            errors.append("package.json: catalog is missing")
+        else:
+            catalog = json.loads(catalog_path.read_text())
+            identifiers = [skill["id"] for skill in catalog.get("skills", [])]
+            discovered = {path.parent.name for path in (package / "skills").glob("*/SKILL.md")}
+            if len(identifiers) != len(set(identifiers)) or set(identifiers) != discovered:
+                errors.append("catalog/skill-set.json: skill inventory differs from discovery")
+            if catalog.get("name") != manifest.get("name") or catalog.get("version") != manifest.get("version"):
+                errors.append("catalog/skill-set.json: identity/version differs from package")
+            for skill in catalog.get("skills", []):
+                if skill.get("path") != f"skills/{skill['id']}/SKILL.md":
+                    errors.append(f"catalog/skill-set.json: invalid entry path for {skill['id']}")
+    return errors
 
-    Returns (errors, warnings): errors are for BUILT_PLUGINS, warnings are
-    for any other plugin directory the same scan happens to pass over.
-    """
+
+def validate_built_plugins(plugins: Path = PLUGINS) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
-    if not PLUGINS.exists():
+    if not plugins.exists():
         return errors, warnings
-
-    for skill_md in sorted(PLUGINS.glob("*/skills/*/SKILL.md")):
-        plugin_name = skill_md.relative_to(PLUGINS).parts[0]
-        sink = errors if plugin_name in BUILT_PLUGINS else warnings
-        content = skill_md.read_text()
-
-        remaining = PROTOCOL_REF.findall(content)
-        if remaining:
-            rel_path = skill_md.relative_to(ROOT)
-            sink.append(f"{rel_path}: unresolved protocol:acs:{remaining[0]} in built plugin")
-
-        for link_target, _anchor in MD_LINK.findall(content):
-            if link_target.startswith(("http://", "https://", "protocol:")):
-                continue
-            resolved = (skill_md.parent / link_target).resolve()
-            if not resolved.exists():
-                rel_path = skill_md.relative_to(ROOT)
-                sink.append(f"{rel_path}: broken link to '{link_target}' (resolved: {resolved})")
-
-    for plugin_json in sorted(PLUGINS.glob("*/.claude-plugin/plugin.json")):
-        plugin_dir = plugin_json.parent.parent
-        plugin_name = plugin_dir.name
-        sink = errors if plugin_name in BUILT_PLUGINS else warnings
-        manifest = json.loads(plugin_json.read_text())
-        for dep_name in manifest.get("peerDependencies", {}):
-            if not (PLUGINS / dep_name).is_dir():
-                rel_path = plugin_json.relative_to(ROOT)
-                sink.append(f"{rel_path}: peerDependency '{dep_name}' has no plugins/{dep_name}/ directory")
-
+    for name in sorted(BUILT_PLUGINS):
+        package = plugins / name
+        if not package.is_dir():
+            errors.append(f"Missing generated plugin: {name}")
+            continue
+        errors.extend(f"{name}/{error}" for error in validate_package(package))
     return errors, warnings
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--plugins", type=Path, default=PLUGINS)
+    parser.add_argument("--source-only", action="store_true")
+    args = parser.parse_args()
     findings = validate_protocols()
-    plugin_errors, plugin_warnings = validate_built_plugins()
-    findings += plugin_errors
-
+    if not args.source_only:
+        findings += validate_built_plugins(args.plugins)[0]
     for finding in findings:
         print(finding)
-    for warning in plugin_warnings:
-        print(f"WARNING (pre-existing, outside build-plugins.py's scope): {warning}")
-
-    count = len(list((SUITE / "protocols").glob("*.md")))
-    plugin_count = len(BUILT_PLUGINS & {p.name for p in PLUGINS.iterdir()}) if PLUGINS.exists() else 0
-    print(f"{count} protocols, {plugin_count} built plugins; registry and references: {'FAIL' if findings else 'PASS'}")
+    print(f"Protocol registry, links and package closure: {'FAIL' if findings else 'PASS'}")
     sys.exit(bool(findings))

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Translate Agent Context"
+  short_description: "Preserve required agent behavior while translating instructions, skills, command..."
+policy:
+  allow_implicit_invocation: false

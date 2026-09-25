@@ -1,6 +1,6 @@
 # Context Protocol Verification
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 This records the historical 2026-09-09 context-protocol verification. Skill paths were updated for the ACS namespace migration; historical counts and results below are not a current suite verdict. The migration is complete; this record stands as a historical snapshot only.
 
@@ -9,7 +9,7 @@ Scope: this suite's 45 source skills, shared contracts, workflows, guides, and a
 
 ## Result
 
-The [protocol](../../skills-src/craft/context/acs-init-context/references/PROTOCOL.md) now defines four lifecycles, one canonical change/spec, scoped freshness, serialized contributions, and retention. [Coordination](../../workflows/context-coordination.md) owns context assembly and runtime operations. Product/Design authority and source formats remain intact; accepted rationale survives before component documentation. [Delivery](../../workflows/feature-delivery.md) defines direct planning/execution without unavailable skills. Testing, Refactoring, and Operations link criterion/preservation/release evidence to the same change.
+The [protocol](../../protocols/skill-declarations.md) now defines four lifecycles, one canonical change/spec, scoped freshness, serialized contributions, and retention. [Coordination](../../workflows/context-coordination.md) owns context assembly and runtime operations. Product/Design authority and source formats remain intact; accepted rationale survives before component documentation. [Delivery](../../workflows/feature-delivery.md) defines direct planning/execution without unavailable skills. Testing, Refactoring, and Operations link criterion/preservation/release evidence to the same change.
 
 ## Structural and executable checks
 
@@ -20,7 +20,7 @@ Environment: local macOS, existing Python 3 standard library and system Ruby/Psy
 | `python3 system/evals/validate_suite.py` | PASS: 45 source skills, six-field declarations, loader symlinks, suite-local Markdown links and anchors |
 | Ruby/Psych `YAML.safe_load` over all skill frontmatter and context blocks | PASS: 45 valid names/descriptions and six array-valued context fields |
 | `python3 -m unittest discover -s system/evals/evals -p 'test_*.py' -v` | PASS: 6 positive/negative fixtures for declarations, identity links, and cleanup retention |
-| `python3 -m unittest discover -s system/skills-src/craft/meta/acs-draw-portfolio-dag/tests -p 'test_*.py' -v` | PASS: existing scan/render test, including status/dependency mapping and read-only generated views |
+| `python3 -m unittest discover -s system/skills-src/authoring/acs-draw-portfolio-dag/tests -p 'test_*.py' -v` | PASS: existing scan/render test, including status/dependency mapping and read-only generated views |
 | Existing `scripts/validate-product-memory.py` against the independent fixture's product HTML | PASS: 0 errors, 0 warnings |
 | Edited Markdown dates, JSON parsing, `git diff --check`, scope audit | PASS: dates current; only suite files changed; unrelated pre-existing untracked files preserved |
 
@@ -47,4 +47,4 @@ These are instruction/artifact tests with synthetic code, verification, and rele
 
 ## Repeatable scenarios
 
-[context-lifecycle.json](context-lifecycle.json) records ten focused cold-session, identity, retention, invalidation, verification, refactoring, release, concurrency, product-boundary, and missing-capability scenarios. Existing [Product scenarios](../../skills-src/product/evals/shared-memory.json) retain enrichment, evidence/commitment, migration, and roadmap cases with clarified spec/acceptance expectations. These scenario files require isolated agent evaluation; passing the structural script does not execute them or prove their behavior.
+[context-lifecycle.json](context-lifecycle.json) records ten focused cold-session, identity, retention, invalidation, verification, refactoring, release, concurrency, product-boundary, and missing-capability scenarios. The Product fixture formerly located at `skills-src/product/evals/shared-memory.json` covered enrichment, evidence/commitment, migration, and roadmap cases; that historical fixture is no longer present in this checkout. These scenario files require isolated agent evaluation; passing the structural script does not execute them or prove their behavior.

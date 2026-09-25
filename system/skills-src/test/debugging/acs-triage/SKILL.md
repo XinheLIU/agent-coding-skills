@@ -5,7 +5,7 @@ description: Move incoming issues or external pull requests through a configured
 
 # Triage
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator, product, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 
 Read `docs/agents/memory.md`, tracker configuration, triage-label mapping, domain memory, and prior notes.

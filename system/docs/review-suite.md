@@ -1,6 +1,6 @@
 # Code Review
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 [System home](../README.md) · [Workflows](../workflows/README.md)
 
@@ -189,7 +189,7 @@ Route cross-domain findings via references  File findings on the wrong side
 | `acs-review-architecture` | `docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md` |
 | `acs-review-code-quality` | `docs/eng-reviews/next-steps-<branch>-<YYYYMMDD-HHMM>.md` |
 
-Preserve established artifact homes; new local change evidence defaults to `docs/changes/<change-id>/verification/`. Each report includes canonical change/task, criterion/contract references, consumed revisions, environment assumptions, failures/omissions, and actionable next steps. Standards and Spec verdicts remain separate. Use the [shared handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope) and [coordinator](../workflows/context-coordination.md).
+Preserve established artifact homes; new local change evidence defaults to `docs/changes/<change-id>/verification/`. Each report includes canonical change/task, criterion/contract references, consumed revisions, environment assumptions, failures/omissions, and actionable next steps. Standards and Spec verdicts remain separate. Use the [shared handoff envelope](../protocols/skill-declarations.md#handoff-envelope) and [coordinator](../workflows/context-coordination.md).
 
 ## Pointers
 

@@ -5,9 +5,9 @@ description: Reconstruct current module boundaries, dependencies, coupling, and 
 
 # Audit Architecture
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
-Read [the visual report contract](references/visual-report.md) and [the HTML report format](references/HTML-REPORT.md) before generating the companion. For complex multi-dimensional analysis with substantial findings across multiple architectural concerns, reference `craft/meta/references/tabbed-discovery-report.md` for the tabbed HTML output protocol. These local references are bundled with the skill; do not depend on `/meta` or another installed skill.
+Read [the visual report contract](references/visual-report.md) and [the HTML report format](references/HTML-REPORT.md) before generating the companion. For complex multi-dimensional analysis with substantial findings across multiple architectural concerns, reference `authoring/references/tabbed-discovery-report.md` for the tabbed HTML output protocol. These local references are bundled with the skill; do not depend on `/meta` or another installed skill.
 
 ## Context contract
 
@@ -21,7 +21,7 @@ context:
   handoff_to: [design_architecture, design_modules]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 ## What this skill does
 

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Define Outcomes
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [product, design]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Turn a chosen solution shape into the verifiable commitments the team can build and measure against. The output says what success looks like for each accepted user outcome, how to prove it end-to-end, which capabilities it depends on, and which capabilities are deferred with their rationale.
@@ -29,7 +29,7 @@ This skill works the same way for new products and existing-product work. For ex
 
 ## Shared Memory Contract
 
-Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](../acs-brainstorm/references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read current capabilities and their evidence, proposed solution capabilities and journeys, demand assessments, accepted constraints, and existing scope decisions. Enrich capability records with outcome IDs, verification scenarios, and acceptance criteria.

@@ -5,7 +5,7 @@ description: Review or update a repository's AGENTS.md or CLAUDE.md. Use to enco
 
 # Review Agent Instructions
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Own the requested `AGENTS.md` or `CLAUDE.md` and its context pointers. The file should contain only always-needed repository constraints and trigger-bearing pointers to canonical detail.
@@ -53,7 +53,7 @@ Route the lesson before writing:
 | Every session in the repository | Root instruction file |
 | One subtree | Nearest scoped instruction file supported by the runtime |
 | Detailed procedure or reference | Canonical document or skill, with a trigger pointer |
-| Active effort only | Configured `state.md` or effort artifact |
+| Active effort only | Configured run recovery entry or linked effort artifact |
 
 Write the minimum checkable instruction that names the target behavior, reason or consequence, and verification when available. Make room by removing or disclosing weaker material from the same owned file. Preserve unrelated structure.
 
@@ -82,7 +82,7 @@ Review is complete when every line passes the criteria, every moved fact has one
 When `docs/agents/memory.md` exists, add or repair:
 
 - a pointer that tells agents when to read it;
-- a startup sequence that resolves the active effort, reads `state.md`, and follows its minimum pointers;
+- a startup sequence that resolves the active effort, reads the configured run recovery entry, and follows its minimum pointers;
 - context pointers for relevant terminology, ADRs, and product intent.
 
 Point to configured values instead of copying them. When memory routing is absent, hand off to `acs-init-context`; when it exists but its targets are stale, hand off to `acs-sync-context`.

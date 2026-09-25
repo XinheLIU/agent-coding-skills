@@ -1,6 +1,6 @@
 # Maintain Workflow
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 Ingest monitoring alerts, diagnose root causes, write verifiable implementation change records, and re-enter `build` for allowed patterns — without human initiation for low-risk fixes.
 
@@ -41,7 +41,7 @@ alert/incident → acs-diagnose-incident → acs-triage → decision point:
 - Any change affecting authentication or authorization
 
 ### 3. Write implementation change record
-Write a verifiable record to `docs/product/<product>/product.html` with:
+Reuse the canonical change/spec and incident home. When absent, create a local change under `docs/changes/<change-id>/`; product records link that same change. Retain diagnosis and regression evidence in Persistent Memory, with raw logs in Working Memory. The record contains:
 - **Current behavior**: what broke, observed symptoms, evidence
 - **Intended behavior**: what should happen, acceptance criteria
 - **Implementation scope**: config change, hotfix, rollback, or "needs design"
@@ -53,10 +53,10 @@ Pass change record to `build` → `test` → `deploy`.
 
 The change record is the spec; no separate requirements phase needed for in-band fixes. The fix must include a regression test that would have caught the original issue.
 
-After deploy: update `docs/operations/incidents.md` with resolution timestamp and fix reference.
+After deploy: update the configured incident record with the observed resolution, source/artifact and environment revisions, release evidence and fix reference.
 
 ### 4b. Outside control band — escalate
-Surface the change record with open questions to the user. Wait for their decision before re-entering `design` or `build`.
+Save the proposed change and open questions before review. Use the [Presenter](../protocols/presenter.md) when a comparison helps; record feedback against the proposal revision through the coordinator. Continue dependent work only when the necessary decision and authorization exist.
 
 ## Autonomy Policy
 
@@ -74,7 +74,7 @@ Autonomous fixes require the project to configure allowed patterns:
 }
 ```
 
-If no `autonomy_rules` are configured, all fixes require user approval. The first 5 autonomous fixes in a new project are logged in `docs/operations/incidents.md` and flagged for retroactive user review.
+These settings illustrate project policy, not a verified host integration or a new authorization source. Explicit task authorization also applies. Without applicable authorization, return the proposed action and blocker; do not infer deployment permission from a low-risk label. Retain consequential decisions in the configured change/incident record.
 
 ## Entry Criteria
 
@@ -83,8 +83,8 @@ If no `autonomy_rules` are configured, all fixes require user approval. The firs
 
 ## Exit Criteria
 
-- Verifiable change record written to `product.html`.
-- `docs/operations/incidents.md` updated with diagnosis and resolution.
+- Canonical change/spec and incident records contain the retained diagnosis and criterion-linked evidence.
+- Configured incident record updated with observed diagnosis/resolution and consumed revisions.
 - Fix deployed and verified (for in-band), OR escalation surfaced with open questions (for out-of-band).
 
 ## Closes the Loop

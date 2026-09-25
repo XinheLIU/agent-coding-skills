@@ -1,91 +1,50 @@
 {
   "name": "acs-design",
-  "version": "0.4.0",
-  "phase": "design",
+  "version": "1.0.0",
   "skills": [
     {
-      "name": "acs-settle-requirements",
-      "path": "skills/acs-settle-requirements",
-      "phase": "design",
-      "group": "requirements",
-      "description": "Define WHAT capabilities the product provides through functional requirements and testable acceptance criteria. Use when starting the design phase from accepted product intent, or when requirements are missing or ambiguous before technical design begins."
+      "id": "acs-audit-architecture",
+      "path": "skills/acs-audit-architecture/SKILL.md"
     },
     {
-      "name": "acs-audit-architecture",
-      "path": "skills/acs-audit-architecture",
-      "phase": "design",
-      "group": "technical",
-      "description": "Reconstruct current module boundaries, dependencies, coupling, and compatibility constraints before brownfield design. Use when the existing structure or runtime path cannot be established cheaply; use acs-review-architecture for holistic architecture judgment."
+      "id": "acs-design-architecture",
+      "path": "skills/acs-design-architecture/SKILL.md"
     },
     {
-      "name": "acs-design-architecture",
-      "path": "skills/acs-design-architecture",
-      "phase": "design",
-      "group": "technical",
-      "description": "Map accepted features to business modules and shared technical capabilities, compare current, ideal, and feasible target architectures, and record the selected evolution for greenfield or brownfield systems."
+      "id": "acs-design-context",
+      "path": "skills/acs-design-context/SKILL.md"
     },
     {
-      "name": "acs-design-foundation",
-      "path": "skills/acs-design-foundation",
-      "phase": "design",
-      "group": "technical",
-      "description": "Design reusable technical foundations—libraries, SDKs, components, middleware, and infrastructure adapters—for project-local or independently published use, and specify the smallest verifiable bootstrap or adoption change."
+      "id": "acs-design-foundation",
+      "path": "skills/acs-design-foundation/SKILL.md"
     },
     {
-      "name": "acs-design-modules",
-      "path": "skills/acs-design-modules",
-      "phase": "design",
-      "group": "technical",
-      "description": "Turn a selected architecture into implementable code modules, interfaces, types, dependency rules, wiring, and brownfield migration steps for business and shared capabilities."
+      "id": "acs-design-implement",
+      "path": "skills/acs-design-implement/SKILL.md"
     },
     {
-      "name": "acs-validate-codebase",
-      "path": "skills/acs-validate-codebase",
-      "phase": "design",
-      "group": "technical",
-      "description": "Validate technical design and implementation reachability across routes, menus, interfaces, exports, modules, dependencies, and agent instructions; apply scoped repairs and retain evidence."
+      "id": "acs-design-interaction-flow",
+      "path": "skills/acs-design-interaction-flow/SKILL.md"
     },
     {
-      "name": "acs-design-context",
-      "path": "skills/acs-design-context",
-      "phase": "design",
-      "group": "ux",
-      "description": "Establish or refresh this project's design authority — the root DESIGN.md that answers HOW the product looks. Adopt an existing DESIGN.md, import from a reference site or brand, fold in a legacy docs/design/system.md, or route to from-scratch creation. Run before any other UX skill; they all read DESIGN.md. Use when no design authority exists, when system.md needs migrating, or when DESIGN.md has drifted from its source."
+      "id": "acs-design-modules",
+      "path": "skills/acs-design-modules/SKILL.md"
     },
     {
-      "name": "acs-design-implement",
-      "path": "skills/acs-design-implement",
-      "phase": "design",
-      "group": "ux",
-      "description": "Turn an approved visual design into production code in the project's own stack and conventions, with design tokens wired up, WCAG AA met, and the component documented in docs/design/components/. Requires a styled section in docs/design/prototype.html and DESIGN.md. Use to implement or build a design that is already settled, not to explore one."
+      "id": "acs-design-system-create",
+      "path": "skills/acs-design-system-create/SKILL.md"
     },
     {
-      "name": "acs-design-interaction-flow",
-      "path": "skills/acs-design-interaction-flow",
-      "phase": "design",
-      "group": "ux",
-      "description": "Decide how a feature behaves before deciding how it looks — information architecture, user flows, and the five interaction states (empty, loading, ideal, error, partial), locked as wireframe sections of the canonical prototype (docs/design/prototype.html). Requires product context; produces the structure that /acs-visual-design-variants is forbidden to change. Use for UX flow, wireframe, state design, or interaction design work on a feature whose behavior is unsettled."
+      "id": "acs-validate-codebase",
+      "path": "skills/acs-validate-codebase/SKILL.md"
     },
     {
-      "name": "acs-design-system-create",
-      "path": "skills/acs-design-system-create",
-      "phase": "design",
-      "group": "ux",
-      "description": "Build design authority from scratch when there is nothing to adopt — no DESIGN.md, no reference brand. Proposes typography, color, and layout tied to the product's persona and constraints, previews it, and writes a root DESIGN.md on approval. Use when asked to create a design system or define visual style; if a reference or DESIGN.md exists, run /acs-design-context instead."
+      "id": "acs-validate-prototype",
+      "path": "skills/acs-validate-prototype/SKILL.md"
     },
     {
-      "name": "acs-validate-prototype",
-      "path": "skills/acs-validate-prototype",
-      "phase": "design",
-      "group": "ux",
-      "description": "Build throwaway code to answer one design question. Use when conversation cannot settle how behavior should work or what an interface should look like."
-    },
-    {
-      "name": "acs-visual-design-variants",
-      "path": "skills/acs-visual-design-variants",
-      "phase": "design",
-      "group": "ux",
-      "description": "Explore three genuinely different visual directions — color, typography, weight — on interaction structure that is already locked. Requires locked wireframe sections in docs/design/prototype.html plus DESIGN.md; cannot move buttons, navigation, or state transitions. The approved direction merges into the canonical prototype as its styled section. Use to compare visual options or design variants before committing to one."
+      "id": "acs-visual-design-variants",
+      "path": "skills/acs-visual-design-variants/SKILL.md"
     }
   ]
 }

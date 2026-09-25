@@ -1,6 +1,6 @@
 # Optional herdr Delivery Binding
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 This preserves the earlier herdr/Claude delivery example as a host-specific binding of the [four orchestration operations](../../skills-src/build/acs-implement/references/orchestration-protocol.md). It is not the default host, an installed runtime integration, or verified CLI syntax.
 
@@ -13,7 +13,7 @@ herdr pane split --cwd <worktree-path>
 herdr agent start claude
 herdr agent prompt <agent> "Load acs-tdd. Execute ticket <path>. \
   Criteria: <refs>. Prerequisite evidence: <paths>. \
-  Write evidence to docs/changes/<change-id>/run/evidence/<ticket-id>.md, then stop."
+  Write evidence to <resolved-run-root>/evidence/<ticket-id>.md, then stop."
 
 # await
 herdr agent wait <agent> --state done,blocked,idle

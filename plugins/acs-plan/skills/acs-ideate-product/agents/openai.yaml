@@ -1,5 +1,5 @@
 interface:
   display_name: "Ideate Product"
-  short_description: "Route a product effort to the right next step"
+  short_description: "Route a product effort to the right next step. Use when the user has an idea, fe..."
 policy:
   allow_implicit_invocation: false

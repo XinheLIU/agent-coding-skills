@@ -1,0 +1,5 @@
+interface:
+  display_name: "Challenge Approach"
+  short_description: "Resolve user-owned decisions one at a time. Use when choices that cannot be disc..."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Validate Codebase"
+  short_description: "Validate technical design and implementation reachability across routes, menus, ..."
+policy:
+  allow_implicit_invocation: false

@@ -1,5 +1,5 @@
 interface:
   display_name: "Brainstorm"
-  short_description: "Turn an ambiguous idea into a Jobs-to-be-Done brief"
+  short_description: "Turn an ambiguous idea into a Jobs-to-be-Done brief through Socratic dialogue. U..."
 policy:
   allow_implicit_invocation: false

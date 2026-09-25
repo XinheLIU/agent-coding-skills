@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Architecture"
+  short_description: "Map accepted features to business modules and shared technical capabilities, com..."
+policy:
+  allow_implicit_invocation: false

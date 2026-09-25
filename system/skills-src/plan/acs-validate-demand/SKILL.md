@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Validate Demand
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 ## Context contract
 
 ```yaml
@@ -19,7 +19,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Decide whether a product idea has real demand behind it, and say so plainly.
@@ -41,7 +41,7 @@ Follow read–match–enrich–verify: create only missing records, preserve oth
 
 ### First promotion point
 
-On Green, route to `acs-write-prd` to preserve the validated claim, persona, job, and supporting evidence before continuing. On Yellow or Red, retain the assessment and the evidence needed to revisit it in working memory. If a new assessment challenges already accepted intent, record a linked review finding for that intent in discovery and state; do not erase or demote it.
+On Green, route to `acs-write-prd` to preserve the validated claim, persona, job, and supporting evidence before continuing. On Yellow or Red, exploratory drafts may remain in Working Memory; retain the assessment and necessary evidence in Persistent Memory before formal review, dependent handoff, or closing the run when the finding must remain reusable. If a new assessment challenges already accepted intent, record a linked review finding for that intent in discovery and state; do not erase or demote it.
 
 ## Invocation
 
@@ -153,7 +153,7 @@ confirms it, and it validates no demand.
 - Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
-- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
+- Run the suite's product-memory validator (`scripts/validate-product-memory.py`, resolved from the ACS suite root) when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do
 

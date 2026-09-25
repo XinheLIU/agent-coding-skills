@@ -1,1 +1,1 @@
-../../../../craft/context/acs-init-context/references/design-memory.md
+../../../../../protocols/design-memory.md

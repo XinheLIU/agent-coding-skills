@@ -5,7 +5,7 @@ description: Turn a selected architecture into implementable code modules, inter
 
 # Design Modules
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -18,6 +18,8 @@ context:
   invalidates: [change.implementation_plan, verification.contract_coverage]
   handoff_to: [validate_codebase, implementation]
 ```
+
+Shared semantics: [memory and handoff protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
 For each module define one responsibility, its public interface (including invariants and failures), owned types, dependencies, callers, registration/wiring location, and verification surface. Apply the deletion test and prefer a deep interface with local implementation complexity. Add seams for real variation; reuse a framework directly when it already provides the required contract. Show current ownership beside target ownership, seam placement, and dependency direction with a compact before/after diagram.
 

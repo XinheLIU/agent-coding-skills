@@ -1,0 +1,5 @@
+interface:
+  display_name: "Validate Prototype"
+  short_description: "Build throwaway code to answer one design question. Use when conversation cannot..."
+policy:
+  allow_implicit_invocation: false

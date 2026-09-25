@@ -1,7 +1,7 @@
 # Ideas Workflow
 
-Last updated: 2026-09-17
-Use this workflow when the problem, product shape, or next increment is uncertain. Product skills enrich shared records rather than passing separate reports down a fixed file chain. Read [the product memory contract](../skills-src/craft/context/acs-init-context/references/product-memory.md) for identity, authority, enrichment, promotion, and legacy inputs.
+Last updated: 2026-09-25
+Use this workflow when the problem, product shape, or next increment is uncertain. Product skills enrich shared records rather than passing separate reports down a fixed file chain. Read [the product memory contract](../protocols/product-memory.md) for identity, authority, enrichment, promotion, and legacy inputs.
 
 ```text
 Greenfield: acs-brainstorm → acs-validate-demand → acs-shape-solution → acs-define-outcomes

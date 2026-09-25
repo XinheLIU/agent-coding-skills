@@ -1,5 +1,5 @@
 interface:
   display_name: "Map Current Product"
-  short_description: "Map current product behavior"
+  short_description: "Map what an existing codebase already does as a product baseline. Use when the u..."
 policy:
   allow_implicit_invocation: false

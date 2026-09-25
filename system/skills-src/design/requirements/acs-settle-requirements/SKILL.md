@@ -5,7 +5,7 @@ description: Define WHAT capabilities the product provides through functional re
 
 # Settle Requirements
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -16,10 +16,10 @@ context:
   produces: [design.functional_requirements, verification.acceptance_criteria]
   updates: [change.spec_readiness]
   invalidates: [design.ux_dependents, verification.criteria]
-  handoff_to: [design/ux, design/technical]
+  handoff_to: [design.ux, design.technical]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 ## Purpose
 

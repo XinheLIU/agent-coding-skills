@@ -44,6 +44,43 @@ class ReportParser(HTMLParser):
 
 
 class RoadmapTest(unittest.TestCase):
+    def test_legacy_source_revision_tracks_edits_and_survives_rendering(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            issues = root / "research" / "issues"
+            issues.mkdir(parents=True)
+            ticket = issues / "01-question.md"
+            manifest_path = root / "manifest.json"
+            html_path = root / "roadmap.html"
+            previous_revision = ""
+            for status in ("pending", "done"):
+                ticket.write_text(
+                    f"# 01 — Research question\n\n**Status:** {status}\n\n**Blocked by:** none\n",
+                    encoding="utf-8",
+                )
+                before = ticket.read_bytes()
+                subprocess.run(
+                    [sys.executable, str(SCAN_SCRIPT), str(root), "-o", str(manifest_path)],
+                    check=True, capture_output=True, text=True,
+                )
+                manifest = json.loads(manifest_path.read_text())
+                node = manifest["nodes"][0]
+                revision = node["source_revision"]
+                self.assertRegex(revision, r"^sha256:[0-9a-f]{64}$")
+                self.assertNotEqual(revision, previous_revision)
+                self.assertEqual(Path(node["source_file"]), ticket.resolve())
+                subprocess.run(
+                    [sys.executable, str(RENDER_SCRIPT), str(manifest_path), "-o", str(html_path)],
+                    check=True, capture_output=True, text=True,
+                )
+                html = html_path.read_text()
+                rendered = re.search(r"const NODES = (.+);", html)
+                assert rendered
+                self.assertEqual(json.loads(rendered[1])[0]["source_revision"], revision)
+                self.assertIn('n.source_revision || "Revision unavailable', html)
+                self.assertEqual(ticket.read_bytes(), before)
+                previous_revision = revision
+
     def test_delivery_plan_refresh_matches_graph_and_preserves_canonical_sources(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)

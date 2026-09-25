@@ -1,0 +1,38 @@
+{
+  "name": "acs-quality",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "acs-diagnose-incident",
+      "path": "skills/acs-diagnose-incident/SKILL.md"
+    },
+    {
+      "id": "acs-refactor-code",
+      "path": "skills/acs-refactor-code/SKILL.md"
+    },
+    {
+      "id": "acs-resolving-merge-conflicts",
+      "path": "skills/acs-resolving-merge-conflicts/SKILL.md"
+    },
+    {
+      "id": "acs-review-architecture",
+      "path": "skills/acs-review-architecture/SKILL.md"
+    },
+    {
+      "id": "acs-review-code-quality",
+      "path": "skills/acs-review-code-quality/SKILL.md"
+    },
+    {
+      "id": "acs-review-design-doc",
+      "path": "skills/acs-review-design-doc/SKILL.md"
+    },
+    {
+      "id": "acs-review-implementation-gaps",
+      "path": "skills/acs-review-implementation-gaps/SKILL.md"
+    },
+    {
+      "id": "acs-triage",
+      "path": "skills/acs-triage/SKILL.md"
+    }
+  ]
+}

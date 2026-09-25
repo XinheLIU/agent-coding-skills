@@ -1,12 +1,12 @@
 # ADR Format
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
 
 Preserve the configured decision-record home. Create `docs/adr/` lazily only when an ADR is warranted. Consequential accepted choices that do not warrant an ADR still belong beside the accepted design/change.
 
-ADRs are historical Change Context under [the shared protocol](PROTOCOL.md). Link the canonical change when applicable, consumed premise revisions, affected scope, and related contracts. Preserve previous decisions; `supersedes` records a replacement, while freshness is assessed separately from acceptance status. Update applicable System State when architecture boundaries change.
+ADRs are historical Persistent Changes under [the shared protocol](../../../../protocols/skill-declarations.md). Link the canonical change when applicable, consumed premise revisions, affected scope, and related contracts. Preserve previous decisions; `supersedes` records a replacement, while freshness is assessed separately from acceptance status. Update applicable System State when architecture boundaries change.
 
 ## Template
 

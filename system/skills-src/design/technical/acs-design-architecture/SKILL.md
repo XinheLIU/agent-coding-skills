@@ -5,7 +5,7 @@ description: Map accepted features to business modules and shared technical capa
 
 # Design Architecture
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,6 +19,8 @@ context:
   handoff_to: [design_foundation, design_modules, validate_codebase]
 ```
 
+Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+
 Read the requirement criteria and inspect the relevant repository slice. For greenfield, establish the minimum structure that supports the accepted features. For brownfield, distinguish what exists from what is intended before proposing change.
 
 For each structural option, make the current-versus-target change visible with a compact diagram; keep the detailed evidence in the Markdown design.
@@ -29,7 +31,7 @@ For each structural option, make the current-versus-target change visible with a
 2. Identify shared capabilities by real consumers: communication, persistence, identity, errors, observability, scheduling, storage, UI primitives, or domain policies. Keep shared domain rules with their owning domain. Record only relevant non-functional constraints, with measurable targets, verification methods, and the trade-offs that determine architecture.
 3. Describe current architecture where code exists. Describe an ideal architecture with freedom to reorganize. For brownfield, derive a feasible target that accounts for compatibility, migration cost, and operational constraints.
 4. Compare two or three materially different options on locality, leverage, failure isolation, operability, migration cost, and complexity. Recommend one and record rejected alternatives only when the trade-off is consequential.
-5. Produce `technical-design.md` (or the established design home) containing feature-to-module mapping, capability consumers, option comparison, selected architecture, gaps, and open decisions. Include a readable current/ideal/feasible comparison diagram and stable IDs for modules and capabilities. When an HTML companion is used, read [the local HTML report format](references/HTML-REPORT.md), apply the visual report contract with inline SVG first, and include a card for each materially different option. For complex multi-dimensional analysis with 3+ architectural options, substantial revision history, or nested design choices, reference `craft/meta/references/tabbed-discovery-report.md` for the tabbed HTML output protocol.
+5. Produce `technical-design.md` (or the established design home) containing feature-to-module mapping, capability consumers, option comparison, selected architecture, gaps, and open decisions. Include a readable current/ideal/feasible comparison diagram and stable IDs for modules and capabilities. When an HTML companion is used, read [the local HTML report format](references/HTML-REPORT.md), apply the visual report contract with inline SVG first, and include a card for each materially different option. For complex multi-dimensional analysis with 3+ architectural options, substantial revision history, or nested design choices, reference `authoring/references/tabbed-discovery-report.md` for the tabbed HTML output protocol.
 
 The design is ready when every accepted requirement has an owner, every shared capability has an explicit consumer list, every selected boundary has a reason, and every gap has a next action or an explicit out-of-scope decision.
 

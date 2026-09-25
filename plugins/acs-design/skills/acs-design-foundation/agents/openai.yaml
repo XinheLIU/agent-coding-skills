@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Foundation"
+  short_description: "Design reusable technical foundations—libraries, SDKs, components, middleware, a..."
+policy:
+  allow_implicit_invocation: false

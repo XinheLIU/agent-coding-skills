@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-20
+Last updated: 2026-09-25
 
 Inspired by the [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) from Anthropic.
 
@@ -16,7 +16,7 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 
 For Codex, OpenCode, Cursor, Pi, and multi-agent setups see [installation.md](installation.md).
 
-1. Run `/acs-init-context` in the target repository — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
+1. Use existing project context or explicit task inputs. Run `/acs-init-context` when routing needs configuration — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
 2. Follow the [lifecycle workflows](system/workflows/README.md): plan → design → build → test → deploy → maintain. These are workflow documents, not installed commands or router skills.
 3. Select a skill by its public ID (`acs-brainstorm`, `acs-engineer-domain-model`, `acs-tdd`, etc.), using the host's invocation syntax and plugin namespace.
 
@@ -28,13 +28,16 @@ All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See th
 | --- | --- |
 | [`system/skills/`](system/skills/) | Flat symlinks (loader entry points) into `skills-src/` |
 | [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
-| [`system/evals/`](system/evals/) | Shared read/write protocol for core, human, optional wiki, and working memory |
+| [`system/protocols/`](system/protocols/) | Canonical memory, coordination, domain, and Presenter contracts |
+| [`system/evals/`](system/evals/) | Structural checks and context handoff/retention scenarios |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
 | [`system/commands/`](system/commands/) | Claude Code entry points, including one-time repository setup |
 | [`system/agents/`](system/agents/) | Shared specialist agents used by review and delivery skills |
 | [`system/docs/`](system/docs/) | Human-facing catalog, organization report, and retained domain guides |
 
-Markdown is the semantic source of truth. HTML is a maintained human view for architecture, code maps, and dependency roadmaps; it must remain reproducible from its Markdown inputs.
+The accepted [Context design: two memories and one Presenter](system/docs/context-memory-presenter-proposal.md) separates run-scoped **Working Memory** from cross-run **Persistent Memory** (Intent, Current, Changes). The [Presenter](system/protocols/presenter.md) builds human reading and review views from versioned records; review decisions return to Persistent Memory. One configured checkpoint resumes each run.
+
+Artifact ownership determines authority, not file extension. Product HTML records and accepted visual prototypes remain canonical persistent artifacts. Reports, code maps, and dependency roadmaps are derived views; removing a view must not lose facts or decisions. Skills hand off canonical references and revisions, with an optional human view.
 
 ## Skill organization
 
@@ -111,7 +114,7 @@ graph LR
 
 This repository publishes skill-set metadata through [`catalog/skill-set.json`](catalog/skill-set.json). The shared frontend and cross-repository catalog live in [Agent Skills](https://github.com/XinheLIU/agent-skills); this repository is the source of truth for the Coding Skills product and its releases.
 
-The full source tree currently supplies shared protocols, workflows, role prompts, and resource symlinks. Copying one skill directory alone can leave missing dependencies. Individually installable packages are the next delivery milestone, subject to the [standalone package contract](system/docs/harness-architecture.md#standalone-package-contract); they are not yet verified standalone distributions.
+Generated plugins embed their transitive protocols, procedures, templates and scripts. Install the complete plugin directory, including `resources/`; copying a source skill directory alone can leave missing dependencies. Isolation tests check package links, deterministic builds and the packaged DAG renderer. Host runtime parity remains separate under the [standalone package contract](system/docs/harness-architecture.md#standalone-package-contract).
 
 Run `python3 system/evals/validate_suite.py --inventory-only` to verify and count source skills, loader entries, catalog records, and the context subpackage. The full command also audits context declarations and local Markdown links.
 
@@ -124,4 +127,4 @@ Run `python3 system/evals/validate_suite.py --inventory-only` to verify and coun
 
 ## Status
 
-Core lifecycle phases (plan, design, build) are mature. Test and maintain phases have initial skills; deploy phase workflows are written but deploy skills are planned. See [`system/TODO.md`](system/TODO.md) for the prioritized work for the inventory.
+Plan, design, and build have domain skills. Test and maintain have initial skills; deployment uses the project's authorized tooling under the Operations contract. The [context design](system/docs/context-memory-presenter-proposal.md) defines memory and review boundaries; validators check source and package integrity, while behavioral scenarios assess agent execution separately.

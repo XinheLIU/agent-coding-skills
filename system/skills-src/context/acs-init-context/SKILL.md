@@ -5,7 +5,7 @@ description: Initialize shared agent context when docs/agents/memory.md is absen
 
 # Init Context
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,10 +19,10 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Set up routing under the lifecycle model in [the protocol](references/PROTOCOL.md). Do not define another layer scheme.
+Set up routing for Working and Persistent Memory under the model in [the protocol](../../../protocols/skill-declarations.md). Do not define another layer scheme.
 
 `AGENTS.md` and `docs/agents/memory.md` are routing indexes. They point at canonical sources instead of copying their contents.
 
@@ -39,16 +39,17 @@ If routing and all configured outputs are healthy, report that setup is already 
 Reuse settled choices. Resolve only these missing values:
 
 - **Work root:** preserve an established location; otherwise `.scratch/`.
+- **Recovery entry:** exactly one per run, default `<work-root>/<run-id>/state.md`. Preserve an explicitly configured JSON entry. Link optional scheduler `execution.json` from the entry; it cannot own another next action or canonical ticket status.
 - **Issue tracker:** preserve the repository's tracker; otherwise GitHub when the remote proves it, local Markdown when it does not.
 - **Change records:** preserve the canonical ticket/spec home; new local changes use tracked `docs/changes/<change-id>/`. Keep canonical ticket ID distinct from branch/run identity.
 - **Operations:** link relevant environment/build/deploy constraints and existing release-evidence homes; load the Operations contract only when needed.
 - **Active effort:** explicit user selection, current branch mapping, or a documented repository rule.
-- **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](references/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
-- **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](references/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `acs-design-context` migrates it — not an incidental setup action.
+- **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](../../../protocols/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
+- **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](../../../protocols/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `acs-design-context` migrates it — not an incidental setup action.
 - **Domain memory:** one root `CONTEXT.md` by default; use a context map only when distinct bounded contexts already exist.
 - **Code index:** disabled by default; offer it only when repository scale makes repeated source search materially expensive.
 
-Configuration is complete when a cold session can resolve every enabled layer without guessing.
+Configuration is complete when a cold session can resolve both memory classes and enabled domain homes without guessing.
 
 ## 3. Propose one write plan
 
@@ -58,7 +59,7 @@ The plan may include:
 
 - `docs/agents/memory.md`
 - the work-root ignore rule
-- `<work-root>/<effort>/state.md` for an active effort
+- the configured recovery entry for an active run (default `<work-root>/<run-id>/state.md`)
 - a short startup sequence and memory pointer in `AGENTS.md` or `CLAUDE.md`
 - an optional environment check script when the repository lacks one and cold starts are otherwise ambiguous
 - an optional code index and its routing pointer
@@ -67,13 +68,13 @@ Create `CONTEXT.md`, ADRs, and product documents only when the repository alread
 
 ## 4. Write routing and working memory
 
-Load [`references/working-memory.md`](references/working-memory.md) for the active-effort shape. Write `docs/agents/memory.md` with the resolved work root, tracker, active-effort rule, domain-memory layout, product-doc path, and code-index status.
+Load [`references/working-memory.md`](references/working-memory.md) for the active-effort shape. Write `docs/agents/memory.md` with the resolved work root, single recovery-entry path, tracker, active-effort rule, domain-memory layout, product-doc path, and code-index status.
 
 Use [`references/templates/AGENTS.template.md`](references/templates/AGENTS.template.md) only for missing routing sections. Preserve user-authored instructions. Every context pointer must name the condition that makes an agent open its target, and every target must resolve.
 
-Create `state.md` only for a real active effort. It must identify the current status, one concrete next action, blockers, canonical change/task and status references, consumed revisions, and the minimum pointers needed to resume. Confirm the work root is ignored.
+Create the configured recovery entry only for a real active run. It must identify the current status, one concrete next action, blockers, canonical change/task and status references, consumed revisions, and the minimum pointers needed to resume. Confirm the work root is ignored.
 
-This step is complete when the memory config resolves all enabled layers and the active effort can resume from `state.md` without reconstructing prior conversation.
+This step is complete when the memory config resolves both memory classes and enabled domain homes and the active effort can resume from that entry without reconstructing prior conversation.
 
 ## 5. Route durable facts
 
@@ -97,13 +98,13 @@ This step is complete when the recorded query works from a cold shell and return
 
 ## 7. Verify cold start
 
-Follow only the new startup sequence: run the recorded environment check when present, inspect recent history, resolve the active effort, read `state.md`, and follow its pointers. Verify every new local link and literal command.
+Follow only the new startup sequence: run the recorded environment check when present, inspect recent history, resolve the active effort, read the configured recovery entry, and follow its pointers. Verify every new local link and literal command.
 
-Setup is complete when that sequence reaches one executable next action, all enabled layer paths resolve, and no repository fact was duplicated into a second canonical home. Report created, repaired, skipped, and deferred items. Leave commits to the user.
+Setup is complete when that sequence reaches one executable next action, all configured memory paths resolve, and no repository fact was duplicated into a second canonical home. Report created, repaired, skipped, and deferred items. Leave commits to the user.
 
 ## Guardrails
 
-- Use code, manifests, and configuration as executable evidence; maintain useful Current State summaries with evidence and revisions, and keep historical rationale in Change Context/ADRs.
+- Use code, manifests, and configuration as executable evidence; maintain useful Persistent Current summaries with evidence and revisions, and keep historical rationale in Persistent Changes/ADRs.
 - Preserve user-authored sections and unrelated state.
 - Move unique rationale to its canonical home before removing a stale copy.
 - Store credentials, personal data, and large raw logs outside shared memory.

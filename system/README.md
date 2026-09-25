@@ -1,12 +1,14 @@
 # Agent Coding System
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
-This directory is the plugin and product. Its skills share a repository memory system: setup declares the paths and protocols once, then all skills coordinate through those artifacts across the six lifecycle phases.
+This directory is the plugin and product. Its skills coordinate through shared repository records across the six lifecycle phases. Setup configures paths when needed; explicit inputs and unambiguous existing homes also support standalone work.
 
 ## System model
 
-The [shared protocol](skills-src/craft/context/acs-init-context/references/PROTOCOL.md) defines four lifecycles: North Star, Current State, Change Context, and Run Context. Product records retain their HTML format; engineering tickets and specs keep Markdown or established tracker homes. One canonical ticket/spec connects all contributions.
+The accepted [Context design](docs/context-memory-presenter-proposal.md) defines **Working Memory**, **Persistent Memory**, and a **Presenter**. The [shared protocol](protocols/skill-declarations.md) owns their artifact roles: Working holds run recovery and scratch; Persistent holds Intent, Current, and Changes. One canonical ticket/spec connects all contributions. Product records retain their HTML format; engineering records keep Markdown or established tracker homes.
+
+The [Presenter](protocols/presenter.md) organizes versioned sources for human reading or review. Domain skills own conclusions; review decisions and exact reviewed content remain persistent. Accepted visual prototypes are persistent artifacts, while reports and DAGs are reconstructible views.
 
 [Workflow coordination](workflows/context-coordination.md) resolves paths and identity, assembles relevant context, binds available runtime capabilities, serializes contributions, tracks freshness, and cleans up reconciled scratch. Skills retain domain reasoning and evidence interpretation.
 
@@ -16,7 +18,7 @@ The [shared protocol](skills-src/craft/context/acs-init-context/references/PROTO
 | --- | --- |
 | [`skills-src/`](skills-src/) | Skill source packages organized by lifecycle phase |
 | [`skills/`](skills/) | Flat symlinks into `skills-src/` for one-level loader discovery |
-| [`memory/`](memory/) | Layer definitions, read/write protocol, ownership registry |
+| [`protocols/`](protocols/) | Memory, ownership, handoff, coordination, and Presenter contracts |
 | [`workflows/`](workflows/) | Six lifecycle workflows plus legacy sequences |
 | [`commands/`](commands/) | Setup and Git commands |
 | [`agents/`](agents/) | Shared explorer, reviewer, and delivery agents |
@@ -37,13 +39,13 @@ Six workflow documents cover the lifecycle. They are navigation and sequencing g
 
 `acs-init-context` sets up memory state and `acs-sync-context` reconciles it. The shared handoff envelope carries pointers into a fresh session. `acs-engineer-domain-model` owns the shared glossary and ADRs. `acs-manage-context` retains the explicit-only compatibility routing behavior under the new namespace.
 
-The [harness architecture](docs/harness-architecture.md) separates domain skills, coordination, and host adapters. Public skill IDs are identical across plugin and planned standalone distributions. Individual skill directories still depend on shared files outside their package and have not passed standalone isolation acceptance.
+The [harness architecture](docs/harness-architecture.md) separates domain skills, coordination, presentation and host adapters. Generated plugins retain public skill IDs and embed linked dependencies. Isolation tests cover resource closure and executable renderer behavior; copying individual source directories alone and host runtime parity remain outside that guarantee.
 
 Legacy workflows are retained for backward compatibility: [ideas](workflows/ideas.md), [feature-delivery](workflows/feature-delivery.md), [testing](workflows/testing.md), [debugging](workflows/debugging.md).
 
 ## Context and retention
 
-Lifecycle and artifact roles live in [shared memory](memory/README.md), with detailed domain contracts loaded only when relevant. Code indexes are derived views. Accepted requirements/designs, consequential decisions, compact verification, and release references survive completion; execution plans, claims, raw outputs, and handoffs are disposable after reconciliation.
+Memory and artifact roles live in the [shared protocol](protocols/skill-declarations.md), with domain contracts loaded only when relevant. Proposed records become persistent before formal review or downstream reliance; persistence does not imply acceptance. Code indexes are derived views. Requirements/designs, consequential decisions, compact verification, and release references survive completion; execution plans, claims, raw outputs, and handoffs are disposable only after the run ends and durable information is reconciled.
 
 Preserve existing tracker/document locations. New local-only changes use tracked `docs/changes/<change-id>/`; run scratch uses the configured work root, default `.scratch/<effort>/`. Current-state assertions carry evidence and relevant revision/environment; documentation dates alone do not prove freshness.
 
@@ -55,6 +57,6 @@ Run the setup command once per target repository:
 /agent-coding-skills:setup
 ```
 
-It inspects existing conventions, proposes the memory configuration, and writes `docs/agents/memory.md` after approval. It does not create empty memory artifacts.
+It inspects existing conventions and configures `docs/agents/memory.md`, including one recovery entry per run. Existing authorization applies; ask only about unresolved choices or work beyond that scope. It does not create empty memory artifacts.
 
 External adaptations and revisions are recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).

@@ -1,1 +1,1 @@
-../../../craft/context/acs-init-context/references/product-memory.md
+../../../../protocols/product-memory.md

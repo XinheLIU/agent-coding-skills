@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Define Outcomes
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [product, design]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Turn a chosen solution shape into the verifiable commitments the team can build and measure against. The output says what success looks like for each accepted user outcome, how to prove it end-to-end, which capabilities it depends on, and which capabilities are deferred with their rationale.

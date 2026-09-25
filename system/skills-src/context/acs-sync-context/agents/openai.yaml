@@ -1,0 +1,5 @@
+interface:
+  display_name: "Sync Context"
+  short_description: "Detect and repair shared-context drift after setup. Use for broken routing, stal..."
+policy:
+  allow_implicit_invocation: false

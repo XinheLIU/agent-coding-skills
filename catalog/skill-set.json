@@ -28,14 +28,14 @@
     },
     {
       "id": "design/requirements",
-      "label": "Design \u00b7 Requirements",
+      "label": "Design · Requirements",
       "skills": [
         "acs-settle-requirements"
       ]
     },
     {
       "id": "design/ux",
-      "label": "Design \u00b7 UX",
+      "label": "Design · UX",
       "skills": [
         "acs-design-context",
         "acs-design-system-create",
@@ -47,7 +47,7 @@
     },
     {
       "id": "design/technical",
-      "label": "Design \u00b7 Technical",
+      "label": "Design · Technical",
       "skills": [
         "acs-audit-architecture",
         "acs-design-architecture",
@@ -81,7 +81,7 @@
     },
     {
       "id": "test/review",
-      "label": "Test \u00b7 Review",
+      "label": "Test · Review",
       "skills": [
         "acs-review-architecture",
         "acs-review-design-doc",
@@ -92,7 +92,7 @@
     },
     {
       "id": "test/debugging",
-      "label": "Test \u00b7 Debugging",
+      "label": "Test · Debugging",
       "skills": [
         "acs-triage",
         "acs-resolving-merge-conflicts"
@@ -133,29 +133,27 @@
     },
     {
       "name": "acs-plan",
-      "version": "0.4.0",
-      "description": "ACS planning phase - discovery, validation, PRD generation",
+      "version": "1.0.0",
+      "description": "Product discovery, ideation, and requirements skills for the ACS suite.",
       "phase": "plan",
-      "skillCount": 10,
-      "dependencies": ["acs-context"]
+      "skillCount": 11,
+      "dependencies": []
     },
     {
       "name": "acs-design",
-      "version": "0.4.0",
-      "description": "ACS design phase - requirements, UX, architecture",
+      "version": "1.0.0",
+      "description": "UX and technical design skills for the ACS suite.",
       "phase": "design",
-      "skillCount": 12,
-      "dependencies": ["acs-context"],
-      "peerDependencies": ["acs-plan"]
+      "skillCount": 11,
+      "dependencies": []
     },
     {
       "name": "acs-build",
-      "version": "0.4.0",
-      "description": "ACS build phase - delivery planning, TDD, implementation",
+      "version": "1.0.0",
+      "description": "Delivery planning, implementation, and test-gap analysis skills for the ACS suite.",
       "phase": "build",
-      "skillCount": 3,
-      "dependencies": ["acs-context"],
-      "peerDependencies": ["acs-design"]
+      "skillCount": 4,
+      "dependencies": []
     },
     {
       "name": "acs-test",
@@ -163,8 +161,7 @@
       "description": "ACS test phase - coverage, review, debugging",
       "phase": "test",
       "skillCount": 8,
-      "dependencies": ["acs-context"],
-      "peerDependencies": ["acs-build"]
+      "dependencies": []
     },
     {
       "name": "acs-maintain",
@@ -172,8 +169,7 @@
       "description": "ACS maintain phase - incident diagnosis and fixes",
       "phase": "maintain",
       "skillCount": 1,
-      "dependencies": ["acs-context"],
-      "peerDependencies": ["acs-test"]
+      "dependencies": []
     },
     {
       "name": "acs-authoring",
@@ -181,7 +177,31 @@
       "description": "ACS meta-tooling - research, DAG visualization, skill development",
       "phase": "authoring",
       "skillCount": 5,
-      "dependencies": ["acs-context"]
+      "dependencies": []
+    },
+    {
+      "name": "acs-protocols",
+      "phase": "protocols",
+      "version": "1.0.0",
+      "description": "Shared ACS contracts and workflows; optional legacy distribution.",
+      "skillCount": 0,
+      "dependencies": []
+    },
+    {
+      "name": "acs-quality",
+      "phase": "quality",
+      "version": "1.0.0",
+      "description": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.",
+      "skillCount": 8,
+      "dependencies": []
+    },
+    {
+      "name": "acs-craft",
+      "phase": "craft",
+      "version": "1.0.0",
+      "description": "Context lifecycle and authoring skills for the ACS suite.",
+      "skillCount": 10,
+      "dependencies": []
     }
   ]
 }

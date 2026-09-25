@@ -5,7 +5,7 @@ description: Turn accepted product scope or designs into delivery tickets and an
 
 # Plan Delivery
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design, implementation]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared writes and claims: [Coordination](../../../workflows/context-coordination.md). Existing authorization persists. A planning request authorizes the plan, not implementation.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared writes and claims: [Coordination](../../../protocols/context-coordination.md). Existing authorization persists. A planning request authorizes the plan, not implementation. Working Memory holds run recovery; Persistent Memory holds reusable domain records, including proposed review inputs. Save referenced conclusions before formal review or dependent handoff. For human-facing reports and review feedback, use [Presenter](../../../protocols/presenter.md); views carry source revisions and never own domain facts.
 
 ## Enter from Product or Design
 
@@ -37,7 +37,7 @@ If scope itself is unsettled, return that question to Product. Use [acs-explore-
 2. **Slice outcomes.** Apply [decomposition rules](references/decomposition-rules.md). Keep one ticket for a small change; put execution checklists inside Run Context. Reuse IDs by parent, scope, and outcome. Each implementation ticket links its criteria, input revisions, affected surfaces, checks, and concurrency risks. Work whose criteria are still being designed links accepted product intent and stays unready.
 3. **Expose design blockers.** Create a design ticket only for a concrete question preventing a slice from becoming executable. Record the question, affected tickets, responsible skill, and decision/check that resolves it. Route missing behavior/criteria to `acs-settle-requirements`, experience questions to the relevant UX skill, and contracts/migrations to technical design. Link existing questions instead of duplicating them. Specialists own answers and acceptance; the planner owns sequencing.
 4. **Persist and validate.** Use the [ticket template](templates/ticket.md) for new local records at `docs/changes/<change-id>/tasks/<task-id>.md`; preserve established trackers and schemas. Record true prerequisites in `depends_on`; keep write/resource conflicts in coordination notes. Check cycles, missing IDs, and scope coverage: every accepted outcome maps to a slice or an explicit unresolved blocker, and every available criterion maps to a ticket/check or a stated omission. Accepted scope changes return to Product; missing design returns to Design.
-5. **Present the plan.** Follow the [HTML delivery report contract](references/delivery-report.md) to generate `docs/changes/<change-id>/delivery-plan.html` using [acs-draw-portfolio-dag](../../craft/meta/acs-draw-portfolio-dag/SKILL.md). Reconcile scanner warnings, then open the report in the available browser and return its clickable path. The report contains accepted scope/outcomes, design blockers, the ready frontier, the next action, ticket details/evidence, and the embedded DAG. Return canonical ticket references, consumed revisions, and changed edges/reasons alongside the report. Planning ends here; invoke `acs-implement` only when execution is in scope.
+5. **Present the plan.** Follow the [HTML delivery report contract](references/delivery-report.md) to generate `docs/changes/<change-id>/delivery-plan.html` using [acs-draw-portfolio-dag](../../authoring/acs-draw-portfolio-dag/SKILL.md). Reconcile scanner warnings, then open the report in the available browser and return its clickable path. The report contains accepted scope/outcomes, design blockers, the ready frontier, the next action, ticket details/evidence, and the embedded DAG. Return canonical ticket references, consumed revisions, and changed edges/reasons alongside the report. Planning ends here; invoke `acs-implement` only when execution is in scope.
 
 ## Reconcile across sessions
 

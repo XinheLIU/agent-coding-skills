@@ -1,11 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "acs-implement run state",
-  "description": "Orchestration state for one acs-implement run. Run Context: disposable after reconciliation. Canonical ticket status lives in the ticket files/tracker, not here.",
+  "description": "Working Memory scheduler details referenced by the configured recovery entry. Canonical tickets own durable status; entries here are derived execution observations. Retain necessary evidence before cleanup.",
   "type": "object",
   "required": ["change_id", "started_at", "tickets"],
   "properties": {
     "change_id": { "type": "string" },
+    "recovery_entry": { "type": "string", "description": "Coordinator-resolved sole recovery entry; default <work-root>/<run-id>/state.md. Explicitly configured JSON entry may identify this file." },
     "started_at": { "type": "string", "format": "date-time" },
     "tickets": {
       "type": "array",
@@ -22,12 +23,12 @@
             "description": "Canonical criterion IDs from the spec"
           },
           "depends_on": { "type": "array", "items": { "type": "string" } },
-          "ticket_path": { "type": "string", "description": "docs/changes/<change-id>/tasks/<task-id>.md" },
+          "ticket_path": { "type": "string", "description": "Coordinator-resolved canonical ticket path or tracker reference" },
           "agent_ref": { "type": "string", "description": "Orchestrator handle from dispatch()" },
           "workspace": { "type": "string", "description": "Worktree path, when isolated" },
           "started_at": { "type": "string", "format": "date-time" },
           "completed_at": { "type": "string", "format": "date-time" },
-          "evidence_path": { "type": "string", "description": "docs/changes/<change-id>/run/evidence/<ticket-id>.md" },
+          "evidence_path": { "type": "string", "description": "Coordinator-resolved evidence reference. Retain criterion-linked evidence before dependent handoff or cleanup." },
           "failure": { "type": "string", "description": "Present when status is failed: what failed and where the evidence is" }
         }
       }

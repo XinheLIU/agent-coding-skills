@@ -1,0 +1,5 @@
+interface:
+  display_name: "Manage Context"
+  short_description: "Explicit-only compatibility router for context setup, synchronization, or cross-..."
+policy:
+  allow_implicit_invocation: false

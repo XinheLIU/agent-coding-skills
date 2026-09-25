@@ -1,0 +1,46 @@
+{
+  "name": "acs-craft",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "acs-challenge-approach",
+      "path": "skills/acs-challenge-approach/SKILL.md"
+    },
+    {
+      "id": "acs-draw-portfolio-dag",
+      "path": "skills/acs-draw-portfolio-dag/SKILL.md"
+    },
+    {
+      "id": "acs-engineer-domain-model",
+      "path": "skills/acs-engineer-domain-model/SKILL.md"
+    },
+    {
+      "id": "acs-init-context",
+      "path": "skills/acs-init-context/SKILL.md"
+    },
+    {
+      "id": "acs-manage-context",
+      "path": "skills/acs-manage-context/SKILL.md"
+    },
+    {
+      "id": "acs-research",
+      "path": "skills/acs-research/SKILL.md"
+    },
+    {
+      "id": "acs-review-agent-instructions",
+      "path": "skills/acs-review-agent-instructions/SKILL.md"
+    },
+    {
+      "id": "acs-sync-context",
+      "path": "skills/acs-sync-context/SKILL.md"
+    },
+    {
+      "id": "acs-translate-agent-context",
+      "path": "skills/acs-translate-agent-context/SKILL.md"
+    },
+    {
+      "id": "acs-writing-great-skills",
+      "path": "skills/acs-writing-great-skills/SKILL.md"
+    }
+  ]
+}

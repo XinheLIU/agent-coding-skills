@@ -5,7 +5,7 @@ description: Map a multi-session effort into dependency-ordered decision tickets
 
 # Explore Unknowns
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,10 +19,10 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
-Wayfinding resolves broad uncertainty. For accepted scope that needs delivery slices and specific design blockers, use [acs-plan-delivery](../../build/acs-plan-delivery/SKILL.md); share existing decision tickets between the two skills.
+Wayfinding resolves broad uncertainty. For accepted scope that needs delivery slices and specific design blockers, use [acs-plan-delivery](../../resources/skills-src/build/acs-plan-delivery/SKILL.md) (reference procedure; capability not installed); share existing decision tickets between the two skills.
 
 ## Chart
 

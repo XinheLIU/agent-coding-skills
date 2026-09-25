@@ -1,0 +1,25 @@
+{
+  "name": "design-doc-review-scenarios",
+  "last_updated": "2026-09-24",
+  "description": "Behavioral scenarios for design-doc review with explicit-path and autodetect modes.",
+  "evals": [
+    {
+      "id": "review-explicit-path",
+      "skills": [
+        "acs-review-design-doc"
+      ],
+      "setup": [],
+      "prompt": "Review the plan at docs/plans/implementation-plan.md before I start coding. Flag scope creep, missing sections, implicit assumptions, and any failure modes the plan does not account for.",
+      "expected_output": "Interactive review walking Scope Challenge through Required Sections, findings in [P0|P1|P2] (confidence: N/10) format, a written artifact under docs/eng-reviews/plan-review-*.md, and a Completion Summary at the end."
+    },
+    {
+      "id": "autodetect-latest-plan",
+      "skills": [
+        "acs-review-design-doc"
+      ],
+      "setup": [],
+      "prompt": "I'm about to start coding. Review my most recent plan doc and tell me what's missing before I write a line of code.",
+      "expected_output": "Skill auto-detects docs/plans/*.md (should pick tdd-execution-plan.md \u2014 newest \u2014 OR ask which one if it picks anything else), reads it, produces interactive review with confidence-calibrated findings and an artifact."
+    }
+  ]
+}

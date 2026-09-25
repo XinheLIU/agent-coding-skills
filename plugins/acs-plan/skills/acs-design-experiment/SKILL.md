@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Design Experiment
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Design the cheapest credible way to resolve a specific product uncertainty. The output is an experiment design — not a product definition. After the experiment runs, its evidence returns to `acs-shape-solution` if it changes the target experience, or to `acs-define-outcomes` if the solution holds but a commitment needs adjustment.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Plan Delivery"
+  short_description: "Turn accepted product scope or designs into delivery tickets and an openable HTM..."
+policy:
+  allow_implicit_invocation: false

@@ -31,7 +31,7 @@ class InventoryTests(unittest.TestCase):
         self.add_skill("acs-research")
         self.catalog(["acs-research"])
 
-    def add_skill(self, name: str, category: str = "craft/meta") -> Path:
+    def add_skill(self, name: str, category: str = "authoring") -> Path:
         directory = self.suite / "skills-src" / category / name
         directory.mkdir(parents=True)
         (directory / "SKILL.md").write_text(f"---\nname: {name}\ndescription: A bounded capability.\n---\n")
@@ -40,7 +40,7 @@ class InventoryTests(unittest.TestCase):
             discovery.symlink_to(directory)
         return directory
 
-    def catalog(self, names: list[str], category: str = "craft/meta") -> None:
+    def catalog(self, names: list[str], category: str = "authoring") -> None:
         (self.root / "catalog/skill-set.json").write_text(json.dumps({
             "schemaVersion": 1,
             "id": "agent-coding-skills",
@@ -68,7 +68,7 @@ class InventoryTests(unittest.TestCase):
         self.assertTrue(any("acs- namespace" in error for error in inventory_errors(self.suite)))
 
     def test_wrong_frontmatter_name_is_rejected(self) -> None:
-        path = self.suite / "skills-src/craft/meta/acs-research/SKILL.md"
+        path = self.suite / "skills-src/authoring/acs-research/SKILL.md"
         path.write_text(path.read_text().replace("name: acs-research", "name: research"))
         self.assertTrue(any("invalid name/description" in error for error in inventory_errors(self.suite)))
 
@@ -109,7 +109,7 @@ class InventoryTests(unittest.TestCase):
         })
         shared = Path("references/index-tools/external-tools.md")
         actual = output / "skills/acs-sync-context" / shared
-        canonical = REPOSITORY / "system/skills-src/craft/context/acs-init-context" / shared
+        canonical = REPOSITORY / "system/skills-src/context/acs-init-context" / shared
         self.assertTrue(actual.is_file())
         self.assertEqual(actual.read_bytes(), canonical.read_bytes())
         self.assertFalse(any(path.is_symlink() for path in output.rglob("*")))

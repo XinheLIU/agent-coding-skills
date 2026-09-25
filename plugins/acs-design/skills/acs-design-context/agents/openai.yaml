@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Context"
+  short_description: ""Establish or refresh this project's design authority — the root DESIGN.md that ..."
+policy:
+  allow_implicit_invocation: false

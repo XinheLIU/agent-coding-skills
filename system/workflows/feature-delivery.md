@@ -1,6 +1,6 @@
 # Feature Delivery Workflow
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 Use approved intent and the [shared coordinator](context-coordination.md). Keep one canonical change/ticket ID throughout Product, Design, Implementation, Verification, and Release.
 
@@ -36,10 +36,10 @@ Return code revision/diff identity, affected surfaces, decision and criterion re
 
 ## Verification contract
 
-Use [Testing](testing.md) and the [engineering evidence contract](../skills-src/craft/context/acs-init-context/references/engineering-memory.md). Review both Standards and Spec axes. Retain criterion → test/evidence → revision mappings, environment assumptions, failures, omissions, and scoped readiness. Static implementation presence is not passing acceptance evidence. Changes to relevant requirements, contracts, code, tests, or environment trigger scoped reassessment.
+Use [Testing](testing.md) and the [engineering evidence contract](../protocols/engineering-memory.md). Review both Standards and Spec axes. Retain criterion → test/evidence → revision mappings, environment assumptions, failures, omissions, and scoped readiness. Static implementation presence is not passing acceptance evidence. Changes to relevant requirements, contracts, code, tests, or environment trigger scoped reassessment.
 
 ## Release and close
 
-Use the [Operations contract](../skills-src/craft/context/acs-init-context/references/operations-memory.md) with existing project tooling and task authorization. Release evidence links the same change to the verified revision/artifact digest, target environment/configuration, gates, migration results, observability, and rollback references. If no release was requested or performed, record that without implying one occurred.
+Use the [Operations contract](../protocols/operations-memory.md) with existing project tooling and task authorization. Release evidence links the same change to the verified revision/artifact digest, target environment/configuration, gates, migration results, observability, and rollback references. If no release was requested or performed, record that without implying one occurred.
 
-Reconcile applicable Product/System/Design/Operations Current State with observed evidence. Apply the protocol's retention gate: retain compact Change Context; verify it remains understandable without the run directory; then remove only reconciled scratch. When another session must continue, transfer through the [shared handoff envelope](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope), with explicit claim transfer when applicable.
+Reconcile applicable Product/System/Design/Operations Current State with observed evidence. Apply the protocol's retention gate: retain compact Change Context; verify it remains understandable without the run directory; then remove only reconciled scratch. When another session must continue, transfer through the [shared handoff envelope](../protocols/skill-declarations.md#handoff-envelope), with explicit claim transfer when applicable.

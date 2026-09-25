@@ -13,7 +13,7 @@ description: >
 
 # Architecture Review
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 Read [the visual report contract](references/visual-report.md) and [the HTML report format](references/HTML-REPORT.md) before generating an HTML companion. These local references are bundled with the skill; do not depend on `/meta` or another installed skill.
 
@@ -29,7 +29,7 @@ context:
   handoff_to: [design, refactoring, code_review]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 
 You are running a holistic architecture review. Your job is **not** to do the reviews yourself — per-aspect explore/review subagent pairs do. Your job is to collect user intent, dispatch subagents in parallel, and consolidate findings into a design-level report.

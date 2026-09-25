@@ -1,6 +1,6 @@
 # Build Workflow
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 Turn accepted scope into a delivery graph, and execute the ready implementation slices when authorized.
 
@@ -24,6 +24,8 @@ Use [acs-implement](../skills-src/build/acs-implement/SKILL.md) for authorized d
 The coordinator acquires claims and checks shared-write/contract risks before dispatching `acs-tdd` executors. Logical independence alone does not establish safe parallelism. `acs-implement` merges completed work in dependency order, records canonical status/evidence, and refreshes the same HTML plan and DAG, reloading the open report. Design blockers, failures, and stale decisions keep only dependent work blocked.
 
 ## Verify and hand off
+
+Use the configured Working Memory recovery entry for the run; orchestration JSON is referenced execution detail, not another source of ticket status or next action. Keep review proposals, accepted contracts and criterion-linked final evidence in Persistent Memory. The [Presenter](../protocols/presenter.md) refreshes the derived delivery view from those records; the next skill consumes source references and revisions.
 
 Exercise delivered behavior on the running system, retaining criterion → ticket → check/evidence → revision mappings. Report undelivered scope and blockers explicitly; child completion never implies parent completion. Return scope/dependency changes to `acs-plan-delivery`, and code ready for assessment to `quality/review` and `test`.
 

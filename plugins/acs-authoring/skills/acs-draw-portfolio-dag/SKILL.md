@@ -5,7 +5,7 @@ description: Render Markdown workstreams and dependency tickets as an interactiv
 
 # Draw Portfolio DAG
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Resolve `SKILL_DIR` as this skill's directory and call its scripts by absolute path.
@@ -32,7 +32,7 @@ For canonical delivery tickets from `acs-plan-delivery`, scan one change directo
 python3 "$SKILL_DIR/scripts/scan_tasks.py" docs/changes/<change-id> -o manifest.json
 ```
 
-The [ticket template](../../../build/acs-plan-delivery/templates/ticket.md) defines this local format: `tasks/<task-id>.md`, an H1 `<task-id>: <title>`, and plain `Type:`, `Status:`, `Readiness:`, `depends_on:` fields. Dependencies are comma-separated local task IDs or `change/task` IDs; `none` means no dependencies. To resolve cross-change edges, scan the common changes directory including prerequisite tickets. Other tracker schemas need a derived manifest rather than conversion of canonical documents.
+The [ticket template](../../resources/skills-src/build/acs-plan-delivery/templates/ticket.md) defines this local format: `tasks/<task-id>.md`, an H1 `<task-id>: <title>`, and plain `Type:`, `Status:`, `Readiness:`, `depends_on:` fields. Dependencies are comma-separated local task IDs or `change/task` IDs; `none` means no dependencies. To resolve cross-change edges, scan the common changes directory including prerequisite tickets. Other tracker schemas need a derived manifest rather than conversion of canonical documents.
 
 The adapter preserves qualified canonical IDs, source paths and SHA-256 revisions. It rejects missing prerequisite IDs and cycles, flags unknown fields, and keeps design tickets, failed/superseded tickets, unresolved dependencies, and unready inputs off the implementation frontier. A historical done ticket with stale readiness remains visible but cannot satisfy downstream prerequisites. The renderer labels type/readiness/status as tags and validates final edges after overlays are applied.
 
@@ -85,7 +85,7 @@ The legacy scanner supports only that shape. For other tracker schemas, supply a
      --format mermaid -o roadmap.md --title "My Roadmap"
    ```
 
-   For `acs-plan-delivery`, pass `--plan plan.json -o docs/changes/<change-id>/delivery-plan.html` to embed the plan and DAG in one self-contained HTML file. Follow its [delivery report contract](../../../build/acs-plan-delivery/references/delivery-report.md) for the derived summary, canonical ticket details, opening, and refresh behavior. The renderer derives the frontier and design-blocker list from the same ticket nodes as the graph.
+   For `acs-plan-delivery`, pass `--plan plan.json -o docs/changes/<change-id>/delivery-plan.html` to embed the plan and DAG in one self-contained HTML file. Follow its [delivery report contract](../../resources/skills-src/build/acs-plan-delivery/references/delivery-report.md) for the derived summary, canonical ticket details, opening, and refresh behavior. The renderer derives the frontier and design-blocker list from the same ticket nodes as the graph.
 
 4. **Verify.** Compare output workstream, node, and dependency counts with the manifest; open HTML output when browser control is available. The graph is done when all verified dependencies render, completed tickets with current evidence are green, execution-ready frontier tickets are orange, design/unready/blocked tickets are blue, and displayed status matches canonical tickets without becoming independently editable.
 

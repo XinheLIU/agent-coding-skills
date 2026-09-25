@@ -1,6 +1,6 @@
 # Engineering Setup
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 **Lifecycle stage 3.** Engineering Setup covers everything needed to make a codebase ready for reliable agent-assisted delivery. Its scope spans three sub-areas:
 
@@ -18,7 +18,7 @@ In agentic coding, **context is the bottleneck**. Too little context leads to ha
 
 ## The Core Framework
 
-The [shared protocol](../skills-src/craft/context/acs-init-context/references/PROTOCOL.md) defines North Star, Current State, Change Context, and Run Context. Code indexes are derived views. The [coordinator](../workflows/context-coordination.md) owns context assembly, runtime bindings, claims, transitions, and cleanup; domain skills own facts and judgments.
+The [shared protocol](../protocols/skill-declarations.md) separates Working Memory (run recovery and scratch) from Persistent Memory (Intent, Current, Changes). The [Presenter](../protocols/presenter.md) creates derived human views; canonical product HTML and accepted prototypes remain persistent artifacts. Code indexes are derived views. The [coordinator](../workflows/context-coordination.md) owns context assembly, runtime bindings, claims, transitions, and cleanup; domain skills own facts and judgments.
 
 `acs-sync-context` reconciles drift and routes affected conclusions to their owners. Keep accepted requirements/designs and compact final evidence after completion; remove only reconciled execution material. Current-state summaries explain applicable behavior/boundaries with source revisions, while ADRs and change records retain historical rationale.
 
@@ -30,9 +30,9 @@ Instruction-file content is maintained by `acs-review-agent-instructions`; runti
 
 ### [acs-init-context](../skills/acs-init-context/SKILL.md)
 
-The one-time setup entry point for the whole collection. Writes `docs/agents/memory.md` and initializes the configured memory layers.
+Configure routing when needed. Explicit task inputs and unambiguous existing homes can be used without setup. `docs/agents/memory.md` records memory homes and one recovery entry per run.
 
-**Phase A (setup)** — runs when routing is absent. Configures the shared memory layers, work root, issue tracker, and optional wiki; writes `docs/agents/memory.md`; and bootstraps the Run Context. Broader documentation, rule extraction, and indexing are separate capabilities.
+**Phase A (setup)** — runs when routing is absent. Configures the shared memory layers, work root, canonical change/tracker homes, and recovery entry; writes `docs/agents/memory.md`; and bootstraps the Run Context. Broader documentation, rule extraction, and indexing are separate capabilities.
 
 **Phase B (sync)** — runs when routing exists. Detects drift across domain records, derived indexes, and Run Context, then makes narrow factual corrections or reports structural work for the owning capability. Distinguishes drift (fix the doc) from a constraint violation (fix the code).
 

@@ -1,5 +1,5 @@
 interface:
   display_name: "Run Premortem"
-  short_description: "Stress-test a plan by assuming it has already failed"
+  short_description: "Stress-test a plan by assuming it has already failed. Use when the user wants a ..."
 policy:
   allow_implicit_invocation: false

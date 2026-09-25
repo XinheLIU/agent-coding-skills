@@ -1,0 +1,7 @@
+{
+  "name": "acs-quality",
+  "version": "1.0.0",
+  "description": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.",
+  "license": "MIT",
+  "main": "catalog/skill-set.json"
+}

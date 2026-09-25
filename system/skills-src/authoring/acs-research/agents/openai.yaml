@@ -1,0 +1,5 @@
+interface:
+  display_name: "Research"
+  short_description: "Resolve an external technical fact blocking an engineering decision, specificati..."
+policy:
+  allow_implicit_invocation: false

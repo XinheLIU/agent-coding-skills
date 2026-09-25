@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Manage Context
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [context_management]
 ```
 
-Shared semantics: [shared protocol](../acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
 This entry retains the former context router's behavior. Older callers must migrate the name to `acs-manage-context`; no unprefixed alias is installed:
@@ -29,4 +29,4 @@ This entry retains the former context router's behavior. Older callers must migr
 2. Use `acs-sync-context` when the routing file exists.
 3. Use `acs-translate-agent-context` for cross-runtime migration.
 
-Routing is complete when exactly one canonical skill has taken over. The shared protocol remains at `../acs-init-context/references/PROTOCOL.md`.
+Routing is complete when exactly one canonical skill has taken over. Canonical contracts live under `system/protocols/`; compatibility aliases contain no independent rules.

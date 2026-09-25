@@ -1,29 +1,14 @@
 # Installation Guide
 
-Last updated: 2026-09-20
+Last updated: 2026-09-25
 
 How to install ACS plugins in Claude Code, Codex, OpenCode, Cursor, and Pi.
 
-The system ships as eight installable plugins plus one monolithic target:
+The active marketplace offers the monolith plus `acs-plan`, `acs-design`, `acs-build`, `acs-quality`, `acs-craft`, and the optional legacy `acs-protocols` package. Existing `acs-context`, `acs-test`, `acs-maintain`, and `acs-authoring` directories remain available as phase packages from a local checkout. Deployment has a workflow but no dedicated skill plugin.
 
-```
-Monolith:    agent-coding-skills   (all skills, one install)
+Install the **entire generated plugin directory**, including `skills/` and `resources/`. Each package embeds its referenced contracts and procedures; no context or protocol peer plugin is required. A loader or installer that copies only individual skill directories must also preserve their linked resources; package validation does not prove every third-party installer does so.
 
-Plugins:     acs-plan              product discovery and intent
-             acs-design            UX and technical design
-             acs-build             delivery, implementation, TDD
-             acs-test              review, debugging, verification
-             acs-context           agent context lifecycle
-             acs-authoring         research, skill writing, decision tools
-             acs-deploy            release and governance  (roadmap)
-             acs-maintain          incident diagnosis
-```
-
-After installation, run a one-time repository setup to write `docs/agents/memory.md`, which is the shared memory file every skill reads and writes:
-
-```
-/acs-init-context
-```
+Skills use explicit inputs or existing canonical homes. Run `/acs-init-context` only when project routing needs configuration. `docs/agents/memory.md` is a routing index for Working/Persistent Memory and one recovery entry per run, not a shared facts file. See the [accepted Context design](system/docs/context-memory-presenter-proposal.md) and [Presenter contract](system/protocols/presenter.md).
 
 
 ## Install from GitHub (any agent)
@@ -103,12 +88,13 @@ cd /path/to/agent-coding-skills
 python3 scripts/validate-protocols.py
 ```
 
-**Check no stale cross-plugin links:**
+**Check package isolation and regeneration:**
 
 ```bash
-grep -r "acs-protocols\|acs-quality\|acs-craft" plugins/ --include="*.md" -l
-# Expected: no output
+python3 -m unittest discover -s system/evals/tests -p 'test_*.py' -v
 ```
+
+This checks actual resource links and isolated execution. Plugin names appearing in prose are not evidence of cross-plugin dependencies.
 
 ---
 
@@ -129,12 +115,11 @@ Claude Code reads skills from `~/.claude/skills/` (global) or `.claude/skills/` 
 
 ```bash
 /plugin marketplace add XinheLIU/agent-coding-skills
-/plugin install agent-coding-skills@acs-plan
-/plugin install agent-coding-skills@acs-design
-/plugin install agent-coding-skills@acs-build
-/plugin install agent-coding-skills@acs-test
-/plugin install agent-coding-skills@acs-context
-/plugin install agent-coding-skills@acs-authoring
+/plugin install acs-plan@agent-coding-skills
+/plugin install acs-design@agent-coding-skills
+/plugin install acs-build@agent-coding-skills
+/plugin install acs-quality@agent-coding-skills
+/plugin install acs-craft@agent-coding-skills
 ```
 
 **From a local clone** (useful while developing skills):

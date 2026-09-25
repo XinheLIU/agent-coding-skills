@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design System Create"
+  short_description: ""Build design authority from scratch when there is nothing to adopt — no DESIGN...."
+policy:
+  allow_implicit_invocation: false

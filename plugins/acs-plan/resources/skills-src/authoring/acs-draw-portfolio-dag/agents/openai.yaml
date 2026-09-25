@@ -1,0 +1,5 @@
+interface:
+  display_name: "Draw Portfolio Dag"
+  short_description: "Render Markdown workstreams and dependency tickets as an interactive HTML DAG or..."
+policy:
+  allow_implicit_invocation: false

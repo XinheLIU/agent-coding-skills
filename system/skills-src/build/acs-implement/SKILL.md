@@ -5,7 +5,7 @@ description: Deliver a verifiable change end-to-end using dependency-ordered tic
 
 # Implement — the delivery loop
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [delivery_planning, code_review, release]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 Accept an authorized change, prepare or reuse its graph, then execute ready implementation tickets; other slices may still await design. Its input is a locked, verifiable change — a user story with test scenarios, a spec section with criteria, a bug report with reproduction steps, or a bootstrap request backed by accepted technical decisions. Its output is working code, verified end-to-end on the running system, with evidence.
 
@@ -40,11 +40,11 @@ Proceed only with execution-ready implementation tickets. Design tickets route t
 
 ## Render the graph
 
-Refresh the existing `delivery-plan.html` with [`acs-draw-portfolio-dag`](../../craft/meta/acs-draw-portfolio-dag/SKILL.md), following the [delivery report contract](../acs-plan-delivery/references/delivery-report.md). Show the frontier before dispatching. On ticket transitions, re-scan canonical tickets, update the derived next action, re-render with `--plan` at the same path and storage key, and reload the open report. This preserves scope, blockers, and evidence alongside live progress: done (green), in progress (yellow), frontier (orange), blocked (blue).
+Refresh the existing `delivery-plan.html` with [`acs-draw-portfolio-dag`](../../authoring/acs-draw-portfolio-dag/SKILL.md), following the [delivery report contract](../acs-plan-delivery/references/delivery-report.md). Show the frontier before dispatching. On ticket transitions, re-scan canonical tickets, update the derived next action, re-render with `--plan` at the same path and storage key, and reload the open report. This preserves scope, blockers, and evidence alongside live progress: done (green), in progress (yellow), frontier (orange), blocked (blue).
 
 ## Orchestrate the frontier
 
-Track run state in `docs/changes/<change-id>/run/state.json` ([schema](references/state-schema.json)) for implementation tickets selected for execution; the canonical graph retains design blockers. Loop until the authorized execution scope is verified or no safe implementation ticket can advance; report remaining design, readiness, and failure blockers:
+Resume through the coordinator-configured recovery entry, default `<work-root>/<run-id>/state.md`. It may reference `<work-root>/<run-id>/execution.json` ([schema](references/state-schema.json)) for scheduler details of selected implementation tickets. If an existing project explicitly configures JSON as its recovery entry, use that entry alone. Canonical tickets own durable status; the canonical graph retains design blockers. Loop until the authorized execution scope is verified or no safe implementation ticket can advance; report remaining design, readiness, and failure blockers:
 
 1. Compute the implementation frontier: pending implementation tickets whose criteria/design are current and ready, external preconditions hold, and prerequisites are done with applicable evidence. Never dispatch design tickets or treat superseded/stale prerequisites as satisfied.
 2. Filter for parallel safety — worktrees isolate files, not semantics; shared contracts, migrations, and generated artifacts still serialize (rules in [decomposition rules](../acs-plan-delivery/references/decomposition-rules.md#parallel-safety)).
@@ -52,7 +52,7 @@ Track run state in `docs/changes/<change-id>/run/state.json` ([schema](reference
 4. Collect completed execution evidence; reconcile contributions in dependency order, merging worktrees only within Git authorization; update state and re-render the graph.
 5. A failed ticket is marked failed with its evidence — its dependents stay blocked, everything else continues. Report failures in the envelope; the user retries specific tickets.
 
-Dispatch, await, collect, and reclaim are the four operations of [the orchestration protocol](references/orchestration-protocol.md). Bind them to verified host capabilities when delegating; otherwise execute serially with the same evidence contract. `state.json` is Run Context — disposable after reconciliation; the tickets are the retained record.
+Dispatch, await, collect, and reclaim are the four operations of [the orchestration protocol](references/orchestration-protocol.md). Bind them to verified host capabilities when delegating; otherwise execute serially with the same evidence contract. Scheduler details are Working Memory and derive ticket status from canonical tickets. Update the sole recovery entry with the next action; do not maintain another independent continuation state. Retain criterion-linked verification and consequential failures in Persistent Memory before handoff or run cleanup.
 
 ## Verify end to end
 
@@ -62,4 +62,4 @@ Code-level green is not done. Start the system the way a user would (documented 
 
 ## Return the envelope
 
-Return the [shared handoff envelope](../../craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope): criterion → ticket → evidence → revision mapping, end-to-end verification result, failed tickets with blocking effects, and the single next action. Code review and refactoring belong to the quality suite (`acs-review-code-quality`, `acs-refactor-code`); no commit or release is implied.
+Return the [shared handoff envelope](../../../protocols/skill-declarations.md#handoff-envelope): criterion → ticket → evidence → revision mapping, end-to-end verification result, failed tickets with blocking effects, and the single next action. Code review and refactoring belong to the quality suite (`acs-review-code-quality`, `acs-refactor-code`); no commit or release is implied.

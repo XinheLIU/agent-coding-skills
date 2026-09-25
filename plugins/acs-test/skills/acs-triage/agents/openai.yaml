@@ -1,0 +1,5 @@
+interface:
+  display_name: "Triage"
+  short_description: "Move incoming issues or external pull requests through a configured triage state..."
+policy:
+  allow_implicit_invocation: false

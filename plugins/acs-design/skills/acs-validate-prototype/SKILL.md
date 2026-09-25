@@ -5,7 +5,7 @@ description: Build throwaway code to answer one design question. Use when conver
 
 # Validate Prototype
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,12 +19,12 @@ context:
   handoff_to: [requesting_domain]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 A prototype is **throwaway code that answers a question**. The question decides the shape: a hand-driven harness for a state model ([LOGIC.md](references/LOGIC.md)), or competing renderings of one surface ([UI.md](references/UI.md)).
 
-Do not confuse this with `docs/design/prototype.html`, the canonical prototype owned by the pipeline stages ([references/design-memory.md](references/design-memory.md)). This skill's outputs are disposable and never merge into it directly; the stage that raised the question folds the decision in through its own approval gate.
+Do not confuse this with `docs/design/prototype.html`, the canonical prototype owned by the pipeline stages ([references/design-memory.md](../acs-design-context/references/design-memory.md)). Exploration is Working Memory; save the exact candidate and dependencies before formal review. A candidate or screenshot relied on by a decision becomes retained evidence. The stage that raised the question reconciles accepted intent into the canonical prototype.
 
 ## Pick a branch
 
@@ -49,7 +49,7 @@ The two branches produce very different artifacts. If the question is ambiguous 
 
 6. **Multiple variants for key decisions.** For logic: expose all transitions. For UI: generate 3-5 structurally different variants (different layout, information hierarchy, primary affordance — not just color tweaks). Surface the differences so the user can compare and decide.
 
-7. **Capture it when done.** Record the decision in `<work-root>/<effort>/prototypes/<slug>/decision.md` with the question, variants tested, evidence, verdict, and source pointer. Commit the prototype itself to a throwaway branch (not main) as a primary source. Fold only the validated decision into the real code. Update the waiting map/spec issue.
+7. **Capture it when done.** Record the decision in `<work-root>/<effort>/prototypes/<slug>/decision.md` with the question, variants tested, evidence, verdict, and source pointer. Preserve the exact reviewed candidate and necessary assets in the resolved persistent evidence home or an already retained revision; commit only with existing explicit Git authorization. Fold only the validated decision into the real code. Update the waiting map/spec issue.
 
 ## Logic Prototype Details
 
@@ -113,7 +113,7 @@ Create a throwaway route following the project's routing convention. Name it obv
 
 5. **Hand it over** with the URL and variant keys. User flips through and picks (or steals bits from each).
 
-6. **Capture the answer and clean up.** Fold the winner into real code. Move losing variants and the switcher to the throwaway branch, not main.
+6. **Capture the answer and clean up.** Fold the winner into real code. Retain any reviewed variant and necessary assets used as decision evidence; remove remaining working variants only after run reconciliation and within the authorized scope.
 
 ## Anti-patterns
 
@@ -126,14 +126,14 @@ Create a throwaway route following the project's routing convention. Name it obv
 
 ## Shared Memory Contract
 
-Full contract: [references/design-memory.md](references/design-memory.md).
+Full contract: [references/design-memory.md](../acs-design-context/references/design-memory.md).
 
 
-Read `docs/agents/memory.md`, the active `state.md`, and the artifact that raised the question (a question or journey/scope record in `discovery.html`, a `map.md` decision ticket, or a `design-system/pages/<page>.md` spec). Write only the question, variants tested, evidence from user feedback, verdict, and pointer to the throwaway branch. Return the verdict and evidence to the domain owner/coordinator. At acceptance, retain consequential rationale, alternatives, criterion/decision IDs, and consumed revisions in linked Change Context before implementation. Resume the requesting stage through the common handoff envelope.
+Read `docs/agents/memory.md`, the configured run recovery entry, and the artifact that raised the question (a question or journey/scope record in `discovery.html`, a `map.md` decision ticket, or a `design-system/pages/<page>.md` spec). Write only the question, variants tested, evidence from user feedback, verdict, and pointer to the throwaway branch. Return the verdict and evidence to the domain owner/coordinator. Before formal review, save candidate content and evidence as proposed Persistent Memory. Record the actual feedback against its subject, reviewed revision, outcome, scope, basis, and source; retain consequential rationale and alternatives before dependent handoff. Resume the requesting stage through the common handoff envelope.
 
 Classify the verdict before handing back — the two kinds promote to different homes. A decision about how the product behaves or looks is product intent and belongs in the PRD. A decision that constrains how the system is built — a data shape, a boundary, a protocol — is an architectural trade-off and belongs in an ADR. State which kind it is in `decision.md` so the owning stage can reconcile it at acceptance.
 
-The prototype code is deliberately disposable; the decision it bought is not. That is the point of the loop — throw away the code, keep the answer.
+Unreviewed exploration is disposable after reconciliation. Preserve the decision and enough exact reviewed code or visual assets to recover its basis; the accepted canonical prototype remains a Persistent artifact.
 
 Use coordinator-resolved existing homes or protocol defaults; ask only when identity or destination remains ambiguous.
 

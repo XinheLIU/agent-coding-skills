@@ -1,204 +1,266 @@
 #!/usr/bin/env python3
-"""Build independently installable plugins from skills-src.
-
-Reads catalog/skill-set.json for the suite -> skill-name mapping, copies each
-suite's SKILL.md files into plugins/<suite>/skills/<name>/SKILL.md, rewrites
-protocol:acs:* references into relative paths that reach the acs-protocols
-plugin, and copies the protocol files themselves into plugins/acs-protocols/.
-
-Idempotent: deletes and recreates each plugin's skills/ (or protocols/)
-directory on every run rather than merging.
-"""
+"""Materialize independently installable plugins and their local resource closure."""
 from __future__ import annotations
 
+import argparse
 import json
+import os
 import re
 import shutil
-import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE = ROOT / "system"
 PLUGINS = ROOT / "plugins"
-
-PROTOCOL_REF = re.compile(r'protocol:acs:([a-z][a-z0-9-]*)')
-# Matches a skills-src-relative link into system/workflows/, e.g.
-# "../../../workflows/feature-delivery.md". Only rewrites links that leave
-# a skill's own directory to reach workflows/; links already inside
-# workflows/*.md (workflow-to-workflow) are untouched by this pattern since
-# those files are copied, not scanned, by build_protocols_plugin().
-WORKFLOWS_REF = re.compile(r'(?:\.\./)+workflows/([a-zA-Z0-9_-]+\.md)')
-
-# category id (from catalog/skill-set.json) -> plugin name
 CATEGORY_TO_PLUGIN = {
-    "plan": "acs-plan",
-    "design/requirements": "acs-plan",
-    "design/ux": "acs-design",
-    "design/technical": "acs-design",
-    "build": "acs-build",
-    "test": "acs-build",
-    "quality/review": "acs-quality",
-    "quality/debugging": "acs-quality",
-    "maintain": "acs-quality",
-    "craft/context": "acs-craft",
-    "craft/meta": "acs-craft",
+    "plan": "acs-plan", "design/requirements": "acs-plan",
+    "design/ux": "acs-design", "design/technical": "acs-design",
+    "build": "acs-build", "test": "acs-build",
+    "quality/review": "acs-quality", "test/review": "acs-quality",
+    "quality/debugging": "acs-quality", "test/debugging": "acs-quality",
+    "maintain": "acs-quality", "craft/context": "acs-craft",
+    "craft/meta": "acs-craft", "context": "acs-craft", "authoring": "acs-craft",
 }
-
 PLUGIN_DESCRIPTIONS = {
-    "acs-protocols": "Shared lifecycle, identity, and domain-memory contracts for the ACS suite. No skills; other acs-* plugins depend on it.",
+    "acs-protocols": "Shared ACS contracts and workflows; optional legacy distribution.",
     "acs-plan": "Product discovery, ideation, and requirements skills for the ACS suite.",
     "acs-design": "UX and technical design skills for the ACS suite.",
     "acs-build": "Delivery planning, implementation, and test-gap analysis skills for the ACS suite.",
     "acs-quality": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.",
-    "acs-craft": "Context lifecycle and meta skills (research, skill authoring, portfolio mapping) for the ACS suite.",
+    "acs-craft": "Context lifecycle and authoring skills for the ACS suite.",
 }
+LINK = re.compile(r"(!?\[[^\]]*\])\(([^)]+)\)")
+FENCE = re.compile(r"(^```[^\n]*\n.*?^```[ \t]*$)", re.MULTILINE | re.DOTALL)
 
 
-def load_skill_to_dir() -> dict[str, Path]:
-    """Map skill name -> its directory under system/skills-src."""
-    mapping: dict[str, Path] = {}
-    for skill_md in SUITE.glob("skills-src/**/SKILL.md"):
-        mapping[skill_md.parent.name] = skill_md.parent
-    return mapping
+def local_reference(raw: str) -> tuple[str, str] | None:
+    """Return a concrete relative path and its optional anchor/title suffix."""
+    raw = raw.strip()
+    if re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:", raw) or raw.startswith(("/", "#")):
+        return None
+    if any(character in raw for character in "<>{}*"):
+        return None  # A placeholder, not a package dependency.
+    path, separator, title = raw.partition(' "')
+    file_part, anchor, fragment = path.partition("#")
+    suffix = (anchor + fragment if anchor else "") + (separator + title if separator else "")
+    return unquote(file_part), suffix
 
 
-def load_skill_to_plugin() -> dict[str, str]:
-    skillset = json.loads((ROOT / "catalog/skill-set.json").read_text())
-    mapping: dict[str, str] = {}
-    for category in skillset["categories"]:
-        plugin = CATEGORY_TO_PLUGIN.get(category["id"])
-        if plugin is None:
-            raise SystemExit(f"category '{category['id']}' has no plugin mapping")
-        for skill in category["skills"]:
-            mapping[skill] = plugin
-    return mapping
+class Materializer:
+    """Copy selected skills, dereference shared files, and close resource links."""
+
+    def __init__(self, suite: Path, output: Path, skills: dict[str, Path]) -> None:
+        self.suite = suite.resolve()
+        self.output = output.resolve()
+        self.skills = skills
+        self.destinations: dict[Path, Path] = {}
+        self.pending: list[tuple[Path, Path]] = []
+        self.copied: set[Path] = set()
+
+    def add_file(self, source: Path, destination: Path) -> None:
+        canonical = source.resolve(strict=True)
+        if not canonical.is_relative_to(self.suite):
+            raise ValueError(f"Resource escapes source suite: {source}")
+        if destination in self.copied:
+            return
+        self.copied.add(destination)
+        self.destinations.setdefault(canonical, destination)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(canonical, destination)
+        if canonical.suffix == ".md":
+            self.pending.append((canonical, destination))
+
+    def add_tree(self, source: Path, destination: Path, *, include_skill: bool = True) -> None:
+        for entry in sorted(source.iterdir()):
+            if entry.name == "__pycache__" or entry.suffix == ".pyc":
+                continue
+            if entry.name == "SKILL.md" and not include_skill:
+                continue
+            target = destination / entry.name
+            if entry.is_dir():
+                self.add_tree(entry, target, include_skill=include_skill)
+            else:
+                self.add_file(entry, target)
+
+    def resource(self, source: Path) -> Path:
+        source = source.resolve(strict=True)
+        existing = self.destinations.get(source)
+        if existing:
+            return existing
+        if not source.is_relative_to(self.suite):
+            raise ValueError(f"Linked resource escapes source suite: {source}")
+        destination = self.output / "resources" / source.relative_to(self.suite)
+        # Companion resource directories contain adjacent scripts/templates that
+        # may be referenced by code or inline instructions instead of MD links.
+        skill_root = next((parent for parent in source.parents if (parent / "SKILL.md").is_file()), None)
+        if skill_root and skill_root.is_relative_to(self.suite / "skills-src"):
+            self.add_tree(skill_root, self.output / "resources" / skill_root.relative_to(self.suite), include_skill=False)
+            if source.name == "SKILL.md":
+                self.add_file(source, destination)
+        elif source.is_dir():
+            self.add_tree(source, destination)
+        else:
+            self.add_file(source, destination)
+        return self.destinations.get(source, destination)
+
+    def rewrite(self, source: Path, destination: Path, text: str) -> str:
+        def replace(match: re.Match[str]) -> str:
+            reference = local_reference(match[2])
+            if reference is None:
+                return match[0]
+            path, suffix = reference
+            target = (source.parent / path).resolve()
+            if not target.is_relative_to(self.suite):
+                # A research corpus is source-checkout provenance, never shipped.
+                if target.is_relative_to(self.suite.parent / "references"):
+                    provenance = target.relative_to(self.suite.parent).as_posix()
+                    return f"{match[1][1:-1]} (source-checkout provenance: `{provenance}{suffix}`)"
+                if target.is_relative_to(self.suite.parent):
+                    relative = target.relative_to(self.suite.parent).as_posix()
+                    return f"{match[1]}(https://github.com/XinheLIU/agent-coding-skills/blob/main/{relative}{suffix})"
+                raise ValueError(f"Linked resource escapes repository: {target}")
+            companion = target.name == "SKILL.md" and target.parent.name not in self.skills
+            copied = self.resource(target)
+            relative = Path(os.path.relpath(copied, destination.parent)).as_posix()
+            note = " (reference procedure; capability not installed)" if companion else ""
+            return f"{match[1]}({relative}{suffix}){note}"
+
+        # Examples are not dependencies and must retain their original spelling.
+        return "".join(part if index % 2 else LINK.sub(replace, part)
+                       for index, part in enumerate(FENCE.split(text)))
+
+    def build(self) -> None:
+        notices = self.suite / "THIRD_PARTY_NOTICES.md"
+        if notices.is_file():
+            self.add_file(notices, self.output / "THIRD_PARTY_NOTICES.md")
+        license_file = self.suite.parent / "LICENSE"
+        if license_file.is_file():
+            self.output.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(license_file, self.output / "LICENSE")
+        for name, source in sorted(self.skills.items()):
+            self.add_tree(source, self.output / "skills" / name)
+        index = 0
+        while index < len(self.pending):
+            source, destination = self.pending[index]
+            index += 1
+            destination.write_text(self.rewrite(source, destination, source.read_text()))
 
 
-def rewrite_protocol_refs(content: str, depth_to_plugins_root: str) -> str:
-    """Rewrite protocol:acs:X and workflows/X.md references to relative paths
-    that reach the acs-protocols plugin.
-
-    depth_to_plugins_root is the '../' prefix from a skill's directory
-    (plugins/<suite>/skills/<name>/) up to plugins/.
-    """
-
-    def replace_protocol(match: re.Match[str]) -> str:
-        name = match.group(1)
-        return f"{depth_to_plugins_root}acs-protocols/protocols/{name}.md"
-
-    def replace_workflow(match: re.Match[str]) -> str:
-        filename = match.group(1)
-        return f"{depth_to_plugins_root}acs-protocols/workflows/{filename}"
-
-    content = PROTOCOL_REF.sub(replace_protocol, content)
-    content = WORKFLOWS_REF.sub(replace_workflow, content)
-    return content
-
-
-PROTOCOLS_VERSION = "1.0.0"
-
-
-def write_plugin_json(plugin_dir: Path, name: str, needs_protocols: bool) -> None:
+def write_manifest(output: Path, name: str, description: str, version: str) -> None:
     manifest = {
-        "name": name,
-        "version": "1.0.0",
-        "description": PLUGIN_DESCRIPTIONS[name],
+        "name": name, "version": version, "description": description,
         "author": {"name": "Xinhe LIU", "url": "https://github.com/XinheLIU"},
         "repository": "https://github.com/XinheLIU/agent-coding-skills",
-        "license": "MIT",
+        "license": "MIT", "skills": "./skills/",
     }
-    if needs_protocols:
-        manifest["skills"] = "./skills/"
-        manifest["peerDependencies"] = {"acs-protocols": f"^{PROTOCOLS_VERSION}"}
-    plugin_json_dir = plugin_dir / ".claude-plugin"
-    plugin_json_dir.mkdir(parents=True, exist_ok=True)
-    (plugin_json_dir / "plugin.json").write_text(json.dumps(manifest, indent=2) + "\n")
+    for host in ("claude", "codex"):
+        path = output / f".{host}-plugin/plugin.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(manifest, indent=2) + "\n")
 
 
-def build_protocols_plugin() -> None:
-    plugin_dir = PLUGINS / "acs-protocols"
-
-    protocols_out = plugin_dir / "protocols"
-    if protocols_out.exists():
-        shutil.rmtree(protocols_out)
-    shutil.copytree(SUITE / "protocols", protocols_out)
-
-    # workflows/ is cross-domain orchestration narrative (build+plan+craft all
-    # linked from it) — same "shared, not owned by one suite" status as
-    # protocols/, so it ships in the same base package. Copied verbatim:
-    # internal links inside these files are pre-existing and out of scope.
-    workflows_out = plugin_dir / "workflows"
-    if workflows_out.exists():
-        shutil.rmtree(workflows_out)
-    shutil.copytree(SUITE / "workflows", workflows_out)
-
-    write_plugin_json(plugin_dir, "acs-protocols", needs_protocols=False)
-    print(f"acs-protocols: copied {len(list(protocols_out.glob('*.md')))} protocol files, {len(list(workflows_out.glob('*.md')))} workflow files")
-
-
-def build_skill_plugins() -> None:
-    skill_to_dir = load_skill_to_dir()
-    skill_to_plugin = load_skill_to_plugin()
-
-    # depth from plugins/<suite>/skills/<name>/ to plugins/ is always ../../../
-    depth_to_plugins_root = "../../../"
-
-    per_plugin_count: dict[str, int] = {}
-
-    for skill_name, plugin_name in sorted(skill_to_plugin.items()):
-        src_dir = skill_to_dir.get(skill_name)
-        if src_dir is None:
-            raise SystemExit(f"skill '{skill_name}' listed in skill-set.json but missing under skills-src/")
-
-        dest_dir = PLUGINS / plugin_name / "skills" / skill_name
-        if dest_dir.exists():
-            shutil.rmtree(dest_dir)
-        shutil.copytree(src_dir, dest_dir)
-
-        skill_md = dest_dir / "SKILL.md"
-        content = skill_md.read_text()
-        rewritten = rewrite_protocol_refs(content, depth_to_plugins_root)
-        skill_md.write_text(rewritten)
-
-        per_plugin_count[plugin_name] = per_plugin_count.get(plugin_name, 0) + 1
-
-    for plugin_name, count in sorted(per_plugin_count.items()):
-        write_plugin_json(PLUGINS / plugin_name, plugin_name, needs_protocols=True)
-        print(f"{plugin_name}: {count} skills")
+def write_package_metadata(output: Path, name: str, description: str,
+                           version: str, skills: dict[str, Path]) -> None:
+    catalog = {"name": name, "version": version, "skills": [
+        {"id": skill, "path": f"skills/{skill}/SKILL.md"} for skill in sorted(skills)
+    ]}
+    (output / "catalog").mkdir(exist_ok=True)
+    (output / "catalog/skill-set.json").write_text(json.dumps(catalog, indent=2) + "\n")
+    (output / "package.json").write_text(json.dumps({
+        "name": name, "version": version, "description": description,
+        "license": "MIT", "main": "catalog/skill-set.json",
+    }, indent=2) + "\n")
+    inventory = "\n".join(f"- [{skill}](skills/{skill}/SKILL.md)" for skill in sorted(skills))
+    (output / "README.md").write_text(
+        f"# {name}\n\nLast updated: 2026-09-25\n\n{description}\n\n"
+        "Generated by `scripts/build-plugins.py`; edit canonical sources, then rebuild.\n\n"
+        "Install or move this entire plugin directory. Keep `skills/` and `resources/` together; "
+        "copying only `skills/` loses embedded contracts. No companion plugin is required. "
+        "Additional procedures under `resources/` are readable references, not registered capabilities.\n\n"
+        "The [catalog](catalog/skill-set.json) lists discovered skills. "
+        "[Third-party notices](THIRD_PARTY_NOTICES.md) preserve source provenance.\n\n"
+        + (f"## Skills\n\n{inventory}\n" if skills else
+           "This legacy package distributes contracts and workflows; it registers no skills.\n")
+    )
 
 
-def update_marketplace() -> None:
-    marketplace_path = ROOT / ".claude-plugin/marketplace.json"
-    marketplace = json.loads(marketplace_path.read_text())
-    marketplace["plugins"] = [
-        {
-            "name": "acs-protocols",
-            "source": "./plugins/acs-protocols",
-            "description": PLUGIN_DESCRIPTIONS["acs-protocols"],
-        },
-        *[
-            {
-                "name": name,
-                "source": f"./plugins/{name}",
-                "description": PLUGIN_DESCRIPTIONS[name],
-            }
-            for name in ["acs-plan", "acs-design", "acs-build", "acs-quality", "acs-craft"]
-        ],
-        {
-            "name": "agent-coding-skills",
-            "source": "./system",
-            "description": "ACS coding skills with shared memory, context management, product ideation, delivery, testing, and debugging workflows. Monolithic install; equivalent to installing all acs-* plugins together.",
-        },
-    ]
-    marketplace_path.write_text(json.dumps(marketplace, indent=2) + "\n")
-    print("marketplace.json: registered 6 plugins + monolithic install")
+def build_package(suite: Path, output: Path, skills: dict[str, Path], *, name: str,
+                  description: str, version: str = "0.4.0") -> None:
+    for directory in ("skills", "resources", "shared", "protocols", "workflows"):
+        target = output / directory
+        if target.is_symlink():
+            target.unlink()
+        elif target.exists():
+            shutil.rmtree(target)
+    Materializer(suite, output, skills).build()
+    write_manifest(output, name, description, version)
+    write_package_metadata(output, name, description, version, skills)
+
+
+def build_plugins(output: Path) -> list[dict[str, str]]:
+    catalog = json.loads((ROOT / "catalog/skill-set.json").read_text())
+    grouped: dict[str, dict[str, Path]] = {}
+    for category in catalog["categories"]:
+        plugin = CATEGORY_TO_PLUGIN[category["id"]]
+        for name in category["skills"]:
+            grouped.setdefault(plugin, {})[name] = SUITE / "skills-src" / category["id"] / name
+    entries: list[dict[str, str]] = []
+    for name, description in PLUGIN_DESCRIPTIONS.items():
+        destination = output / name
+        if name == "acs-protocols":
+            for directory in ("protocols", "workflows", "resources", "shared"):
+                target = destination / directory
+                if target.exists():
+                    shutil.rmtree(target)
+            materializer = Materializer(SUITE, destination, {})
+            for directory in ("protocols", "workflows"):
+                materializer.add_tree(SUITE / directory, destination / directory)
+            materializer.build()
+            write_manifest(destination, name, description, "1.0.0")
+            write_package_metadata(destination, name, description, "1.0.0", {})
+            for host in ("claude", "codex"):
+                manifest_path = destination / f".{host}-plugin/plugin.json"
+                manifest = json.loads(manifest_path.read_text())
+                del manifest["skills"]
+                manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
+            print("acs-protocols: materialized optional legacy contract package")
+        else:
+            skills = grouped[name]
+            build_package(SUITE, destination, skills, name=name, description=description, version="1.0.0")
+            print(f"{name}: {len(skills)} skills, embedded resources")
+        entries.append({"name": name, "source": f"./plugins/{name}", "description": description})
+    # Retain existing phase package IDs without changing the active marketplace.
+    for plugin in catalog["plugins"]:
+        if plugin["name"] not in {"acs-context", "acs-authoring", "acs-test", "acs-maintain"}:
+            continue
+        skills = {
+            name: SUITE / "skills-src" / category["id"] / name
+            for category in catalog["categories"]
+            if category["id"].split("/")[0] == plugin["phase"]
+            for name in category["skills"]
+        }
+        build_package(SUITE, output / plugin["name"], skills, name=plugin["name"],
+                      description=plugin["description"], version=plugin["version"])
+        print(f"{plugin['name']}: {len(skills)} skills, retained phase package")
+    return entries
 
 
 def main() -> None:
-    PLUGINS.mkdir(exist_ok=True)
-    build_protocols_plugin()
-    build_skill_plugins()
-    update_marketplace()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=PLUGINS,
+                        help="Build elsewhere without changing the repository marketplace")
+    args = parser.parse_args()
+    output = args.output.resolve()
+    entries = build_plugins(output)
+    if output == PLUGINS.resolve():
+        path = ROOT / ".claude-plugin/marketplace.json"
+        marketplace = json.loads(path.read_text())
+        marketplace["plugins"] = entries + [{
+            "name": "agent-coding-skills", "source": "./system",
+            "description": "All ACS skills, shared memory contracts, and workflows.",
+        }]
+        path.write_text(json.dumps(marketplace, indent=2) + "\n")
 
 
 if __name__ == "__main__":

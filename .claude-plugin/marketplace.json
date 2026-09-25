@@ -1,8 +1,16 @@
 {
   "name": "agent-coding-skills",
   "description": "A marketplace for the Agent Coding System plugin.",
-  "owner": { "name": "Xinhe LIU", "url": "https://github.com/XinheLIU" },
+  "owner": {
+    "name": "Xinhe LIU",
+    "url": "https://github.com/XinheLIU"
+  },
   "plugins": [
+    {
+      "name": "acs-protocols",
+      "source": "./plugins/acs-protocols",
+      "description": "Shared ACS contracts and workflows; optional legacy distribution."
+    },
     {
       "name": "acs-plan",
       "source": "./plugins/acs-plan",
@@ -16,37 +24,22 @@
     {
       "name": "acs-build",
       "source": "./plugins/acs-build",
-      "description": "Delivery planning, implementation, and TDD skills for the ACS suite."
+      "description": "Delivery planning, implementation, and test-gap analysis skills for the ACS suite."
     },
     {
-      "name": "acs-test",
-      "source": "./plugins/acs-test",
-      "description": "Verification, review, debugging, and test-gap analysis skills for the ACS suite."
+      "name": "acs-quality",
+      "source": "./plugins/acs-quality",
+      "description": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite."
     },
     {
-      "name": "acs-deploy",
-      "source": "./plugins/acs-deploy",
-      "description": "Deployment, release, and governance skills for the ACS suite."
-    },
-    {
-      "name": "acs-maintain",
-      "source": "./plugins/acs-maintain",
-      "description": "Incident diagnosis, monitoring, and operations skills for the ACS suite."
-    },
-    {
-      "name": "acs-context",
-      "source": "./plugins/acs-context",
-      "description": "Context lifecycle management for agent coordination."
-    },
-    {
-      "name": "acs-authoring",
-      "source": "./plugins/acs-authoring",
-      "description": "Meta-skills for writing skills, reviewing instructions, research, and decision-making."
+      "name": "acs-craft",
+      "source": "./plugins/acs-craft",
+      "description": "Context lifecycle and authoring skills for the ACS suite."
     },
     {
       "name": "agent-coding-skills",
       "source": "./system",
-      "description": "ACS monolith — equivalent to installing all acs-* plugins together."
+      "description": "All ACS skills, shared memory contracts, and workflows."
     }
   ]
 }

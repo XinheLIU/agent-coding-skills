@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Brainstorm
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Turn an ambiguous idea into a Jobs-to-be-Done brief through natural Socratic conversation.
@@ -106,7 +106,7 @@ Enrich the shared records in `discovery.html`: users/problems for the brief, ris
 - Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
-- Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
+- Run the suite's product-memory validator (`scripts/validate-product-memory.py`, resolved from the ACS suite root) when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do
 

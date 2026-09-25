@@ -3,7 +3,7 @@
 
 Validates the deliberately constrained six-field YAML declaration syntax, source
 skill discovery, and suite-local Markdown references. Behavioral scenarios in
-memory/evals require an isolated agent run; this script does not execute them.
+evals/evals require an isolated agent run; this script does not execute them.
 """
 from __future__ import annotations
 
@@ -102,15 +102,12 @@ def inventory_errors(suite: Path = SUITE) -> list[str]:
         expected = {"acs-init-context", "acs-sync-context", "acs-translate-agent-context"}
         if {entry.name for entry in context_root.iterdir()} != expected:
             errors.append("context subpackage: unexpected skill inventory")
+        # Content is rewritten during portable materialization; byte equality
+        # with sources would reject correctly relocated links. Package closure
+        # is exercised by build-context-plugin and isolated package tests.
         for name in sorted(expected):
-            canonical = suite / "skills-src/craft/context" / name
-            generated = context_root / name
-            for source in canonical.rglob("*"):
-                if not source.is_file() or "__pycache__" in source.parts or source.suffix == ".pyc":
-                    continue
-                copy = generated / source.relative_to(canonical)
-                if not copy.is_file() or copy.read_bytes() != source.read_bytes():
-                    errors.append(f"context subpackage: stale or missing resource {name}/{source.relative_to(canonical)}")
+            if not (context_root / name / "SKILL.md").is_file():
+                errors.append(f"context subpackage: missing entrypoint {name}")
     return errors
 
 

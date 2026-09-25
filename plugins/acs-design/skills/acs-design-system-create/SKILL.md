@@ -3,7 +3,7 @@ name: acs-design-system-create
 description: "Build design authority from scratch when there is nothing to adopt — no DESIGN.md, no reference brand. Proposes typography, color, and layout tied to the product's persona and constraints, previews it, and writes a root DESIGN.md on approval. Use when asked to create a design system or define visual style; if a reference or DESIGN.md exists, run /acs-design-context instead."
 ---
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -17,12 +17,12 @@ context:
   handoff_to: [interaction_design, visual_design]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 # Design System Creation
 
-Create the canonical design authority that grounds all design work in this project: `DESIGN.md` at the project root — the **how** of the shared design triad ([references/design-memory.md](references/design-memory.md)).
+Create the canonical design authority that grounds all design work in this project: `DESIGN.md` at the project root — the **how** of the shared design triad ([references/design-memory.md](../acs-design-context/references/design-memory.md)).
 
 ## When to Use
 
@@ -83,7 +83,7 @@ Read existing context sources first, then fill gaps with one comprehensive quest
 
 **Auto-gather from:**
 
-1. Resolve the active product document from explicit user paths, `docs/agents/memory.md`, and `state.md`. Read its persona/problem and platform records through the PRD reading index; use a legacy PRD if it remains canonical. Do not select the first product found on disk.
+1. Resolve the active product document from explicit user paths, `docs/agents/memory.md`, and the configured run recovery entry. Read its persona/problem and platform records through the PRD reading index; use a legacy PRD if it remains canonical. Do not select the first product found on disk.
 Extract: persona (who), platform (web/mobile/desktop), product type (SaaS/marketing/dashboard/etc.)
 
 2. CONTEXT.md if it exists:
@@ -227,7 +227,7 @@ State these as principles, not code.
 
 ### Step 3: Generate Preview HTML
 
-Create a simple preview showing the design system elements. This is Run Context (disposable after approval), so write to:
+Create a simple preview showing the design system elements. Exploratory previews are Working Memory. Before formal review preserve the exact reviewed preview and assets as Persistent evidence when appearance informs the decision; the working default is:
 
 ```bash
 mkdir -p "$WORK_ROOT/$EFFORT/design"
@@ -344,7 +344,7 @@ If `docs/design/prototype.html` exists, re-sync its `:root` token block from the
 
 Report what was created:
 - `DESIGN.md` — Current State, git-tracked canonical design authority (the triad's **how**)
-- `<work-root>/<effort>/design/system-preview.html` — Run Context, preview (can be deleted)
+- `<work-root>/<effort>/design/system-preview.html` — Working preview; retain the reviewed version and assets before deleting any decision evidence
 
 Next steps:
 - Use `/acs-design-interaction-flow` to define structure and states in the canonical prototype, then `/acs-visual-design-variants` for visual options
@@ -353,11 +353,11 @@ Next steps:
 
 ## Accepted decision handoff
 
-At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](../acs-design-context/references/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 
-Full contract: [references/design-memory.md](references/design-memory.md).
+Full contract: [references/design-memory.md](../acs-design-context/references/design-memory.md).
 
 
 Use coordinator-supplied paths and the active change identity; do not repeat path discovery.

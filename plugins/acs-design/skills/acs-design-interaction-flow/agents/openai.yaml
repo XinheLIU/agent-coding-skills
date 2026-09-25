@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Interaction Flow"
+  short_description: ""Decide how a feature behaves before deciding how it looks — information archite..."
+policy:
+  allow_implicit_invocation: false

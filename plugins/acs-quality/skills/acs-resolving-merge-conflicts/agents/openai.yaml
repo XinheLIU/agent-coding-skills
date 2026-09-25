@@ -1,0 +1,5 @@
+interface:
+  display_name: "Resolving Merge Conflicts"
+  short_description: "Resolve an in-progress Git merge or rebase from both sides' documented intent. U..."
+policy:
+  allow_implicit_invocation: false

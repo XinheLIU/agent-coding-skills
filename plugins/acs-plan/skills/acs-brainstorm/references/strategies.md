@@ -1,6 +1,6 @@
 # Brainstorm Strategy Variants
 
-Last updated: 2026-09-08
+Last updated: 2026-09-24
 
 ## Systematic (`--strategy systematic`)
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Visual Design Variants"
+  short_description: ""Explore three genuinely different visual directions — color, typography, weight..."
+policy:
+  allow_implicit_invocation: false

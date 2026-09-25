@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PRD Writer
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
 
 
 Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.
@@ -30,7 +30,7 @@ Preserve accepted product intent so the project still knows what it is building 
 Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy migration. Read [PRD principles](references/prd-principles.md) for the requirements framework and examples; the shared HTML contract governs storage and updates.
 
 
-Resolve the product through user paths, `docs/agents/memory.md`, and active `state.md`. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.
+Resolve the product through user paths, `docs/agents/memory.md`, and configured run recovery entry. Reuse its existing durable home for increments; the effort slug does not create a new product identity. Default to `docs/product/<product-slug>/product.html` only when no existing home conflicts. Read legacy `prd.md` when it remains canonical; migrate only within authorized scope, never maintain a competing HTML truth.
 
 ## One change, one requirements source
 
@@ -45,7 +45,7 @@ Use established answers regardless of the producing skill. A standalone run can 
 | Knowledge | PRD use |
 | --- | --- |
 | Personas, problems, demand assessments | Product purpose, who benefits, why it matters, strength of supporting evidence |
-| Vision records | Product identity and purpose framing in Part 0/1; user-confirmed visions promote to `overview`, inferred candidates stay working with their open question linked |
+| Vision records | Product identity and purpose framing in Part 0/1; user-confirmed visions promote to `overview`, inferred candidates stay proposed; retain them before formal review or dependent handoff with their open question linked |
 | Current capability evidence | Context for the change, with observed behavior distinct from intended behavior |
 | Proposed capabilities and journeys | Desired outcomes, scenarios, flows, and interaction states |
 | Accepted scope and deltas | Included/excluded requirements, priorities, acceptance, and rationale |
@@ -58,14 +58,14 @@ Ask only for unknown information needed for the current result. Product title, p
 
 ## Promote and reconcile
 
-1. Identify accepted or otherwise established durable conclusions. On Green demand, preserve the core problem, persona, job, verdict, and necessary evidence early; solution and scope can remain unresolved. Later runs extend those same records.
+1. Identify accepted conclusions and proposed content needed for formal review or dependent handoff. Persist both with explicit status; persistence never implies acceptance. On Green demand, preserve the core problem, persona, job, verdict, and necessary evidence early; solution and scope can remain unresolved. Later runs extend those same records.
 2. Match existing durable records by product, actor, outcome, surface, and scenario. Preserve their IDs and user-authored content. New records retain their working IDs unless a collision requires an explicit mapping and link repair.
 3. For an accepted increment, apply ADDED / MODIFIED / REMOVED to the relevant intended behavior and scope only. Preserve current observation, unrelated requirements, and rejected alternatives with lasting rationale. A removed behavior remains identifiable for references; record that the intent was superseded instead of reusing its ID.
 4. Bring the minimum supporting rationale and evidence into durable storage, or link stable sources. Necessary evidence must not depend on an effort directory scheduled for deletion. Keep raw code inventories and execution narratives in working memory.
 5. Build or update the PRD reading index over the canonical records. Add a dated change note with affected record links and the decision/source basis. Do not duplicate normative requirements into the index or a separate PRD file.
 6. Verify durable content and links before replacing promoted working conclusions with pointers. Repair cross-record links, record any amendment-to-canonical ID mapping, then return routing updates to the coordinator. Do not erase evidence or unresolved analysis that the active effort still needs.
 
-Promotion does not change a claim's evidence strength. A proposed commitment remains proposed; an open question stays open until answered. A **user-confirmed** vision promotes into `product.html` `overview` with its ID, confirmation date, and links preserved; an **inferred** candidate vision stays in working memory and the PRD links its open confirmation question instead. Never invent a vision or upgrade one by promotion. If a relevant premise changes, mark affected conclusions for review and route the unresolved assessment to the appropriate skill.
+Promotion does not change a claim's evidence strength. A proposed commitment remains proposed; an open question stays open until answered. A **user-confirmed** vision promotes into `product.html` `overview` with its ID, confirmation date, and links preserved; an **inferred** candidate vision stays proposed and links its open confirmation question. Exploratory drafts can remain in Working Memory; formal review or dependent handoff requires a retained candidate and exact revision. Never invent a vision or upgrade one by promotion. If a relevant premise changes, mark affected conclusions for review and route the unresolved assessment to the appropriate skill.
 
 ## Decompose the roadmap
 
@@ -123,17 +123,17 @@ The PRD fixes *what* to build. The delivery plan exposes missing design as block
 | --- | --- |
 | Part 3 five-state specs are thin because layout, information hierarchy, or the visual system is undecided — or the effort is frontend-heavy with no design system | `design/ux/acs-design-context` (then the UX pipeline — see `workflows/design.md`) |
 | The destination is known but the route is foggy — multiple interdependent decisions, larger than one session | `plan/acs-explore-unknowns` |
-| PRD terms have no agreed meaning, or a hard-to-reverse trade-off needs an ADR | `craft/context/acs-engineer-domain-model` |
+| PRD terms have no agreed meaning, or a hard-to-reverse trade-off needs an ADR | `context/acs-engineer-domain-model` |
 | The feature strains existing module boundaries, or it is unclear where behavior belongs | `design/technical/acs-design-architecture` |
 | The product is an agent system | `design/technical/acs-design-architecture`, plus `design-agent-architecture` when available (ships outside this plugin) |
-| The product is an operational decision loop | `craft/context/acs-engineer-domain-model`, plus `design-operational-ontology` when available (ships outside this plugin) |
+| The product is an operational decision loop | `context/acs-engineer-domain-model`, plus `design-operational-ontology` when available (ships outside this plugin) |
 | Only delivery boundaries and sequencing remain open | `build/acs-plan-delivery` |
 | Behavior or testable criteria are missing | `design/requirements/acs-settle-requirements` |
 | None of the above | `build/acs-plan-delivery` |
 
 **Skip test** — skip design entirely when all three hold: the Part 2 flowchart and Part 3 five-state blocks are complete; vocabulary is settled (glossary exists or terms are unambiguous); the change fits the existing architecture. What remains then is implementation choices, handled by `acs-plan-delivery` and `acs-implement`.
 
-More than one row may apply — UX and technical design can both run. UX output additionally feeds frontend implementation via `design/ux/acs-design-implement` and the delivery graph. A design question that the criteria and conversation cannot settle goes to `design/ux/acs-validate-prototype`: throwaway variants, draft decision recorded in `prototypes/<slug>/decision.md`, consequential verdict and basis retained in Change Context at acceptance, control returns to the skill that raised it.
+More than one row may apply — UX and technical design can both run. UX output additionally feeds frontend implementation via `design/ux/acs-design-implement` and the delivery graph. A design question that the criteria and conversation cannot settle goes to `design/ux/acs-validate-prototype`: throwaway variants, draft decision recorded in `prototypes/<slug>/decision.md`, proposed candidate and evidence retained before formal review, then the verdict and basis recorded in Persistent Memory, control returns to the skill that raised it.
 
 ---
 
@@ -141,5 +141,5 @@ More than one row may apply — UX and technical design can both run. UX output 
 
 - Consolidates the problem, demand assessment, solution, and scope; does not invent or silently reclassify them.
 - Can add shared questions and resolve them from supplied evidence or user answers within this task.
-- Preserves accepted intent and essential rationale; implementation plans remain working memory.
+- Preserves accepted intent, reviewable proposals, and essential rationale. Canonical delivery tickets are Persistent Memory; execution checklists and scheduling details are Working Memory.
 - Produces product requirements and a design/engineering handoff, not implementation code.

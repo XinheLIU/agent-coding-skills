@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-09
 
-Use [the product memory contract](product-memory.md). Preserve the six-phase reasoning method, then enrich shared HTML records rather than generating a separate report. Read existing risks and related gaps first.
+Use [the product memory contract](../../acs-brainstorm/references/product-memory.md). Preserve the six-phase reasoning method, then enrich shared HTML records rather than generating a separate report. Read existing risks and related gaps first.
 
 | Analysis | Shared memory contribution |
 | --- | --- |

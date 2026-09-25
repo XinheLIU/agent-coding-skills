@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Implement"
+  short_description: ""Turn an approved visual design into production code in the project's own stack ..."
+policy:
+  allow_implicit_invocation: false

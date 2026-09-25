@@ -3,7 +3,7 @@ name: acs-design-context
 description: "Establish or refresh this project's design authority — the root DESIGN.md that answers HOW the product looks. Adopt an existing DESIGN.md, import from a reference site or brand, fold in a legacy docs/design/system.md, or route to from-scratch creation. Run before any other UX skill; they all read DESIGN.md. Use when no design authority exists, when system.md needs migrating, or when DESIGN.md has drifted from its source."
 ---
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -17,7 +17,7 @@ context:
   handoff_to: [interaction_design, visual_design]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 
 # Design Context
@@ -171,7 +171,7 @@ Report:
 
 ## Accepted decision handoff
 
-At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](references/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 

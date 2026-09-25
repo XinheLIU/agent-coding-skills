@@ -1,0 +1,5 @@
+interface:
+  display_name: "Review Design Doc"
+  short_description: "Engineering review of a design doc (DESIGN.md, docs/plans/*.md) BEFORE any code ..."
+policy:
+  allow_implicit_invocation: false

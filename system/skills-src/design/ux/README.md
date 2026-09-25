@@ -1,12 +1,12 @@
 # Design · UX
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 How the UX design system in this repo is designed: the internal pipeline of stage skills, the six-layer model of external capabilities they dispatch to, and the contract between the two. For the detailed external-tool catalog — every tool, comparison tables, and workflow recipes — see [`external-skills.md`](external-skills.md). For step-by-step procedures, see [`workflows/design.md`](../../../workflows/design.md).
 
 ## What this phase owns
 
-UX design turns PRD intent into implemented components. Shared design understanding is a **triad** (contract: `craft/context/acs-init-context/references/design-memory.md`, symlinked into each skill's `references/`):
+UX design turns PRD intent into implemented components. Shared design understanding is a **triad** (contract: [Design memory](../../../protocols/design-memory.md), symlinked into each skill's `references/`):
 
 | Question | Document | Holds |
 | --- | --- | --- |
@@ -61,7 +61,7 @@ Two hard sequencing rules, both machine-checkable in the design doc:
 1. **Interaction before visuals** — structure (what/where/when) is designed and locked (`data-structure="locked"`) before color, typography, or polish. `acs-visual-design-variants` may not move buttons, navigation, or state transitions; a structural change reopens the section through `acs-design-interaction-flow`.
 2. **One canonical token source** — root `DESIGN.md` is the only how downstream skills read for visual values. `acs-design-context` decides what feeds it (adopt, extract, migrate, or create) and keeps the design doc's `:root` token block in sync.
 
-Lifecycle and retention follow [the shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md), with artifact roles in [the Design contract](../../craft/context/acs-init-context/references/design-memory.md). Retain accepted prototype intent and consequential rationale at acceptance; Current State describes applicable design rules. Run exploration is disposable only after reconciliation.
+Lifecycle and retention follow [the shared protocol](../../../protocols/skill-declarations.md), with artifact roles in [the Design contract](../../../protocols/design-memory.md). Persistent Memory retains proposed designs before formal review and accepted prototype intent, exact reviewed versions, decisions, and applicable rules. Working Memory holds run exploration until reconciliation. [Presenter](../../../protocols/presenter.md) renders derived review views; canonical prototype HTML remains a Persistent artifact.
 
 ## The six-layer external model
 
@@ -115,7 +115,7 @@ The coordinator records one row per relevant probe to `<work-root>/<effort>/desi
 | ③ method | <name> | accepted — polish pass, limits 1–3 applied | acs-design-implement |
 ```
 
-The [coordinator](../../../workflows/context-coordination.md) owns capability discovery, recorded choices, runtime calls, and serialized updates. Disjoint rows do not remove file contention. Reuse settled choices; changed availability requires reassessment of that slot. Domain skills request slots and validate outputs.
+The [coordinator](../../../protocols/context-coordination.md) owns capability discovery, recorded choices, runtime calls, and serialized updates. Disjoint rows do not remove file contention. Reuse settled choices; changed availability requires reassessment of that slot. Domain skills request slots and validate outputs.
 
 The reconciliation rules, enforced by every stage:
 
@@ -128,7 +128,7 @@ The reconciliation rules, enforced by every stage:
 
 ## acs-validate-prototype
 
-`acs-validate-prototype` sits alongside the pipeline as a shared utility, not a stage. It builds throwaway code to answer one design question when conversation cannot settle it — a logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question. The code is disposable; the decision it buys is not. Draft decisions are recorded in `prototypes/<slug>/decision.md`; consequential verdict and rationale are retained in linked Change Context at acceptance. It never writes the canonical `docs/design/ux-design.html` — only pipeline stages merge into that, through their gates.
+`acs-validate-prototype` sits alongside the pipeline as a shared utility, not a stage. It builds throwaway code to answer one design question when conversation cannot settle it — a logic harness for state models, or radically different UI layouts for interface questions. Any stage may call it; control returns to the stage that raised the question. Unreviewed exploration is disposable after reconciliation. Draft decisions start in the configured Working directory; candidate content is retained before formal review, with exact reviewed assets and consequential rationale in Persistent Memory. It never writes the canonical `docs/design/prototype.html` — only pipeline stages merge into that, through their gates.
 
 ## Further reading
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Audit Architecture"
+  short_description: "Reconstruct current module boundaries, dependencies, coupling, and compatibility..."
+policy:
+  allow_implicit_invocation: false

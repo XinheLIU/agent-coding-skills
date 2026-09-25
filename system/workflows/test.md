@@ -1,6 +1,6 @@
 # Test Workflow
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 Audit test coverage after implementation, add missing integration and end-to-end tests, and verify the full suite is green before deploy.
 
@@ -30,7 +30,7 @@ Write integration tests and e2e tests for the gaps identified. These tests exerc
 Run all tests (unit + integration + e2e). Every test must be green. A flaky test is a failing test.
 
 ### 4. Verify coverage threshold
-Check that overall coverage meets the project threshold (default: 80% line coverage for modified files). If the project has no threshold configured, establish one and record it in `docs/agents/memory.md`.
+Check any established project threshold and retain its source reference. Criterion coverage and executed evidence determine readiness; a percentage cannot replace missing acceptance checks. Record unknown expectations without inventing a threshold in the routing configuration.
 
 ## Entry Criteria
 
@@ -46,6 +46,8 @@ Check that overall coverage meets the project threshold (default: 80% line cover
 
 ## Handoff
 
-Passes green test suite and coverage report to `deploy`.
+Retain criterion → check → result mappings, consumed requirement/design revisions, code/diff identity, environment/configuration, failures, skips and omissions in Persistent Memory under the [engineering evidence contract](../protocols/engineering-memory.md). Raw logs remain Working Memory after unique evidence is retained.
+
+Return canonical references and scoped readiness to the coordinator; deployment also requires artifact identity and authorization. The [Presenter](../protocols/presenter.md) may organize a human report from the retained evidence. The report is not a second verification record.
 
 Shared context coordination: [context-coordination.md](context-coordination.md)

@@ -3,29 +3,24 @@
   "version": "0.4.0",
   "skills": [
     {
+      "id": "acs-engineer-domain-model",
+      "path": "skills/acs-engineer-domain-model/SKILL.md"
+    },
+    {
       "id": "acs-init-context",
-      "phase": "context",
-      "description": "Initialize shared agent context when docs/agents/memory.md is absent or routing was lost. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use acs-sync-context for later drift."
+      "path": "skills/acs-init-context/SKILL.md"
     },
     {
       "id": "acs-manage-context",
-      "phase": "context",
-      "description": "Explicit-only compatibility router for context setup, synchronization, or cross-runtime translation. Prefer the focused ACS context skills for new integrations."
+      "path": "skills/acs-manage-context/SKILL.md"
     },
     {
       "id": "acs-sync-context",
-      "phase": "context",
-      "description": "Detect and repair shared-context drift after setup. Use for broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state; use acs-init-context when routing is absent."
+      "path": "skills/acs-sync-context/SKILL.md"
     },
     {
       "id": "acs-translate-agent-context",
-      "phase": "context",
-      "description": "Preserve required agent behavior while translating instructions, skills, commands, hooks, roles, and context between agent runtimes or host applications. Use for runtime migration, parity, or drift across any named or unknown agent system, including Codex-like hosts. Classify source and target by verified discovery, tools, delegation, permissions, persistence, enforcement, and lifecycle or timing rather than by brand. Use `acs-review-agent-instructions` for content quality alone."
-    },
-    {
-      "id": "acs-engineer-domain-model",
-      "phase": "context",
-      "description": "Maintain shared domain language and durable architectural decisions. Use when terms are vague or conflicting, the code and stated model disagree, or a hard-to-reverse trade-off needs an ADR."
+      "path": "skills/acs-translate-agent-context/SKILL.md"
     }
   ]
 }

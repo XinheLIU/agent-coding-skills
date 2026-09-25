@@ -1,0 +1,5 @@
+interface:
+  display_name: "Engineer Domain Model"
+  short_description: "Maintain shared domain language and durable architectural decisions. Use when te..."
+policy:
+  allow_implicit_invocation: false

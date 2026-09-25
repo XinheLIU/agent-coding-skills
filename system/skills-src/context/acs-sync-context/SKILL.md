@@ -5,7 +5,7 @@ description: Detect and repair shared-context drift after setup. Use for broken 
 
 # Sync Context
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,10 +19,10 @@ context:
   handoff_to: [domain_owners, coordinator]
 ```
 
-Shared semantics: [shared protocol](../acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
 
 
-Use the [protocol](references/PROTOCOL.md) and [document layout](references/canonical-doc-layout.md) for routing, freshness, ownership, and retention. When routing is absent, use `acs-init-context`; read-only inspection may proceed from explicit sources.
+Use the [protocol](../../../protocols/skill-declarations.md) and [document layout](../acs-init-context/references/canonical-doc-layout.md) for routing, freshness, ownership, and retention. When routing is absent, use `acs-init-context`; read-only inspection may proceed from explicit sources.
 
 ## Modes
 
@@ -41,16 +41,18 @@ Current-state architecture, conventions, and runbooks may explain present truth 
 
 ## Full-mode checks
 
-- Active runs link canonical change/task status, useful next action, blockers, required references and revisions; do not maintain independent ticket status.
+- Each active run has one configured recovery entry with canonical change/task references, one useful next action, blockers and required revisions. An internal scheduler file is linked detail, not a second next-action or ticket-status source.
 - Claims and shared writes follow serialized reconciliation. Repeated contributions with unchanged evidence create no duplicate records.
+- Proposed records required for review or downstream work already live in Persistent Memory; persistence does not imply acceptance.
+- Review decisions bind actual feedback to subject, revision and scope; exact reviewed content/assets remain retrievable and duplicate feedback is a no-op under [Presenter](../../../protocols/presenter.md).
 - Generated views can be rebuilt from declared sources. Query an enabled code index against source or refresh it using its recorded command.
-- Product HTML is a semantic source under [the Product contract](references/product-memory.md), not a generated view; preserve record IDs, authority, and active review findings.
-- Design acceptance preserved consequential rationale under [the Design contract](../acs-init-context/references/design-memory.md), independently of component documentation.
+- Product HTML is a semantic source under [the Product contract](../../../protocols/product-memory.md), not a generated view; preserve record IDs, authority, and active review findings.
+- Design acceptance preserved consequential rationale under [the Design contract](../../../protocols/design-memory.md), independently of component documentation.
 - Final verification identifies criteria, code/diff revision, environment, failures, omissions, and release references where applicable.
 
 ## Completion retention
 
-Follow the protocol's retention gate. Retain the canonical ticket/spec, accepted designs/contracts, consequential decisions, compact verification and release references in Change Context. Reconcile applicable Current State. Verify all essential links and rationale with the run directory unavailable before removing execution plans, raw outputs, claims, temporary excerpts, or handoffs. A tracked spec does not become disposable on implementation.
+Follow the protocol's retention gate. Retain the canonical ticket/spec, required proposals, accepted designs/contracts, exact reviewed content, consequential and review decisions, compact verification and release references in Persistent Changes. Reconcile applicable Persistent Current. Verify all essential links and rationale with the run directory unavailable before removing execution plans, raw outputs, claims, temporary excerpts, or handoffs. A tracked spec does not become disposable on implementation.
 
 ## Apply and verify
 

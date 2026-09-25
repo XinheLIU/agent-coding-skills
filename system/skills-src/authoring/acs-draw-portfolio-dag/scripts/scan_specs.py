@@ -15,6 +15,7 @@ Usage:
     python3 scan_specs.py <specs_root> -o manifest.json
 """
 import argparse
+import hashlib
 import json
 import re
 import sys
@@ -110,7 +111,8 @@ def scan_issues(dir_path: Path, prefix: str, warnings: list) -> list:
             continue
         num = m.group(1)
         node_id = f"{prefix}{num}"
-        text = f.read_text(encoding="utf-8")
+        source = f.read_bytes()
+        text = source.decode("utf-8")
         h1 = H1_RE.search(text)
         raw_title = h1.group(1) if h1 else f.stem
         tm = ISSUE_TITLE_RE.match(raw_title)
@@ -147,7 +149,8 @@ def scan_issues(dir_path: Path, prefix: str, warnings: list) -> list:
                 "unresolved_dep_text": unresolved if unresolved and unresolved.lower() not in (
                     "", "none", "none.",
                 ) else "",
-                "source_file": str(f),
+                "source_file": str(f.resolve()),
+                "source_revision": "sha256:" + hashlib.sha256(source).hexdigest(),
             }
         )
     return nodes

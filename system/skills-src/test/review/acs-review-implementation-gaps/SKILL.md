@@ -3,7 +3,7 @@ name: acs-review-implementation-gaps
 description: Compare the current codebase against a design doc (DESIGN.md, docs/plans/*.md) and produce a structured gap analysis — what's complete, partial, missing, divergent, or unexpected scope creep. Use this skill whenever the user asks "what's left to do", "gap analysis", "am I done with the plan", "compare code to the plan", or "what did I miss from the design". Also use when a plan is partway implemented and the user is about to continue — knowing the current gap map prevents re-implementing finished work or skipping unfinished work. Writes a machine-readable-ish artifact that the acs-review-code-quality skill auto-consumes.
 ---
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -17,7 +17,7 @@ context:
   handoff_to: [implementation, testing, code_review]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 
 # Engineering Gap Review

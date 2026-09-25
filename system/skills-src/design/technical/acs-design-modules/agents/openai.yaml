@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Modules"
+  short_description: "Turn a selected architecture into implementable code modules, interfaces, types,..."
+policy:
+  allow_implicit_invocation: false

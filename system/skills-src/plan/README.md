@@ -1,10 +1,12 @@
 # Plan
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 From raw idea or existing codebase to durable product intent an engineer can build against. Ten skills contribute to one shared product model through two lanes: greenfield creation and existing-product improvement.
 
-Read [the product memory contract](../craft/context/acs-init-context/references/product-memory.md) for the record schema and update rules. The source contract lives with context initialization; each product skill exposes the same file through a local `references/product-memory.md` symlink so packaged copies can materialize it without separate maintained versions.
+Read [the product memory contract](../../protocols/product-memory.md) for the record schema and update rules. The source contract lives in `system/protocols/`; each product skill exposes the same file through a local `references/product-memory.md` symlink so packaged copies can materialize it without separate maintained versions.
+
+Working Memory holds discovery drafts and run recovery. Persistent Memory holds Intent, Current, and Changes, including proposed records saved before formal review or dependent handoff. Product HTML remains a canonical record container; derived reports use [Presenter](../../protocols/presenter.md).
 
 ## The lanes
 
@@ -90,4 +92,4 @@ flowchart LR
 `acs-map-current-product` → `acs-define-outcomes` → `acs-write-prd` delta mode
 
 **Stalled effort:**
-`acs-ideate-product` reads `state.md` and artifacts, reports which question is open, routes there.
+`acs-ideate-product` reads the configured run recovery entry and artifacts, reports which question is open, routes there.

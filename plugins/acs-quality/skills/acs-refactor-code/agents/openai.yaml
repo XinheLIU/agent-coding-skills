@@ -1,0 +1,5 @@
+interface:
+  display_name: "Refactor Code"
+  short_description: ""Improve existing code without changing behavior, at two depths. Depth 1 — quick..."
+policy:
+  allow_implicit_invocation: false

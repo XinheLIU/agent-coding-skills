@@ -1,0 +1,11 @@
+{
+  "name": "acs-protocols",
+  "version": "1.0.0",
+  "description": "Shared ACS contracts and workflows; optional legacy distribution.",
+  "author": {
+    "name": "Xinhe LIU",
+    "url": "https://github.com/XinheLIU"
+  },
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "license": "MIT"
+}

@@ -5,7 +5,7 @@ description: "Decide how a feature behaves before deciding how it looks — info
 
 # Design Interaction Flow
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [visual_design, product, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Design the **how users interact** before the **how it looks**. Define information architecture, user flows, and all interaction states (loading, empty, error, success, partial) through low-fidelity wireframes.
@@ -538,17 +538,17 @@ docs/design/prototype.html      # Canonical prototype — wireframe sections, lo
 
 ## Accepted decision handoff
 
-At acceptance, retain consequential decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions beside the accepted design or in linked Change Context, following [the Design contract](references/design-memory.md). Do not wait for component documentation. Draft notes and rejected variant files may remain in Run Context after this reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
+Before formal review, save the proposed design and its exact revision in Persistent Memory, following [the Design contract](../acs-design-context/references/design-memory.md). Record feedback against that revision; at acceptance retain decision IDs, rationale, alternatives, affected surfaces/criteria, and consumed requirement/token/contract revisions. Preserve reviewed visual assets when they form the decision basis. Other exploratory notes and variants stay Working Memory until run reconciliation. Return accepted references, delta, unresolved questions/blocking effects, and next action to the coordinator.
 
 ## Shared Memory Contract
 
-Full contract: [references/design-memory.md](references/design-memory.md).
+Full contract: [references/design-memory.md](../acs-design-context/references/design-memory.md).
 
 
 Use coordinator-supplied paths and the active change identity; do not repeat path discovery.
 
 Durability test: the locked sections yes — they are the structure every later pass styles and implements, so they merge into the prototype. The five-state definitions yes — they are acceptance criteria someone will re-derive otherwise, so they promote to capability records. The journey maps and working drafts no; they were the argument.
 
-When sync is authorized, `acs-write-prd` promotes accepted state definitions into canonical capability records and replaces the working definitions with links. Alternatives that were considered and rejected stay in working memory and are discarded with it.
+When sync is authorized, `acs-write-prd` promotes accepted state definitions into canonical capability records and replaces the working definitions with links. Retain consequential rejected alternatives and review evidence in Persistent Memory; discard only remaining run exploration after reconciliation.
 
 **Return the transition to the coordinator at the approval gate** — structure locked, the `data-surface` anchors touched, next stage `/acs-visual-design-variants`. That pointer is what lets the next stage start without re-reading everything here.

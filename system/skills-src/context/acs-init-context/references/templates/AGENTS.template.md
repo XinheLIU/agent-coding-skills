@@ -3,7 +3,7 @@
 <!-- Keep this file under 200 lines. It is an index, not an encyclopedia.
      Anything that grows past a few lines belongs in docs/ with a pointer here. -->
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## What this project is
 
@@ -23,7 +23,7 @@ Last updated: 2026-09-17
 
 Read the relevant file before changing anything.
 
-Route relevant North Star, Current State, Change Context, and Run Context here. Current-state summaries cite executable evidence; indexes are derived views.
+Route Persistent Intent, Current and Changes plus Working recovery here. Current summaries cite executable evidence; human reports and indexes are derived views.
 
 | I want to know... | Read |
 | --- | --- |
@@ -33,7 +33,7 @@ Route relevant North Star, Current State, Change Context, and Run Context here. 
 | A constraint that binds the project from outside | {{whichever of the above owns it}} |
 | Requirements, accepted decisions, and final evidence for this change | {{canonical change/ticket/spec}} |
 | Applicable system boundaries and operational constraints | {{current-state docs and source evidence}} |
-| What is happening right now | {{work-root}}/{{effort}}/state.md |
+| What is happening right now | {{configured recovery entry}} |
 
 <!-- Every path here must resolve. Delete rows whose target you did not create. -->
 
@@ -51,18 +51,18 @@ symbols, callers, or change impact. Refresh with `{{refresh-command}}`.
 
 1. Run `{{init script}}` to verify the environment.
 2. Read `git log --oneline -10` for recent history.
-3. Read `{{work-root}}/{{effort}}/state.md` for canonical change/status pointers and the next action, then follow its pointers.
+3. Read `{{configured recovery entry}}` for canonical change/status pointers and the next action, then follow its pointers.
 
 ## Working rules
 
 <!-- Genuine constraints only. Generic advice earns no place here. -->
 
 1. **Read the code for structure.** Derive module boundaries and patterns from the
-   source or a source-verified index; Current State explains applicable boundaries.
+   source or a source-verified index; Persistent Current explains applicable boundaries.
 2. **Verify before claiming.** Confirm a relationship against the code, never
    against another document.
 3. **Record a decision where decisions live.** When a change settles a
-   consequential trade-off, retain its rationale and update applicable Current State.
+   consequential trade-off, retain its rationale and update applicable Persistent Current.
 4. {{Project-specific rule.}}
 
 ## Do not

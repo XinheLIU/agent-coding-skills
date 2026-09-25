@@ -1,5 +1,5 @@
 interface:
   display_name: "Shape Solution"
-  short_description: "Shape a validated demand or baseline into a concrete solution"
+  short_description: "Turn a validated demand or current-product baseline into a concrete solution wit..."
 policy:
   allow_implicit_invocation: false

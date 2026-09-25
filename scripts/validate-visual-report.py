@@ -10,7 +10,7 @@ from pathlib import Path
 
 CONSUMERS = (
     Path("system/skills-src/design/technical/acs-audit-architecture"),
-    Path("system/skills-src/quality/review/acs-review-architecture"),
+    Path("system/skills-src/test/review/acs-review-architecture"),
     Path("system/skills-src/plan/acs-map-current-product"),
 )
 

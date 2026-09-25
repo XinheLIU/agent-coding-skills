@@ -1,6 +1,10 @@
 # Third-Party Notices
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
+
+## Context and presentation architecture
+
+The accepted [Context design](docs/context-memory-presenter-proposal.md) adapts memory-scope separation from [LangGraph](https://docs.langchain.com/oss/python/concepts/memory), structured notes and selective retrieval from [Anthropic Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents), and presentation/domain separation from [Martin Fowler's Presentation Model](https://martinfowler.com/eaaDev/PresentationModel.html). OpenSpec (`bae58cf`) informs current/change separation; Superpowers (`5bf4e78`) informs optional visual companions. These are design influences, not vendored runtime dependencies. The proposal records source details and the adapted boundaries.
 ## Reference clones (study material only)
 
 Two upstream references are cloned under [`references/`](../references/) for study: [`obra/superpowers`](https://github.com/obra/superpowers) (MIT) and [`Fission-AI/OpenSpec`](https://github.com/Fission-AI/OpenSpec) (MIT). Their pinned commits are recorded in [`references/README.md`](../references/README.md). These entries record the provenance of the study corpus — the same status as the gstack and Matt Pocock snapshots.
@@ -51,13 +55,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-Existing skill packages may contain their own licenses or metadata. Their provenance needs a complete normalization audit before a release; see [`TODO.md`](TODO.md).
+Existing skill packages may contain their own licenses or metadata. Their provenance needs a complete normalization audit before a release.
 
 ## Wiki-layer
 
 The prose wiki capability (`llm-wiki-init`, `llm-wiki-ingest`, `llm-wiki-lint`) now lives in [learning-os](https://github.com/XinheLIU/learning-os). Those skills adapt the LLM Wiki discipline from Andrej Karpathy's LLM Wiki approach (MIT). This system routes to them rather than maintaining a local copy.
 
-`acs-init-context` documents and invokes the external indexers listed in [`references/index-tools/external-tools.md`](skills-src/craft/context/acs-init-context/references/index-tools/external-tools.md) without vendoring their code: [`codemap`](https://github.com/JordanCoin/codemap), [`codegraph`](https://github.com/colbymchenry/codegraph), `graphify` (published as `graphifyy`), and [`GitNexus`](https://github.com/abhigyanpatwari/GitNexus). Each remains under its own upstream license and is invoked as an installed tool.
+`acs-init-context` documents and invokes the external indexers listed in [`references/index-tools/external-tools.md`](skills-src/context/acs-init-context/references/index-tools/external-tools.md) without vendoring their code: [`codemap`](https://github.com/JordanCoin/codemap), [`codegraph`](https://github.com/colbymchenry/codegraph), `graphify` (published as `graphifyy`), and [`GitNexus`](https://github.com/abhigyanpatwari/GitNexus). Each remains under its own upstream license and is invoked as an installed tool.
 
 ## Product-ideation adaptations
 

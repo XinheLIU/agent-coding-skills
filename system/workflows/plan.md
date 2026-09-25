@@ -1,6 +1,6 @@
 # Plan Workflow
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 Turn an uncertain idea, opportunity, or maintenance alert into accepted product intent recorded in `docs/product/<product>/product.html`.
 
 ```
@@ -23,13 +23,13 @@ uncertain idea → acs-brainstorm → acs-validate-demand → acs-shape-solution
 ## Entry Criteria
 
 - User has a problem description, opportunity, or feature idea (however vague).
-- `docs/agents/memory.md` exists (if not, run `/acs-init-context` first).
+- Canonical inputs can be resolved from explicit references, existing homes, or `docs/agents/memory.md`. Use `/acs-init-context` only when routing needs configuration.
 
 ## Routing Decision
 
 Check these in order:
 
-1. **No memory exists** → run `/acs-init-context` first, then return here.
+1. **Routing is ambiguous** → resolve the missing identity/home; use `/acs-init-context` for repository-wide configuration. Clear inputs can proceed without setup.
 2. **Problem is vague or unclear** → start with `/acs-brainstorm`, then `/acs-validate-demand`.
 3. **Problem is clear but involves an existing product** → start with `/acs-map-current-product`.
 4. **Problem is clear and risky** → start with `/acs-run-premortem` alongside discovery.
@@ -59,6 +59,8 @@ Check these in order:
 - User has reviewed and accepted the demand verdict.
 
 ## Handoff
+
+Save proposals and essential evidence in Persistent Memory before formal review or downstream reliance, retaining `proposed` until accepted. Working discovery remains run-scoped. When a human needs a comparison or report, the [Presenter](../protocols/presenter.md) organizes those versioned records; feedback becomes a scoped decision through the coordinator.
 
 When grilling confirms scope for a concrete change, persist its canonical Product records and invoke [acs-plan-delivery](../skills-src/build/acs-plan-delivery/SKILL.md). Supply the change ID, accepted scope/outcomes/priorities, spec/decision links and revisions, and remaining questions. It generates and opens `docs/changes/<change-id>/delivery-plan.html`: scope, outcomes, design blockers, ready tickets, next action, and an embedded DAG. Design resolves the blockers while independent slices can become ready. Scope still unsettled or a consolidation-only request ends with the Product report; accepted product intent alone does not authorize implementation.
 

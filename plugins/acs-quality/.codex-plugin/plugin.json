@@ -1,0 +1,12 @@
+{
+  "name": "acs-quality",
+  "version": "1.0.0",
+  "description": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.",
+  "author": {
+    "name": "Xinhe LIU",
+    "url": "https://github.com/XinheLIU"
+  },
+  "repository": "https://github.com/XinheLIU/agent-coding-skills",
+  "license": "MIT",
+  "skills": "./skills/"
+}

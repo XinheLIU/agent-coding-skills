@@ -3,7 +3,7 @@ name: acs-refactor-code
 description: "Improve existing code without changing behavior, at two depths. Depth 1 — quick polish of recently modified code — renames vague identifiers, flattens nesting with early returns, drops redundant wrappers and dead comments, aligns with the repo's style guide; applied directly, verified by tests. Depth 2 — structural refactor — extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units; workflow is scope confirmation → baseline metrics → ranked proposal → user approval → grouped edits with tests between groups → re-measured before/after report. Triggers: \"refactor\", \"simplify\", \"polish\", \"clean up what I just wrote\", \"reduce duplication\", \"break up this class\". Tests are the safety net; behavior must not change."
 ---
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -17,7 +17,7 @@ context:
   handoff_to: [testing, design, code_review]
 ```
 
-Shared semantics: [shared protocol](../../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
 
 
 # Refactor Code
@@ -26,7 +26,7 @@ You improve the internal structure of existing code while keeping every external
 
 ## Context and preservation contract
 
-Read [engineering context](../../../craft/context/acs-init-context/references/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
+Read [engineering context](../../../../protocols/engineering-memory.md) for the active change and preservation evidence. Require relevant architecture invariants, accepted behavior/criteria, dependencies, tests, and consequential rationale. For a standalone refactor, record the scoped preservation baseline instead of inventing product requirements.
 
 Capture before/after source revisions or diff identities and equivalent checks/environment. Return `change.preservation_evidence`: invariant/criterion → before/after check → result, structural delta, omissions, and next action. If module boundaries or dependency rules change, update the configured System State with current evidence and amend or supersede applicable ADRs while preserving history. When another owner must author an amendment, return a blocking handoff until it is reconciled. If architecture is unchanged, record that assessment without creating an empty ADR. External behavior changes return to Product/Design for scope resolution.
 
@@ -158,7 +158,7 @@ After the last group passes, recompute the same metrics from step 2 for the same
 
 Include a visual structural delta for cross-file refactors: removed shallow modules, new seams, moved ownership, and preserved behavior. Use inline SVG first, retain ordinary HTML fallback labels, and link each visual claim to preservation evidence.
 
-Use the local [visual report contract](references/visual-report.md) and the *Report format* below. For complex multi-dimensional refactoring with substantial before/after comparisons across multiple architectural concerns, reference `craft/meta/references/tabbed-discovery-report.md` for the tabbed HTML output protocol. Be honest about debt that was deferred — do not claim wins you did not achieve.
+Use the local [visual report contract](references/visual-report.md) and the *Report format* below. For complex multi-dimensional refactoring with substantial before/after comparisons across multiple architectural concerns, reference `authoring/references/tabbed-discovery-report.md` for the tabbed HTML output protocol. Be honest about debt that was deferred — do not claim wins you did not achieve.
 
 ## Refactoring catalog
 

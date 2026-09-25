@@ -5,7 +5,7 @@ description: Design reusable technical foundations—libraries, SDKs, components
 
 # Design Foundation
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -18,6 +18,8 @@ context:
   invalidates: [design.module_dependents, verification.foundation_coverage]
   handoff_to: [design_modules, implementation, validate_codebase]
 ```
+
+Shared semantics: [memory and handoff protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
 Design a foundation capability only when it has a named consumer and a clear reason to centralize it. A capability may remain a local module, become a package/library, or run as middleware or a service. Choose the smallest form that gives consumers locality and leverage. Do not move shared domain policy into a technical `common` layer merely because it is used twice.
 

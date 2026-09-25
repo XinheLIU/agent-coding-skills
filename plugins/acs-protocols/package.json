@@ -1,0 +1,7 @@
+{
+  "name": "acs-protocols",
+  "version": "1.0.0",
+  "description": "Shared ACS contracts and workflows; optional legacy distribution.",
+  "license": "MIT",
+  "main": "catalog/skill-set.json"
+}

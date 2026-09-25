@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Pre-Mortem Analysis
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 ## Context contract
 
@@ -20,18 +20,18 @@ context:
   handoff_to: [product, design, operations]
 ```
 
-Shared semantics: [shared protocol](../../craft/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../../workflows/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+Shared semantics: [shared protocol](../../resources/skills-src/context/acs-init-context/references/PROTOCOL.md#skill-declarations); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../resources/protocols/presenter.md); source records retain authority.
 
 
 Run a 6-phase "project autopsy" starting from an assumed total failure, then produce a
 risk analysis that enriches shared HTML product memory. The autopsy is a dialogue: the
 user holds context the records do not, and the output is a reading of the risks that the
 user has confirmed or explicitly disputed — not a list the model believes is true.
-Questioning and confirmation follow [the shared-understanding protocol](references/shared-understanding.md).
+Questioning and confirmation follow [the shared-understanding protocol](../acs-brainstorm/references/shared-understanding.md).
 
 ## Shared Memory Contract
 
-Read [the product memory contract](references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
+Read [the product memory contract](../acs-brainstorm/references/product-memory.md) before persistence. It defines record identity, enrichment, authority, promotion, HTML structure, and legacy input handling.
 
 
 Read the supplied plan or existing scope, relevant demand evidence, capabilities, gaps, and risks. Enrich existing failure scenarios before adding new ones. Hypothetical failures and quotes are exercises, never observed evidence.

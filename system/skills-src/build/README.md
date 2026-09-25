@@ -1,10 +1,10 @@
 # Build
 
-Last updated: 2026-09-17
+Last updated: 2026-09-25
 
 Plan delivery from accepted Product or Design inputs, then execute the ready slices. Planning and implementation are independently callable; an implementation request can invoke planning when its tickets are missing or stale.
 
-Read the [engineering memory contract](../craft/context/acs-init-context/references/engineering-memory.md) for context ownership and update rules.
+Read the [engineering memory contract](../../protocols/engineering-memory.md) for context ownership and update rules.
 
 ```mermaid
 flowchart LR
@@ -35,6 +35,6 @@ Specs own requirements, tickets own durable status/dependencies/readiness, and t
 
 - Former `break-into-tasks` decomposition now belongs to [acs-plan-delivery's rules](acs-plan-delivery/references/decomposition-rules.md).
 - Greenfield foundations are designed by `design/technical/acs-design-foundation`, then planned and executed as ordinary changes; the rules include a bootstrap example.
-- Every handoff uses the [shared envelope](../craft/context/acs-init-context/references/PROTOCOL.md#handoff-envelope).
+- Every handoff uses the [shared envelope](../../protocols/skill-declarations.md#handoff-envelope).
 
 Verified code goes to `quality/review` and `test`. Product and Design retain ownership of substantive scope, behavior, and contract decisions.
