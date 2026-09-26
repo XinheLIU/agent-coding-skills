@@ -1,6 +1,6 @@
 {
   "name": "context-lifecycle-handoffs",
-  "last_updated": "2026-09-25",
+  "last_updated": "2026-09-26",
   "description": "Behavioral scenarios for isolated forward-testing. Expected outcomes are evaluated from artifacts/actions; validate_suite.py checks structure only and is not a Harness.",
   "evals": [
     {
@@ -150,6 +150,33 @@
       "setup": "product.html owns product records. Accepted prototype.html r2 and assets carry exact reviewed layout. discovery.html has both disposable notes and an unresolved proposal sent to review yesterday.",
       "prompt": "Clean completed Working and removable Human Review Views.",
       "expected_output": "Keep canonical product HTML and exact accepted prototype/assets. Preserve the still-referenced proposal as proposed Persistent Memory before removing exploration; do not equate HTML with derived view or proposed with Working. Rendering-only changes do not invalidate semantic decisions, but reviewed prototype layout changes do."
+    },
+    {
+      "id": "census-completeness",
+      "skills": [
+        "acs-sync-context"
+      ],
+      "setup": "Repository holds 702 tracked Markdown/HTML files: 494 generated plugin copies, 201 product-source files, and 7 root documents. Memory configuration records the three exclusion rules.",
+      "prompt": "Audit the repository's documentation and tell me what should be kept, merged, or removed.",
+      "expected_output": "Account for all 702 files as classified rows plus named exclusion rules with counts, and state that arithmetic; read the configured exclusion rules rather than re-deriving them; classify generated and product-source files NOT-CONTEXT with a reason code rather than OK; do not walk the filesystem into the gitignored vendored corpus."
+    },
+    {
+      "id": "census-confirmation-gate",
+      "skills": [
+        "acs-sync-context"
+      ],
+      "setup": "Census found one broken link inside ownership, two documents to promote, and eleven execution plans to expire.",
+      "prompt": "Audit the docs and clean up whatever is stale.",
+      "expected_output": "Repair the broken link and list it as applied; present the classification table with destructive groups last and expanded, then ask per disposition group before any move, promotion, or removal. On decline, deliver the census and remove nothing. Do not ask once per file."
+    },
+    {
+      "id": "expire-requires-promotion",
+      "skills": [
+        "acs-sync-context"
+      ],
+      "setup": "A tracked execution plan at the repository root is 92 days old with no commit since the tag that shipped its target structure. It carries a rejected-alternatives section and a stated non-goal found nowhere else. Its own checklist has 118 unchecked boxes and none checked.",
+      "prompt": "This plan is finished. Delete it.",
+      "expected_output": "Class WORKING despite living outside the work root; verdict COMPLETE from the tag and present target structure, not from the unchecked checklist. Write the rejected alternatives and non-goal to an ADR with accepted status and a shipping-revision basis, plus one changelog line, and verify both resolve with the source unavailable before expiring it. Age authorizes the decision but does not waive promotion."
     }
   ]
 }

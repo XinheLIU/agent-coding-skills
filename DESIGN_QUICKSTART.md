@@ -1,280 +1,103 @@
 # Design Workflow Quick Start
 
-Last updated: 2026-08-10
+Last updated: 2026-09-26
+
+The short path through the UX pipeline. Full sequence and gates: [`system/workflows/design.md`](system/workflows/design.md).
 
 ## 30-Second Overview
 
-**Three skills, clear handoffs:**
+Three skills, one durable artifact:
 
 ```
-/interaction-design → wireframes + state table
-/visual-design-variants → approved.html  
-/design-implement → production code
+/acs-design-interaction-flow → wireframe sections + state coverage
+/acs-visual-design-variants  → winning treatment merged (→ styled)
+/acs-design-implement        → production code (→ implemented)
 ```
+
+Each stage advances sections of one canonical prototype rather than producing its own file. Approval is a section transition, not a handoff document.
+
+## The design triad
+
+Three durable documents, each answering one question:
+
+| | Document | Owns |
+| --- | --- | --- |
+| **Why** | `docs/product/<product>/product.html` | Product intent; every prototype surface links its capability record |
+| **How** | `DESIGN.md` at the project root | Design authority: visual tokens in YAML frontmatter, rationale in prose |
+| **What** | `docs/design/prototype.html` | The canonical prototype, one self-contained file |
+
+Working exploration — journey maps, state tables, variant candidates — lives and dies in the work root.
 
 ## When to Use Each Skill
 
-### `/interaction-design` — Start Here
+### `/acs-design-interaction-flow` — Start Here
 
-Use when:
-- Starting a new feature
-- User flows unclear
-- Don't know what states to show (loading/empty/error)
+Use when starting a feature, when user flows are unclear, or when you don't know which states to show.
 
-**Output:** Low-fi wireframes (gray boxes), state table (5 states × N features)
+**Output:** wireframe sections in the prototype, marked `data-fidelity="wireframe"` with `data-structure="locked"`, plus the five state blocks per surface.
 
-**Time:** 30-45 min
+### `/acs-visual-design-variants` — After Structure Locks
 
----
+Use when wireframes are accepted and you need to see visual options.
 
-### `/visual-design-variants` — After Interaction Approved
+**Requires:** locked wireframe sections and `DESIGN.md` tokens.
 
-Use when:
-- Wireframes exist and approved
-- Need to see visual options
-- Want to explore colors/fonts/styling
+**Output:** the winning treatment merged into those sections, advancing them to `data-fidelity="styled"`. Candidates stay in the work root.
 
-**Requires:** Wireframes from `/interaction-design`
+### `/acs-design-implement` — Final Step
 
-**Output:** 3 visual variants, user picks one
+Use when the visual design is accepted and you're ready for production code.
 
-**Time:** 15-30 min
-
----
-
-### `/design-implement` — Final Step
-
-Use when:
-- Visual design approved
-- Ready for production code
-
-**Requires:** Approved visual + state table
-
-**Output:** Component code + docs
-
-**Time:** 20-30 min
+**Output:** component code, plus sections marked `data-fidelity="implemented"` with component pointers.
 
 ## First-Time Setup
 
-### Optional: Create Design System
+`/acs-design-context` inspects the whole product and writes root `DESIGN.md` — typography, colors, spacing, and the rationale behind them. Run once per project. A legacy `docs/design/system.md` stays canonical until this skill folds it in and leaves a pointer.
 
-```bash
-/design-system-create
-```
-
-Defines typography, colors, spacing. Run once per project.
-
-**Output:** `docs/design/system.md`
-
-**Time:** 15-20 min
-
-## Example Session
-
-```bash
-# 1. Define user flows and states
-/interaction-design
-
-# You'll be asked:
-# - Who are the users? What are they doing?
-# - Key features to design?
-# - Edge cases you're worried about?
-
-# Skill generates:
-# - Wireframes (.scratch/.../interaction/wireframes/*.html)
-# - State table with 5 states per feature
-# - User journey map
-
-# 2. Explore visual directions
-/visual-design-variants
-
-# Skill automatically:
-# - Reads your wireframes
-# - Generates 3 visual variants (same structure, different visuals)
-# - Opens in browser for comparison
-
-# You pick one variant
-
-# 3. Generate production code
-/design-implement
-
-# Skill automatically:
-# - Converts approved visual to React/Vue/HTML code
-# - Implements all 5 states from state table
-# - Writes component docs
-```
+`/acs-design-system-create` extracts reusable patterns once duplication is visible (3+ uses).
 
 ## Key Rules
 
-### Five States Are Mandatory
+### Five states are mandatory
 
-Every feature MUST define:
-- **LOADING** — Skeleton UI
-- **EMPTY** — Warm empty state with action
-- **ERROR** — Specific error + recovery
-- **SUCCESS** — Full data display
-- **PARTIAL** — Degraded or incomplete data
+Every surface defines **LOADING** (skeleton), **EMPTY** (warm, with a primary action), **ERROR** (specific, with recovery), **SUCCESS** (full data), and **PARTIAL** (degraded or incomplete).
 
-**Why:** These states get forgotten. Making them mandatory prevents "No data" shipped as empty state.
+**Why:** these get forgotten, which is how "No data" ships as an empty state. Making them mandatory and machine-checkable via `data-state` blocks prevents it.
 
-### Structure Locks After Interaction Design
+### Structure locks after interaction design
 
-Once wireframes approved:
-- Button positions LOCKED
-- Navigation hierarchy LOCKED
-- User flows LOCKED
+Once wireframe sections are accepted, button positions, navigation hierarchy, and user flows are locked — recorded as `data-structure="locked"`, not as prose. Visual design may change only color, typography, spacing, and borders.
 
-Visual design can only change:
-- Colors
-- Fonts
-- Spacing
-- Shadows/borders
+**Why:** separating structure from style makes iteration faster, and one token source prevents two authorities disagreeing.
 
-**Why:** Separating structure from style makes iteration faster.
+### Shipped code is canonical behavior
+
+The prototype section is canonical *intent*; shipped code is canonical *behavior*. Divergence is reported and reconciled, never silent.
 
 ## Common Patterns
 
-### Pattern 1: Full Flow (New Feature)
-
-```
-/interaction-design → /visual-design-variants → /design-implement
-```
-
-**Time:** ~1.5 hours total
-
-### Pattern 2: Visual Tweak Only
-
-```
-/visual-design-variants (reads existing wireframes) → /design-implement
-```
-
-**Time:** ~45 min
-
-### Pattern 3: Interaction Needs Fix
-
-```
-/interaction-design (revise) → /visual-design-variants (regenerate) → /design-implement
-```
-
-**Time:** ~1 hour
-
-## What Gets Created
-
-### Working Layer (`.scratch/<effort>/`)
-
-**Not git-tracked, disposable after implementation:**
-
-```
-.scratch/20261010-143022-feature-name/
-  interaction/
-    wireframes/
-      main-screen.html
-      flow-screen-2.html
-    state-table.md          ← CORE: 5 states × N features
-    journey-map.md
-    decisions.md
-    responsive-a11y.md
-  visual/
-    variants/
-      variant-a.html
-      variant-b.html
-      variant-c.html
-    approved.html           ← CORE: chosen visual
-    decision.md
-```
-
-### Human Layer (`docs/design/`)
-
-**Git-tracked, permanent documentation:**
-
-```
-docs/
-  design/
-    system.md              ← Design system (if created)
-    components/
-      feature-name.md      ← Component docs from /design-implement
-```
-
-### Project Source
-
-**Git-tracked, production code:**
-
-```
-src/components/FeatureName.tsx   ← From /design-implement
-```
+| Situation | Sequence |
+| --- | --- |
+| New feature | interaction-flow → visual-design-variants → design-implement |
+| Visual tweak only | visual-design-variants (reads locked sections) → design-implement |
+| Interaction needs a fix | interaction-flow (revise, unlock scope) → visual-design-variants → design-implement |
 
 ## PRD Integration
 
-**PRD Part 3 (Five-State Blocks) ↔ Interaction State Table**
-
-If your PRD has Part 3:
-- `/interaction-design` reads it as seed
-- Fills gaps
-- Offers to write back (syncs PRD ← state table)
-
-**Why:** Single source of truth for state definitions.
+If the spec carries five-state blocks, `/acs-design-interaction-flow` reads them as a seed, fills gaps, and offers to write back — so state definitions have one source of truth.
 
 ## Troubleshooting
 
-**"No wireframes found"**
-→ Run `/interaction-design` first
-
-**"No design system found"**
-→ Optional. Create with `/design-system-create` or skill will use defaults
-
-**"Visual design changed button positions"**
-→ That's a bug — visual design CANNOT change structure. Report it.
-
-**"Missing states in state table"**
-→ `/interaction-design` enforces all 5 states. Check the generated state-table.md
-
-**"Need different aesthetic"**
-→ Run `/visual-design-variants` again with new direction, or update design system
-
-## Tips
-
-1. **Don't skip interaction design** — even if you "know what it looks like," defining states upfront saves debugging later
-
-2. **Wireframes are intentionally ugly** — gray boxes force focus on structure, not colors
-
-3. **Empty states need love** — "No items" is lazy. Explain why empty + offer primary action
-
-4. **Error states need recovery** — "Something went wrong" is useless. Say what happened + how to fix
-
-5. **Partial states are real** — APIs return partial data. Plan for it.
-
-## What Makes This Different
-
-### vs. Traditional Design Tools
-
-- **State-first:** Forces you to think about loading/empty/error upfront
-- **Interaction-visual split:** Can iterate visuals without redoing flows
-- **Code generation:** Approved design → production code automatically
-
-### vs. Old design-explore-variants
-
-- **Before:** Structure + visuals changed together
-- **After:** Structure locked first, then explore visuals
-- **Result:** Faster iteration, fewer surprises
-
-## Quick Reference
-
-| Want to... | Run... | Needs... |
-|-----------|--------|----------|
-| Define user flows | `/interaction-design` | PRD (optional) |
-| See visual options | `/visual-design-variants` | Wireframes |
-| Get production code | `/design-implement` | Approved visual + state table |
-| Create design system | `/design-system-create` | Product context |
+| Symptom | Cause |
+| --- | --- |
+| "No wireframe sections found" | Run `/acs-design-interaction-flow` first |
+| "No design system found" | Optional — run `/acs-design-context`, or the skill uses defaults |
+| Visual design moved a button | A bug. Visual design cannot change locked structure — report it |
+| Missing states | `/acs-design-interaction-flow` enforces all five; check the `data-state` blocks |
+| Need a different aesthetic | Re-run `/acs-visual-design-variants` with a new direction, or update `DESIGN.md` |
 
 ## Full Documentation
 
-- **Architecture:** `DESIGN_SEPARATION_PROPOSAL.md`
-- **Implementation:** `DESIGN_SEPARATION_COMPLETE.md`
-- **Workflow details:** `system/workflows/design.md`
-
-## Ready to Start?
-
-```bash
-/interaction-design
-```
-
-That's it. The skill will guide you through the rest.
+- **Workflow and gates:** [`system/workflows/design.md`](system/workflows/design.md)
+- **Design contract:** [`system/protocols/design-memory.md`](system/protocols/design-memory.md)
+- **External design skills:** [`system/skills-src/design/ux/external-skills.md`](system/skills-src/design/ux/external-skills.md)

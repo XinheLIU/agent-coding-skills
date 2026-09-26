@@ -1,6 +1,6 @@
 ---
 protocol: acs:skill-declarations
-version: 1.2.0
+version: 1.3.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/skill-declarations.md
 ---
@@ -15,7 +15,7 @@ This is the suite's canonical lifecycle, identity, ownership, and handoff contra
 
 | Memory | Scope and records | Retention |
 | --- | --- | --- |
-| Working Memory | One run: recovery checkpoint, next action, blockers, execution steps, claims, exploratory drafts and raw outputs | May persist across sessions; remove only after the run ends and required records are reconciled |
+| Working Memory | One run: recovery checkpoint, next action, blockers, execution steps, claims, exploratory drafts and raw outputs | May persist across sessions. Remove after the run ends and required records are reconciled, or — past the configured retention window — after unique durable facts are promoted and the user confirms |
 | Persistent Memory | Across runs: Intent, Current, Changes as defined below | Keep addressable records and necessary history in canonical homes |
 
 Persistent records have three purposes, not three additional storage layers:
@@ -33,6 +33,8 @@ Three questions decide where a record belongs:
 Working may be saved to disk; Persistent does not mean accepted or implemented. Save a proposal with `proposed` status before formal review, cross-run handoff, or downstream reliance. Record domain status separately from retention and freshness.
 
 Classify records by ownership and future use, never by file extension or directory. A file may contain several Persistent purposes. `product.html` owns canonical product records; accepted prototypes own design intent and exact visual content. Preserve their versions and necessary assets. Code, schemas, tests and configuration establish executable facts; accepted intent does not establish shipped behavior.
+
+Location does not establish class in either direction. A tracked execution plan, task breakdown, or dispatch checklist outside the work root is Working Memory that was misfiled, and retention applies to it; a canonical ticket or spec inside a work root remains Persistent Changes.
 
 The [Presenter](../../../resources/protocols/presenter.md) organizes Human Review Views from referenced records. Reports, HTML companions, roadmaps and code indexes are derived views, not a third memory or independent fact source. A view may show explicitly labelled Working information; every unique domain conclusion needed for review or later work must first reach Persistent Memory. Rebuild views from declared sources; validate generated indexes against code. A reviewed view retained as decision evidence belongs to Persistent history, not another current source.
 
@@ -166,11 +168,13 @@ Claims are exclusive Working Memory records referencing canonical task identity 
 
 Before removing Working Memory:
 
-1. Establish that the run is completed or explicitly abandoned from repository/tracker evidence; active recovery points and drafts remain available.
+1. Establish the run's state from repository/tracker evidence. A tag, release, or merged commit naming the effort establishes completion, as does the effort's target structure being present at the paths it states; a document's own checklist establishes nothing, because an unchecked box in a shipped effort shows the checklist was abandoned, not the work. Working Memory untouched longer than the configured retention window — default 14 days, measured by the last commit touching it, never by a `Last updated` line — is presumed abandoned and may be removed after explicit user confirmation, whether or not the run completed. Age authorizes that decision; it does not waive step 4. Active recovery points and drafts inside the window remain available.
 2. Retain the canonical ticket/spec, proposals required for review or future work, accepted designs/contracts, version-scoped review decisions with retrievable reviewed content, consequential rationale, compact verification summary (criteria, revision, environment, failures and omissions), and release references in Persistent Changes. Abandoned changes retain the reason and unverified scope.
 3. Reconcile current behavior, architecture, design rules, and operational state with evidence; preserve history in change records/ADRs. Do not present planned behavior as current.
 4. Verify all essential references without the run directory, including reviewed content, necessary visual assets and accepted design rationale. Move unique required evidence before removing raw outputs; references to unavailable logs are insufficient.
 5. Remove only reconciled execution plans, scratch, claims, temporary excerpts, raw outputs, and session handoffs, and repair routing.
+
+Retention keeps the why and drops the how. Code, tests, configuration and the shipped diff establish how and what; an execution plan's step sequence, task assignment, file manifest and effort estimates are reconstructible from them and are not retained. Rationale is not reconstructible: a completed effort's consequential rationale becomes an ADR under Persistent Changes plus one summary line in the changelog linked to its release reference, after which the plan, checklist and task-breakdown documents are removed. Write one ADR per decision, not one per document — an ADR that compacts a document's contents recreates that document under a new name. Rejected alternatives, deliberate non-goals, and the compact verification summary survive with the rationale: absent behavior and skipped checks leave no trace in code, so a future reader would otherwise re-propose exactly what was rejected.
 
 Completion compacts Persistent Changes; it does not delete requirements, accepted decisions, or final evidence by default. An archive is optional under repository retention rules. Do not promote an execution transcript wholesale. Preserve user-authored content, update Markdown dates and HTML record dates, and never store secrets or unnecessary personal data in shared context.
 

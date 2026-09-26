@@ -1,11 +1,11 @@
 ---
 name: acs-init-context
-description: Initialize shared agent context when setup is requested or missing/lost routing blocks a required persistent write. Configure canonical context paths, durable change records, run scratch, and an optional derived code index; use acs-sync-context for drift inspection.
+description: Initialize shared agent context when setup is requested or missing/lost routing blocks a required persistent write. Configure canonical context paths, durable change records, run scratch, retention and audit boundaries, and an optional derived code index; use acs-sync-context for drift inspection and whole-repository document audits.
 ---
 
 # Init Context
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ## Context contract
 
@@ -47,6 +47,10 @@ Reuse settled choices. Resolve only these missing values:
 - **Product memory:** preserve the existing canonical product path and identity; new products use `docs/product/<product-slug>/product.html`. Map increments to that same product. Read [the product contract](../../../protocols/product-memory.md) when product work exists; do not migrate legacy docs as an incidental setup action.
 - **Design memory:** the durable design triad is root `DESIGN.md` (how) and `docs/design/prototype.html` (what), linked to `product.html` (why). Read [the design contract](../../../protocols/design-memory.md) when design work exists; a legacy `docs/design/system.md` stays canonical until `acs-design-context` migrates it — not an incidental setup action.
 - **Domain memory:** one root `CONTEXT.md` by default; use a context map only when distinct bounded contexts already exist.
+- **Not context:** path rules for product source, generated build output, vendored corpora, and repository interface files, each with its reason code. Derive them from the build scripts, ignore rules, and repository instructions. Recording them once makes the audit boundary a reviewed repository fact instead of a per-run judgment.
+- **Retention window:** how long Working Memory may sit untouched before it is presumed abandoned; default 14 days, measured by the last commit touching it.
+- **Decision records:** preserve an existing home; otherwise `docs/adr/`, created lazily when an ADR is warranted.
+- **Changelog:** the existing changelog, which is the promotion target for retained summary lines.
 - **Code index:** disabled by default; offer it only when repository scale makes repeated source search materially expensive.
 
 Configuration is complete when a cold session can resolve both memory classes and enabled domain homes without guessing.
@@ -68,7 +72,7 @@ Create `CONTEXT.md`, ADRs, and product documents only when the repository alread
 
 ## 4. Write routing and working memory
 
-Load [`references/working-memory.md`](references/working-memory.md) for the active-effort shape. Write `docs/agents/memory.md` with the resolved work root, single recovery-entry path, tracker, active-effort rule, domain-memory layout, product-doc path, and code-index status.
+Load [`references/working-memory.md`](references/working-memory.md) for the active-effort shape. Write `docs/agents/memory.md` with the resolved work root, single recovery-entry path, tracker, active-effort rule, domain-memory layout, product-doc path, not-context rules, retention window, decision-record home, changelog, and code-index status.
 
 Use [`references/templates/AGENTS.template.md`](references/templates/AGENTS.template.md) only for missing routing sections. Preserve user-authored instructions. Every context pointer must name the condition that makes an agent open its target, and every target must resolve.
 
@@ -81,7 +85,7 @@ This step is complete when the memory config resolves both memory classes and en
 Load [`references/canonical-doc-layout.md`](references/canonical-doc-layout.md). Move or link existing durable facts to one canonical lifecycle-appropriate home:
 
 - terminology and bounded-context language -> `CONTEXT.md` or `CONTEXT-MAP.md`
-- settled, durable trade-offs -> `docs/adr/NNNN-<slug>.md`
+- settled, durable trade-offs -> `docs/adr/NNNN-<slug>.md`, paired with one summary line in the configured changelog linked to the release reference; the ADR carries the rationale, the changelog carries the visibility
 - product intent -> the configured durable product document (new default `docs/product/<product-slug>/product.html`)
 
 Use [`references/CONTEXT-FORMAT.md`](references/CONTEXT-FORMAT.md) and [`references/ADR-FORMAT.md`](references/ADR-FORMAT.md) only when that branch is earned. Preserve unique rationale and leave pointers where a fact moved.

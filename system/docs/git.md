@@ -1,6 +1,6 @@
 # Slash Commands
 
-Last updated: 2026-08-02
+Last updated: 2026-09-26
 
 Custom commands for this project. Invoke with `/command-name [args]` in Claude Code.
 
@@ -71,6 +71,23 @@ Auto-detects branch name, recent commits, and changed files. Generates a PR body
 - Share URL with reviewer
 - `/git:status` to confirm working tree is clean
 - Start next feature on a new branch
+
+---
+
+## `/setup`
+
+**When:** First run in a repository, or when routing is missing and blocks a durable write.
+
+```
+/setup
+/setup "use the existing Linear tracker"
+```
+
+Configures the shared memory protocol via `acs-init-context`: work root, recovery entry, tracker, retention window, decision-record home, and census exclusion rules. If `docs/agents/memory.md` already exists, use `acs-sync-context` for drift instead.
+
+**Next steps after setup:**
+- Confirm `docs/agents/memory.md` resolves from a cold session
+- Check the work root is ignored
 
 ---
 

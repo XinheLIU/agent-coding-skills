@@ -1,6 +1,12 @@
 # Agent Instructions
 
-Last updated: 2026-08-04
+Last updated: 2026-09-26
+
+## Memory and context
+
+[`docs/agents/memory.md`](docs/agents/memory.md) is the routing index: work root, retention window, decision-record home, and the census exclusion rules. Read it before writing anything durable, or before auditing which documents belong where.
+
+Decisions are recorded in [`docs/adr/`](docs/adr/) and summarized in [`CHANGELOG.md`](CHANGELOG.md) under the release that shipped them. Execution plans and checklists belong in the gitignored work root, not in tracked directories.
 
 ## Repository boundary
 

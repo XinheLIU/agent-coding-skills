@@ -1,8 +1,44 @@
 # Changelog
 
-Last updated: 2026-09-14
+Last updated: 2026-09-26
 
 ## Unreleased
+
+### Context audits classify every document and confirm before removing
+
+`acs-sync-context` could not see a document that no commit had touched since the one that shipped it: its inspection was scoped to changed paths, so eleven completed execution plans under `docs/migration/` were outside every scope it could compute. It now runs a census — every tracked `.md` and `.html` file lands in one classification row or one named exclusion rule, and the counts must reconcile — then classifies on two axes, decides each effort's state from repository evidence, and presents the table for confirmation before anything is moved, promoted, or removed. The census procedure lives in `acs-sync-context/references/document-census.md`.
+
+New vocabulary: memory classes (`INTENT`, `CURRENT`, `CHANGES`, `WORKING`, `VIEW`, `ROUTING`, `NOT-CONTEXT`) separate what a document *is* from what happens to it, and `NOT-CONTEXT` reason codes (`product-source`, `generated`, `external`, `interface`) give generated build output and product source a home the eight dispositions previously lacked. Two dispositions added: `EXPIRE` for age-authorized removal and `OUT-OF-SCOPE` for counted-but-untouched rows.
+
+The skill's contract no longer requires routing configuration — `context.configuration` moved to `retrieves`, which is what it always was. Requiring it meant the skill was blocked from running on repositories that had not been set up, including the one that ships it.
+
+### Working Memory gains a retention window
+
+[Shared protocol](system/protocols/skill-declarations.md) v1.3.0. Working Memory untouched longer than the configured window — default 14 days, measured by the last commit touching it — is presumed abandoned and may be removed after explicit confirmation, whether or not the run completed. Age authorizes the decision; it does not waive promoting unique durable facts first.
+
+Two supporting rules: class follows role, not location, so a tracked execution plan outside the work root is Working Memory that was misfiled; and a document's own checklist is not evidence of its state, since unchecked boxes in a shipped effort show the checklist was abandoned, not the work. Retention now states explicitly that it keeps the why and drops the how, with rejected alternatives, deliberate non-goals, and the verification summary surviving alongside the rationale — none of them leave a trace in code.
+
+### The repository uses its own protocol
+
+`docs/agents/memory.md`, `docs/adr/`, and this changelog's release structure did not exist here, though `acs-init-context` writes all three into other repositories. Added, along with ADRs [0001](docs/adr/0001-lifecycle-phase-organization.md), [0002](docs/adr/0002-acs-skill-namespace.md) and [0003](docs/adr/0003-independent-plugin-closure.md) recovering the rationale from the completed plan documents they replace. `IMPROVEMENT-PLAN.md`, `docs/phase-plugin-refactoring-plan.md` and `docs/migration/` were removed after extraction — their step sequences and task assignments are in the shipped diff.
+
+`acs-init-context` now resolves three more values during setup: the retention window, the decision-record home, and the changelog, plus a `## Not context` section recording census exclusion rules as a reviewed repository fact rather than a per-run judgment.
+
+### Two memories and a Presenter
+
+Replaced the four-lifecycle model with **Working Memory** for one run and **Persistent Memory** across runs, holding Intent, Current and Changes as three *purposes*, not three storage layers. The **Presenter** became a separate role that organizes human review views over versioned records; reviewed decisions land in Persistent Memory rather than establishing a third fact source. Added `presenter.md`, `context-coordination.md` and `orchestration.md`; the accepted rationale is in [`system/docs/context-memory-presenter-proposal.md`](system/docs/context-memory-presenter-proposal.md).
+
+Contracts then re-layered so each file answers one question — L0 memory model, L1 domain records, L2 formats, L3 Presenter, L4 runtime — under the invariant that a domain contract never teaches HTML, a format file never defines ownership, and a Presenter view never owns facts. Extracted `html-records.md` so the shared HTML record grammar is stated once; `product-memory.md` slimmed from 312 to 212 lines. Non-context plugins stopped carrying the context tree, which was never a real dependency.
+
+## [v0.4.0](https://github.com/XinheLIU/agent-coding-skills/releases/tag/v0.4.0) — 2026-09-22
+
+### Skills reorganize by lifecycle phase and ship as independent plugins
+
+Skills moved from domain directories (`product/`, `engineering/`, `quality/`, `craft/`) to the six lifecycle phases `plan`, `design`, `build`, `test`, `deploy`, `maintain`, and every skill took an `acs-` prefix. See [ADR-0001](docs/adr/0001-lifecycle-phase-organization.md) and [ADR-0002](docs/adr/0002-acs-skill-namespace.md).
+
+Extracted seven independently installable plugins — `acs-context`, `acs-plan`, `acs-design`, `acs-build`, `acs-test`, `acs-maintain`, `acs-authoring` — each materializing its full transitive resource closure so it installs and works with every other plugin absent. `catalog/skill-set.json` gained a `plugins[]` array. See [ADR-0003](docs/adr/0003-independent-plugin-closure.md).
+
+Renamed `system/memory/` to `system/evals/` to reflect its actual content: a test and eval harness, not runtime storage.
 
 ### Technical design suite consolidation
 
@@ -229,7 +265,7 @@ Clarified the four-layer memory contract so the Human/Working split is a content
 - Added an organization report and prioritized TODO for Matt adaptations and existing-skill cleanup.
 - Kept local upstream snapshots under the ignored, read-only `references/` boundary.
 
-## v0.1.0 — 2026-07-31
+## [v0.1.0](https://github.com/XinheLIU/agent-coding-skills/releases/tag/v0.1.0) — 2026-07-31
 
 Initial extraction from [XinheLIU/agent-skills](https://github.com/XinheLIU/agent-skills).
 
