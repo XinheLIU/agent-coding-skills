@@ -5,7 +5,7 @@ description: Diagnose hard bugs and performance regressions through a red-capabl
 
 # Diagnose Incident
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 ## Context contract
 
@@ -42,4 +42,4 @@ Turn the minimized reproduction into a failing regression test at the correct pu
 
 ## 5. Close
 
-Remove temporary instrumentation, record the confirmed cause and verification, return routing updates to the coordinator, and route architectural seam failures to `acs-audit-architecture`. Do not commit unless asked.
+Remove temporary instrumentation, record the confirmed cause and verification, return routing updates to the coordinator, and route architectural seam failures to `acs-design-architecture` (missing invariants or failure handling to `acs-design-contracts`). Do not commit unless asked.

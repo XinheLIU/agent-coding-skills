@@ -7,7 +7,7 @@
       "title": "Skill Context Declaration Contract",
       "canonical": "protocols/skill-declarations.md",
       "anchor": "#skill-declarations",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "status": "stable"
     },
     "context-coordination": {
@@ -28,7 +28,7 @@
       "id": "protocol:acs:design-memory",
       "title": "Design Domain Memory Contract",
       "canonical": "protocols/design-memory.md",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "status": "stable"
     },
     "engineering-memory": {

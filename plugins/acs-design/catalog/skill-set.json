@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "skills": [
     {
-      "id": "acs-audit-architecture",
-      "path": "skills/acs-audit-architecture/SKILL.md"
-    },
-    {
       "id": "acs-design-architecture",
       "path": "skills/acs-design-architecture/SKILL.md"
     },
@@ -15,8 +11,8 @@
       "path": "skills/acs-design-context/SKILL.md"
     },
     {
-      "id": "acs-design-foundation",
-      "path": "skills/acs-design-foundation/SKILL.md"
+      "id": "acs-design-contracts",
+      "path": "skills/acs-design-contracts/SKILL.md"
     },
     {
       "id": "acs-design-implement",
@@ -35,8 +31,16 @@
       "path": "skills/acs-design-system-create/SKILL.md"
     },
     {
-      "id": "acs-validate-codebase",
-      "path": "skills/acs-validate-codebase/SKILL.md"
+      "id": "acs-design-test-strategy",
+      "path": "skills/acs-design-test-strategy/SKILL.md"
+    },
+    {
+      "id": "acs-technical-design",
+      "path": "skills/acs-technical-design/SKILL.md"
+    },
+    {
+      "id": "acs-trace-requirements",
+      "path": "skills/acs-trace-requirements/SKILL.md"
     },
     {
       "id": "acs-validate-prototype",

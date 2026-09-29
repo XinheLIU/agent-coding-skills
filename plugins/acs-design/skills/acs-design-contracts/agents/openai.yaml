@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Contracts"
+  short_description: "Design or review invariants, operation contracts, error semantics, and failure modes (CON card)"
+policy:
+  allow_implicit_invocation: false

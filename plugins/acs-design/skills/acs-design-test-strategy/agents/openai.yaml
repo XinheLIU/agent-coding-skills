@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design Test Strategy"
+  short_description: "Plan test layers, seams, fixtures, and gates for every requirement and contract (TST card)"
+policy:
+  allow_implicit_invocation: false

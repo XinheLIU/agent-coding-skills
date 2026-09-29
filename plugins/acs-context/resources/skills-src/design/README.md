@@ -1,6 +1,6 @@
 # Design
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 How the product should work, at three levels: what capabilities it provides (requirements), how users experience it (UX), and how the system is structured under the hood (technical). Three sequential sub-phases with explicit boundaries and handoffs — run the full [`design` workflow](../../workflows/design.md) or enter individual sub-phases directly.
 
@@ -8,7 +8,7 @@ How the product should work, at three levels: what capabilities it provides (req
 | --- | --- | --- |
 | Requirements | WHAT capabilities the product provides | `requirements/` |
 | UX | HOW those capabilities are delivered (interaction + visual) | `ux/` |
-| Technical | HOW to engineer them (architecture, shared foundations, code modules, verification) | `technical/` |
+| Technical | HOW to engineer them (architecture, modules, contracts, test strategy, traceability) | `technical/` |
 
 Requirements feed UX and technical design both. UX and technical design feed `build/acs-plan-delivery` with accepted artifacts, revisions, and unresolved blockers; `acs-implement` consumes the resulting ready slices. UX also feeds production code via `ux/acs-design-implement`. Existing accepted designs can satisfy a slice without rerunning every sub-phase.
 
@@ -41,11 +41,14 @@ UX skills operate on the whole product, not individual pages. One design documen
 
 Enter when the system's shape is undecided. Prerequisite: `specs/<spec>.md`; `docs/design/ux-design.html` strongly recommended.
 
-- `technical/audit-architecture` — reconstruct current architecture when brownfield evidence is unclear
-- `technical/design-architecture` — map features to modules and compare current, ideal, and feasible designs
-- `technical/design-foundation` — design libraries, SDKs, components, middleware, and infrastructure adapters
-- `technical/design-modules` — specify code contracts, directories, dependency rules, wiring, and migration
-- `technical/validate-codebase` — validate reachability and apply scoped cleanup after design or implementation
+Technical design is five aspect cards writing one record, `docs/design/technical-design.md`, with one derived view (see [`technical/README.md`](technical/README.md)):
+
+- `technical/technical-design` — router: scope challenge, picks cards, consolidates the findings ledger and verdict
+- `technical/design-architecture` (ARC) — system shape, shared foundations, fit, decisions; design or brownfield/architecture review
+- `technical/design-modules` (MOD) — responsibilities, interfaces, dependency rules, wiring, migration
+- `technical/design-contracts` (CON) — invariants, pre/postconditions, error semantics, failure modes
+- `technical/design-test-strategy` (TST) — critical paths, test layers, seams, gates
+- `technical/trace-requirements` (TRC) — requirement-to-code reachability before and after build
 
 Use `plan/acs-explore-unknowns` for multi-session decision wayfinding. Technical design handles NFR analysis, domain clarification, boundary refactoring, splitting, and design challenge inside the owning workflow node rather than exposing separate technical skills.
 

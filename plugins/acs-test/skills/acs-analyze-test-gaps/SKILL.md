@@ -10,20 +10,20 @@ description: >
   is the test net strong enough", "test health check", "what tests are
   missing", "review test coverage by business flow". Use this instead of
   per-file coverage tools when the question is "do tests protect the
-  flows that actually matter?". MECE with `code-reviewer` (which scores
-  diff-level test quality) and `acs-review-code-quality` (which gates a PR).
+  flows that actually matter?". MECE with the `code` lens of
+  `acs-review-code-quality` (which scores diff-level test quality) and `acs-review-code-quality` (which gates a PR).
 ---
 
 # Test Gap Analyzer
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 ## Context contract
 
 ```yaml
 context:
   requires: [verification.expected_behavior]
-  retrieves: [change.requirements, design.contracts, source.changed_code, verification.failure_history, operations.environment]
+  retrieves: [change.requirements, design.contracts, verification.test_strategy, source.changed_code, verification.failure_history, operations.environment]
   produces: [verification.criteria_coverage, verification.gap_findings]
   updates: [change.verification_evidence]
   invalidates: [verification.unsupported_readiness]
@@ -43,7 +43,7 @@ Source, tests, and configuration are read-only. You may write the analysis artif
 
 | Concern | Owner |
 |---|---|
-| Per-diff test quality (FIRST/AAA, assertion strength, missing tests on changed lines) | `code-reviewer` |
+| Per-diff test quality (FIRST/AAA, assertion strength, missing tests on changed lines) | `acs-review-code-quality` (`code` lens) |
 | Whole-PR merge verdict + test-coverage diagram | `acs-review-code-quality` |
 | **Whole-codebase test adequacy anchored on business flows** | **this skill** |
 
@@ -83,6 +83,8 @@ Read existing records and reconcile by change/scope/revision; preserve unrelated
 ## Step 1 — Identify Critical Business Paths → `docs/critical-paths.md`
 
 **Goal:** anchor the entire analysis on at most **8 business flows** most likely to break under refactor or to hurt users if broken.
+
+When the technical-design record has an accepted `TST` section, start from its critical paths and layer assignments, and report gaps against its `TST-n` rows instead of re-deriving the flows.
 
 ### Procedure
 

@@ -1,6 +1,6 @@
 # Build
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 Plan delivery from accepted Product or Design inputs, then execute the ready slices. Planning and implementation are independently callable; an implementation request can invoke planning when its tickets are missing or stale.
 
@@ -34,7 +34,7 @@ Specs own requirements, tickets own durable status/dependencies/readiness, and t
 ## Retained capabilities
 
 - Former `break-into-tasks` decomposition now belongs to [acs-plan-delivery's rules](acs-plan-delivery/references/decomposition-rules.md).
-- Greenfield foundations are designed by `design/technical/acs-design-foundation`, then planned and executed as ordinary changes; the rules include a bootstrap example.
+- Greenfield foundations are chosen by `design/technical/acs-design-architecture` and specified by `acs-design-modules`, then planned and executed as ordinary changes; the rules include a bootstrap example.
 - Every handoff uses the [shared envelope](../../protocols/skill-declarations.md#handoff-envelope).
 
 Verified code goes to `quality/review` and `test`. Product and Design retain ownership of substantive scope, behavior, and contract decisions.

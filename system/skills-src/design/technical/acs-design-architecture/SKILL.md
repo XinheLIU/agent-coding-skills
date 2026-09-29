@@ -1,40 +1,87 @@
 ---
 name: acs-design-architecture
-description: Map accepted features to business modules and shared technical capabilities, compare current, ideal, and feasible target architectures, and record the selected evolution for greenfield or brownfield systems.
+description: Design or review the system shape — feature-to-capability map, current/ideal/feasible architecture, shared foundations, data/technology/deploy fit, and the decision ledger. Use for greenfield architecture, brownfield audits ("this is tangled", "tech debt", "audit architecture"), or architecture review; writes the ARC section of the shared technical-design.md.
 ---
 
 # Design Architecture
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 ## Context contract
 
 ```yaml
 context:
   requires: [change.requirements]
-  retrieves: [system.current_state, system.affected_source, design.relevant_decisions]
-  produces: [design.architecture_options, design.selected_architecture, design.capability_map]
+  retrieves: [system.current_state, system.affected_source, design.relevant_decisions, operations.constraints, verification.failure_history]
+  produces: [design.selected_architecture, design.capability_map, design.architecture_findings]
   updates: [design.accepted_decisions, system.architecture_state]
-  invalidates: [design.module_dependents, change.implementation_plan]
-  handoff_to: [design_foundation, design_modules, validate_codebase]
+  invalidates: [design.module_dependents, change.implementation_plan, design.disproved_assumptions]
+  handoff_to: [design_modules, design_contracts, code_review]
 ```
 
 Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
 
-Read the requirement criteria and inspect the relevant repository slice. For greenfield, establish the minimum structure that supports the accepted features. For brownfield, distinguish what exists from what is intended before proposing change.
+Follow [the card contract](../references/card-contract.md): read the record, write only `## Architecture (ARC)` and `FND-ARC-*` ledger rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md).
 
-For each structural option, make the current-versus-target change visible with a compact diagram; keep the detailed evidence in the Markdown design.
+**Owns:** what the parts of the system are, who owns each capability, what is shared and in what form, and whether the stack and topology fit the workload. **Does not own:** module interfaces (MOD), invariants and failure semantics (CON), code-level defects (`acs-review-code-quality`).
 
-## Workflow
+## Current (brownfield)
 
-1. Map each feature to a capability, owner, entry point, data it changes, and evidence or requirement ID. Mark unknowns explicitly.
-2. Identify shared capabilities by real consumers: communication, persistence, identity, errors, observability, scheduling, storage, UI primitives, or domain policies. Keep shared domain rules with their owning domain. Record only relevant non-functional constraints, with measurable targets, verification methods, and the trade-offs that determine architecture.
-3. Describe current architecture where code exists. Describe an ideal architecture with freedom to reorganize. For brownfield, derive a feasible target that accounts for compatibility, migration cost, and operational constraints.
-4. Compare two or three materially different options on locality, leverage, failure isolation, operability, migration cost, and complexity. Recommend one and record rejected alternatives only when the trade-off is consequential.
-5. Produce `technical-design.md` (or the established design home) containing feature-to-module mapping, capability consumers, option comparison, selected architecture, gaps, and open decisions. Include a readable current/ideal/feasible comparison diagram and stable IDs for modules and capabilities. When an HTML companion is used, read [the local HTML report format](references/HTML-REPORT.md), apply the visual report contract with inline SVG first, and include a card for each materially different option. For complex multi-dimensional analysis with 3+ architectural options, substantial revision history, or nested design choices, reference `authoring/references/tabbed-discovery-report.md` for the tabbed HTML output protocol.
+Reconstruct only what cannot be read cheaply from the record. Scope the survey to the request plus hot spots from change frequency (`git log --format= --name-only | sort | uniq -c | sort -rn`).
 
-The design is ready when every accepted requirement has an owner, every shared capability has an explicit consumer list, every selected boundary has a reason, and every gap has a next action or an explicit out-of-scope decision.
+Map what imports, routes, registrations, and runtime paths actually do. Then assess:
 
-## Handoff
+| Lens | Look for |
+| --- | --- |
+| Boundaries | Circular dependencies, hidden coupling through shared mutable state, leaky abstractions, seams that don't match concerns |
+| Cohesion | God modules, feature envy, scattered concerns, inappropriate intimacy — record the problem here; the split design belongs to MOD |
+| Change cost | Change amplification (simple features touch 10+ files), navigation friction, cognitive load |
+| Decisions | Explicit and implicit architectural decisions, each `Sound`, `Reconsider`, `Missing-but-needed`, `Drifted`, or `Stale` |
 
-Send shared capability rows to `acs-design-foundation` and business/module rows to `acs-design-modules`. A greenfield foundation may be designed before all feature modules when it is needed to validate the first real path. A brownfield audit is required only when current structure or compatibility is unknown; use `acs-audit-architecture` for that evidence.
+Rank each problem by `impact × change frequency / fix difficulty`. Violations on hot paths rank high; violations in stable code and aesthetic issues rank low.
+
+## Target
+
+1. **Capability map.** Give each accepted requirement a capability, owner, entry point, and the data it changes. Mark unknowns.
+2. **Shared foundations.** Name a shared capability (communication, persistence, identity, errors, observability, scheduling, storage, UI primitives) only when it has named consumers. Choose the smallest form: local module, package/library, component, middleware, or service. Keep shared domain rules with their domain; do not create a `common` dumping ground. The foundation's contract is designed in MOD.
+3. **Three views.** Describe *current* (brownfield), *ideal* (free to reorganize), and *feasible target* (accounting for compatibility, migration cost, and operations).
+4. **Options.** Compare two or three materially different options on locality, leverage, failure isolation, operability, migration cost, and complexity. Recommend one. Keep rejected options only when the trade-off is consequential.
+5. **Fit.** Record only non-functional constraints that shape the architecture, each with a measurable target and a verification method. Check:
+   - **Data:** schema ownership, one writer per dataset, layering, lineage.
+   - **Technology:** runtime, database, scheduler, and observability against the workload; name scaling cliffs.
+   - **Deploy:** deploy units, network exposure, environment contract, prod/dev variant model.
+   - **Trust boundaries:** where authentication happens, where authorization is decided, which component sees which data.
+6. **Decisions.** Give each consequential choice an ADR or a `## Decisions` row. Reversibility matters most: a one-way door needs a flag, canary, or rollback path.
+
+Target items: `ARC-n` rows naming capability, owner, form, consumers, and requirement IDs. Include one current/target diagram (ideal and feasible when brownfield).
+
+## Review mode
+
+Check the target (or a supplied plan) with the lenses above plus:
+
+- **Blast radius:** the worst case of this decision, and how many systems and users it affects.
+- **Boring by default:** is an innovation token being spent on something already proven?
+- **Essential vs accidental complexity:** does the design solve a real problem or one it created?
+
+Every problem is a `FND-ARC-n` ledger row with severity, confidence, and anchor.
+
+## Deep mode
+
+For a whole-system review, apply the six lenses in [architecture-lenses.md](references/architecture-lenses.md). Each lens maps first, then judges. Default: all six; args like `business,data` select a subset.
+
+| Lens | Question |
+| --- | --- |
+| business | Do modules and entry points deliver the documented capabilities and end-to-end flows? |
+| application | Is decomposition coherent; do layering, boundaries, cohesion, and runtime ownership match decisions? |
+| data | Are schema ownership, data layering, dataset contracts, and lineage explicit and respected? |
+| technology | Do runtime, DB, scheduler, and observability choices fit the workload; where are the scaling cliffs? |
+| deploy | Are topology, network exposure, env contract, and prod/dev variants sound? |
+| adr | Which decisions does the system rest on, and what is each one's ledger status? |
+
+Scope is whole codebase or a subtree by default; architecture findings need surrounding context that a narrow diff hides. For scoped runs, capture the file list first and use it for every lens. An empty scope stops here.
+
+When the coordinator allows delegation, a lens may run as a delegated task whose instruction is that lens's section of the reference; otherwise run it inline. Lens findings become `FND-ARC` rows with their confidence and anchors quoted verbatim, never paraphrased. The `adr` lens fills the Decisions ledger. A lens that was not run is recorded as `not assessed` in `### Open`. Code-level defects a lens surfaces (handler validation, SQL, concrete auth/reliability/security/perf bugs, test quality) are `routed` to `acs-review-code-quality`, not kept as ARC findings.
+
+## Done when
+
+Every accepted requirement has an owner, every shared capability has consumers and a chosen form, every boundary has a reason, and every gap has a next action or an out-of-scope decision. Hand boundaries and foundations to `acs-design-modules`, and trust-boundary and data-ownership items to `acs-design-contracts`.

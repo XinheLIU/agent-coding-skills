@@ -1,5 +1,5 @@
 interface:
   display_name: "Design Modules"
-  short_description: "Turn a selected architecture into implementable code modules, interfaces, types,..."
+  short_description: "Design or review module responsibilities, interfaces, wiring, and migration (MOD card)"
 policy:
   allow_implicit_invocation: false

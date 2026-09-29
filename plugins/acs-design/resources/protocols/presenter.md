@@ -27,7 +27,7 @@ Simple results use text/Markdown; use HTML when diagrams, comparisons or progres
 
 | Template | Use when |
 | --- | --- |
-| [Visual report](../../skills/acs-audit-architecture/references/visual-report.md) | The default derived HTML companion: header, overview, finding cards, evidence, footer |
+| [Visual report](../../skills/acs-design-architecture/references/visual-report.md) | The default derived HTML companion: header, overview, finding cards, evidence, footer |
 | [Tabbed discovery report](../skills-src/authoring/references/tabbed-discovery-report.md) | Complex multi-dimensional analysis: 3+ major concerns, revision history, nested options, multi-dimension before/after |
 
 Per-skill `HTML-REPORT.md` references only add that skill's content requirements; display rules stay in these shared templates. Canonical memory documents (`product.html`, `prototype.html`) are not Presenter views; their serialization is the [HTML record format](html-records.md).

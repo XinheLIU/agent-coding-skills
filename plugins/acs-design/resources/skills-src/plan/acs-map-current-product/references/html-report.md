@@ -2,7 +2,7 @@
 
 Last updated: 2026-09-17
 
-For the compact card grammar, standalone packaging rule, and before/after visual budget, also read [the local visual report contract](../../../../../skills/acs-audit-architecture/references/visual-report.md). This document remains the product-memory-specific presentation guidance; the local contract supplies the portable visual rules.
+For the compact card grammar, standalone packaging rule, and before/after visual budget, also read [the local visual report contract](../../../../../skills/acs-design-architecture/references/visual-report.md). This document remains the product-memory-specific presentation guidance; the local contract supplies the portable visual rules.
 
 Read [the product memory contract](../../../../protocols/product-memory.md) first. The baseline enriches `discovery.html`; it does not own the document or produce a separate `current-product.html`. These patterns guide presentation of current behavior inside shared concepts. Preserve records, IDs, and styling already present.
 

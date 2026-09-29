@@ -1,0 +1,5 @@
+interface:
+  display_name: "Trace Requirements"
+  short_description: "Trace requirements through wiring, modules, contracts, and tests before and after build (TRC card)"
+policy:
+  allow_implicit_invocation: false

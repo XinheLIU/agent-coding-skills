@@ -5,7 +5,7 @@ description: Execute one ticket through criterion-based red-green-refactor loops
 
 # TDD Execution
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 ## Context contract
 
@@ -43,6 +43,6 @@ On an unexpected failure, distinguish implementation, test, and environment caus
 
 ## Review and handoff
 
-Self-check criterion coverage, scope, assertion quality, and regressions before reporting. Propose `acs-review-implementation-gaps` when implementation completeness needs checking and `acs-review-code-quality` for the Standards and Spec axes; the coordinator selects relevant reviews. A checked execution step is not acceptance evidence.
+Self-check criterion coverage, scope, assertion quality, and regressions before reporting. Propose `acs-trace-requirements` (post-build) when implementation completeness needs checking and `acs-review-code-quality` for the Standards and Spec axes; the coordinator selects relevant reviews. A checked execution step is not acceptance evidence.
 
 Return the common handoff envelope with criterion → test/evidence → revision mapping, affected surfaces, accepted decision references, deviations, failures, skipped/not-run checks, environment assumptions, and next action. The coordinator retains compact final verification in Change Context and reconciles canonical ticket status. Raw output and scratch remain Run Context. No commit or release is implied.

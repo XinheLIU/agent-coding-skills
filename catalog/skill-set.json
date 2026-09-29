@@ -49,11 +49,12 @@
       "id": "design/technical",
       "label": "Design · Technical",
       "skills": [
-        "acs-audit-architecture",
+        "acs-technical-design",
         "acs-design-architecture",
-        "acs-design-foundation",
         "acs-design-modules",
-        "acs-validate-codebase"
+        "acs-design-contracts",
+        "acs-design-test-strategy",
+        "acs-trace-requirements"
       ]
     },
     {
@@ -83,9 +84,6 @@
       "id": "test/review",
       "label": "Test · Review",
       "skills": [
-        "acs-review-architecture",
-        "acs-review-design-doc",
-        "acs-review-implementation-gaps",
         "acs-review-code-quality",
         "acs-refactor-code"
       ]
@@ -144,7 +142,7 @@
       "version": "1.0.0",
       "description": "UX and technical design skills for the ACS suite.",
       "phase": "design",
-      "skillCount": 11,
+      "skillCount": 12,
       "dependencies": []
     },
     {
@@ -160,7 +158,7 @@
       "version": "0.4.0",
       "description": "ACS test phase - coverage, review, debugging",
       "phase": "test",
-      "skillCount": 8,
+      "skillCount": 5,
       "dependencies": []
     },
     {
@@ -192,7 +190,7 @@
       "phase": "quality",
       "version": "1.0.0",
       "description": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.",
-      "skillCount": 8,
+      "skillCount": 5,
       "dependencies": []
     },
     {

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Technical Design"
+  short_description: "Route a change through the aspect cards and consolidate one technical-design record and view"
+policy:
+  allow_implicit_invocation: false

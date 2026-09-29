@@ -15,8 +15,5 @@ The [catalog](catalog/skill-set.json) lists discovered skills. [Third-party noti
 - [acs-analyze-test-gaps](skills/acs-analyze-test-gaps/SKILL.md)
 - [acs-refactor-code](skills/acs-refactor-code/SKILL.md)
 - [acs-resolving-merge-conflicts](skills/acs-resolving-merge-conflicts/SKILL.md)
-- [acs-review-architecture](skills/acs-review-architecture/SKILL.md)
 - [acs-review-code-quality](skills/acs-review-code-quality/SKILL.md)
-- [acs-review-design-doc](skills/acs-review-design-doc/SKILL.md)
-- [acs-review-implementation-gaps](skills/acs-review-implementation-gaps/SKILL.md)
 - [acs-triage](skills/acs-triage/SKILL.md)

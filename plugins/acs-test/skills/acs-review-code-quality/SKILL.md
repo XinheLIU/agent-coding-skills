@@ -1,32 +1,31 @@
 ---
 name: acs-review-code-quality
 description: >
-  Run a production-readiness code review. Orchestrates domain subagent pairs
-  (api, db, auth, reliability, performance, security, code-reviewer) in parallel
-  when available; falls back to inline review when they aren't. Produces
+  Run a production-readiness code review. Applies seven domain lenses
+  (api, db, auth, reliability, performance, security, code), inline or as
+  delegated tasks when the runtime allows. Produces
   confidence-calibrated findings, a test-coverage diagram, a prioritized
   next-steps plan (CRITICAL → IMPORTANT → NICE-TO-HAVE), and a merge verdict.
   Findings are tagged on two axes — Standards (code vs this repo's conventions
   and quality bar) and Spec (code vs what the plan/issue asked for) — reported
   separately, never reranked against each other. Supports three modes: (A)
   recent-changes via git diff [default], (B) whole codebase vs spec/rules,
-  (C) drill-down after an architecture review. Triggers: "review my code",
+  (C) drill-down from open ARC findings in the technical-design record. Triggers: "review my code",
   "code review", "review this PR", "review recent changes", "review against
   spec", "verify my changes", "review before commit/merge", "drill into arch
-  review", "what should I work on next", "ready for PR?". Consumes a matching change/revision gap-analysis artifact from acs-review-implementation-gaps when
-  present.
+  review", "what should I work on next", "ready for PR?". Consumes matching TRC rows from acs-trace-requirements when present.
 ---
 
 # Code Quality Review
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 ## Context contract
 
 ```yaml
 context:
   requires: [source.review_scope]
-  retrieves: [change.requirements, design.contracts, repository.standards, verification.latest_evidence]
+  retrieves: [change.requirements, design.contracts, design.architecture_findings, verification.trace_matrix, repository.standards, verification.latest_evidence]
   produces: [verification.standards_findings, verification.spec_findings]
   updates: [change.review_evidence]
   invalidates: [verification.unsupported_readiness]
@@ -44,16 +43,16 @@ You are a staff engineer running a production-readiness review. Two jobs:
 
 Every finding is tagged with the axis it fails:
 
-- **Standards** — does the code follow this repo's documented conventions and quality bar? Fed by the domain subagents (Step 1) and the inline pass (Steps 2.1–2.5, 3, 4).
+- **Standards** — does the code follow this repo's documented conventions and quality bar? Fed by the domain lenses (Step 1) and the inline pass (Steps 2.1–2.5, 3, 4).
 - **Spec** — does the code do what the plan/issue asked for? Fed by the spec-fidelity pass (Step 2.6).
 
 A change can pass one axis and fail the other: code that follows every standard but implements the wrong thing fails Spec; code that does exactly what was asked but breaks the repo's conventions fails Standards. Report the axes separately — never merge or rerank findings across them, so one axis cannot mask the other.
 
-## Boundary with `acs-review-architecture` (MECE)
+## Boundary with the technical design cards (MECE)
 
-This skill judges the **code as written**: handler bugs, query smells, missing timeouts, perf hotspots, weak tests, code-level security misconfigs. Design-level questions go to `acs-review-architecture` instead:
+This skill judges the **code as written**: handler bugs, query smells, missing timeouts, perf hotspots, weak tests, code-level security misconfigs. Design-level questions go to the owning card in `acs-technical-design` instead:
 
-| Concern | acs-review-code-quality | acs-review-architecture |
+| Concern | acs-review-code-quality | Design card |
 |---|---|---|
 | Handler validation, error envelope, status codes | ✓ | — |
 | SQL correctness, injection, indexing, N+1 | ✓ | — |
@@ -62,23 +61,25 @@ This skill judges the **code as written**: handler bugs, query smells, missing t
 | Local performance smells (per-row insert, model reload) | ✓ | — |
 | Concrete security bugs (committed secrets, TLS off) | ✓ | — |
 | Test coverage / quality, complexity, smells | ✓ | — |
-| Module boundaries, layering, ownership | — | ✓ |
-| Service / deploy topology, network exposure | — | ✓ |
-| Canonical data model, schema ownership, lineage | — | ✓ |
-| Tech-stack fit, scaling cliffs | — | ✓ |
-| Cross-cutting design decisions (ADRs) | — | ✓ |
-| API surface design (versioning, contract style) | — | ✓ |
-| Authn/authz architecture (trust boundaries, role topology) | — | ✓ |
+| Module boundaries, layering, ownership | — | ARC / MOD |
+| Service / deploy topology, network exposure | — | ARC |
+| Canonical data model, schema ownership, lineage | — | ARC |
+| Tech-stack fit, scaling cliffs | — | ARC |
+| Cross-cutting design decisions (ADRs) | — | ARC |
+| API surface design (versioning, contract style) | — | CON |
+| Authn/authz architecture (trust boundaries, role topology) | — | ARC / CON |
+| Invariants, error semantics, failure-mode design | — | CON |
+| Test strategy (layers, seams, gates) | — | TST |
 
-If a subagent surfaces a finding on the wrong side of the line, route it via the cross-reference channel (Step 5.1) — do not flag it as a code-level finding here.
+If a lens surfaces a finding on the wrong side of the line, route it via the cross-reference channel (Step 5.1) — do not flag it as a code-level finding here.
 
 ## When to use
 
 - "Review my code" / "what should I do next" / "ready for PR?"
 - Right before opening a pull request
-- After `acs-review-implementation-gaps` to tighten COMPLETE + PARTIAL components
-- Drill-down after `acs-review-architecture` flagged issues at specific files
-- Stage 3 of: plan-review → gap-review → **acs-review-code-quality**
+- After `acs-trace-requirements` (post-build) to tighten REACHABLE + PARTIAL rows
+- Drill-down on open `FND-ARC` findings anchored at specific files
+- Last stage of: `acs-technical-design` review → `acs-trace-requirements` → **acs-review-code-quality**
 
 ## Step 0 — Mode + scope
 
@@ -88,26 +89,26 @@ If a subagent surfaces a finding on the wrong side of the line, route it via the
 |---|---|---|
 | **A** recent-changes | reviewing a PR, commit, or WIP | default |
 | **B** whole vs spec | auditing the repo against documented rules | on user request |
-| **C** drill-down | following up an architecture review at specific files | user pasted arch-review output |
+| **C** drill-down | following up open `FND-ARC` ledger rows at specific files | record has open ARC findings, or user pasted them |
 
-If the invocation implies a mode (pasted arch-review → C; "review against spec" → B), proceed without asking. Otherwise default to A.
+If the invocation implies a mode (ARC findings named → C; "review against spec" → B), proceed without asking. Otherwise default to A.
 
 ### 0.2 Pick a scope (depends on mode)
 
-**Mode A** — use the coordinator-resolved explicit path/range or active branch diff, including relevant uncommitted changes. Reuse a gap-analysis artifact only when its canonical change identity and consumed source/design revisions match the review scope; otherwise mark it for reassessment. For COMPLETE/PARTIAL items review existing code, for DIVERGENT items carry the accepted design deviation, and retain MISSING items as Spec-axis omissions. Do not let a prior report narrow away accepted criteria.
+**Mode A** — use the coordinator-resolved explicit path/range or active branch diff, including relevant uncommitted changes. Reuse `TRC` rows only when their canonical change identity and consumed source/design revisions match the review scope; otherwise mark them for reassessment. For REACHABLE/PARTIAL rows review existing code, for DIVERGENT items carry the accepted design deviation, and retain MISSING items as Spec-axis omissions. Do not let a prior report narrow away accepted criteria.
 
 **Mode B** — read up front and compile a rules digest:
 - `AGENTS.md` (root + relevant subdirectory copies)
 - `docs/spec.md` if present
-- Extract forbidden patterns, coding standards, architectural decisions. Pass the digest to every subagent.
+- Extract forbidden patterns, coding standards, architectural decisions. Apply the digest in every lens.
 
-**Mode C** — parse the pasted arch-review. Extract unique `file:line` refs as the scope; carry parent Critical/Warning findings as context to subagents (filtered per domain).
+**Mode C** — read open `FND-ARC` rows (from the record or pasted). Extract unique `file:line` anchors as the scope; carry their P0/P1 findings as context to each lens (filtered per domain).
 
 State the mode and scope in one sentence. If ambiguous, ask once — never guess silently.
 
 ### 0.3 Pick aspects (domains)
 
-Default: all seven — `api`, `db`, `auth`, `reliability`, `performance`, `security`, `code-reviewer`. If the user narrows, respect it.
+Default: all seven — `api`, `db`, `auth`, `reliability`, `performance`, `security`, `code`. If the user narrows, respect it.
 
 ### 0.4 Identify the spec source (Spec axis)
 
@@ -115,9 +116,9 @@ Use the coordinator-resolved canonical change/spec and acceptance criteria, then
 
 ## Step 1 — Request relevant domain analysis
 
-Propose the relevant `api`, `db`, `auth`, `reliability`, `performance`, `security`, and `code-reviewer` lenses. The coordinator handles available/authorized delegation, explorer-before-reviewer dependencies, accessible context, claims, and runtime calls. When delegation is absent, apply the same lenses inline. A failed or omitted lens is visible as unassessed scope, not a passing review.
+Apply the relevant lenses from [domain-lenses.md](references/domain-lenses.md): `api`, `db`, `auth`, `reliability`, `performance`, `security`, and `code`. Each lens maps what exists in scope, then judges it. When the coordinator allows delegation, a lens may run as a delegated task whose instruction is that lens's section; otherwise apply it inline. A failed or omitted lens is visible as unassessed scope, not a passing review.
 
-Each domain receives the shared handoff envelope plus review mode/scope, relevant diff or rules, and domain-filtered parent findings. Return evidence with criterion/contract IDs, source revision/diff identity, environment assumptions, and omissions. Role prompts are suite-local under `system/agents/` (resolve from the suite, not a hardcoded runtime mirror).
+Each lens receives the shared handoff envelope plus review mode/scope, relevant diff or rules, and domain-filtered parent findings. Return evidence with criterion/contract IDs, source revision/diff identity, environment assumptions, and omissions.
 
 ## Step 2 — Inline review (always runs; also the fallback)
 
@@ -157,7 +158,7 @@ Compare the behavior in scope against the spec source from Step 0.4:
 - Behavior the spec did not ask for (scope creep).
 - Requirements that look implemented but whose implementation is wrong.
 
-Cite the spec line for each finding. If a gap-analysis artifact from `acs-review-implementation-gaps` exists, reuse its PARTIAL/MISSING/DIVERGENT statuses as the starting point instead of re-deriving them. This pass runs inline — no dedicated subagent; the axes are a reporting split, not a third reviewer.
+Cite the spec line for each finding. If matching `TRC` rows from `acs-trace-requirements` exist, reuse their PARTIAL/MISSING/DIVERGENT statuses as the starting point instead of re-deriving them. This pass runs inline — no dedicated lens; the axes are a reporting split, not a third reviewer.
 
 **Interactive flow.** Stop after each file. For every finding with confidence ≥ 7, follow *Rules for the interactive review* below — one issue, one `the coordinator’s question interface`.
 
@@ -209,7 +210,7 @@ Surface only findings with confidence ≥ 7. Suppress performance theater ("this
 
 ## Step 4.5 — Static security greps
 
-Run deterministic scans over the added lines of the review diff. Any match feeds the security findings (Standards axis) — cheap, no subagent needed:
+Run deterministic scans over the added lines of the review diff. Any match feeds the security findings (Standards axis) — cheap, no lens needed:
 
 ```bash
 DIFF="git diff <range>"   # the scope's diff command from Step 0
@@ -225,15 +226,15 @@ A match is a candidate, not an automatic Critical — read the surrounding code,
 ## Step 5 — Consolidate, prioritize, verdict
 
 ### 5.1 Dedupe
-Merge subagent + inline findings. Dedupe by `file:line` with a `Confirmed by: [subagents]` tag on each entry. Keep the axis tag on every finding; Standards and Spec findings stay in separate subsections and are never reranked against each other.
+Merge lens + inline findings. Dedupe by `file:line` with a `Confirmed by: [lenses]` tag on each entry. Keep the axis tag on every finding; Standards and Spec findings stay in separate subsections and are never reranked against each other.
 
-When a subagent's finding is genuinely **architectural** (e.g., a reviewer notices schema-ownership leakage between modules, or a deploy-topology smell, or a cross-cutting decision that needs an ADR), do **not** demote it to a code-level finding. Record it in a separate **Cross-references to acs-review-architecture** subsection with the form:
+When a lens finding is genuinely **architectural** (e.g., a lens notices schema-ownership leakage between modules, or a deploy-topology smell, or a cross-cutting decision that needs an ADR), do **not** demote it to a code-level finding. Record it in a separate **Cross-references to design cards** subsection with the form:
 
 ```
-[→ acs-review-architecture (<aspect>)] file:line — short description
+[→ <card> (<lens>)] file:line — short description
 ```
 
-Aspects: `business`, `application`, `data`, `technology`, `deploy`, `adr`. The user can run `acs-review-architecture` to follow up.
+Cards: `ARC` (lenses `business`, `application`, `data`, `technology`, `deploy`, `adr`), `MOD`, `CON`, `TST`. The user can run the named card, or `acs-technical-design`, to follow up; the card records it as an `FND` row.
 
 ### 5.2 Prioritized next-steps
 
@@ -260,7 +261,7 @@ Order within each bucket by dependency — items with no deps first.
 - Only Warnings / Suggestions → **READY-WITH-FIXES**
 - No issues above Suggestion → **READY** (READY FOR PR)
 
-`code-reviewer` Criticals (cyclomatic complexity > 21, changed logic with zero tests, ice-cream-cone pyramid) block the merge like any HIGH-confidence Critical.
+`code` lens Criticals (cyclomatic complexity > 21, changed logic with zero tests, ice-cream-cone pyramid) block the merge like any HIGH-confidence Critical.
 
 ## Output artifact
 
@@ -276,11 +277,11 @@ Structure:
 # Code Review — Mode {A|B|C} — {scope summary}
 Generated: {YYYY-MM-DD HH:MM}
 Branch: {branch}
-Scope: {gap-analysis path | user path | git range | arch-review drill files}
+Scope: {TRC rows | user path | git range | FND-ARC drill files}
 Reviewer: acs-review-code-quality
 Spec source: {path | "none — Standards-only review"}
-Subagents used: {list, or "none — inline only"}
-Subagents skipped: {list with reason: NOT DETECTED | failed | not invoked}
+Lenses delegated: {list, or "none — inline only"}
+Lenses skipped: {list with reason: NOT DETECTED | failed | not invoked}
 
 ## Verdict
 READY | READY-WITH-FIXES | NOT-READY
@@ -310,7 +311,7 @@ Reasoning: <1–2 sentences. Cite blocking Criticals and their axis if NOT-READY
 {ASCII diagram from Step 3}
 
 ## Per-Domain Reports
-{one section per subagent that ran; "Not detected" or "Skipped — inline" where applicable}
+{one section per lens that ran; "Not detected" or "Skipped — inline" where applicable}
 ```
 
 ## Finding format
@@ -348,9 +349,9 @@ Confidence rules:
 
 - **Git range invalid or empty** → stop, ask user for a different range.
 - **Mode B, no rules files** → warn spec/rules absent; offer standard quality fallback or abort.
-- **Mode C, first message isn't an arch-review** → ask for it, or switch to Mode A.
-- **A subagent errors out** → note failure under "Subagents skipped"; proceed with others.
-- **All subagents fail** → announce, run the entire review inline (Steps 2–4).
+- **Mode C, no open ARC findings available** → ask for them, or switch to Mode A.
+- **A delegated lens errors out** → run it inline, or note it under "Lenses skipped"; proceed with others.
+- **No delegation available** → apply every lens inline (Steps 1–4).
 - **Scope too large** (e.g. Mode B on 100k files) → report file count; ask the user to narrow before proceeding.
 
 ## Completion report
@@ -360,7 +361,7 @@ After writing the artifact, print:
 ```
 Code review complete → docs/eng-reviews/next-steps-{branch}-{date}.md
 
-Mode: {A|B|C}    Subagents: {n used / n skipped}
+Mode: {A|B|C}    Lenses: {n run / n skipped}
 Findings: N (P0: a / P1: b / P2: c — Standards: s / Spec: p)
 Coverage: Y/X branches tested ({pct}%)
 Next: CRITICAL × N, IMPORTANT × N, NICE-TO-HAVE × N

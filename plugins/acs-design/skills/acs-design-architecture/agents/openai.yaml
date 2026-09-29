@@ -1,5 +1,5 @@
 interface:
   display_name: "Design Architecture"
-  short_description: "Map accepted features to business modules and shared technical capabilities, com..."
+  short_description: "Design or review system shape, shared foundations, fit, and decisions (ARC card)"
 policy:
   allow_implicit_invocation: false

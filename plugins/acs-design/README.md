@@ -12,14 +12,15 @@ The [catalog](catalog/skill-set.json) lists discovered skills. [Third-party noti
 
 ## Skills
 
-- [acs-audit-architecture](skills/acs-audit-architecture/SKILL.md)
 - [acs-design-architecture](skills/acs-design-architecture/SKILL.md)
 - [acs-design-context](skills/acs-design-context/SKILL.md)
-- [acs-design-foundation](skills/acs-design-foundation/SKILL.md)
+- [acs-design-contracts](skills/acs-design-contracts/SKILL.md)
 - [acs-design-implement](skills/acs-design-implement/SKILL.md)
 - [acs-design-interaction-flow](skills/acs-design-interaction-flow/SKILL.md)
 - [acs-design-modules](skills/acs-design-modules/SKILL.md)
 - [acs-design-system-create](skills/acs-design-system-create/SKILL.md)
-- [acs-validate-codebase](skills/acs-validate-codebase/SKILL.md)
+- [acs-design-test-strategy](skills/acs-design-test-strategy/SKILL.md)
+- [acs-technical-design](skills/acs-technical-design/SKILL.md)
+- [acs-trace-requirements](skills/acs-trace-requirements/SKILL.md)
 - [acs-validate-prototype](skills/acs-validate-prototype/SKILL.md)
 - [acs-visual-design-variants](skills/acs-visual-design-variants/SKILL.md)

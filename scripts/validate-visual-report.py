@@ -9,8 +9,12 @@ import sys
 from pathlib import Path
 
 CONSUMERS = (
-    Path("system/skills-src/design/technical/acs-audit-architecture"),
-    Path("system/skills-src/test/review/acs-review-architecture"),
+    Path("system/skills-src/design/technical/acs-technical-design"),
+    Path("system/skills-src/design/technical/acs-design-architecture"),
+    Path("system/skills-src/design/technical/acs-design-modules"),
+    Path("system/skills-src/design/technical/acs-design-contracts"),
+    Path("system/skills-src/design/technical/acs-design-test-strategy"),
+    Path("system/skills-src/design/technical/acs-trace-requirements"),
     Path("system/skills-src/plan/acs-map-current-product"),
 )
 

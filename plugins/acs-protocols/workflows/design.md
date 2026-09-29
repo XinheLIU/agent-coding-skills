@@ -1,6 +1,6 @@
 # Design Workflow
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 Transform accepted product intent into settled requirements, a unified UX design, and an engineering design. Three sequential sub-phases with clear boundaries: requirements define WHAT, UX defines HOW (delivery), technical defines HOW (engineering).
 
@@ -15,11 +15,12 @@ approval_gate:  Necessary decisions accepted per slice before execution; existin
 ```
 accepted intent → [1] requirements → [2] UX design → [3] technical design → acs-plan-delivery
                       WHAT                HOW delivery    HOW engineering
-                  acs-settle-requirements  acs-design-context    acs-audit-architecture
-                                       acs-validate-prototype acs-design-architecture
-                                       acs-design-interaction-flow acs-design-foundation
-                                       acs-visual-design-variants acs-design-modules
-                                       acs-design-implement  acs-validate-codebase
+                  acs-settle-requirements  acs-design-context    acs-technical-design (router)
+                                       acs-validate-prototype  ARC acs-design-architecture
+                                       acs-design-interaction-flow MOD acs-design-modules
+                                       acs-visual-design-variants CON acs-design-contracts
+                                       acs-design-implement    TST acs-design-test-strategy
+                                                               TRC acs-trace-requirements
 ```
 
 ## Sub-phase 1: Requirements (WHAT)
@@ -55,20 +56,21 @@ accepted intent → [1] requirements → [2] UX design → [3] technical design 
 
 ## Sub-phase 3: Technical (HOW engineering)
 
-**Goal:** Map accepted features to an implementable architecture, shared technical foundations, code modules, and verified wiring.
+**Goal:** Map accepted features to an implementable architecture, modules, contracts, a test strategy, and verified wiring. Five aspect cards each design or review one aspect and write their own section of one record, `docs/design/technical-design.md`, with one findings ledger and one derived view.
 
 **Entry:** canonical spec/criteria and relevant accepted prototype sections or existing technical inputs.
 
 **Skills:**
-- `/acs-audit-architecture` — reconstruct current structure when brownfield evidence is unclear
-- `/acs-design-architecture` — map features to business modules and compare current, ideal, and feasible designs
-- `/acs-design-foundation` — design libraries, SDKs, components, middleware, and infrastructure adapters for named consumers
-- `/acs-design-modules` — specify code interfaces, types, directories, wiring, dependency rules, and migration
-- `/acs-validate-codebase` — verify design and implementation reachability across routes, menus, exports, interfaces, and modules
+- `/acs-technical-design` — scope challenge, pick cards, consolidate findings and verdict
+- `/acs-design-architecture` (ARC) — capability map, current/ideal/feasible target, shared foundations, fit, decisions; brownfield audit and architecture review
+- `/acs-design-modules` (MOD) — responsibilities, interfaces, wiring, dependency rules, foundation contracts, migration
+- `/acs-design-contracts` (CON) — invariants, pre/postconditions, error semantics, trust boundaries, failure modes
+- `/acs-design-test-strategy` (TST) — critical paths, test layers, seams and doubles, fixtures, CI gates
+- `/acs-trace-requirements` (TRC) — requirement → entry → module → contract → test reachability, before and after build
 
-The handoff is `requirement → capability/module → contract → code entry → verification evidence`. Greenfield uses a minimum real end-to-end path; brownfield includes migration and preservation evidence.
+The handoff is `requirement → ARC capability → MOD interface → CON contract → TST verification → TRC status`. Greenfield uses a minimum real end-to-end path; brownfield includes migration and preservation evidence.
 
-**Exit:** technical design with architecture options, capability contracts, module contracts, wiring, gaps, and validation evidence.
+**Exit:** `technical-design.md` with accepted sections, no open `P0` in the ledger, and an Overview verdict of READY TO BUILD.
 
 **Gate:** Relevant technical decisions must be accepted before dependent slices execute. Their tickets may be planned earlier.
 

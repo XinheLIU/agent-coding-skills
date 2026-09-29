@@ -1,0 +1,106 @@
+{
+  "name": "technical-design-scenarios",
+  "last_updated": "2026-09-29",
+  "description": "Behavioral scenarios for the technical-design aspect cards and router: greenfield and brownfield per card, one shared record, no per-skill report files.",
+  "evals": [
+    {
+      "id": "router-plan-review",
+      "skills": [
+        "acs-technical-design"
+      ],
+      "setup": [],
+      "prompt": "Review the plan at docs/plans/implementation-plan.md before I start coding. Flag scope creep, missing pieces, assumptions and failure modes.",
+      "expected_output": "Runs the scope challenge, selects cards in review mode (ARC only if a boundary moves), and consolidates one docs/design/technical-design.md with an Overview verdict and a single deduplicated findings ledger (FND-<PREFIX>-n, severity, confidence, anchor). One derived technical-design.html; no per-skill files."
+    },
+    {
+      "id": "arc-greenfield",
+      "skills": [
+        "acs-design-architecture"
+      ],
+      "setup": [],
+      "prompt": "We're starting a multi-tenant invoicing service from scratch. Design the architecture from the accepted requirements.",
+      "expected_output": "ARC section with a capability map (each requirement gets owner, entry point, data), shared foundations only where named consumers exist with the smallest form, two or three compared options with a recommendation, measurable NFR fit, and decision rows; ARC-n target items. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "arc-brownfield-audit",
+      "skills": [
+        "acs-design-architecture"
+      ],
+      "setup": [],
+      "prompt": "This codebase feels tangled and every feature touches ten files. Audit the architecture.",
+      "expected_output": "Current subsection built from real imports and change-frequency hot spots; boundary, cohesion, change-cost and decision lenses; problems ranked by impact x change frequency / fix difficulty as FND-ARC rows with anchors; current/ideal/feasible target; code-level defects routed to acs-review-code-quality. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "mod-greenfield",
+      "skills": [
+        "acs-design-modules"
+      ],
+      "setup": [],
+      "prompt": "Given the accepted architecture, design the modules and interfaces for the invoicing service.",
+      "expected_output": "MOD-n rows with responsibility, deep interface, dependencies in one direction, and wiring; foundation contracts in a chosen form; greenfield bootstrap slice. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "mod-brownfield-split",
+      "skills": [
+        "acs-design-modules"
+      ],
+      "setup": [],
+      "prompt": "billing/service.py is 3000 lines. Propose how to split it.",
+      "expected_output": "Current subsection applying the deletion test and cohesion; target MOD items with split/merge rationale and an incremental migration plan that keeps the system shippable at each step. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "con-greenfield",
+      "skills": [
+        "acs-design-contracts"
+      ],
+      "setup": [],
+      "prompt": "Define what must always be true for payments and what happens when things fail.",
+      "expected_output": "CON-n invariant and operation rows naming owner and enforcement point; one error model per boundary; idempotency for retried operations; trust boundaries from ARC; failure-modes table with a P0 for any unhandled, untested, silent row. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "con-brownfield-recover",
+      "skills": [
+        "acs-design-contracts"
+      ],
+      "setup": [],
+      "prompt": "Before we refactor checkout, what invariants does the current code rely on?",
+      "expected_output": "Recovers enforced and silently relied-on contracts (validation, constraints, transactions, retries) with anchors; unchecked reliances become FND-CON rows; produces system.invariants for acs-refactor-code. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "tst-greenfield",
+      "skills": [
+        "acs-design-test-strategy"
+      ],
+      "setup": [],
+      "prompt": "Plan the testing strategy for the invoicing service before we write code.",
+      "expected_output": "At most 8 critical paths tied to criteria; TST-n verification map giving each criterion, CON item and failure mode a layer, method, doubles, data and gate; mocks only at owned boundaries; CI gate budget. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "tst-brownfield-move",
+      "skills": [
+        "acs-design-test-strategy"
+      ],
+      "setup": [],
+      "prompt": "We're moving order pricing into its own module. What tests do we need first?",
+      "expected_output": "Inventories existing layers, fixtures and flaky areas; requires characterization tests before the move; flags missing seams as MOD open items. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "trc-pre-build",
+      "skills": [
+        "acs-trace-requirements"
+      ],
+      "setup": [],
+      "prompt": "Before I build, is every requirement in the design actually connected end to end?",
+      "expected_output": "Pre-build TRC matrix: each criterion traced to ARC/MOD owner, wiring point, CON items and TST row; design holes as MISSING; build order in topological sequence. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    },
+    {
+      "id": "trc-post-build",
+      "skills": [
+        "acs-trace-requirements"
+      ],
+      "setup": [],
+      "prompt": "Am I done with the design? What's left?",
+      "expected_output": "Post-build TRC matrix over the resolved diff with REACHABLE/PARTIAL/MISSING/DIVERGENT/UNEXPECTED/UNASSESSED and evidence; unexpected code classified; scoped wiring repairs only when conclusive; DIVERGENT routed to the owning card; Open names rows for acs-review-code-quality. Writes only its own section of docs/design/technical-design.md and its own FND ledger rows; creates no per-skill report file (no AUDIT.md, no docs/eng-reviews/*)."
+    }
+  ]
+}

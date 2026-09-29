@@ -13,10 +13,12 @@ REQUIRED = (
     "top recommendation",
 )
 CONSUMERS = (
-    ROOT / "design/technical/acs-audit-architecture",
+    ROOT / "design/technical/acs-technical-design",
     ROOT / "design/technical/acs-design-architecture",
     ROOT / "design/technical/acs-design-modules",
-    ROOT / "test/review/acs-review-architecture",
+    ROOT / "design/technical/acs-design-contracts",
+    ROOT / "design/technical/acs-design-test-strategy",
+    ROOT / "design/technical/acs-trace-requirements",
     ROOT / "test/review/acs-refactor-code",
     ROOT / "plan/acs-map-current-product",
 )
@@ -28,7 +30,12 @@ def main() -> int:
     if not canonical.exists():
         errors.append(f"missing canonical contract: {canonical}")
     for skill_dir in CONSUMERS:
-        report_reference = "references/html-report.md" if skill_dir.name == "acs-map-current-product" else "references/HTML-REPORT.md"
+        if skill_dir.parent.name == "technical":
+            report_reference = "../references/technical-view.md"
+        elif skill_dir.name == "acs-map-current-product":
+            report_reference = "references/html-report.md"
+        else:
+            report_reference = "references/HTML-REPORT.md"
         for relative in ("SKILL.md", "references/visual-report.md", report_reference):
             path = skill_dir / relative
             if not path.exists():

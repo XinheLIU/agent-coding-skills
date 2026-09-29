@@ -1,6 +1,6 @@
 # Test Workflow
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 Audit test coverage after implementation, add missing integration and end-to-end tests, and verify the full suite is green before deploy.
 
@@ -22,6 +22,7 @@ code + unit tests → acs-analyze-test-gaps → add integration/e2e tests → fu
 
 ### 1. Audit coverage
 - `/acs-analyze-test-gaps` — read the implementation, map it against the acceptance criteria in `specs/<spec>.md`, identify gaps: missing integration tests, untested edge cases, missing error path coverage
+- `/acs-trace-requirements` (post-build) — when a technical-design record exists, confirm every criterion is reachable through entry, module, contract, and test before filling gaps; the accepted `TST` section is the target layer plan
 
 ### 2. Fill gaps
 Write integration tests and e2e tests for the gaps identified. These tests exercise multiple components together or verify behavior from the outside.

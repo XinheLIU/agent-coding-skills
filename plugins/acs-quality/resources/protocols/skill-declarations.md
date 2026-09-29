@@ -1,13 +1,13 @@
 ---
 protocol: acs:skill-declarations
-version: 1.3.0
+version: 1.4.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/skill-declarations.md
 ---
 
 # Shared Context Protocol
 
-Last updated: 2026-09-26
+Last updated: 2026-09-29
 
 This is the suite's canonical lifecycle, identity, ownership, and handoff contract. Domain contracts specialize artifact meaning; workflows coordinate execution. It applies to standalone skills as well as composed workflows.
 
@@ -116,8 +116,11 @@ Skills may be owners, record-level contributors, consumers, or transient operati
 | `design.ux` | UX design owner |
 | `design.technical` | Technical design owner |
 | `design_architecture` | Architecture design capability |
-| `design_foundation` | Technical foundation design capability |
 | `design_modules` | Module design capability |
+| `design_contracts` | Contracts and correctness design capability |
+| `design_test_strategy` | Test strategy design capability |
+| `trace_requirements` | Requirement traceability capability |
+| `technical_design` | Technical design router and consolidation |
 | `interaction_design` | Interaction design capability |
 | `visual_design` | Visual design capability |
 | `implementation` | Implementation owner |
@@ -125,7 +128,6 @@ Skills may be owners, record-level contributors, consumers, or transient operati
 | `testing` | Testing owner |
 | `code_review` | Code review capability |
 | `refactoring` | Refactoring owner |
-| `validate_codebase` | Codebase validation capability |
 | `operations` | DevOps / CI-CD owner |
 | `release` | Release capability within Operations |
 | `sync_context` | Context synchronization capability |

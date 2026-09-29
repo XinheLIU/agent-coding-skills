@@ -1,8 +1,26 @@
 # Changelog
 
-Last updated: 2026-09-26
+Last updated: 2026-09-29
 
 ## Unreleased
+
+### Technical design becomes five aspect cards on one record
+
+Technical design and design review were split by activity. Thin design skills sat beside large review skills; each skill wrote its own report file; and two skills traced design to code with different vocabularies.
+
+The set is now one card per aspect, and each card both designs and reviews that aspect:
+
+- `acs-design-architecture` (ARC)
+- `acs-design-modules` (MOD)
+- `acs-design-contracts` (CON, new)
+- `acs-design-test-strategy` (TST, new)
+- `acs-trace-requirements` (TRC, replacing `acs-validate-codebase` and `acs-review-implementation-gaps`)
+
+A thin router, `acs-technical-design`, runs the scope challenge, picks cards, and consolidates. All cards write sections of one `docs/design/technical-design.md` with a single findings ledger, and one derived HTML view replaces three per-skill report contracts.
+
+`acs-audit-architecture`, `acs-design-foundation`, `acs-review-architecture` and `acs-review-design-doc` were absorbed into the cards. `system.invariants` now has a producer (CON). Protocols: skill-declarations v1.4.0, design-memory v1.3.0.
+
+`system/agents/` is removed. The architecture explorer/reviewer prompts are now the lens checklist in `acs-design-architecture`, the domain and `code-reviewer` prompts are the lens checklist in `acs-review-code-quality` (the `code-reviewer` lens is now `code`), and `tdd-builder` duplicated `acs-implement` with `acs-tdd`. See [ADR-0004](docs/adr/0004-technical-design-aspect-cards.md).
 
 ### Context audits classify every document and confirm before removing
 

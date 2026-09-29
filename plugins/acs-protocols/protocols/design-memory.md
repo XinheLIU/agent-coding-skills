@@ -1,13 +1,13 @@
 ---
 protocol: acs:design-memory
-version: 1.2.0
+version: 1.3.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/design-memory.md
 ---
 
 # Design Memory Contract
 
-Last updated: 2026-09-26
+Last updated: 2026-09-29
 
 Design skills contribute to one shared design understanding. A skill owns its reasoning method, not the understanding itself. Read this contract before reading or updating design memory. It also applies when a skill runs standalone.
 
@@ -30,6 +30,22 @@ Shared design understanding is three durable documents, answering three differen
 | **What** | `docs/design/prototype.html` | The canonical prototype: rendered structure and visuals per surface, all five states switchable, fidelity and lock markers, links back to the why. | The pipeline stage whose gate the change passed through. |
 
 A reader who opens these three files knows what the product is for, what its design rules are, and what the design actually looks like — without reconstructing any effort's working files. Separately linked accepted contracts and consequential decisions are also durable. Unreferenced drafts and raw experiments remain Working; preserve rejected or proposed variants when review history or future work needs them, including the exact reviewed content and necessary assets.
+
+## The technical record
+
+The triad covers experience. Structure has one canonical record beside it: `docs/design/technical-design.md` (or an established home recorded in `docs/agents/memory.md`), with the derived view `docs/design/technical-design.html` rebuilt by Presenter. Five aspect cards and a router write it under the [card contract](../resources/skills-src/design/technical/references/card-contract.md):
+
+| Section | Prefix | Owner | Holds |
+| --- | --- | --- | --- |
+| Overview | — | `acs-technical-design` | Scope decision, card scorecard, verdict, next action |
+| Architecture | `ARC-` | `acs-design-architecture` | Capability map, current/ideal/feasible target, shared foundations, fit, decision ledger |
+| Modules & Interfaces | `MOD-` | `acs-design-modules` | Responsibilities, interfaces, dependency direction, wiring, migration |
+| Contracts & Correctness | `CON-` | `acs-design-contracts` | Invariants, operation contracts, error semantics, failure modes |
+| Test Strategy | `TST-` | `acs-design-test-strategy` | Critical paths, layer assignment, verification map, gates |
+| Traceability | `TRC-` | `acs-trace-requirements` | Requirement → entry → module → contract → test status matrix |
+| Findings Ledger | `FND-<prefix>-` | each card, own rows | Every design and review finding, one table |
+
+A card edits only its own section and ledger rows. Change-scoped work references record IDs from `docs/changes/<change-id>/` instead of forking the record. Per-skill report files (audit reports, plan reviews, gap analyses) are not created; the record and its view are the whole output.
 
 ## Documents and routing
 

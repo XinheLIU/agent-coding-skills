@@ -1,6 +1,6 @@
 # Decomposition rules
 
-Last updated: 2026-09-17
+Last updated: 2026-09-29
 
 How `acs-plan-delivery` turns accepted scope into dependency-ordered tickets. Extracted from `acs-implement`, retaining the former `break-into-tasks` and `bootstrap-project` guidance.
 
@@ -32,7 +32,7 @@ Choose checks from acceptance criteria, regression risk, preservation constraint
 
 ## Worked example: greenfield bootstrap
 
-Scaffolding and infrastructure are changes proposed by the technical design phase — `design/technical/acs-design-foundation` produces the foundation spec with these five slices and their gates as criteria. Current state: empty repository. Desired state: a working skeleton with zero business logic, from accepted stack and infrastructure-pattern decisions. The natural decomposition:
+Scaffolding and infrastructure are changes proposed by the technical design phase — `design/technical/acs-design-architecture` names the shared foundations and `design/technical/acs-design-modules` specifies them with these five bootstrap slices and their gates as criteria. Current state: empty repository. Desired state: a working skeleton with zero business logic, from accepted stack and infrastructure-pattern decisions. The natural decomposition:
 
 | Ticket | Outcome | Verify |
 | --- | --- | --- |

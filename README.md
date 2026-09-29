@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-26
+Last updated: 2026-09-29
 
 Inspired by the [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) from Anthropic.
 
@@ -32,7 +32,6 @@ All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See th
 | [`system/evals/`](system/evals/) | Structural checks and context handoff/retention scenarios |
 | [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
 | [`system/commands/`](system/commands/) | Claude Code entry points, including one-time repository setup |
-| [`system/agents/`](system/agents/) | Shared specialist agents used by review and delivery skills |
 | [`system/docs/`](system/docs/) | Human-facing catalog, organization report, and retained domain guides |
 
 ## Memory system
@@ -94,7 +93,7 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 | [`plan/`](system/skills-src/plan/) | Problem discovery through accepted product intent, including multi-session decision mapping. |
 | [`design/requirements/`](system/skills-src/design/requirements/) | Functional requirements and testable acceptance criteria. |
 | [`design/ux/`](system/skills-src/design/ux/) | Interaction flows, visual system, unified design doc. |
-| [`design/technical/`](system/skills-src/design/technical/) | Architecture, shared foundations, module contracts, and reachability. |
+| [`design/technical/`](system/skills-src/design/technical/) | Five aspect cards (architecture, modules, contracts, test strategy, traceability) writing one technical-design record. |
 | [`build/`](system/skills-src/build/) | Delivery planning, ticket DAGs, TDD execution, and verification. |
 | [`test/`](system/skills-src/test/) | Coverage audit, review, debugging, and integration tests after build. |
 | [`deploy/`](system/skills-src/deploy/) | Release, governance, and PR review. _(planned)_ |
@@ -115,7 +114,7 @@ graph LR
     end
 
     subgraph DESIGN["design/"]
-        SR[acs-settle-requirements] --> DI[acs-design-interaction-flow] --> DA[acs-design-architecture]
+        SR[acs-settle-requirements] --> DI[acs-design-interaction-flow] --> TD[acs-technical-design<br/>ARC·MOD·CON·TST·TRC]
     end
 
     subgraph BUILD["build/"]
@@ -136,7 +135,7 @@ graph LR
 
     PRD --> SR
     PRD --> PD
-    DA --> PD
+    TD --> PD
     PD -->|design blockers| SR
     IMP --> ATG
     ATG --> DEP

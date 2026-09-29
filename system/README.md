@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 This directory is the plugin and product. Its skills coordinate through shared repository records across the six lifecycle phases. Setup configures paths when needed; explicit inputs and unambiguous existing homes also support standalone work.
 
@@ -21,7 +21,6 @@ The [Presenter](protocols/presenter.md) organizes versioned sources for human re
 | [`protocols/`](protocols/) | Memory, ownership, handoff, coordination, and Presenter contracts |
 | [`workflows/`](workflows/) | Six lifecycle workflows plus legacy sequences |
 | [`commands/`](commands/) | Setup and Git commands |
-| [`agents/`](agents/) | Shared explorer, reviewer, and delivery agents |
 | [`docs/`](docs/) | Human guides and organization report |
 | [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin manifest |
 | [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest |

@@ -458,7 +458,7 @@ Avoid "better", "improved", "enhanced" without saying what got better.
 
 ## Related contracts
 
-- [visual-report.md](../../../../skills/acs-audit-architecture/references/visual-report.md) — Card-based reports, inline SVG patterns
+- [visual-report.md](../../../../skills/acs-design-architecture/references/visual-report.md) — Card-based reports, inline SVG patterns
 - [html-report.md](../../plan/acs-map-current-product/references/html-report.md) — Progressive disclosure for product mapping
 
 Use tabbed-discovery-report.md when the structure requires hiding inactive sections. Use visual-report.md when all findings fit comfortably in one scrollable page.

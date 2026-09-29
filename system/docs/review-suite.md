@@ -1,10 +1,15 @@
 # Code Review
 
-Last updated: 2026-09-25
+Last updated: 2026-09-29
 
 [System home](../README.md) · [Workflows](../workflows/README.md)
 
-This folder defines a technical review system with two primary orchestrators and a shared subagent fleet. `acs-review-architecture` and `acs-review-code-quality` own domain review reasoning while the shared coordinator owns runtime orchestration; the gate chain `acs-review-design-doc → acs-review-implementation-gaps → acs-review-code-quality` runs a change from plan to merge verdict, `acs-analyze-test-gaps` audits whole-codebase test adequacy, and `acs-refactor-code` is the corrective follow-up that acts on findings. `acs-tdd` enters this pipeline at gap-review — it routes its spec and quality reviews here rather than embedding its own reviewers.
+This folder defines a technical review system with two levels. Each level is a skill that carries its own lenses; there are no separate agent prompts.
+
+- **Design level.** The technical design aspect cards (`acs-technical-design` router plus ARC, MOD, CON, TST and TRC) each review one aspect and write findings into one record, `docs/design/technical-design.md`, with a single ledger.
+- **Code level.** `acs-review-code-quality` judges the code as written and produces a merge verdict.
+
+The shared coordinator owns runtime orchestration. The gate chain from plan to merge verdict is `acs-technical-design` (review mode) → `acs-trace-requirements` (post-build) → `acs-review-code-quality`. `acs-analyze-test-gaps` audits whole-codebase test adequacy, and `acs-refactor-code` is the corrective follow-up. `acs-tdd` enters at the trace step; it routes its spec and quality reviews here rather than embedding its own reviewers.
 
 ## TL;DR — Which Skill?
 
@@ -15,27 +20,30 @@ This folder defines a technical review system with two primary orchestrators and
                 ┌───────────────┴───────────────┐
                 ▼                               ▼
          design / structure                code as written
-       /acs-review-architecture              /acs-review-code-quality
-                                                │
+       /acs-technical-design                /acs-review-code-quality
+        (ARC MOD CON TST TRC cards)             │
                             ready to ship a PR? │ yes
                                                 ▼
                                         verdict + next steps
 ```
 
-- `acs-review-architecture`: intent, boundaries, topology, contracts, and ADR quality.
+- Design cards: system shape and decisions (ARC), module boundaries (MOD), contracts and failure semantics (CON), test strategy (TST), and requirement reachability (TRC).
 - `acs-review-code-quality`: concrete defects, maintainability, tests, and merge readiness.
-- Cross-skill findings are routed via cross-reference sections, not mixed into the wrong skill.
+- Cross-level findings are routed, not mixed into the wrong skill.
 
 ## MECE Boundary
 
-| Concern | acs-review-architecture | acs-review-code-quality |
+| Concern | Design card | acs-review-code-quality |
 |---|---|---|
-| Business intent, personas, golden paths | Yes | No |
-| Module decomposition, layering, runtime ownership | Yes | No |
-| Data layering, ownership, lineage, contracts | Yes | No |
-| Technology choice fit and scaling cliffs | Yes | No |
-| Deploy topology, trust boundaries, exposure model | Yes | No |
-| ADR discipline and decision drift | Yes | No |
+| Business intent, personas, golden paths | ARC | No |
+| Module decomposition, layering, runtime ownership | ARC / MOD | No |
+| Data layering, ownership, lineage | ARC | No |
+| Technology choice fit and scaling cliffs | ARC | No |
+| Deploy topology, trust boundaries, exposure model | ARC | No |
+| ADR discipline and decision drift | ARC | No |
+| Invariants, API evolution, error and failure semantics | CON | No |
+| Test layers, seams, gates (before code) | TST | No |
+| Requirement → code reachability | TRC | Spec axis reuses TRC rows |
 | Endpoint validation and error-envelope correctness | No | Yes |
 | SQL/query correctness and DB safety defects | No | Yes |
 | Code-level auth and authorization bugs | No | Yes |
@@ -44,78 +52,54 @@ This folder defines a technical review system with two primary orchestrators and
 | App security implementation bugs | No | Yes |
 | Test quality, code complexity, maintainability smells | No | Yes |
 
-Rule of thumb: `acs-review-architecture` judges the system design; `acs-review-code-quality` judges the code implementing that design.
+Rule of thumb: the design cards judge the system design; `acs-review-code-quality` judges the code implementing it.
 
-## Skill 1: acs-review-architecture
+## Level 1: Technical design cards
 
-`acs-review-architecture` proposes relevant aspect pairs (`explorer` then `reviewer`) and consolidates a design-level report. The coordinator handles authorized delegation or inline execution.
+`acs-technical-design` challenges scope, picks cards, and consolidates the ledger into a verdict (READY TO BUILD / NEEDS REVISION / AT RISK). Each card also runs alone. See [design/technical](../skills-src/design/technical/README.md).
 
-### Architecture Scope
+### Architecture deep mode
 
-- Reviews design quality across business, application, data, technology, deploy, and ADR aspects.
-- Supports whole codebase and narrowed scopes (subtree, commit ranges, branch diff, working tree, custom file list).
-- Produces a single consolidated artifact with executive summary, aspect scorecard, cross-aspect findings, and ADR ledger.
+`acs-design-architecture` applies six lenses for a whole-system review: `business`, `application`, `data`, `technology`, `deploy` and `adr`. Each lens maps the system first, then judges it. The checklists live in the skill's [architecture-lenses.md](../skills-src/design/technical/acs-design-architecture/references/architecture-lenses.md). A lens runs inline, or as a delegated task when the coordinator allows it; either way, its findings become `FND-ARC` ledger rows with anchors and confidence kept verbatim.
 
-### Aspect subagents
+### Design output
 
-| Aspect | Explorer | Reviewer | What it answers |
-|---|---|---|---|
-| `business` | `business-explorer` (haiku, `Read`/`Grep`/`Glob`) | `business-reviewer` (sonnet, `Read`/`Grep`, plan mode) | Mission-to-implementation alignment, persona coverage, golden path completeness |
-| `application` | `application-explorer` | `application-reviewer` | Module decomposition, layer discipline, contract stability, topology coherence |
-| `data` | `data-architecture-explorer` | `data-architecture-reviewer` | Schema ownership, ODS/DWD/APP layering, lineage integrity, dataset contract health |
-| `technology` | `technology-explorer` | `technology-reviewer` | Stack fit vs workload, scaling cliffs, observability posture, dependency risk |
-| `deploy` | `deploy-explorer` | `deploy-reviewer` | Compose topology, network trust boundaries, env-var contracts, prod/dev variant fit |
-| `adr` | `adr-explorer` | `adr-reviewer` | Decision inventory and status: Sound, Reconsider, Missing-but-needed, Drifted, Stale |
+`docs/design/technical-design.md` (sections plus the findings ledger) and its derived view, `docs/design/technical-design.html`.
 
-### Architecture Pipeline
+## Level 2: acs-review-code-quality
 
-```text
-/acs-review-architecture
-  -> choose aspects + scope
-  -> run selected explorers in parallel
-  -> run paired reviewers in parallel
-  -> consolidate + dedupe + rank + cross-reference
-  -> write architecture artifact
-```
-
-### Architecture Output Artifact
-
-`docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md`
-
-## Skill 2: acs-review-code-quality
-
-`acs-review-code-quality` runs domain review subagents plus a standalone `code-reviewer`, then produces a merge verdict and prioritized next steps.
+`acs-review-code-quality` applies seven domain lenses plus an inline quality pass, then produces a merge verdict and prioritized next steps.
 
 ### Code Quality Scope
 
 - Reviews implementation quality and production-readiness defects.
-- Tags every finding on two axes — **Standards** (code vs the repo's documented conventions and quality bar, fed by the domain subagents and inline pass) and **Spec** (code vs what the plan/issue asked for, fed by a spec-fidelity pass against a located spec source) — reported separately, never reranked against each other. Finding format: `[P0|P1|P2] [Standards|Spec] (confidence: N/10) file:line — description`.
+- Tags every finding on two axes — **Standards** (code vs the repo's documented conventions and quality bar, fed by the domain lenses and inline pass) and **Spec** (code vs what the plan/issue asked for, fed by a spec-fidelity pass against a located spec source) — reported separately, never reranked against each other. Finding format: `[P0|P1|P2] [Standards|Spec] (confidence: N/10) file:line — description`.
 - Supports three modes:
   - Mode A: recent changes (default).
   - Mode B: whole codebase against specs/rules.
-  - Mode C: drill-down from acs-review-architecture output.
+  - Mode C: drill-down from open `FND-ARC` ledger rows.
 - Always includes consolidation, confidence calibration, test-coverage gap analysis, and verdicting.
 
-### Domain subagents
+### Domain lenses
 
-| Domain | Explorer | Reviewer | What it catches |
-|---|---|---|---|
-| `api` | `api-explorer` (haiku) | `api-reviewer` (sonnet, plan mode) | Endpoint contract issues, boundary validation gaps, error envelope/status misuse |
-| `db` | `db-explorer` | `db-reviewer` | Schema integrity risks, SQL safety defects, migration and DB-level performance issues |
-| `auth` | `auth-explorer` | `auth-reviewer` | Auth flow flaws, token/session weaknesses, authorization bypass risks |
-| `reliability` | `reliability-explorer` | `reliability-reviewer` | Missing timeouts/retries, weak degradation, observability and lifecycle gaps |
-| `performance` | `performance-explorer` | `performance-reviewer` | Cache/pool/concurrency/scaling and memory pressure risks |
-| `security` | `security-explorer` | `security-reviewer` | Secrets, crypto posture, audit/PII handling, supply-chain and non-API injection sinks |
-| code quality | *(no explorer)* | `code-reviewer` (sonnet, plan mode, includes `Bash`) | Cyclomatic complexity, test quality, code smells, FIRST/AAA, test pyramid health |
+| Lens | What it catches |
+|---|---|
+| `api` | Endpoint contract issues, boundary validation gaps, error envelope/status misuse |
+| `db` | Schema integrity risks, SQL safety defects, migration and DB-level performance issues |
+| `auth` | Auth flow flaws, token/session weaknesses, authorization bypass risks |
+| `reliability` | Missing timeouts/retries, weak degradation, observability and lifecycle gaps |
+| `performance` | Cache/pool/concurrency/scaling and memory pressure risks |
+| `security` | Secrets, crypto posture, audit/PII handling, supply-chain and non-API injection sinks |
+| `code` | Cyclomatic complexity, test quality, code smells, FIRST/AAA, test pyramid health |
+
+The checklists live in the skill's [domain-lenses.md](../skills-src/test/review/acs-review-code-quality/references/domain-lenses.md).
 
 ### Code Quality Pipeline
 
 ```text
 /acs-review-code-quality
   -> pick mode + scope + domains + spec source
-  -> run explorers in parallel
-  -> run paired reviewers in parallel
-  -> run standalone code-reviewer
+  -> apply domain lenses (inline, or delegated when allowed)
   -> inline quality pass + spec-fidelity pass (Spec axis) + coverage diagram + consolidation
   -> verdict: READY | READY-WITH-FIXES | NOT-READY
   -> write next-steps artifact
@@ -129,43 +113,24 @@ Rule of thumb: `acs-review-architecture` judges the system design; `acs-review-c
 
 The former `request-code-review` skill (pre-commit verification pipeline) is folded into `acs-review-code-quality`: its pre-commit triggers ("verify my changes", "review before commit/merge") and its static security greps now live there. Its auto-fix loop, stash-based test baseline, and auto-commit behavior were dropped by design — this system never commits without explicit user authority.
 
-## Standalone Agent: tdd-builder
+## Lens Contract
 
-`tdd-builder` is not part of either review pipeline. It is an orchestration agent for new features using strict test-first delivery.
-
-- Sequence: `acs-brainstorm` (when needed) → `acs-settle-requirements` (reuse canonical requirements) → `acs-plan-delivery` → `acs-implement` / `acs-tdd` (criterion-based execution). The coordinator selects verified host capabilities or executes serially.
-- Optional execution loop: red -> green -> refactor.
-- Enforces story-by-story progression and blocks code-before-test behavior.
-
-## Shared Subagent Contract
-
-Most domains follow the same two-stage contract:
+Every lens in both skills follows the same two steps:
 
 ```text
-<domain>-explorer
-  - maps scope and emits structured domain context
-  - no severity assignment
-  - can return Status: NOT DETECTED
-
-<domain>-reviewer
-  - requires explorer output as first input
-  - emits Critical / Warning / Suggestion findings
-  - assigns Confidence (HIGH / MEDIUM / LOW)
-  - routes out-of-scope issues via cross-reference recommendations
+map    — record what exists in scope with file:line anchors; no severity; may be NOT DETECTED
+judge  — apply the lens checks; assign severity and confidence (HIGH / MEDIUM / LOW);
+         route out-of-scope issues as cross-references
 ```
 
-Operational defaults:
-
-- Explorers: haiku, typically `Read` + `Grep` + `Glob`.
-- Reviewers: sonnet, `Read` + `Grep`, plan permission mode, read-only posture.
-- Reviewer sequencing rule: reviewers consume available explorer evidence; the coordinator selects parallel or inline execution based on authorization and capability.
+A lens runs inline by default. When the coordinator allows delegation, a lens may run as a delegated task whose whole instruction is that lens's section of the reference file. Test-first feature delivery is `acs-implement` with `acs-tdd`, not a review lens.
 
 ## Cross-Skill Handoff
 
-Use cross-reference routing when a finding belongs to the other skill:
+Use cross-reference routing when a finding belongs to the other level:
 
-- Design-level issue found during `acs-review-code-quality` -> reference `acs-review-architecture` with aspect hint (`business`, `application`, `data`, `technology`, `deploy`, `adr`).
-- Code-level issue found during `acs-review-architecture` -> reference `acs-review-code-quality` with domain hint (`api`, `db`, `auth`, `reliability`, `performance`, `security`, `code-reviewer`).
+- Design-level issue found during `acs-review-code-quality` -> reference the owning card (`ARC` with lens hint `business`, `application`, `data`, `technology`, `deploy`, `adr`; or `MOD`, `CON`, `TST`).
+- Code-level issue found by a design card -> ledger row with status `routed` to `acs-review-code-quality` with domain hint (`api`, `db`, `auth`, `reliability`, `performance`, `security`, `code`).
 
 This keeps findings MECE and avoids duplicate or contradictory reporting.
 
@@ -177,7 +142,7 @@ DO                                          DON'T
 Use coordinator-selected execution          Require unavailable delegation
 Pass scoped file lists when restricted      Review outside the requested scope
 Preserve file:line anchors and confidence   Paraphrase away evidence
-Consolidate before presenting               Dump raw subagent outputs at user
+Consolidate before presenting               Dump raw lens outputs at user   
 Keep LOW confidence out of Critical         Promote uncertain claims to blockers
 Route cross-domain findings via references  File findings on the wrong side
 ```
@@ -186,7 +151,7 @@ Route cross-domain findings via references  File findings on the wrong side
 
 | Skill | Artifact path |
 |---|---|
-| `acs-review-architecture` | `docs/eng-reviews/review-architecture-<YYYYMMDD-HHMM>.md` |
+| Technical design cards | `docs/design/technical-design.md` + `.html` view |
 | `acs-review-code-quality` | `docs/eng-reviews/next-steps-<branch>-<YYYYMMDD-HHMM>.md` |
 
 Preserve established artifact homes; new local change evidence defaults to `docs/changes/<change-id>/verification/`. Each report includes canonical change/task, criterion/contract references, consumed revisions, environment assumptions, failures/omissions, and actionable next steps. Standards and Spec verdicts remain separate. Use the [shared handoff envelope](../protocols/skill-declarations.md#handoff-envelope) and [coordinator](../workflows/context-coordination.md).
@@ -194,5 +159,5 @@ Preserve established artifact homes; new local change evidence defaults to `docs
 ## Pointers
 
 - Skills: `system/skills/`
-- Subagents: `system/agents/`
-- Runtime copies (if used): `.claude/skills/...`, `.claude/agents/...`
+- Lens checklists: each skill's `references/` folder
+- Runtime copies (if used): `.claude/skills/...`
