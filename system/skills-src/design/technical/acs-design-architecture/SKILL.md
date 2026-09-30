@@ -1,6 +1,6 @@
 ---
 name: acs-design-architecture
-description: Design or review the system shape — feature-to-capability map, current/ideal/feasible architecture, shared foundations, data/technology/deploy fit, and the decision ledger. Use for greenfield architecture, brownfield audits ("this is tangled", "tech debt", "audit architecture"), or architecture review; writes the ARC section of the shared technical-design.md.
+description: Design or review the system shape — feature-to-capability map, current/ideal/feasible architecture, shared foundations, data/technology/deploy fit, and the decision ledger. Use for greenfield architecture, brownfield audits ("this is tangled", "tech debt", "audit architecture"), architecture review, or ADR review (run the `adr` lens alone to re-judge accumulated ADRs and deprecate or supersede those that no longer hold); writes the ARC section of the shared technical-design.md.
 ---
 
 # Design Architecture
@@ -81,6 +81,19 @@ For a whole-system review, apply the six lenses in [architecture-lenses.md](refe
 Scope is whole codebase or a subtree by default; architecture findings need surrounding context that a narrow diff hides. For scoped runs, capture the file list first and use it for every lens. An empty scope stops here.
 
 When the coordinator allows delegation, a lens may run as a delegated task whose instruction is that lens's section of the reference; otherwise run it inline. Lens findings become `FND-ARC` rows with their confidence and anchors quoted verbatim, never paraphrased. The `adr` lens fills the Decisions ledger. A lens that was not run is recorded as `not assessed` in `### Open`. Code-level defects a lens surfaces (handler validation, SQL, concrete auth/reliability/security/perf bugs, test quality) are `routed` to `acs-review-code-quality`, not kept as ARC findings.
+
+## ADR upkeep
+
+A ledger status that never reaches the ADR leaves the file claiming `accepted` for a decision the review just rejected. Whenever decision statuses are assigned — the `adr` lens or the brownfield `Decisions` row — propose one edit per non-`Sound` decision at the configured decision-record home, in [ADR format](references/ADR-FORMAT.md):
+
+| Status | ADR edit |
+| --- | --- |
+| `Stale` | Set `Status: deprecated`; one line naming what stopped relying on it. |
+| `Reconsider` | New ADR recording the changed assumption and the replacement decision; the old ADR gets `Status: superseded by ADR-NNNN`. |
+| `Drifted` | Ask which way: restore enforcement (route the violation to implementation, ADR unchanged) or accept the drift (new superseding ADR). |
+| `Missing-but-needed` | New ADR when it meets [the ADR bar](references/ADR-FORMAT.md#when-to-offer-an-adr); otherwise a `## Decisions` row only. |
+
+Present the proposed edits as one table beside their `FND-ARC` anchors and apply only confirmed rows. Never rewrite an accepted ADR's decision in place: history stays, and replacement is recorded by supersession. Each new ADR gets its changelog line like any other. These edits are the one write this skill makes outside the record.
 
 ## Done when
 

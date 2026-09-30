@@ -1,6 +1,6 @@
 # Architecture Lenses
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 Deep mode applies these six lenses to the whole system or a subtree. For each lens, first **map** (read the listed sources and record facts with `file:line` anchors), then **judge** (apply the checks). Mapping stays in structure: do not read handler logic or query bodies.
 
@@ -82,3 +82,5 @@ A lens can run inline or as a delegated task. A delegated task gets this file's 
 - `Stale`: written, but nothing relies on it.
 
 Also flag decisions that conflict at a boundary, cross-cutting concerns with no decision, and rules that no test or lint enforces.
+
+Anchor each decision to its ADR path when one exists. The coordinator turns non-`Sound` statuses into ADR edits under `## ADR upkeep` in the skill; a delegated lens only reports them.
