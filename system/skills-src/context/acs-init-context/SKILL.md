@@ -55,9 +55,11 @@ Reuse settled choices. Resolve only these missing values:
 
 Configuration is complete when a cold session can resolve both memory classes and enabled domain homes without guessing.
 
-## 3. Propose one write plan
+## 3. Confirm the configuration
 
-List exact files to create or update, existing content to preserve, verification commands, and any dependency installation. Apply already authorized setup changes; ask only for unresolved choices or actions outside authorization. A skipped item stays unchanged.
+Present the resolved configuration in one message: a table with every value from step 2 — work root, recovery entry, tracker, change records, active effort, domain homes, not-context rules with reason codes, retention window, decision records, changelog, code index — each tagged `keep`, `create`, or `repair` with the repository evidence or user decision that resolved it. Below it, list exact files to create or update, existing content to preserve, verification commands, and any dependency installation.
+
+Ask one confirmation question for the whole plan, not one per value; amendments come back as named rows. This gate exists because later syncs treat these values as reviewed repository facts: the not-context rules decide what a census excludes, and the retention window is what authorizes an `EXPIRE`. Existing explicit authorization for a named value persists and is not re-requested. A skipped or declined item stays unchanged. A non-interactive run stops here, records the unconfirmed configuration as an open question, and writes nothing.
 
 The plan may include:
 
@@ -89,6 +91,8 @@ Load [`references/canonical-doc-layout.md`](references/canonical-doc-layout.md).
 - product intent -> the configured durable product document (new default `docs/product/<product-slug>/product.html`)
 
 Use [`references/CONTEXT-FORMAT.md`](references/CONTEXT-FORMAT.md) and [`references/ADR-FORMAT.md`](references/ADR-FORMAT.md) only when that branch is earned. Preserve unique rationale and leave pointers where a fact moved.
+
+Route only the facts encountered while establishing homes. A full sweep of an existing document tree is `acs-sync-context` Full mode, run after this setup so the census has confirmed not-context rules and a retention window to work from.
 
 This step is complete when each routed fact has one canonical home and routing files contain pointers rather than copies.
 

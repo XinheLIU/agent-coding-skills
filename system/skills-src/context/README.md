@@ -6,8 +6,8 @@ The [shared protocol](../../protocols/skill-declarations.md) defines **Working M
 
 | Skill | Use it for |
 | --- | --- |
-| `acs-init-context` | Configure routing and canonical homes when absent |
-| `acs-sync-context` | Audit every document into its memory class, confirm the plan, then reconcile drift and retention |
+| `acs-init-context` | Configure routing and canonical homes when absent; confirms the configuration before writing |
+| `acs-sync-context` | Audit every document into its memory class, confirm the plan, then reconcile drift and retention — including cleanup of a messy document tree (run init first when routing is absent) |
 | `acs-translate-agent-context` | Preserve behavior across runtime surfaces |
 | `acs-engineer-domain-model` | Maintain shared terminology and consequential ADRs |
 | `acs-manage-context` | Compatibility entry for older callers |

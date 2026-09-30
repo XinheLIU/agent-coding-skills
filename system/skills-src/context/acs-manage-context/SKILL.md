@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Manage Context
 
-Last updated: 2026-09-25
+Last updated: 2026-09-26
 
 ## Context contract
 
@@ -29,4 +29,4 @@ This entry retains the former context router's behavior. Older callers must migr
 2. Use `acs-init-context` when setup is requested, or missing/lost routing blocks a required persistent write after checking explicit sources, established homes, and protocol defaults. Preserve any other established routing found during inspection.
 3. Use `acs-sync-context` to inspect or reconcile drift in existing context. If routing is absent, a read-only inspection can still use explicit sources; hand off to `acs-init-context` only when the requested repair needs routing.
 
-Missing `docs/agents/memory.md` alone does not require setup. Routing is complete when the focused skill has taken over, or a read-only request has been answered from explicit sources. Canonical contracts live under `system/protocols/`; compatibility aliases contain no independent rules.
+Missing `docs/agents/memory.md` alone does not require setup. Before handing off, state the chosen skill, its mode where one applies, and the observation that selected it, in one sentence; when two routes fit the request, ask instead of choosing. Routing is complete when the focused skill has taken over, or a read-only request has been answered from explicit sources. Canonical contracts live under `system/protocols/`; compatibility aliases contain no independent rules.

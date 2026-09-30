@@ -10,7 +10,7 @@ Procedure for the census, effort verdicts, and why-extraction steps of [`acs-syn
 git ls-files '*.md' '*.html'
 ```
 
-Report untracked candidates from a separate named scan. Do not walk the filesystem for the boundary: a bare `find` descends into vendored corpora that repository instructions forbid touching, inflating the count with files no disposition applies to.
+The work root is ignored, so nothing in it appears in that list. Enumerate it with a second named scan of the configured work root, one `WORKING` row per run directory: the execution plans, raw outputs, claims, and handoffs that completion retention removes live there, and no history holds them once gone. Report any other untracked candidates from a third named scan. Do not walk the filesystem for the boundary: a bare `find` descends into vendored corpora that repository instructions forbid touching, inflating the count with files no disposition applies to.
 
 Read the configured `## Not context` rules from memory configuration before deriving any. They are a reviewed repository fact; re-deriving them each run invites disagreement between runs.
 
@@ -18,7 +18,7 @@ Narrow the boundary to changed paths in Fast mode. Fast mode then reports a scop
 
 ## Accounting
 
-Each document lands in exactly one classification row, or inside one named exclusion rule carrying its file count. Classified rows plus excluded counts equal the scan count. State that arithmetic; it is what makes the census reviewable, and "etc." breaks it.
+Each document lands in exactly one classification row, or inside one named exclusion rule carrying its file count. Classified rows plus excluded counts equal the scan count, stated for each scan. State that arithmetic; it is what makes the census reviewable, and "etc." breaks it.
 
 Exclusion rules name a path pattern, its reason code, and its count:
 
@@ -69,7 +69,7 @@ Present one message in this order:
 
 1. **Scope** — one line: mode, baseline, and counts, including how many were classified and how many excluded by how many rules.
 2. **Exclusions** — the rule table, a line per rule. It answers "did you look at everything" before the reader wonders.
-3. **Classified rows grouped by disposition**, least destructive first. Collapse `OK` to a count. Expand `DELETE` and `EXPIRE` last and in full, every path spelled out with its basis and why destination.
+3. **Classified rows grouped by disposition**, least destructive first. Collapse `OK` to a count. Expand `DELETE` and `EXPIRE` last and in full, every path spelled out with its basis and why destination, and every untracked path marked unrecoverable.
 4. **The close** — state what is established from tag, commit, or shipped-structure evidence; what rests on age alone, named as an assumption with its consequence; and where repository evidence and a document's own claims disagree, with the observation that settles it.
 5. **One question per disposition group** — confirm, amend named rows, or decline. Not one question per file: a retention sweep is a batch decision, and twenty sequential prompts is the same defect in another costume. Declining ends the run with the census as the deliverable.
 

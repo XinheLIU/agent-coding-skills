@@ -1,6 +1,6 @@
 ---
 name: acs-sync-context
-description: Inventory and classify every repository document into its memory class, then repair shared-context drift. Use for a whole-repository documentation audit, stale or abandoned plan documents, broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state. Presents a classification table and confirms the edit plan before moving, promoting, or removing anything; if routing is absent, inspect explicit sources read-only or use acs-init-context when setup is needed.
+description: Inventory and classify every repository document into its memory class, then repair shared-context drift. Use for a whole-repository documentation audit, cleaning up a messy documentation tree (scattered, stale, or malformed Markdown and HTML files) back to the protocol, stale or abandoned plan documents, broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state. Presents a classification table and confirms the edit plan before moving, promoting, or removing anything; if routing is absent, inspect explicit sources read-only or run acs-init-context first when setup is needed.
 ---
 
 # Sync Context
@@ -29,7 +29,9 @@ Use the [protocol](../../resources/protocols/skill-declarations.md) and [documen
 - **Fast**: narrow the census boundary to changed paths, report scoped findings, claim no completeness. Stops after step 3.
 - **Full**: account for every document in the boundary, then reconcile affected domain context, active runs, optional indexes, and completion retention.
 
-Steps 1 through 4 are read-only in both modes. An inventory-only request is Full mode declined at step 5.
+Steps 1 through 4 are read-only in both modes; Fast mode writes nothing. An inventory-only request is Full mode declined at step 5.
+
+Cleaning up a messy document tree is Full mode. When that repository has no routing, run `acs-init-context` first: the census reads its confirmed not-context rules, and the retention verdicts rest on its confirmed window. Without them, every exclusion and every `EXPIRE` here would be a per-run guess.
 
 ## 1. Scope and baseline
 
@@ -39,9 +41,9 @@ Use a requested revision/range, merge, release, or last successful sync as the b
 
 ## 2. Census
 
-Account for every tracked `.md` and `.html` file in the boundary. Each lands in exactly one classification row, or inside one named exclusion rule carrying its file count. Read the configured `## Not context` rules before deriving any.
+Account for every tracked `.md` and `.html` file in the boundary, and every run directory under the configured work root as one row each. Each lands in exactly one classification row, or inside one named exclusion rule carrying its file count. Read the configured `## Not context` rules before deriving any.
 
-Complete when classified rows plus excluded counts equal the scan count, stated explicitly, with no row implied by "etc."
+Complete when classified rows plus excluded counts equal the scan count for each scan, stated explicitly, with no row implied by "etc."
 
 ## 3. Classify
 
@@ -61,7 +63,7 @@ Give each Working-class row `COMPLETE`, `PARTIAL`, `ONGOING`, or `ABANDONED` fro
 
 Persist the census, then present scope, exclusions, rows grouped by disposition with the destructive groups last and expanded, the close, and one question per disposition group.
 
-Before this gate, apply nothing but in-place repair of broken links and stale paths within this skill's ownership, and list each one as applied — [ordinary factual updates need no approval](../../resources/protocols/presenter.md#review-reconciliation). `MOVE`, `PROMOTE`, `COMPACT`, `DELETE`, and `EXPIRE` require confirmation here, per group, naming exact paths. Existing explicit authorization for a named action persists and is not re-requested.
+At this step, and only in Full mode, repair broken links and stale paths within this skill's ownership without asking, listing each as applied — [ordinary factual updates need no approval](../../resources/protocols/presenter.md#review-reconciliation). Every other non-`OK` group gets its question here, naming exact paths: an `UPDATE` that changes an assertion rather than a reference, `STRUCTURAL`/`MISSING` that creates files, and `MOVE`, `PROMOTE`, `COMPACT`, `DELETE`, and `EXPIRE` that move or remove them. A row whose path is untracked is marked unrecoverable in the presentation; a tracked deletion survives in history, an untracked one does not. Existing explicit authorization for a named action persists and is not re-requested.
 
 Complete when the user has confirmed, amended, or declined each group. Declining ends the run with the census as the deliverable. A non-interactive run stops here, records the unconfirmed plan as an open question, and applies nothing destructive.
 
@@ -80,14 +82,18 @@ For every confirmed `PROMOTE` or `EXPIRE` row, separate rationale from procedure
 - Design acceptance preserved consequential rationale under [the Design contract](../../resources/protocols/design-memory.md), independently of component documentation.
 - Final verification identifies criteria, code/diff revision, environment, failures, omissions, and release references where applicable.
 
+A check that would change Persistent content or remove a file is a finding, not an action: collect these into one supplementary group and confirm it under the step 5 rule before step 8. Refreshing a derived view by its recorded command and repairing the recovery entry need no confirmation.
+
 ## Completion retention
 
-Follow the protocol's retention gate. Retain the canonical ticket/spec, required proposals, accepted designs/contracts, exact reviewed content, consequential and review decisions, compact verification and release references in Persistent Changes. Reconcile applicable Persistent Current. Verify all essential links and rationale with the run directory unavailable before removing execution plans, raw outputs, claims, temporary excerpts, or handoffs. A tracked spec does not become disposable on implementation.
+Follow the protocol's retention gate. Retain the canonical ticket/spec, required proposals, accepted designs/contracts, exact reviewed content, consequential and review decisions, compact verification and release references in Persistent Changes. Reconcile applicable Persistent Current. Verify all essential links and rationale with the run directory unavailable before removing execution plans, raw outputs, claims, temporary excerpts, or handoffs. A tracked spec does not become disposable on implementation. Nothing leaves the work root on the basis of a row it never appeared in.
 
 Working Memory past the configured retention window is presumed abandoned and may be expired once its unique durable facts are promoted and the user confirms. Age authorizes that decision; it does not waive promotion.
 
 ## 8. Apply, verify, report
 
 Apply confirmed actions. Return domain findings to their owners; absent a specialized skill, the active agent can perform competent domain work under its contract. Ask only for actions outside existing authorization, naming the concrete proposed change.
+
+The report lists each written ADR and changelog line beside the row it was extracted from; the uncommitted diff is the acceptance surface for that extraction. For an unrecoverable row, present the extraction and wait for acknowledgment before removing the source: the step 5 confirmation authorized the removal on the condition that extraction succeeded, and only the user can judge that for content no history will hold.
 
 Preserve unrelated and user-authored records, update Markdown dates, and verify changed references. Record the retention outcome as a Persistent Changes entry naming what was removed and on what basis. Report applied, deferred, and still-blocked findings with scope and evidence. Synchronization is complete only when all applied actions are verified and retained change records survive cleanup with removed sources unavailable. No commit is implied.
