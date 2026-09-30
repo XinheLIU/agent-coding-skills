@@ -1,8 +1,18 @@
 # Changelog
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Unreleased
+
+### Visual reports are checked per card and carry a date
+
+Generated HTML views could satisfy the visual contract on paper and still ship as tables and prose. Three things allowed it: Contracts, Test Strategy, and Traceability were exempt from visuals; any card could skip its comparison by "stating why"; and the validator only looked for the words "before" and "after" somewhere on the page. No skill ran the validator either.
+
+- `visual-report.md` adds a card skeleton and `data-visual` (`compare` / `single` / `none`). Every card has a visual, and a table sits beside its diagram instead of replacing it. SVG labels are capped at 14 words each and 90 words per diagram. SVG colors use theme tokens. The header has one `YYYY-MM-DD · revision · scope` line.
+- Date and version: every view carries `<meta name="generated">` and `<meta name="source-revision">`. One-off reports are named `<slug>-YYYY-MM-DD.html`. Living views such as `technical-design.html` keep their path and declare `view-kind="living"`.
+- `validate-report-html.py` checks each card, and each producing skill runs it before handover. `scripts/validate-visual-report.py` now delegates its HTML checks to it.
+- The tabbed template now meets the contract it demonstrates.
+- The date and version rule now covers every human-readable HTML file, not only visual reports. `presenter.md` and `html-records.md` require the meta tags on canonical records (`product.html`, `discovery.html`, `prototype.html`), roadmaps, delivery plans, and design previews. `render_dag.py` and `gen-roadmap.py` write the tags themselves. The validator gains `--version-only` (date, revision, and links only; no card rules), and every plan, PRD, UX, and DAG skill runs it after writing. Existing records gain the tags on their next write.
 
 ### Technical design becomes five aspect cards on one record
 

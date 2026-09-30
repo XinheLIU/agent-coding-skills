@@ -1,13 +1,13 @@
 ---
 protocol: acs:presenter
-version: 1.1.0
+version: 1.2.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/presenter.md
 ---
 
 # Presenter and Human Review
 
-Last updated: 2026-09-26
+Last updated: 2026-09-30
 
 Use this contract when preparing a human reading/review view, receiving feedback on a view, or retaining reviewed evidence. It specializes the [memory and ownership protocol](skill-declarations.md); it adds neither a service nor an approval gate.
 
@@ -38,6 +38,17 @@ Per-skill `HTML-REPORT.md` references only add that skill's content requirements
 2. Organize existing conclusions around the focus. Mark any Working-only execution information as provisional run state and link its checkpoint. Keep rendering intermediates in Working; no persistent parallel ViewModel is required.
 3. Show source references and revisions, domain status and applicable review findings. A view contains no unique domain conclusion or hidden second copy of canonical state. Retain the existing renderer/template where suitable.
 4. Verify that links and the visible meaning agree with the sources. The delivered view represents the listed revisions. Refresh by rereading sources; rendering never mutates them. A static offline page cannot automatically detect later source changes.
+
+## Date and version
+
+Every human-readable HTML file an ACS skill writes — views, roadmaps, delivery plans, design previews, and the canonical records under [HTML record format](html-records.md) — tells a later reader which day and which source it represents:
+
+```html
+<meta name="generated" content="YYYY-MM-DD">
+<meta name="source-revision" content="<git short sha, record revision, or untracked>">
+```
+
+The same date and revision appear on a visible line near the top. A one-off report is named `<slug>-YYYY-MM-DD.html`; a file rebuilt or edited at a fixed path (`technical-design.html`, `roadmap.html`, `delivery-plan.html`, `product.html`, `prototype.html`) keeps its path and adds `<meta name="view-kind" content="living">`. Before handover, run the [validator](../skills-src/authoring/scripts/validate-report-html.py): finding reports run it plainly, as the [visual report](../../skills/acs-design-architecture/references/visual-report.md) contract requires; every other HTML file runs it with `--version-only`. Fix every error.
 
 Generated reports, delivery roadmaps and DAGs can be removed and rebuilt without changing facts or decisions. Canonical `product.html` records and design prototypes are Persistent artifacts, even when human-readable: their contents and accepted visuals must not be discarded as derived presentation.
 

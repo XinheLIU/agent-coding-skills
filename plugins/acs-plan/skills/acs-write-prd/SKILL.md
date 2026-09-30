@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PRD Writer
 
-Last updated: 2026-09-26
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -104,7 +104,7 @@ Before saving or reporting readiness:
 - Verify unique IDs and resolving file/anchor links, including promotion pointers. No essential durable link may rely on disposable discovery.
 - Verify every record `<article>` carries a closed-list `data-kind` (see the contract's kind table) and sits inside one of the shared sections; every `roadmap-ticket` also carries `data-ticket-type`, links at least one research-basis record and one mission or vision, and its spec or prototype-decision links resolve. Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 - Check a repeated consolidation would enrich the same records rather than create duplicates. Check HTML facts remain readable without JavaScript.
-- Update the document's visible date and changed record dates. Return the durable path, affected anchors, consumed revisions, unresolved blockers, and next action for the coordinator to update run routing.
+- Update the document's visible date and changed record dates, set its `generated` and `source-revision` meta tags to match, and run the [validator](../../resources/skills-src/authoring/scripts/validate-report-html.py) with `--version-only`; fix every error. Return the durable path, affected anchors, consumed revisions, unresolved blockers, and next action for the coordinator to update run routing.
 
 Report the HTML path and the conclusions promoted, amended, or still unresolved. Before
 claiming the PRD is ready, state what was promoted versus what remains open and ask the user

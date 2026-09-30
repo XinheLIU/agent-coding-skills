@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Map Current Product
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 Read the standalone [visual report contract](references/visual-report.md) before creating or extending `discovery.html`. This local reference is bundled with the skill; do not depend on `/meta` or another installed skill.
 
@@ -145,6 +145,7 @@ Return the relevant anchors to the coordinator, open the resulting HTML for the 
 - Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
+- The document's `generated` and `source-revision` meta tags match its visible date and revision; run the [validator](../../resources/skills-src/authoring/scripts/validate-report-html.py) with `--version-only` and fix every error.
 - Run the suite's product-memory validator (`scripts/validate-product-memory.py`, resolved from the ACS suite root) when available; fix errors before reporting.
 
 ## Quality Bar

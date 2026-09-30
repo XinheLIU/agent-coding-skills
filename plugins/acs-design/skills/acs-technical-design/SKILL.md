@@ -5,7 +5,7 @@ description: Run technical design or design review as a set of aspect cards — 
 
 # Technical Design
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -73,7 +73,7 @@ Verdict: READY TO BUILD | NEEDS REVISION | AT RISK — <one-line reason>
 Next action: <one action, owning card or skill>
 ```
 
-- Ask Presenter to rebuild `docs/design/technical-design.html` from [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) when a human will read the result. Complex multi-card views use the tabbed layout in [the visual report contract](../acs-design-architecture/references/visual-report.md).
+- Ask Presenter to rebuild `docs/design/technical-design.html` from [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) when a human will read the result. Complex multi-card views use the tabbed layout in [the visual report contract](../acs-design-architecture/references/visual-report.md). Run the contract's validator on the rebuilt view and fix every error before handover.
 
 `READY TO BUILD` requires: every accepted requirement has an ARC or MOD owner, every CON item names where it is enforced, every critical path has a TST layer, and no open `P0`.
 

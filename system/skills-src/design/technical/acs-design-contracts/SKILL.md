@@ -5,7 +5,7 @@ description: Design or review correctness contracts — invariants, pre/postcond
 
 # Design Contracts
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -21,7 +21,7 @@ context:
 
 Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
 
-Follow [the card contract](../references/card-contract.md): read ARC and MOD, write only `## Contracts & Correctness (CON)` and `FND-CON-*` rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md).
+Follow [the card contract](../references/card-contract.md): read ARC and MOD, write only `## Contracts & Correctness (CON)` and `FND-CON-*` rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md); run the contract's validator and fix every error before handover.
 
 **Owns:** what must always be true, what each interface promises and requires, and what happens when something fails. **Does not own:** interface shape (MOD), how contracts are tested (TST), code-level violations (`acs-review-code-quality`).
 

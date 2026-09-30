@@ -3,7 +3,7 @@ name: acs-visual-design-variants
 description: "Explore three genuinely different visual directions — color, typography, weight — on interaction structure that is already locked. Requires locked wireframe sections in docs/design/prototype.html plus DESIGN.md; cannot move buttons, navigation, or state transitions. The approved direction merges into the canonical prototype as its styled section. Use to compare visual options or design variants before committing to one."
 ---
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -343,6 +343,7 @@ Before marking visual design complete:
 - [ ] Mobile responsive if the section specified mobile behavior
 - [ ] Accessibility contrast meets WCAG AA (check with browser tools)
 - [ ] Section markers intact: still locked, fidelity styled, data-updated current
+- [ ] `prototype.html` and each `variant-*.html` carry `generated` and `source-revision` meta tags matching the visible date and revision; the [validator](../../../authoring/scripts/validate-report-html.py) passes with `--version-only`
 
 ## Common Pitfalls
 

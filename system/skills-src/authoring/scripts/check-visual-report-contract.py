@@ -11,6 +11,9 @@ REQUIRED = (
     "Mermaid",
     "320",
     "top recommendation",
+    "data-visual",
+    'name="generated"',
+    "validate-report-html",
 )
 CONSUMERS = (
     ROOT / "design/technical/acs-technical-design",

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Pre-Mortem Analysis
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -162,6 +162,7 @@ A proposed pivot or scope cut stays a proposal. Record user-authorized changes w
 - Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
+- The document's `generated` and `source-revision` meta tags match its visible date and revision; run the [validator](../../resources/skills-src/authoring/scripts/validate-report-html.py) with `--version-only` and fix every error.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do

@@ -1,19 +1,19 @@
 ---
 protocol: acs:html-records
-version: 1.0.0
+version: 1.1.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/html-records.md
 ---
 
 # HTML Record Format
 
-Last updated: 2026-09-26
+Last updated: 2026-09-30
 
 This is the shared serialization grammar for canonical HTML memory documents — currently product memory (`product.html`, `discovery.html`) and the design prototype (`prototype.html`). It defines *how* records are written and retrieved. Which records exist, who owns them, and what their statuses mean belong to the domain contracts ([Product](product-memory.md), [Design](design-memory.md)); derived human views belong to [Presenter](presenter.md).
 
 ## Self-contained document
 
-Use a readable, self-contained document: UTF-8, responsive viewport, title, visible update date, inline shared CSS once, semantic headings, lists, tables, links, and native `<details>`. The document needs no build step and opens from `file://`. All canonical facts must be readable from source HTML with JavaScript disabled. No remote dependency is required to read the document. Reuse the document's existing visual style instead of redesigning it on each skill run.
+Use a readable, self-contained document: UTF-8, responsive viewport, title, visible update date and revision with matching `generated`, `source-revision`, and `view-kind="living"` meta tags (see [Presenter date and version](presenter.md#date-and-version)), inline shared CSS once, semantic headings, lists, tables, links, and native `<details>`. The document needs no build step and opens from `file://`. All canonical facts must be readable from source HTML with JavaScript disabled. No remote dependency is required to read the document. Reuse the document's existing visual style instead of redesigning it on each skill run.
 
 Record IDs and `data-*` attributes are the reading contract; visual classes are not. Never store a second semantic copy in Markdown, embedded JSON, JavaScript state, or browser storage. Browser localStorage may hold UI preferences only, never decisions or sole feedback copies.
 
@@ -42,4 +42,4 @@ This is why documents must stay concise: one record per subject, links instead o
 
 ## Writing
 
-Section tags do not provide concurrency control. Serialize writes to each shared file under the [shared protocol](skill-declarations.md#coordinated-writes-and-claims). Immediately before applying a patch, reread its target and referenced premises; if they changed, reconcile first. Never overwrite a shared file from a stale whole-document snapshot. Preserve unrelated fields, user edits, IDs, and layout. Update visible `Last updated` dates on changed records and the document.
+Section tags do not provide concurrency control. Serialize writes to each shared file under the [shared protocol](skill-declarations.md#coordinated-writes-and-claims). Immediately before applying a patch, reread its target and referenced premises; if they changed, reconcile first. Never overwrite a shared file from a stale whole-document snapshot. Preserve unrelated fields, user edits, IDs, and layout. Update visible `Last updated` dates on changed records and the document, and set the document's `generated` and `source-revision` meta tags to match. A document written before this rule gains the tags on its next write. After writing, run the [validator](../resources/skills-src/authoring/scripts/validate-report-html.py) with `--version-only` and fix every error.

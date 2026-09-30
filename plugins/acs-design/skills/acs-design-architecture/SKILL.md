@@ -5,7 +5,7 @@ description: Design or review the system shape — feature-to-capability map, cu
 
 # Design Architecture
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -21,7 +21,7 @@ context:
 
 Shared semantics: [memory and handoff protocol](../../resources/protocols/skill-declarations.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
-Follow [the card contract](../../resources/skills-src/design/technical/references/card-contract.md): read the record, write only `## Architecture (ARC)` and `FND-ARC-*` ledger rows. Views follow [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) and [the visual report contract](references/visual-report.md).
+Follow [the card contract](../../resources/skills-src/design/technical/references/card-contract.md): read the record, write only `## Architecture (ARC)` and `FND-ARC-*` ledger rows. Views follow [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) and [the visual report contract](references/visual-report.md); run the contract's validator and fix every error before handover.
 
 **Owns:** what the parts of the system are, who owns each capability, what is shared and in what form, and whether the stack and topology fit the workload. **Does not own:** module interfaces (MOD), invariants and failure semantics (CON), code-level defects (`acs-review-code-quality`).
 

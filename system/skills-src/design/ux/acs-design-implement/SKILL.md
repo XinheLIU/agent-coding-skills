@@ -3,7 +3,7 @@ name: acs-design-implement
 description: "Turn an approved visual design into production code in the project's own stack and conventions, with design tokens wired up, WCAG AA met, and the component documented in docs/design/components/. Requires a styled section in docs/design/prototype.html and DESIGN.md. Use to implement or build a design that is already settled, not to explore one."
 ---
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -316,6 +316,7 @@ Before finalizing:
 - [ ] Touch targets 44x44px minimum on mobile
 - [ ] Responsive tested (375px, 768px, 1024px breakpoints)
 - [ ] Component API documented with prop types
+- [ ] `prototype.html` carry `generated` and `source-revision` meta tags matching the visible date and revision; the [validator](../../../authoring/scripts/validate-report-html.py) passes with `--version-only`
 - [ ] Usage example provided
 - [ ] Matches tech stack conventions (file naming, folder structure)
 

@@ -11,6 +11,8 @@ Output defaults to <effort-dir>/roadmap.html.
 import sys
 import json
 import re
+import subprocess
+from datetime import date
 from pathlib import Path
 
 
@@ -203,13 +205,17 @@ HTML_TEMPLATE = """\
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generated" content="__GENERATED__">
+<meta name="source-revision" content="__SOURCE_REVISION__">
+<meta name="view-kind" content="living">
 <title>Roadmap</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   background:#0f172a;color:#e2e8f0;min-height:100vh}
 #app{padding:24px;max-width:calc(100vw - 360px);overflow-x:hidden}
-h1{font-size:1.3rem;font-weight:600;color:#f8fafc;margin-bottom:14px}
+h1{font-size:1.3rem;font-weight:600;color:#f8fafc;margin-bottom:4px}
+.meta{font-size:.73rem;color:#94a3b8;margin-bottom:14px}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:.73rem;color:#94a3b8}
 .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -244,6 +250,7 @@ h1{font-size:1.3rem;font-weight:600;color:#f8fafc;margin-bottom:14px}
 <body>
 <div id="app">
   <h1>Roadmap</h1>
+  <p class="meta">__GENERATED__ &middot; __SOURCE_REVISION__</p>
   <div class="legend" id="legend"></div>
   <div id="lanes"></div>
 </div>
@@ -387,7 +394,14 @@ def _serialise_lane(lane: dict) -> dict:
     }
 
 
-def generate_html(data: dict) -> str:
+def repository_revision(directory: Path) -> str:
+    """Short HEAD of the repository holding the effort; "untracked" outside git."""
+    result = subprocess.run(["git", "-C", str(directory), "rev-parse", "--short", "HEAD"],
+                            capture_output=True, text=True)
+    return result.stdout.strip() if result.returncode == 0 else "untracked"
+
+
+def generate_html(data: dict, generated: str, source_revision: str) -> str:
     tasks_out = {}
     for tid, t in data["tasks"].items():
         tasks_out[tid] = {k: v for k, v in t.items() if not k.startswith("_")}
@@ -399,7 +413,9 @@ def generate_html(data: dict) -> str:
         "tasks": tasks_out,
         "cross_edges": data["cross_edges"],
     }, ensure_ascii=False)
-    return HTML_TEMPLATE.replace("__DATA_JSON__", payload)
+    return (HTML_TEMPLATE.replace("__GENERATED__", generated)
+            .replace("__SOURCE_REVISION__", source_revision)
+            .replace("__DATA_JSON__", payload))
 
 
 def main() -> None:
@@ -415,7 +431,7 @@ def main() -> None:
         else effort_dir / "roadmap.html"
     )
     data = build_data(effort_dir)
-    html = generate_html(data)
+    html = generate_html(data, date.today().isoformat(), repository_revision(effort_dir))
     out_path.write_text(html, encoding="utf-8")
     n_specs = sum(1 for l in data["lanes"] if l["spec"]["id"] != "__standalone__")
     print(f"wrote {out_path}")

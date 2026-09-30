@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generated" content="2026-09-19">
+<meta name="source-revision" content="a1b2c3d">
 <title>Discovery Report — Tabbed Template</title>
 <style>
 /* CSS Variables for light/dark mode */
@@ -462,7 +464,7 @@ li {
 
 <!-- Header: Title + Subtitle -->
 <h1>Discovery Report Template</h1>
-<p class="subtitle">Last updated: 2026-09-19 · Example tabbed structure</p>
+<p class="subtitle">2026-09-19 · <code>a1b2c3d</code> · Example tabbed structure</p>
 
 <!-- Metrics Card: At-a-glance summary -->
 <div class="metrics-card">
@@ -526,25 +528,26 @@ li {
     <p>Current architecture has 4 structural issues across the layering boundary.</p>
 
     <!-- Example Problem Card 1 -->
-    <div class="comparison-card">
+    <article class="card comparison-card" id="problem-1" data-visual="compare">
       <h3>
         Problem 1: Schema Leak
         <span class="badge badge-high">High</span>
       </h3>
 
       <div class="comparison">
-        <div class="before">
+        <div class="before pane">
           <h4>Current ❌</h4>
-          <svg class="diagram" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="10" width="260" height="40" fill="none" stroke="#dc2626" stroke-width="2"/>
+          <svg class="diagram" role="img" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
+            <title>Schema enums live in SKILL.md and leak into the CLI</title>
+            <rect x="10" y="10" width="260" height="40" fill="none" stroke="var(--problem)" stroke-width="2"/>
             <text x="140" y="35" text-anchor="middle" fill="currentColor" font-size="14" font-weight="600">SKILL.md (193 lines)</text>
-            <rect x="10" y="70" width="260" height="40" fill="none" stroke="#78716c" stroke-width="1"/>
+            <rect x="10" y="70" width="260" height="40" fill="none" stroke="var(--mut)" stroke-width="1"/>
             <text x="140" y="95" text-anchor="middle" fill="currentColor" font-size="14">CLI</text>
-            <path d="M 80 50 L 80 70" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowred)"/>
-            <text x="85" y="65" fill="#dc2626" font-size="11">leak</text>
+            <path d="M 80 50 L 80 70" stroke="var(--problem)" stroke-width="2" marker-end="url(#arrowred)"/>
+            <text x="85" y="65" fill="var(--problem)" font-size="11">leak</text>
             <defs>
               <marker id="arrowred" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--problem)"/>
               </marker>
             </defs>
           </svg>
@@ -555,17 +558,18 @@ codeFormats: [...]</code></pre>
           <p class="cost">Cost: Goes stale after DB migration, no type safety</p>
         </div>
 
-        <div class="after">
+        <div class="after pane">
           <h4>Target ✅</h4>
-          <svg class="diagram" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10" y="10" width="260" height="40" fill="none" stroke="#16a34a" stroke-width="2"/>
+          <svg class="diagram" role="img" width="280" height="140" xmlns="http://www.w3.org/2000/svg">
+            <title>SKILL.md fetches the schema from the CLI</title>
+            <rect x="10" y="10" width="260" height="40" fill="none" stroke="var(--ok)" stroke-width="2"/>
             <text x="140" y="35" text-anchor="middle" fill="currentColor" font-size="14" font-weight="600">SKILL.md (60 lines)</text>
-            <rect x="10" y="70" width="260" height="40" fill="none" stroke="#16a34a" stroke-width="2"/>
+            <rect x="10" y="70" width="260" height="40" fill="none" stroke="var(--ok)" stroke-width="2"/>
             <text x="140" y="95" text-anchor="middle" fill="currentColor" font-size="14">CLI (schema describe)</text>
-            <path d="M 140 50 L 140 70" stroke="#16a34a" stroke-width="2" marker-end="url(#arrowgreen)"/>
+            <path d="M 140 50 L 140 70" stroke="var(--ok)" stroke-width="2" marker-end="url(#arrowgreen)"/>
             <defs>
               <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a"/>
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ok)"/>
               </marker>
             </defs>
           </svg>
@@ -576,6 +580,8 @@ horizon schema describe --output json
         </div>
       </div>
 
+      <p class="takeaway">The schema moves out of prose and behind one CLI call.</p>
+
       <details class="evidence">
         <summary>Evidence (3 files affected)</summary>
         <ul>
@@ -584,32 +590,9 @@ horizon schema describe --output json
           <li><code>worklogCommands.ts</code> — status checks hardcoded from SKILL.md</li>
         </ul>
       </details>
-    </div>
+    </article>
 
-    <!-- Placeholder for Problems 2-4 -->
-    <div class="comparison-card">
-      <h3>
-        Problem 2: Aggregation Logic Leak
-        <span class="badge badge-medium">Medium</span>
-      </h3>
-      <p>Placeholder: CLI pulls full project graph + people, then triages in-memory. Should be server-side derived views.</p>
-    </div>
-
-    <div class="comparison-card">
-      <h3>
-        Problem 3: Consent Leaks to Prose
-        <span class="badge badge-high">High</span>
-      </h3>
-      <p>Placeholder: <code>--yes</code> is a token the model can type. Not real consent.</p>
-    </div>
-
-    <div class="comparison-card">
-      <h3>
-        Problem 4: No Batch Writes
-        <span class="badge badge-high">High</span>
-      </h3>
-      <p>Placeholder: Version increments after each write. Second command in a batch is always stale.</p>
-    </div>
+    <!-- Problems 2-4 repeat the article.card structure above: Before/After panes, takeaway, evidence. -->
 
   </div>
 
@@ -751,6 +734,11 @@ horizon plan apply --project &lt;ref&gt; --change-set cs.json \
   </div>
 
 </div>
+
+<section class="card" id="top-recommendation">
+  <h2>Top recommendation</h2>
+  <p><a href="#problem-1">Problem 1: Schema Leak</a> first: it stops schema drift with no server change.</p>
+</section>
 
 </main>
 

@@ -20,6 +20,7 @@ Canonical scans and derived manifests may add per-node fields:
 import argparse
 import json
 import os
+import subprocess
 from datetime import date
 from html import escape
 from pathlib import Path
@@ -179,6 +180,9 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generated" content="__GENERATED__">
+<meta name="source-revision" content="__SOURCE_REVISION__">
+<meta name="view-kind" content="living">
 <title>__TITLE__</title>
 <style>
 :root{--done-bg:#d1e7dd;--done-bd:#0f5132;--prog-bg:#fef9c3;--prog-bd:#a16207;--frontier-bg:#ffe3c2;--frontier-bd:#c2540c;--todo-bg:#dbeafe;--todo-bd:#1d4ed8;}
@@ -237,7 +241,7 @@ summary{cursor:pointer;}
 <body class="__BODY_CLASS__">
 <div id="toolbar">
   <h1>__TITLE__</h1>
-  <span class="sub">__WS_COUNT__ workstreams &middot; __NODE_COUNT__ tickets &middot; status from Markdown &middot; drag to rearrange</span>
+  <span class="sub">__GENERATED__ &middot; __SOURCE_REVISION__ &middot; __WS_COUNT__ workstreams &middot; __NODE_COUNT__ tickets &middot; status from Markdown &middot; drag to rearrange</span>
   <div class="legend">
     <span><span class="swatch" style="background:var(--done-bg);border:1px solid var(--done-bd)"></span>Finished</span>
     <span><span class="swatch" style="background:var(--prog-bg);border:1px solid var(--prog-bd)"></span>In progress</span>
@@ -437,8 +441,16 @@ render();
 """
 
 
+def repository_revision(directory: Path) -> str:
+    """Short HEAD of the repository holding the output; "untracked" outside git."""
+    result = subprocess.run(["git", "-C", str(directory), "rev-parse", "--short", "HEAD"],
+                            capture_output=True, text=True)
+    return result.stdout.strip() if result.returncode == 0 else "untracked"
+
+
 def render_html(workstreams, nodes, title, storage_key, tag_styles_all,
-                plan: DeliveryPlan | None = None, output_dir: Path = Path(".")):
+                plan: DeliveryPlan | None = None, output_dir: Path = Path("."),
+                *, generated: str, source_revision: str):
     done = {node["id"] for node in nodes if node["done"]}
     rows_json = json.dumps(
         [{"key": w["key"], "label": w["label"], "note": w.get("note", "")} for w in workstreams],
@@ -471,6 +483,8 @@ def render_html(workstreams, nodes, title, storage_key, tag_styles_all,
     tag_styles = {k: v for k, v in tag_styles_all.items() if k in used_tags}
     html = HTML_TEMPLATE
     html = html.replace("__TITLE__", escape(title))
+    html = html.replace("__GENERATED__", generated)
+    html = html.replace("__SOURCE_REVISION__", escape(source_revision))
     html = html.replace("__WS_COUNT__", str(len(workstreams)))
     html = html.replace("__NODE_COUNT__", str(len(nodes)))
     html = html.replace("__STORAGE_KEY__", json.dumps(storage_key).replace("<", "\\u003c"))
@@ -498,6 +512,11 @@ def main():
         default=None,
         help="localStorage key prefix for HTML output (default: derived from output filename)",
     )
+    ap.add_argument(
+        "--source-revision",
+        default=None,
+        help="Revision shown in the header and <meta name=\"source-revision\"> (default: git HEAD of the output directory)",
+    )
     args = ap.parse_args()
     if args.plan and args.format != "html":
         ap.error("--plan requires --format html")
@@ -512,7 +531,10 @@ def main():
     else:
         storage_key = args.storage_key or ("dag_" + args.out.stem)
         plan = json.loads(args.plan.read_text(encoding="utf-8")) if args.plan else None
-        out = render_html(workstreams, nodes, args.title, storage_key, tag_styles_all, plan, args.out.resolve().parent)
+        output_dir = args.out.resolve().parent
+        source_revision = args.source_revision or repository_revision(output_dir)
+        out = render_html(workstreams, nodes, args.title, storage_key, tag_styles_all, plan, output_dir,
+                          generated=date.today().isoformat(), source_revision=source_revision)
 
     args.out.write_text(out, encoding="utf-8")
     print(f"Wrote {args.format} DAG ({len(nodes)} nodes, {len(workstreams)} workstreams) -> {args.out}")

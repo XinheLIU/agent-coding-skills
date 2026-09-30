@@ -5,7 +5,7 @@ description: "Decide how a feature behaves before deciding how it looks — info
 
 # Design Interaction Flow
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -487,6 +487,7 @@ Before marking interaction design complete, verify:
 - [ ] Keyboard navigation patterns specified
 - [ ] Touch targets meet 44px minimum
 - [ ] Major interaction decisions documented with rationale
+- [ ] `prototype.html` and each wireframe draft carry `generated` and `source-revision` meta tags matching the visible date and revision; the [validator](../../../authoring/scripts/validate-report-html.py) passes with `--version-only`
 
 ## Common Pitfalls
 

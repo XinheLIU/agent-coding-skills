@@ -5,7 +5,7 @@ description: Render Markdown workstreams and dependency tickets as an interactiv
 
 # Draw Portfolio DAG
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -87,7 +87,7 @@ The legacy scanner supports only that shape. For other tracker schemas, supply a
 
    For `acs-plan-delivery`, pass `--plan plan.json -o docs/changes/<change-id>/delivery-plan.html` to embed the plan and DAG in one self-contained HTML file. Follow its [delivery report contract](../../build/acs-plan-delivery/references/delivery-report.md) for the derived summary, canonical ticket details, opening, and refresh behavior. The renderer derives the frontier and design-blocker list from the same ticket nodes as the graph.
 
-4. **Verify.** Compare output workstream, node, and dependency counts with the manifest; open HTML output when browser control is available. The graph is done when all verified dependencies render, completed tickets with current evidence are green, execution-ready frontier tickets are orange, design/unready/blocked tickets are blue, and displayed status matches canonical tickets without becoming independently editable.
+4. **Verify.** Compare output workstream, node, and dependency counts with the manifest; open HTML output when browser control is available. The graph is done when all verified dependencies render, completed tickets with current evidence are green, execution-ready frontier tickets are orange, design/unready/blocked tickets are blue, and displayed status matches canonical tickets without becoming independently editable. The renderer writes the `generated`, `source-revision`, and `view-kind="living"` meta tags (override the revision with `--source-revision`); confirm with the [validator](../scripts/validate-report-html.py) `--version-only`.
 
 ## Source and view
 

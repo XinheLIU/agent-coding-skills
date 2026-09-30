@@ -5,7 +5,7 @@ description: Design or review code structure — module responsibilities, deep i
 
 # Design Modules
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -21,7 +21,7 @@ context:
 
 Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
 
-Follow [the card contract](../references/card-contract.md): read ARC, write only `## Modules & Interfaces (MOD)` and `FND-MOD-*` rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md).
+Follow [the card contract](../references/card-contract.md): read ARC, write only `## Modules & Interfaces (MOD)` and `FND-MOD-*` rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md); run the contract's validator and fix every error before handover.
 
 **Owns:** where code lives, what each module exposes, which way dependencies point, and how the pieces are wired. **Does not own:** what the parts are (ARC), what must stay true across calls (CON), how it is tested (TST).
 

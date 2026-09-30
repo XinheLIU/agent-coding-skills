@@ -5,7 +5,7 @@ description: Trace every requirement through entry point, registration, module, 
 
 # Trace Requirements
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -21,7 +21,7 @@ context:
 
 Shared semantics: [memory and handoff protocol](../../resources/protocols/skill-declarations.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
-Follow [the card contract](../../resources/skills-src/design/technical/references/card-contract.md): read every accepted section, write only `## Traceability (TRC)` and `FND-TRC-*` rows. Views follow [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) and [the visual report contract](../acs-design-architecture/references/visual-report.md).
+Follow [the card contract](../../resources/skills-src/design/technical/references/card-contract.md): read every accepted section, write only `## Traceability (TRC)` and `FND-TRC-*` rows. Views follow [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) and [the visual report contract](../acs-design-architecture/references/visual-report.md); run the contract's validator and fix every error before handover.
 
 **Owns:** whether what was designed is connected, and whether what was built matches the design. **Does not own:** judging the design (other cards), code quality (`acs-review-code-quality`), running tests (`acs-analyze-test-gaps`).
 

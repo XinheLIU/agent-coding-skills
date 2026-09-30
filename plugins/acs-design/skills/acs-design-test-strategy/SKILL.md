@@ -5,7 +5,7 @@ description: Design or review the test strategy before code — critical paths, 
 
 # Design Test Strategy
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -21,7 +21,7 @@ context:
 
 Shared semantics: [memory and handoff protocol](../../resources/protocols/skill-declarations.md); shared execution: [Coordination](../../resources/protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../resources/protocols/presenter.md); views carry source revisions and never own domain facts.
 
-Follow [the card contract](../../resources/skills-src/design/technical/references/card-contract.md): read MOD and CON, write only `## Test Strategy (TST)` and `FND-TST-*` rows. Views follow [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) and [the visual report contract](../acs-design-architecture/references/visual-report.md).
+Follow [the card contract](../../resources/skills-src/design/technical/references/card-contract.md): read MOD and CON, write only `## Test Strategy (TST)` and `FND-TST-*` rows. Views follow [the technical view template](../../resources/skills-src/design/technical/references/technical-view.md) and [the visual report contract](../acs-design-architecture/references/visual-report.md); run the contract's validator and fix every error before handover.
 
 **Owns:** what is tested, at which layer, with which doubles and data, and what blocks a merge. **Does not own:** writing tests (`acs-tdd`, `acs-implement`), measuring coverage of existing tests (`acs-analyze-test-gaps`), reviewing test code in a diff (`acs-review-code-quality`).
 

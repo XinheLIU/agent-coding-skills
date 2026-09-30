@@ -3,7 +3,7 @@ name: acs-design-system-create
 description: "Build design authority from scratch when there is nothing to adopt — no DESIGN.md, no reference brand. Proposes typography, color, and layout tied to the product's persona and constraints, previews it, and writes a root DESIGN.md on approval. Use when asked to create a design system or define visual style; if a reference or DESIGN.md exists, run /acs-design-context instead."
 ---
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -377,6 +377,7 @@ Before writing `DESIGN.md`:
 - [ ] ONE decisive accent color (not three equal-weight brand colors)
 - [ ] Rationale ties aesthetic to product/user needs (not arbitrary choices)
 - [ ] Frontmatter tokens and prose sections both present; provenance line in `## References`
+- [ ] `system-preview.html` and any re-synced `prototype.html` carry `generated` and `source-revision` meta tags matching the visible date and revision; the [validator](../../resources/skills-src/authoring/scripts/validate-report-html.py) passes with `--version-only`
 
 ## Integration Points
 

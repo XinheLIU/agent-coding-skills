@@ -3,7 +3,7 @@ name: acs-design-context
 description: "Establish or refresh this project's design authority — the root DESIGN.md that answers HOW the product looks. Adopt an existing DESIGN.md, import from a reference site or brand, fold in a legacy docs/design/system.md, or route to from-scratch creation. Run before any other UX skill; they all read DESIGN.md. Use when no design authority exists, when system.md needs migrating, or when DESIGN.md has drifted from its source."
 ---
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -195,6 +195,7 @@ Before writing `DESIGN.md`:
 - [ ] Frontmatter tokens and prose sections both present (tokens without rationale is half an authority)
 - [ ] Legacy `system.md`, if present, was folded in and pointered — not left as a second authority
 - [ ] Prototype `:root` block re-synced when a prototype exists
+- [ ] A re-synced `prototype.html` carry `generated` and `source-revision` meta tags matching the visible date and revision; the [validator](../../../authoring/scripts/validate-report-html.py) passes with `--version-only`
 
 ## Integration Points
 

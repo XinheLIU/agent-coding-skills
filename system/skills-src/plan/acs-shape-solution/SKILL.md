@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Shape Solution
 
-Last updated: 2026-09-25
+Last updated: 2026-09-30
 
 ## Context contract
 
@@ -447,6 +447,7 @@ The narrative and story prompt remain usable human presentations, but point to s
 - Records sit inside one of the shared sections listed in the contract's section table (including `research` in `discovery.html` and `roadmap` in `product.html`).
 - Local `#anchor` links resolve; unrelated records and IDs are preserved.
 - `Last updated` dates are current on changed records and the document.
+- The document's `generated` and `source-revision` meta tags match its visible date and revision; run the [validator](../../authoring/scripts/validate-report-html.py) with `--version-only` and fix every error.
 - Run `python3 scripts/validate-product-memory.py <file>` when available; fix errors before reporting.
 
 ## What This Skill Does NOT Do

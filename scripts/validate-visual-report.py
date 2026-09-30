@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-import re
+import importlib.util
 import sys
 from pathlib import Path
 
@@ -17,6 +17,8 @@ CONSUMERS = (
     Path("system/skills-src/design/technical/acs-trace-requirements"),
     Path("system/skills-src/plan/acs-map-current-product"),
 )
+
+REPORT_VALIDATOR = Path("system/skills-src/authoring/scripts/validate-report-html.py")
 
 def check_standalone_references(root: Path) -> list[str]:
     errors: list[str] = []
@@ -33,18 +35,12 @@ def check_standalone_references(root: Path) -> list[str]:
             errors.append(f"skill does not declare visual reference: {skill}")
     return errors
 
-def check_html(path: Path) -> list[str]:
-    text = path.read_text(encoding="utf-8")
-    errors: list[str] = []
-    if not any(marker in text for marker in ("top-recommendation", "Top recommendation", "Recommended order")):
-        errors.append(f"missing top recommendation marker: {path}")
-    if text.lower().count("before") and not text.lower().count("after"):
-        errors.append(f"before visual has no after counterpart: {path}")
-    anchors = set(re.findall(r'id=["\']([^"\']+)', text))
-    for target in re.findall(r'href=["\']#([^"\']+)', text):
-        if target not in anchors:
-            errors.append(f"broken internal link #{target} in {path}")
-    return errors
+def check_html(root: Path, path: Path) -> list[str]:
+    """Delegate to the shipped per-card validator so there is one HTML checker."""
+    spec = importlib.util.spec_from_file_location("validate_report_html", root / REPORT_VALIDATOR)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return [f"{path}: {error}" for error in module.validate(path)]
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -53,7 +49,7 @@ def main() -> int:
     args = parser.parse_args()
     errors = check_standalone_references(args.root)
     for path in args.html:
-        errors.extend(check_html(path))
+        errors.extend(check_html(args.root, path))
     if errors:
         print("\n".join(f"ERROR: {error}" for error in errors), file=sys.stderr)
         return 1
