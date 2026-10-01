@@ -130,7 +130,7 @@ class RoadmapTest(unittest.TestCase):
                 expected_ready = {"#ticket-profile%2FT1"}
                 if design_done:
                     expected_ready.add("#ticket-profile%2FT2")
-                self.assertEqual(set(parsed.section_links["frontier"]), expected_ready)
+                self.assertEqual(set(parsed.section_links["ready"]), expected_ready)
                 self.assertEqual(parsed.section_links.get("design-blockers", []),
                                  [] if design_done else ["#ticket-profile%2FD1"])
                 self.assertEqual(len(parsed.ticket_states), len(tickets))
@@ -151,7 +151,7 @@ class RoadmapTest(unittest.TestCase):
                 self.assertIn("acs-design-architecture resolves avatar storage", html)
                 self.assertIn("Decision reference ADR-1", html)
                 self.assertIn(plan["next_action"], html)
-                self.assertIn('const STORAGE_KEY = "delivery-profile";', html)
+                self.assertRegex(html, r'const STORAGE_KEY = "delivery-profile[^"]*";')
                 self.assertNotIn('<script>alert("x")</script>', html)
                 self.assertEqual(html.count("</script>"), 1)
                 self.assertEqual(before, {path: path.read_bytes() for path in before})
@@ -212,7 +212,7 @@ class RoadmapTest(unittest.TestCase):
             before = {path: path.read_bytes() for path in tasks.glob("*.md")}
             manifest_path = root / "manifest.json"
             html_path = root / "roadmap.html"
-            for expected_avatar_status in ("todo", "frontier"):
+            for expected_avatar_status in ("waiting", "ready"):
                 subprocess.run(
                     [sys.executable, str(TASK_SCAN_SCRIPT), str(tasks.parent), "-o", str(manifest_path)],
                     check=True, capture_output=True, text=True,
@@ -238,12 +238,17 @@ class RoadmapTest(unittest.TestCase):
                     check=True, capture_output=True, text=True,
                 )
                 statuses = json.loads(result.stdout)
-                self.assertEqual(statuses["profile/T1"], "frontier")
+                self.assertEqual(statuses["profile/T1"], "ready")
                 self.assertEqual(statuses["profile/T2"], expected_avatar_status)
-                for ticket_id in ("T3", "T4", "D2"):
-                    self.assertEqual(statuses[f"profile/{ticket_id}"], "todo")
-                self.assertEqual(statuses["profile/T5"], "inprogress")
-                if expected_avatar_status == "todo":
+                # While D1's evidence is stale it is not done, so nothing
+                # downstream of it is ready.
+                self.assertEqual(statuses["profile/D1"],
+                                 "needs_design" if expected_avatar_status == "waiting" else "done")
+                for ticket_id in ("T3", "D2"):
+                    self.assertEqual(statuses[f"profile/{ticket_id}"], "needs_design")
+                self.assertEqual(statuses["profile/T4"], "failed")
+                self.assertEqual(statuses["profile/T5"], "in_progress")
+                if expected_avatar_status == "waiting":
                     self.assertEqual(before, {path: path.read_bytes() for path in tasks.glob("*.md")})
                     decision = tasks / "D1.md"
                     decision.write_text(decision.read_text().replace("needs-review", "ready"))
@@ -336,7 +341,57 @@ class RoadmapTest(unittest.TestCase):
             self.assertIn("status from Markdown", html)
             self.assertNotIn("toggle finished", html)
             self.assertNotIn('STORAGE_KEY + "_status"', html)
-            self.assertIn("flowchart TB", markdown_path.read_text(encoding="utf-8"))
+            self.assertIn("flowchart LR", markdown_path.read_text(encoding="utf-8"))
+
+
+    def test_waves_critical_path_and_palette_tokens(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            tasks = root / "profile" / "tasks"
+            tasks.mkdir(parents=True)
+            # A is done; B and C share its wave; D joins them; E is independent.
+            graph = [("A", "none"), ("B", "A"), ("C", "A"), ("D", "B,C"), ("E", "none")]
+            for ticket_id, deps in graph:
+                status = "done" if ticket_id == "A" else "pending"
+                (tasks / f"{ticket_id}.md").write_text(
+                    f"# {ticket_id}: Step {ticket_id}\nType: implementation\nStatus: {status}\n"
+                    f"Readiness: ready\ndepends_on: {deps}\n", encoding="utf-8",
+                )
+            manifest_path = root / "manifest.json"
+            html_path = root / "roadmap.html"
+            mermaid_path = root / "roadmap.md"
+            subprocess.run([sys.executable, str(TASK_SCAN_SCRIPT), str(root), "-o", str(manifest_path)],
+                           check=True, capture_output=True, text=True)
+            subprocess.run([sys.executable, str(RENDER_SCRIPT), str(manifest_path), "-o", str(html_path)],
+                           check=True, capture_output=True, text=True)
+            subprocess.run([sys.executable, str(RENDER_SCRIPT), str(manifest_path), "--format", "mermaid",
+                            "-o", str(mermaid_path)], check=True, capture_output=True, text=True)
+
+            html = html_path.read_text(encoding="utf-8")
+            nodes = json.loads(re.search(r"const NODES = (.+);", html)[1])
+            by_id = {node["id"]: node for node in nodes}
+            self.assertEqual([by_id[f"profile/{t}"]["wave"] for t in "ABCDE"], [1, 2, 2, 3, 1])
+            self.assertEqual(by_id["profile/D"]["critical_deps"], ["profile/B"])
+            self.assertEqual(by_id["profile/B"]["critical_deps"], [])
+            # A done ticket never appears on the remaining critical path.
+            self.assertEqual(by_id["profile/A"]["critical_deps"], [])
+            self.assertIn("Remaining critical path: profile/B → profile/D · 3 waves · 1/5 done", html)
+
+            # Colour is defined once, as tokens, and never in a rule or script.
+            palette = "".join(re.findall(r"/\* palette:start \*/(.*?)/\* palette:end \*/", html, re.DOTALL))
+            self.assertIn("--ready-bd", palette)
+            self.assertIn("prefers-color-scheme: dark", palette)
+            # `(?<!&)` keeps numeric HTML entities such as &#9881; out of the match.
+            self.assertEqual(re.findall(r"(?<!&)#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b",
+                                        html.replace(palette, "")), [])
+
+            mermaid = mermaid_path.read_text(encoding="utf-8")
+            self.assertIn("classDef done", mermaid)
+            self.assertIn("classDef ready", mermaid)
+            self.assertIn("classDef waiting", mermaid)  # D waits on B and C
+            self.assertNotIn("classDef failed", mermaid)  # absent statuses are omitted
+            self.assertIn("linkStyle", mermaid)
+            self.assertIn("Remaining critical path: profile/B", mermaid)
 
 
 if __name__ == "__main__":

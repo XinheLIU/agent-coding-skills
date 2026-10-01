@@ -65,6 +65,13 @@
       "canonical": "protocols/presenter.md",
       "version": "1.2.0",
       "status": "stable"
+    },
+    "task-graph": {
+      "id": "protocol:acs:task-graph",
+      "title": "Task Graph View Contract",
+      "canonical": "protocols/task-graph.md",
+      "version": "1.0.0",
+      "status": "stable"
     }
   }
 }

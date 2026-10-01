@@ -5,7 +5,7 @@ description: Render Markdown workstreams and dependency tickets as an interactiv
 
 # Draw Portfolio DAG
 
-Last updated: 2026-09-30
+Last updated: 2026-10-01
 
 ## Context contract
 
@@ -34,7 +34,7 @@ python3 "$SKILL_DIR/scripts/scan_tasks.py" docs/changes/<change-id> -o manifest.
 
 The [ticket template](../../../../skills/acs-plan-delivery/templates/ticket.md) defines this local format: `tasks/<task-id>.md`, an H1 `<task-id>: <title>`, and plain `Type:`, `Status:`, `Readiness:`, `depends_on:` fields. Dependencies are comma-separated local task IDs or `change/task` IDs; `none` means no dependencies. To resolve cross-change edges, scan the common changes directory including prerequisite tickets. Other tracker schemas need a derived manifest rather than conversion of canonical documents.
 
-The adapter preserves qualified canonical IDs, source paths and SHA-256 revisions. It rejects missing prerequisite IDs and cycles, flags unknown fields, and keeps design tickets, failed/superseded tickets, unresolved dependencies, and unready inputs off the implementation frontier. A historical done ticket with stale readiness remains visible but cannot satisfy downstream prerequisites. The renderer labels type/readiness/status as tags and validates final edges after overlays are applied.
+The adapter preserves qualified canonical IDs, source paths and SHA-256 revisions. It rejects missing prerequisite IDs and cycles, flags unknown fields, and keeps design tickets, failed/superseded tickets, unresolved dependencies, and unready inputs off the implementation frontier. A historical done ticket with stale readiness remains visible but cannot satisfy downstream prerequisites. Ticket type, readiness, and status reach the reader through the node's view status and tooltip rather than as pills, and the renderer validates final edges after overlays are applied.
 
 For legacy workstreams, `scan_specs.py` accepts one folder per workstream:
 
@@ -66,12 +66,11 @@ The legacy scanner supports only that shape. For other tracker schemas, supply a
    {
      "extra_deps": {"AOM01": ["ASR07"]},
      "tags": {"SPR04": ["data", "deploy"]},
-     "tag_styles": {
-       "data": {"label": "DATA", "bg": "#5b21b6", "fg": "#fff"},
-       "deploy": {"label": "DEPLOY", "bg": "#b45309", "fg": "#fff"}
-     }
+     "tag_styles": {"data": {"label": "DATA"}, "deploy": {"label": "DEPLOY"}}
    }
    ```
+
+   Tags render as neutral outline pills. Colour is reserved for view status under the [task graph contract](../../../protocols/task-graph.md), so `tag_styles` overrides only the pill's label.
 
    Leave external preconditions as prose. Resolution is complete when each warning is either mapped to a verified ticket ID or deliberately retained as a non-ticket blocker.
 
@@ -85,9 +84,11 @@ The legacy scanner supports only that shape. For other tracker schemas, supply a
      --format mermaid -o roadmap.md --title "My Roadmap"
    ```
 
-   For `acs-plan-delivery`, pass `--plan plan.json -o docs/changes/<change-id>/delivery-plan.html` to embed the plan and DAG in one self-contained HTML file. Follow its [delivery report contract](../../../../skills/acs-plan-delivery/references/delivery-report.md) for the derived summary, canonical ticket details, opening, and refresh behavior. The renderer derives the frontier and design-blocker list from the same ticket nodes as the graph.
+   For `acs-plan-delivery`, pass `--plan plan.json -o docs/changes/<change-id>/delivery-plan.html` to embed the plan and DAG in one self-contained HTML file. Follow its [delivery report contract](../../../../skills/acs-plan-delivery/references/delivery-report.md) for the derived summary, canonical ticket details, opening, and refresh behavior. The renderer derives the ready and design-blocker lists from the same ticket nodes as the graph.
 
-4. **Verify.** Compare output workstream, node, and dependency counts with the manifest; open HTML output when browser control is available. The graph is done when all verified dependencies render, completed tickets with current evidence are green, execution-ready frontier tickets are orange, design/unready/blocked tickets are blue, and displayed status matches canonical tickets without becoming independently editable. The renderer writes the `generated`, `source-revision`, and `view-kind="living"` meta tags (override the revision with `--source-revision`); confirm with the [validator](../scripts/validate-report-html.py) `--version-only`.
+   View status, palette, wave layout, the critical path, and the legend are owned by the [task graph contract](../../../protocols/task-graph.md). Read it before changing a colour, a status label, or the layout; this skill implements that contract and does not restate it.
+
+4. **Verify.** Compare output workstream, node, and dependency counts with the manifest; open HTML output when browser control is available. The graph is done when all verified dependencies render, every node's view status matches the [task graph contract](../../../protocols/task-graph.md) for its canonical ticket, the legend lists exactly the statuses present, and displayed status never becomes independently editable. The renderer writes the `generated`, `source-revision`, and `view-kind="living"` meta tags (override the revision with `--source-revision`); confirm with the [validator](../scripts/validate-report-html.py) `--version-only`.
 
 ## Source and view
 

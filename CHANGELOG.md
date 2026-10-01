@@ -1,6 +1,6 @@
 # Changelog
 
-Last updated: 2026-09-30
+Last updated: 2026-10-01
 
 ## Unreleased
 
@@ -12,7 +12,21 @@ Generated HTML views could satisfy the visual contract on paper and still ship a
 - Date and version: every view carries `<meta name="generated">` and `<meta name="source-revision">`. One-off reports are named `<slug>-YYYY-MM-DD.html`. Living views such as `technical-design.html` keep their path and declare `view-kind="living"`.
 - `validate-report-html.py` checks each card, and each producing skill runs it before handover. `scripts/validate-visual-report.py` now delegates its HTML checks to it.
 - The tabbed template now meets the contract it demonstrates.
-- The date and version rule now covers every human-readable HTML file, not only visual reports. `presenter.md` and `html-records.md` require the meta tags on canonical records (`product.html`, `discovery.html`, `prototype.html`), roadmaps, delivery plans, and design previews. `render_dag.py` and `gen-roadmap.py` write the tags themselves. The validator gains `--version-only` (date, revision, and links only; no card rules), and every plan, PRD, UX, and DAG skill runs it after writing. Existing records gain the tags on their next write.
+- The date and version rule now covers every human-readable HTML file, not only visual reports. `presenter.md` and `html-records.md` require the meta tags on canonical records (`product.html`, `discovery.html`, `prototype.html`), roadmaps, delivery plans, and design previews. `render_dag.py` and `gen-roadmap.py` write the tags themselves. The validator gains `--version-only` (date, revision, and links only; no card rules), and every plan, PRD, UX, and DAG skill runs it after writing. Existing records gain the tags on their next write. (`gen-roadmap.py` was later deleted; see below.)
+
+### One task-graph contract for every DAG view
+
+Task graphs came from `render_dag.py`, which the delivery and roadmap skills use, and an orphaned `scripts/gen-roadmap.py`. They disagreed: blue meant "blocked" in one and "ready" in the other, four status vocabularies described the same tickets, and the palette was written three times — hard-coded, then restated in two `SKILL.md` files. `failed` and `superseded` had no colour at all, and the Mermaid output styled only `done`.
+
+- New protocol [task-graph.md](system/protocols/task-graph.md) (`protocol:acs:task-graph`, v1.0.0) owns the vocabulary, palette, layout, critical path, and legend. The two skills now link to it instead of restating colours.
+- Seven view statuses replace four: `done`, `in_progress`, `failed`, `ready`, `needs_design`, `waiting`, `superseded`. One label map feeds the legend, the node tooltip, and the ticket card, so `Finished`/`Complete`/`Done` drift is gone.
+- Layout changed from one arbitrary row per workstream to a **waves × lanes** grid: columns are dependency waves (what can run in parallel), rows are workstream lanes, and edges are orthogonal elbows.
+- The remaining critical path is computed and drawn: its edges are thick, and the legend footer states the chain (`Remaining critical path: A → B → C · 4 waves · 3/12 done`).
+- Colour is defined once, as CSS custom properties under `:root` with a `prefers-color-scheme: dark` override. No rule, script, or inline style carries a raw colour, and a test enforces it. The palette has a dark variant, which the graph previously lacked.
+- Tag pills are neutral outlines, and the scanner's own type/readiness/status tags no longer render as pills — the node colour and tooltip already carry them. `tag_styles` overrides only a pill's label.
+- The Mermaid output gains `flowchart LR`, a `classDef` per present status, `linkStyle` for critical edges, and the same summary line.
+- `scripts/gen-roadmap.py` is deleted. It had no callers and its dark-only palette conflicted with the contract. See [ADR-0005](docs/adr/0005-task-graph-view-contract.md).
+- Fixed a false positive in `validate-report-html.py`: it compared an internal link's fragment literally, so the delivery plan's `href="#ticket-<change>%2F<id>"` never matched its own `id="ticket-<change>/<id>"` and `--version-only` reported every ticket link broken. The fragment is now percent-decoded before the comparison, as a browser does.
 
 ### Technical design becomes five aspect cards on one record
 

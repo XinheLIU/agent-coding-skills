@@ -1,5 +1,5 @@
 {
-  "_comment": "Manually resolved edges/tags that scan_specs.py cannot infer mechanically (cross-workstream refs, external preconditions). Re-check this file whenever scan_specs.py reports unresolved_dep_count > 0 for a node not yet listed here.",
+  "_comment": "Manually resolved edges/tags that scan_specs.py cannot infer mechanically (cross-workstream refs, external preconditions). Re-check this file whenever scan_specs.py reports unresolved_dep_count > 0 for a node not yet listed here. tag_styles sets pill labels only; colour carries view status — see system/protocols/task-graph.md.",
   "extra_deps": {
     "AOM01": [
       "ASR07"
@@ -107,14 +107,10 @@
   },
   "tag_styles": {
     "data": {
-      "label": "DATA",
-      "bg": "#5b21b6",
-      "fg": "#fff"
+      "label": "DATA"
     },
     "deploy": {
-      "label": "DEPLOY",
-      "bg": "#b45309",
-      "fg": "#fff"
+      "label": "DEPLOY"
     }
   }
 }

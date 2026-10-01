@@ -5,7 +5,7 @@ description: Deliver a verifiable change end-to-end using dependency-ordered tic
 
 # Implement — the delivery loop
 
-Last updated: 2026-09-25
+Last updated: 2026-10-01
 
 ## Context contract
 
@@ -40,7 +40,7 @@ Proceed only with execution-ready implementation tickets. Design tickets route t
 
 ## Render the graph
 
-Refresh the existing `delivery-plan.html` with [`acs-draw-portfolio-dag`](../../resources/skills-src/authoring/acs-draw-portfolio-dag/SKILL.md) (reference procedure; capability not installed), following the [delivery report contract](../acs-plan-delivery/references/delivery-report.md). Show the frontier before dispatching. On ticket transitions, re-scan canonical tickets, update the derived next action, re-render with `--plan` at the same path and storage key, and reload the open report. This preserves scope, blockers, and evidence alongside live progress: done (green), in progress (yellow), frontier (orange), blocked (blue).
+Refresh the existing `delivery-plan.html` with [`acs-draw-portfolio-dag`](../../resources/skills-src/authoring/acs-draw-portfolio-dag/SKILL.md) (reference procedure; capability not installed), following the [delivery report contract](../acs-plan-delivery/references/delivery-report.md). Show the ready work before dispatching. On ticket transitions, re-scan canonical tickets, update the derived next action, re-render with `--plan` at the same path and storage key, and reload the open report. This preserves scope, blockers, and evidence alongside live progress. Each node's colour is its [task graph](../../resources/protocols/task-graph.md) view status, so read progress from that contract rather than from a per-skill colour list.
 
 ## Orchestrate the frontier
 

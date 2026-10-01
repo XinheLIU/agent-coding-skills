@@ -15,6 +15,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 import re
 import sys
+from urllib.parse import unquote
 
 ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 DATED_FILENAME = re.compile(r"-\d{4}-\d{2}-\d{2}\.html$")
@@ -173,7 +174,9 @@ def check_links(html: str) -> list[str]:
     anchors = set(re.findall(r'id=["\']([^"\']+)', html))
     # Hrefs built inside scripts are templates, not static links.
     markup = SCRIPT_BLOCK.sub("", html)
-    return [f"broken internal link #{target}" for target in re.findall(r'href=["\']#([^"\']+)', markup) if target not in anchors]
+    # A browser percent-decodes the fragment before matching it against an id,
+    # so "#ticket-a%2Fb" resolves to id="ticket-a/b". Compare what it resolves to.
+    return [f"broken internal link #{target}" for target in re.findall(r'href=["\']#([^"\']+)', markup) if unquote(target) not in anchors]
 
 
 def validate(path: Path, *, version_only: bool = False) -> list[str]:
