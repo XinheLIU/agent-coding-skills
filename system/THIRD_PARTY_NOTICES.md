@@ -1,19 +1,19 @@
 # Third-Party Notices
 
-Last updated: 2026-09-26
+Last updated: 2026-10-04
 
 ## Context and presentation architecture
 
 The accepted [Context design](docs/context-memory-presenter-proposal.md) adapts memory-scope separation from [LangGraph](https://docs.langchain.com/oss/python/concepts/memory), structured notes and selective retrieval from [Anthropic Context Engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents), and presentation/domain separation from [Martin Fowler's Presentation Model](https://martinfowler.com/eaaDev/PresentationModel.html). OpenSpec (`bae58cf`) informs current/change separation; Superpowers (`5bf4e78`) informs optional visual companions. These are design influences, not vendored runtime dependencies. The proposal records source details and the adapted boundaries.
 ## Reference clones (study material only)
 
-Two upstream references are cloned under [`references/`](../references/) for study: [`obra/superpowers`](https://github.com/obra/superpowers) (MIT) and [`Fission-AI/OpenSpec`](https://github.com/Fission-AI/OpenSpec) (MIT). Their pinned commits are recorded in [`references/README.md`](../references/README.md). These entries record the provenance of the study corpus — the same status as the gstack and Matt Pocock snapshots.
+Two upstream references are cloned under [`references/`](../references) for study: [`obra/superpowers`](https://github.com/obra/superpowers) (MIT) and [`Fission-AI/OpenSpec`](https://github.com/Fission-AI/OpenSpec) (MIT). Their pinned commits are recorded in [`references/README.md`](../references/README.md). These entries record the provenance of the study corpus — the same status as the gstack and Matt Pocock snapshots.
 
 The `acs-brainstorm` skill cites the `superpowers` `brainstorming` Socratic pattern (see `skills-src/plan/acs-brainstorm/SKILL.md`). The existing-product lane adapts OpenSpec's brownfield-first and delta-spec principles in `acs-map-current-product` and `acs-define-outcomes`. Upstream names in these notices retain their original spelling; ACS adaptations use the `acs-` namespace.
 
 ## PM-Skills
 
-The existing-product lane adapts selected principles from [`product-on-purpose/pm-skills`](https://github.com/product-on-purpose/pm-skills), licensed under Apache-2.0. The local study copy is under [`references/pm-skills/`](../references/pm-skills/), with license text at [`references/pm-skills/LICENSE`](../references/pm-skills/LICENSE).
+The existing-product lane adapts selected principles from [`product-on-purpose/pm-skills`](https://github.com/product-on-purpose/pm-skills), licensed under Apache-2.0. The local study copy is under [`references/pm-skills/`](../references/pm-skills), with license text at [`references/pm-skills/LICENSE`](../references/pm-skills/LICENSE).
 
 - `acs-map-current-product` adapts `deliver-user-stories` for persona/action/benefit story shape and story testability.
 - `acs-define-outcomes` adapts `deliver-acceptance-criteria`, `deliver-edge-cases`, `measure-instrumentation-spec`, and `iterate-refinement-notes` for acceptance criteria, recovery-path coverage, analytics contracts, and refinement notes.

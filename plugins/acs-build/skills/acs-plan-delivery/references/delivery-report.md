@@ -1,13 +1,19 @@
 # HTML Delivery Report
 
-Last updated: 2026-10-01
+Last updated: 2026-10-11
 
-The user receives one `docs/changes/<change-id>/delivery-plan.html` after accepted scope has been decomposed. Preserve an established report location on resumed work. `acs-plan-delivery` owns domain scope, decomposition, blockers, and recommendations; [Presenter](../../../resources/protocols/presenter.md) owns display and review semantics. `acs-draw-portfolio-dag` renders the derived view and can refresh progress without repeating planning.
+After `acs-plan-delivery` decomposes the accepted scope, the user receives one `docs/changes/<change-id>/delivery-plan.html`. On resumed work, keep an established report location.
+
+| Owner | Owns |
+| --- | --- |
+| `acs-plan-delivery` | domain scope, decomposition, blockers, recommendations |
+| [Presenter](../../../resources/protocols/presenter.md) | display and review semantics |
+| `acs-draw-portfolio-dag` | rendering the derived view; refreshing progress without planning again |
 
 ## Generate
 
-1. Scan canonical tickets with `acs-draw-portfolio-dag/scripts/scan_tasks.py`. Include prerequisite changes for cross-change edges; keep qualified IDs. For an existing tracker, derive the same manifest from its canonical records. Report nodes retain `ticket_type`, `readiness`, `scope`, `inputs`, `verification`, `blockers`, and `evidence` as plain text alongside IDs, dependencies, status, and source revisions.
-2. Prepare a derived `plan.json` in the configured Working Memory. Summarize accepted source records; retain scope and substantive decisions in their canonical homes. Required fields:
+1. Scan canonical tickets with `acs-draw-portfolio-dag/scripts/scan_tasks.py`. Include prerequisite changes for cross-change edges, and keep qualified IDs. For an existing tracker, derive the same manifest from its canonical records. Report nodes keep `ticket_type`, `readiness`, `scope`, `inputs`, `verification`, `blockers` and `evidence` as plain text, next to IDs, dependencies, status and source revisions.
+2. Prepare a derived `plan.json` in the configured Working Memory. Summarize the accepted source records. Keep scope and substantive decisions in their canonical homes. Required fields:
 
    ```json
    {
@@ -20,7 +26,7 @@ The user receives one `docs/changes/<change-id>/delivery-plan.html` after accept
    }
    ```
 
-   Source links resolve relative to the final HTML file, or use an established tracker URL. The next action reflects current authorization and blockers; readiness alone does not authorize execution. Keep reasons for changed edges in canonical tickets and summarize consequential changes in the handoff.
+   Source links resolve relative to the final HTML file, or use an established tracker URL. The next action reflects current authorization and blockers; readiness alone does not authorize execution. Keep the reasons for changed edges in canonical tickets. Summarize consequential changes in the handoff.
 3. Resolve `DAG_DIR` to the installed `acs-draw-portfolio-dag` skill directory and render with its existing CLI:
 
    ```bash
@@ -31,12 +37,20 @@ The user receives one `docs/changes/<change-id>/delivery-plan.html` after accept
      -o "docs/changes/<change-id>/delivery-plan.html"
    ```
 
-   `RUN_DIR` is the resolved Working Memory directory. The renderer embeds the report, graph, styles, and scripts into one file; no server or network dependency is required. Ticket details remain readable without JavaScript. Mermaid and graph-only HTML remain available for other callers.
+   `RUN_DIR` is the resolved Working Memory directory. The renderer embeds the report, graph, styles and scripts in one file; it needs no server or network. Ticket details stay readable without JavaScript. Mermaid and graph-only HTML stay available for other callers.
 
-The HTML is a Human Review View, not a memory source. Preserve proposed plan decisions in canonical records before formal review; use those records and their revisions for feedback. Retain a reviewed snapshot only when its presentation influenced the decision.
+The HTML is a Human Review View, not a memory source. Before formal review, save proposed plan decisions in canonical records. Use those records and their revisions for feedback. Keep a reviewed snapshot only when its presentation influenced the decision.
 
 ## Present and refresh
 
-Open the HTML using the available browser capability and return a clickable file link. If opening is unavailable, return the link and state that it was generated but not opened. Inspect scope/outcomes, next action, ready work, design blockers, graph, ticket checks/evidence, and source links. Verify graph and ticket counts, dependencies, readiness, and links against the manifest and canonical sources. The graph's colours, legend, and node labels follow the [task graph contract](../../../resources/protocols/task-graph.md); confirm the view status of each ticket there rather than reading the colours as a new vocabulary.
+Open the HTML with the available browser capability and return a clickable file link. If you cannot open it, return the link and say that it was generated but not opened.
 
-After a ticket transition, re-scan, refresh the derived next action, and re-render the **same HTML path** with `--plan` and the same storage key. Reload an open tab to show the update; file regeneration alone does not update a loaded page. Refresh ordinary execution status directly; return scope or dependency changes to `acs-plan-delivery`. Recreate missing run files from canonical sources rather than treating the HTML or JSON as authoritative.
+Inspect the scope and outcomes, next action, ready work, design blockers, graph, ticket checks and evidence, and source links. Verify graph and ticket counts, dependencies, readiness and links against the manifest and canonical sources. The graph's colours, legend and node labels follow the [task graph contract](../../../resources/protocols/task-graph.md). Confirm each ticket's view status there; do not read the colours as a new vocabulary.
+
+After a ticket transition:
+
+1. Scan again and refresh the derived next action.
+2. Render the **same HTML path** again, with `--plan` and the same storage key.
+3. Reload an open tab to show the update. Regenerating the file does not update a loaded page.
+
+Refresh ordinary execution status directly. Send scope or dependency changes back to `acs-plan-delivery`. If run files are missing, recreate them from canonical sources; never treat the HTML or JSON as authoritative.

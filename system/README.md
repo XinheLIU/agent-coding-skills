@@ -1,6 +1,6 @@
 # Agent Coding System
 
-Last updated: 2026-09-29
+Last updated: 2026-10-04
 
 This directory is the plugin and product. Its skills coordinate through shared repository records across the six lifecycle phases. Setup configures paths when needed; explicit inputs and unambiguous existing homes also support standalone work.
 
@@ -16,14 +16,14 @@ The [Presenter](protocols/presenter.md) organizes versioned sources for human re
 
 | Path | Contents |
 | --- | --- |
-| [`skills-src/`](skills-src/) | Skill source packages organized by lifecycle phase |
-| [`skills/`](skills/) | Flat symlinks into `skills-src/` for one-level loader discovery |
-| [`protocols/`](protocols/) | Memory, ownership, handoff, coordination, and Presenter contracts |
-| [`workflows/`](workflows/) | Six lifecycle workflows plus legacy sequences |
-| [`commands/`](commands/) | Setup and Git commands |
-| [`docs/`](docs/) | Human guides and organization report |
-| [`.claude-plugin/`](.claude-plugin/) | Claude Code plugin manifest |
-| [`.codex-plugin/`](.codex-plugin/) | Codex plugin manifest |
+| [`skills-src/`](skills-src) | Skill source packages organized by lifecycle phase |
+| [`skills/`](skills) | Flat symlinks into `skills-src/` for one-level loader discovery |
+| [`protocols/`](protocols) | Memory, ownership, handoff, coordination, and Presenter contracts |
+| [`workflows/`](workflows) | Six lifecycle workflows plus legacy sequences |
+| [`commands/`](commands) | Setup and Git commands |
+| [`docs/`](docs) | Human guides and organization report |
+| [`.claude-plugin/`](.claude-plugin) | Claude Code plugin manifest |
+| [`.codex-plugin/`](.codex-plugin) | Codex plugin manifest |
 
 ## Workflow navigation
 

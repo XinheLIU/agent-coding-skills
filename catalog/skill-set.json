@@ -105,6 +105,7 @@
         "acs-translate-agent-context",
         "acs-sync-context",
         "acs-engineer-domain-model",
+        "acs-create-readme",
         "acs-manage-context"
       ]
     },
@@ -126,7 +127,7 @@
       "version": "0.4.0",
       "description": "ACS foundational context and memory infrastructure",
       "phase": "context",
-      "skillCount": 5,
+      "skillCount": 6,
       "dependencies": []
     },
     {
@@ -198,7 +199,7 @@
       "phase": "craft",
       "version": "1.0.0",
       "description": "Context lifecycle and authoring skills for the ACS suite.",
-      "skillCount": 10,
+      "skillCount": 11,
       "dependencies": []
     }
   ]

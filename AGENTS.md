@@ -1,12 +1,12 @@
 # Agent Instructions
 
-Last updated: 2026-09-26
+Last updated: 2026-10-04
 
 ## Memory and context
 
 [`docs/agents/memory.md`](docs/agents/memory.md) is the routing index: work root, retention window, decision-record home, and the census exclusion rules. Read it before writing anything durable, or before auditing which documents belong where.
 
-Decisions are recorded in [`docs/adr/`](docs/adr/) and summarized in [`CHANGELOG.md`](CHANGELOG.md) under the release that shipped them. Execution plans and checklists belong in the gitignored work root, not in tracked directories.
+Decisions are recorded in [`docs/adr/`](docs/adr) and summarized in [`CHANGELOG.md`](CHANGELOG.md) under the release that shipped them. Execution plans and checklists belong in the gitignored work root, not in tracked directories.
 
 ## Repository boundary
 
@@ -27,10 +27,10 @@ Treat `references/` as read-only source material:
 
 ## Shared frontend
 
-The public catalog frontend is owned by the sibling `../agent-skills` repository. This repository publishes only `catalog/skill-set.json`; do not recreate or maintain a separate frontend here.
+The public catalog frontend is owned by the sibling `../../skills/agent-skills` repository. This repository publishes only `catalog/skill-set.json`; do not recreate or maintain a separate frontend here.
 
 When the user asks to launch, run, open, preview, or test the frontend locally from this repository:
 
-1. Run `node scripts/build-catalog.mjs --local` in `../agent-skills`.
-2. Start `python3 -m http.server 4174 -d docs` in `../agent-skills`. If port `4174` is occupied, choose the next available port without terminating an unknown process.
+1. Run `node scripts/build-catalog.mjs --local` in `../../skills/agent-skills`.
+2. Start `python3 -m http.server 4174 -d docs` in `../../skills/agent-skills`. If port `4174` is occupied, choose the next available port without terminating an unknown process.
 3. Verify the local catalog loads, then give the user the exact `http://127.0.0.1:<port>/` URL and keep the server running.

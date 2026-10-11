@@ -35,12 +35,19 @@ def check_standalone_references(root: Path) -> list[str]:
             errors.append(f"skill does not declare visual reference: {skill}")
     return errors
 
-def check_html(root: Path, path: Path) -> list[str]:
-    """Delegate to the shipped per-card validator so there is one HTML checker."""
+def load_report_validator(root: Path):
     spec = importlib.util.spec_from_file_location("validate_report_html", root / REPORT_VALIDATOR)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    return [f"{path}: {error}" for error in module.validate(path)]
+    return module
+
+def check_html(root: Path, path: Path) -> list[str]:
+    """Delegate to the shipped per-card validator so there is one HTML checker."""
+    return [f"{path}: {error}" for error in load_report_validator(root).validate(path)]
+
+def lint_html(root: Path, path: Path) -> list[str]:
+    """Wording warnings from the same validator; they never fail the run."""
+    return [f"{path}: {warning}" for warning in load_report_validator(root).lint_wording(path)]
 
 def main() -> int:
     parser = argparse.ArgumentParser()
@@ -50,6 +57,8 @@ def main() -> int:
     errors = check_standalone_references(args.root)
     for path in args.html:
         errors.extend(check_html(args.root, path))
+        for warning in lint_html(args.root, path):
+            print(f"WARNING: {warning}")
     if errors:
         print("\n".join(f"ERROR: {error}" for error in errors), file=sys.stderr)
         return 1

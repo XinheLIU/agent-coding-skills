@@ -1,10 +1,10 @@
 # Agent Coding System
 
-Last updated: 2026-09-29
+Last updated: 2026-10-04
 
 Inspired by the [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) from Anthropic.
 
-A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system/); copied upstream material stays in the local, ignored `references/` workspace.
+A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system); copied upstream material stays in the local, ignored `references/` workspace.
 
 ## Quick start
 
@@ -26,13 +26,13 @@ All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See th
 
 | Component | Role |
 | --- | --- |
-| [`system/skills/`](system/skills/) | Flat symlinks (loader entry points) into `skills-src/` |
-| [`system/skills-src/`](system/skills-src/) | Skill source packages organized by lifecycle phase |
-| [`system/protocols/`](system/protocols/) | Canonical memory, coordination, domain, and Presenter contracts |
-| [`system/evals/`](system/evals/) | Structural checks and context handoff/retention scenarios |
-| [`system/workflows/`](system/workflows/) | Six lifecycle workflows plus legacy sequences |
-| [`system/commands/`](system/commands/) | Claude Code entry points, including one-time repository setup |
-| [`system/docs/`](system/docs/) | Human-facing catalog, organization report, and retained domain guides |
+| [`system/skills/`](system/skills) | Flat symlinks (loader entry points) into `skills-src/` |
+| [`system/skills-src/`](system/skills-src) | Skill source packages organized by lifecycle phase |
+| [`system/protocols/`](system/protocols) | Canonical memory, coordination, domain, and Presenter contracts |
+| [`system/evals/`](system/evals) | Structural checks and context handoff/retention scenarios |
+| [`system/workflows/`](system/workflows) | Six lifecycle workflows plus legacy sequences |
+| [`system/commands/`](system/commands) | Claude Code entry points, including one-time repository setup |
+| [`system/docs/`](system/docs) | Human-facing catalog, organization report, and retained domain guides |
 
 ## Memory system
 
@@ -90,18 +90,18 @@ Skills live under `system/skills-src/<phase>/<skill>/`. Six phases map directly 
 
 | Phase | What it covers |
 | --- | --- |
-| [`plan/`](system/skills-src/plan/) | Problem discovery through accepted product intent, including multi-session decision mapping. |
-| [`design/requirements/`](system/skills-src/design/requirements/) | Functional requirements and testable acceptance criteria. |
-| [`design/ux/`](system/skills-src/design/ux/) | Interaction flows, visual system, unified design doc. |
-| [`design/technical/`](system/skills-src/design/technical/) | Five aspect cards (architecture, modules, contracts, test strategy, traceability) writing one technical-design record. |
-| [`build/`](system/skills-src/build/) | Delivery planning, ticket DAGs, TDD execution, and verification. |
-| [`test/`](system/skills-src/test/) | Coverage audit, review, debugging, and integration tests after build. |
-| [`deploy/`](system/skills-src/deploy/) | Release, governance, and PR review. _(planned)_ |
-| [`maintain/`](system/skills-src/maintain/) | Incident diagnosis and fix loop. |
-| [`test/review/`](system/skills-src/test/review/) | Design review, gap analysis, code quality, and refactoring. |
-| [`test/debugging/`](system/skills-src/test/debugging/) | Triage and merge-conflict resolution. |
-| [`context/`](system/skills-src/context/) | Agent memory, terminology, decisions, and the explicit-only compatibility router. |
-| [`authoring/`](system/skills-src/authoring/) | Research, decision challenge, DAG rendering, and skill authoring. |
+| [`plan/`](system/skills-src/plan) | Problem discovery through accepted product intent, including multi-session decision mapping. |
+| [`design/requirements/`](system/skills-src/design/requirements) | Functional requirements and testable acceptance criteria. |
+| [`design/ux/`](system/skills-src/design/ux) | Interaction flows, visual system, unified design doc. |
+| [`design/technical/`](system/skills-src/design/technical) | Five aspect cards (architecture, modules, contracts, test strategy, traceability) writing one technical-design record. |
+| [`build/`](system/skills-src/build) | Delivery planning, ticket DAGs, TDD execution, and verification. |
+| [`test/`](system/skills-src/test) | Coverage audit, review, debugging, and integration tests after build. |
+| [`deploy/`](system/skills-src/deploy) | Release, governance, and PR review. _(planned)_ |
+| [`maintain/`](system/skills-src/maintain) | Incident diagnosis and fix loop. |
+| [`test/review/`](system/skills-src/test/review) | Design review, gap analysis, code quality, and refactoring. |
+| [`test/debugging/`](system/skills-src/test/debugging) | Triage and merge-conflict resolution. |
+| [`context/`](system/skills-src/context) | Agent memory, terminology, decisions, and the explicit-only compatibility router. |
+| [`authoring/`](system/skills-src/authoring) | Research, decision challenge, DAG rendering, and skill authoring. |
 
 `system/skills/` holds flat symlinks into `skills-src/` so the loader — which scans one level deep — can discover every skill while the source stays browsable by phase.
 

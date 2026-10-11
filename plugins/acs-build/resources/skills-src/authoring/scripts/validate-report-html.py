@@ -8,6 +8,9 @@ reports slipped through before.
 --version-only checks just the date, revision, and internal links. Use it for
 human-readable HTML that is not a finding report: canonical records, roadmaps,
 delivery plans, prototypes, and design previews.
+
+Both modes also print wording warnings (the visual contract's Writing rules).
+Warnings never change the exit code.
 """
 
 from dataclasses import dataclass, field
@@ -26,6 +29,41 @@ VISUAL_MODES = ("compare", "single", "none")
 # and under ~90 words per diagram; prose drawn as SVG text runs far above both.
 MAX_WORDS_PER_LABEL = 14
 MAX_WORDS_PER_SVG = 90
+# ASD-STE100 limits: a step (an <ol> item) at most 20 words, a description at
+# most 25, a paragraph at most 6 sentences. Chinese uses the character limits of
+# Simplified Technical Chinese. A card at its sentence limits (title, 1-sentence
+# problem, solution and takeaway, 4 short wins, 1 callout) is about 120 words.
+MAX_WORDS_PER_STEP = 20
+MAX_WORDS_PER_SENTENCE = 25
+MAX_CJK_CHARS_PER_STEP = 35
+MAX_CJK_CHARS_PER_SENTENCE = 45
+MAX_SENTENCES_PER_PARAGRAPH = 6
+MAX_WORDS_PER_CARD_PROSE = 120
+MAX_DE_PER_CLAUSE = 3
+PLAIN_WORDS = (
+    (r"\butili[sz](e|es|ed|ing|ation)\b", "use"),
+    (r"\bcommence[sd]?\b", "start"),
+    (r"\bprior to\b", "before"),
+    (r"\bin order to\b", "to"),
+    # Verb only: "leverage" the noun is an architecture lens term.
+    (r"\bleverag(es|ed|ing)\b|\bto leverage\b", "use"),
+    (r"\bfacilitat(e|es|ed|ing)\b", "help"),
+    (r"\ba number of\b", "the actual count"),
+    (r"\bit(?:'s| is) worth noting\b", "delete it"),
+    (r"\bbasically\b", "delete it"),
+    (r"\bwith regard to\b", "about"),
+    (r"\bvarious\b", "name them"),
+    (r"\brobust\b", "say what it withstands"),
+    (r"进行(?!中)", "use the verb alone: 进行优化 → 优化"),
+    (r"加以", "use the verb alone: 加以说明 → 说明"),
+    (r"赋能|闭环|至关重要", "say the concrete effect"),
+)
+CJK_CHAR = re.compile(r"[぀-ヿ一-鿿]")
+SENTENCE_END = re.compile(r"(?<=[.!?])\s+|(?<=[。！？；])")
+CLAUSE_END = re.compile(r"[，、,。！？；]")
+WORDING_BLOCKS = {"p", "li", "td", "th", "dd", "summary", "caption", "figcaption", "h1", "h2", "h3", "h4", "h5", "h6"}
+# Code, diagrams, and struck-out counter-examples are not prose.
+WORDING_SKIPPED = {"script", "style", "svg", "pre", "code", "s", "del"}
 
 
 @dataclass
@@ -179,6 +217,124 @@ def check_links(html: str) -> list[str]:
     return [f"broken internal link #{target}" for target in re.findall(r'href=["\']#([^"\']+)', markup) if unquote(target) not in anchors]
 
 
+@dataclass
+class Block:
+    tag: str
+    location: str
+    is_step: bool
+    text: list[str] = field(default_factory=list)
+
+
+class WordingParser(HTMLParser):
+    """Collect visible prose per block element, and per card outside <details>."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.blocks: list[Block] = []
+        self.card_words: dict[str, int] = {}
+        self._open_blocks: list[Block] = []
+        self._lists: list[str] = []
+        self._skipped: list[str] = []
+        self._card: str | None = None
+        self._details_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if self._skipped:
+            if tag == self._skipped[-1]:
+                self._skipped.append(tag)
+            return
+        if tag in WORDING_SKIPPED:
+            self._skipped.append(tag)
+            return
+        attrs_map = {name: value or "" for name, value in attrs}
+        if tag == "article" and "card" in attrs_map.get("class", "").split():
+            self._card = attrs_map.get("id") or f"<article> #{len(self.card_words) + 1}"
+            self.card_words[self._card] = 0
+        if tag == "details":
+            self._details_depth += 1
+        if tag in ("ol", "ul"):
+            self._lists.append(tag)
+        if tag in WORDING_BLOCKS:
+            is_step = tag == "li" and bool(self._lists) and self._lists[-1] == "ol"
+            self._open_blocks.append(Block(tag, self._card or "page", is_step))
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._skipped:
+            if tag == self._skipped[-1]:
+                self._skipped.pop()
+            return
+        if tag == "article":
+            self._card = None
+        if tag == "details" and self._details_depth:
+            self._details_depth -= 1
+        if tag in ("ol", "ul") and self._lists:
+            self._lists.pop()
+        # Close the matching block and any block the HTML left implicitly open.
+        if any(block.tag == tag for block in self._open_blocks):
+            while self._open_blocks:
+                block = self._open_blocks.pop()
+                self.blocks.append(block)
+                if block.tag == tag:
+                    break
+
+    def handle_data(self, data: str) -> None:
+        if self._skipped:
+            return
+        if self._open_blocks:
+            self._open_blocks[-1].text.append(data)
+        if self._card and not self._details_depth:
+            self.card_words[self._card] += len(data.split())
+
+
+def sentence_length(sentence: str) -> tuple[int, bool]:
+    """Return (length, counted_in_cjk_chars). CJK-dominant text counts characters."""
+    cjk_chars = len(CJK_CHAR.findall(sentence))
+    latin_words = len(CJK_CHAR.sub(" ", sentence).split())
+    if cjk_chars > latin_words:
+        return cjk_chars + latin_words, True
+    return len(sentence.split()), False
+
+
+def excerpt(text: str) -> str:
+    return text if len(text) <= 60 else text[:57] + "..."
+
+
+def check_sentences(block: Block) -> list[str]:
+    warnings: list[str] = []
+    text = " ".join("".join(block.text).split())
+    sentences = [sentence for sentence in SENTENCE_END.split(text) if sentence.strip()]
+    for sentence in sentences:
+        length, in_chars = sentence_length(sentence)
+        if in_chars:
+            limit, unit = (MAX_CJK_CHARS_PER_STEP if block.is_step else MAX_CJK_CHARS_PER_SENTENCE), "characters"
+        else:
+            limit, unit = (MAX_WORDS_PER_STEP if block.is_step else MAX_WORDS_PER_SENTENCE), "words"
+        if length > limit:
+            kind = "step" if block.is_step else "sentence"
+            warnings.append(f"{block.location}: {kind} has {length} {unit} (max {limit}); split it: \"{excerpt(sentence)}\"")
+        for clause in CLAUSE_END.split(sentence):
+            if clause.count("的") > MAX_DE_PER_CLAUSE:
+                warnings.append(f"{block.location}: more than {MAX_DE_PER_CLAUSE} 的 in one clause: \"{excerpt(clause)}\"")
+    if block.tag == "p" and len(sentences) > MAX_SENTENCES_PER_PARAGRAPH:
+        warnings.append(f"{block.location}: paragraph has {len(sentences)} sentences (max {MAX_SENTENCES_PER_PARAGRAPH}); use a list: \"{excerpt(text)}\"")
+    for pattern, replacement in PLAIN_WORDS:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            warnings.append(f"{block.location}: \"{match.group(0)}\" → {replacement}")
+    return warnings
+
+
+def lint_wording(path: Path) -> list[str]:
+    """Warn where visible prose breaks the Writing rules. Never an error."""
+    parser = WordingParser()
+    parser.feed(path.read_text(encoding="utf-8"))
+    warnings = [warning for block in parser.blocks for warning in check_sentences(block)]
+    for card, words in parser.card_words.items():
+        if words > MAX_WORDS_PER_CARD_PROSE:
+            warnings.append(f"card {card}: {words} words of prose outside <details> (max {MAX_WORDS_PER_CARD_PROSE}); move evidence into <details>")
+    return warnings
+
+
 def validate(path: Path, *, version_only: bool = False) -> list[str]:
     html = path.read_text(encoding="utf-8")
     parser = ReportParser()
@@ -204,13 +360,16 @@ def main() -> int:
     failed = False
     for path in paths:
         errors = validate(path, version_only=version_only)
+        warnings = lint_wording(path)
         if errors:
             failed = True
             print(f"{path}:", file=sys.stderr)
             for error in errors:
                 print(f"  - {error}", file=sys.stderr)
-            continue
-        print(f"{path}: {'date and version' if version_only else 'visual report'} OK")
+        else:
+            print(f"{path}: {'date and version' if version_only else 'visual report'} OK")
+        for warning in warnings:
+            print(f"  warning: {warning}")
     return 1 if failed else 0
 
 

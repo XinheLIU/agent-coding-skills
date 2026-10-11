@@ -1,8 +1,16 @@
 # Changelog
 
-Last updated: 2026-10-01
+Last updated: 2026-10-11
 
 ## Unreleased
+
+### Human review views follow STE wording rules
+
+Generated views and the contracts behind them used long sentences. One sentence often carried three or four clauses, and the wording rules were split across three "Tone" paragraphs. Nothing measured the result.
+
+- `visual-report.md` has a new **Writing** section, adapted from ASD-STE100 Simplified Technical English and the answer-me-with-html controlled-writing rules. It covers the logic of a page: conclusion first, one card per finding, one statement per sentence, and each fact said once. It also covers wording: steps at most 20 words, other sentences at most 25, active voice, one term per meaning, a short-word table, and Chinese light-verb and `的` rules. A card has at most 120 words of prose outside `<svg>`, `<pre>` and `<details>`.
+- `validate-report-html.py` prints wording warnings in both modes. Warnings never change the exit code. `scripts/validate-visual-report.py` prints the same warnings.
+- `presenter.md` (v1.3.0), `html-records.md` (v1.2.0), `tabbed-discovery-report.md`, `html-report.md`, `technical-view.md` and `delivery-report.md` are rewritten in the same style. `tabbed-discovery-report.md` now points to its template for markup and script instead of repeating them (464 → 146 lines). No display requirement changed.
 
 ### Visual reports are checked per card and carry a date
 

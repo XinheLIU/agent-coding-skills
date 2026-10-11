@@ -1,6 +1,6 @@
 # acs-context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-04
 
 ACS foundational context and memory infrastructure
 
@@ -12,6 +12,7 @@ The [catalog](catalog/skill-set.json) lists discovered skills. [Third-party noti
 
 ## Skills
 
+- [acs-create-readme](skills/acs-create-readme/SKILL.md)
 - [acs-engineer-domain-model](skills/acs-engineer-domain-model/SKILL.md)
 - [acs-init-context](skills/acs-init-context/SKILL.md)
 - [acs-manage-context](skills/acs-manage-context/SKILL.md)

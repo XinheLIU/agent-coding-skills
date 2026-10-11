@@ -1,6 +1,6 @@
 # acs-craft
 
-Last updated: 2026-09-26
+Last updated: 2026-10-04
 
 Context lifecycle and authoring skills for the ACS suite.
 
@@ -13,6 +13,7 @@ The [catalog](catalog/skill-set.json) lists discovered skills. [Third-party noti
 ## Skills
 
 - [acs-challenge-approach](skills/acs-challenge-approach/SKILL.md)
+- [acs-create-readme](skills/acs-create-readme/SKILL.md)
 - [acs-draw-portfolio-dag](skills/acs-draw-portfolio-dag/SKILL.md)
 - [acs-engineer-domain-model](skills/acs-engineer-domain-model/SKILL.md)
 - [acs-init-context](skills/acs-init-context/SKILL.md)
