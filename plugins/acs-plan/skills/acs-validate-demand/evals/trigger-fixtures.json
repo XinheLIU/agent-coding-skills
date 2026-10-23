@@ -1,0 +1,130 @@
+{
+  "schema": 1,
+  "skill": "acs-validate-demand",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "/acs-validate-demand assess the customer evidence for this proposed workflow.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-02",
+      "q": "/acs-validate-demand decide whether these interviews support building the idea.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-03",
+      "q": "/acs-validate-demand grade the evidence behind our product-market fit claim.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-04",
+      "q": "/acs-validate-demand review the demand for this active-product improvement.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-05",
+      "q": "/acs-validate-demand test whether our claimed user pain is observed or inferred.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-06",
+      "q": "/acs-validate-demand issue a go/no-go verdict from the supplied demand evidence.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-07",
+      "q": "/acs-validate-demand check the narrowest wedge and status quo before investment.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "trigger-08",
+      "q": "/acs-validate-demand assess the paying-customer evidence behind this expansion.",
+      "expect": "trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "The repository answers the technical facts, but only I can decide whether launch speed matters more than customization. Help me settle that choice.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Review this PR for production readiness and return a merge verdict.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Decide the checkout flow and its empty, loading, error, success, and partial states before styling.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Our plan is blocked on my tolerance for downtime. Ask me the decision needed to proceed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Assess the recent diff against repository standards and the accepted spec.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Create wireframes for this accepted feature whose user journey is unsettled.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "I have two acceptable retention policies and no legal constraint picks one. Help me choose before the design continues.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Review my code for reliability, security, performance, and maintainability findings.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-09",
+      "q": "I saw acs-validate-demand mentioned in the docs. Explain what the name means; do not invoke it.",
+      "expect": "no-trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-10",
+      "q": "Is this product idea worth building based on these interviews?",
+      "expect": "no-trigger",
+      "invocation": "automatic"
+    }
+  ]
+}

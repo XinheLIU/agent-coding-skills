@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-tdd",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Execute this one ready ticket using its acceptance criteria and prerequisite evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "For ticket AUTH-7, write a failing acceptance check and implement the smallest passing change.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "The delivery coordinator assigned only this ready parser ticket. Run its red-green-refactor loop.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Implement the single scoped retry ticket and map each criterion to executed evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Work this one accepted bugfix criterion from a red regression to a passing repair.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "This ticket is ready; use test-driven implementation for its boundary behavior.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Finish the one claimed serialization ticket, preserving the existing seam and verifying its criteria.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Implement this ready unit of work and return criterion-to-test-to-revision evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "The feature scope and acceptance criteria are approved. Implement the whole change through its delivery tickets.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-implement"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Design the verification strategy for these requirements before we write code.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-test-strategy"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Resume the authorized delivery run from the existing ticket graph and evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-implement"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "The technical plan has a thin testing section. Define layers, seams, and CI gates.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-test-strategy"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Build this accepted bugfix end to end and return verified results.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-implement"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Assign a verification method to every proposed contract and failure mode.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-test-strategy"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "We approved the bootstrap plan. Carry its dependency-ordered work through implementation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-implement"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Decide where this design needs contract tests versus integration tests.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-test-strategy"
+    }
+  ]
+}

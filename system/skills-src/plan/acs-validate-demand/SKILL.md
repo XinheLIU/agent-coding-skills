@@ -165,3 +165,9 @@ confirms it, and it validates no demand.
 - **Does not write the PRD** — it promotes the core idea, not the full spec
 
 Adapted from gstack `office-hours` and `plan-ceo-review`; see `system/THIRD_PARTY_NOTICES.md`.
+
+## When NOT to use
+
+- For user-owned choices blocking a caller, use [acs-challenge-approach](../../authoring/acs-challenge-approach/SKILL.md).
+- For production-readiness code review, use [acs-review-code-quality](../../test/review/acs-review-code-quality/SKILL.md).
+- For unsettled flows, wireframes, or interaction states, use [acs-design-interaction-flow](../../design/ux/acs-design-interaction-flow/SKILL.md).

@@ -29,7 +29,7 @@ The adapted skills listed in the organization report were influenced by [`mattpo
 - Revision `2ab958093e83e0ec752e6c1c5932da465bf23e0c`: `grill-me`, `grill-with-docs`, `grilling`, `to-spec`, `to-tickets`.
 - Revision `ed37663cc5fbef691ddfecd080dff42f7e7e350d`: the other 17 audited skills.
 
-The study copy under `references/matt-pocock/` has since been refreshed to the upstream tree at `49dd158` (2026-10-09). The adaptations above were made against the older revisions. The corpus-alignment changes additionally adapt questioning and TDD seam principles from `49dd158`, with provenance recorded in `protocols/questioning.md` and `skills-src/build/acs-tdd/SKILL.md`.
+The study copy under `references/matt-pocock/` has since been refreshed to the upstream tree at `49dd158` (2026-10-09). The adaptations above were made against the older revisions. The corpus-alignment changes additionally adapt questioning and TDD seam principles from `49dd158`, with provenance recorded in `protocols/questioning.md` and the B4 change ticket.
 
 `build/acs-plan-delivery` adapts the progressive decision mapping of `wayfinder` and independently verifiable slicing of `to-tickets`. It reuses upstream Product/Design decisions, keeps design blockers and delivery slices in one canonical graph, and integrates the suite's DAG renderer and execution handoffs. No upstream skill installation is required.
 

@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-validate-prototype",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Build throwaway code to determine whether this drag interaction works on touch screens.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Conversation cannot tell us if this streaming layout is usable. Prototype the specific behavior.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Test a disposable interface to settle whether inline editing feels too crowded.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Create a small throwaway experiment to observe the debounce behavior before deciding.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "We cannot resolve the scrolling interaction by discussion. Build a focused prototype.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Prototype this one uncertain interface question and report what the observation establishes.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Use disposable code to check whether the offline conflict flow is understandable.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Observe an executable mock of this transition before choosing the design.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "The repository answers the technical facts, but only I can decide whether launch speed matters more than customization. Help me settle that choice.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Implement the approved styled prototype in our production stack using DESIGN.md.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Our plan is blocked on my tolerance for downtime. Ask me the decision needed to proceed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "The visual design and structure are locked; build the production component.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "I have two acceptable retention policies and no legal constraint picks one. Help me choose before the design continues.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Convert the accepted styled checkout prototype into accessible application code.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "The triage brief needs a priority only the product owner can set. Resolve that remaining decision with me.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Wire the approved design tokens into this ready-to-build UI.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    }
+  ]
+}

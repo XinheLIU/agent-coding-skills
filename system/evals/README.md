@@ -1,6 +1,6 @@
 # Shared Context
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 The [canonical protocol](../protocols/skill-declarations.md) defines Working Memory for run recovery and Persistent Memory for Intent, Current, and Changes. The [Presenter](../protocols/presenter.md) derives human review views without owning domain facts; review decisions and exact reviewed artifacts remain persistent. Classify records by ownership and retention, never by file format.
 
@@ -15,6 +15,13 @@ Setup records repository paths in `docs/agents/memory.md`. The [coordinator](../
 A completed change retains its ticket/spec, accepted decisions, compact verification, and release references. Only reconciled execution scratch is disposable. Preserve established trackers; new local changes use tracked `docs/changes/<change-id>/`.
 
 [Current implementation verification](evals/context-memory-presenter-verification.md) records Working/Persistent/Presenter checks and the independent review/cleanup exercise. The earlier [verification record](evals/verification.md) is a historical snapshot.
+
+## Trigger routing
+
+[Trigger fixtures and runner](trigger-evals.md) cover every model-invocable skill, near-misses,
+and reciprocal collision boundaries. `python3 system/evals/trigger_evals.py --check` checks
+coverage; the default runner prints a dry plan. Model and budget configuration remain
+unset pending selection, so these artifacts do not claim measured routing success.
 
 ## Repeatable verification
 

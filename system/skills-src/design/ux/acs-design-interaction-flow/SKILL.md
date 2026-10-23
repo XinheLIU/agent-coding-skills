@@ -23,7 +23,7 @@ context:
 
 ## Procedure
 
-0. Use coordinator paths/change identity, never newest effort. Read PRD Parts 1+3, IDs/revisions, prototype markers, optional DESIGN.md/context. Existing interaction design: ask iterate/archive+restart/cancel through coordinator. Explicitly reopen touched locked surfaces with user; no silent structure changes.
+0. Coordinator paths/change identity, never newest effort. Read PRD Parts 1+3, IDs/revisions, prototype markers, optional DESIGN.md/context. Existing design: ask iterate/archive+restart/cancel via coordinator. Explicitly reopen touched locked surfaces with user; no silent structure changes.
 1. Reuse persona/tasks/platform/flows/edge cases; ask only gaps. Save `interaction/context.md` in resolved effort. Optional UX knowledge is evidence, never required.
 2. Save hierarchy/nav in `architecture.md`: primary/secondary/tertiary, entry/exit, three indispensable elements. Confirm via coordinator; show grayscale draft first if requested.
 3. In `state-table.md` define EVERY feature: LOADING/EMPTY/ERROR/SUCCESS/PARTIAL. Reuse PRD states; [questioning](../../../../protocols/questioning.md) classifies user-owned frontier decisions; present proposals at gate. Empty needs warmth, errors recovery. Authorized PRD reconciliation → `acs-write-prd` with accepted states/capability IDs; no second normative copy.
@@ -38,6 +38,11 @@ context:
 
 Verify all five states/capability links, ≥2 journeys, approved structure, recorded architecture/rationale/mobile/a11y/deferrals. No styling or unrelated surface edits. Authorized state promotion replaces working definitions with links. Prototype/drafts: `generated`/`source-revision` match visible date/revision; run [validator](../../../authoring/scripts/validate-report-html.py) `--version-only`, fix errors. Accepted rationale survives scratch; drafts are not authority.
 
-For artifact layouts load [output examples](references/output-examples.md) only when needed.
+[Layouts](references/output-examples.md) as needed.
+
+
+## When NOT to use
+
+[Choices](../../../authoring/acs-challenge-approach/SKILL.md); [code review](../../../test/review/acs-review-code-quality/SKILL.md); [demand evidence](../../../plan/acs-validate-demand/SKILL.md) (explicit only).
 
 <!-- compaction-core:end -->

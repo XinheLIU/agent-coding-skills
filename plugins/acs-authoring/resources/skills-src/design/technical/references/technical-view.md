@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-11
 
-One HTML view, `docs/design/technical-design.html`, renders the whole technical record. It replaces per-skill report files. Apply the display and Writing rules in [the visual report contract](../../../authoring/references/visual-report.md) and the tab mechanics in [the tabbed report protocol](../../../authoring/references/tabbed-discovery-report.md); this file adds only the technical-design content requirements.
+One HTML view, `docs/design/technical-design.html`, renders the whole technical record. It replaces per-skill report files. Apply the display and Writing rules in [the visual report contract](../acs-trace-requirements/references/visual-report.md) and the tab mechanics in [the tabbed report protocol](../../../authoring/references/tabbed-discovery-report.md); this file adds only the technical-design content requirements.
 
 The view is derived. Every fact, ID and verdict comes from `technical-design.md` at a named revision, which the header shows. It is a *living view*: keep the fixed path, and set `view-kind="living"` and the `generated` and `source-revision` meta tags (see the visual contract's date-and-version rule). On refresh, rebuild the whole file. Never edit it by hand, and never let it hold a conclusion that the record lacks.
 

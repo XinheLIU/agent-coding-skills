@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-review-agent-instructions",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Our AGENTS.md repeats obsolete guidance; prune it against current repository behavior.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Repair the hierarchy between root and package CLAUDE.md instructions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "An incident revealed a rule that cannot be enforced mechanically. Add the concise lesson to agent instructions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "The agent context pointers in AGENTS.md are broken. Repair their routing.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Review whether our repository agent instructions are useful and noncontradictory.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Update CLAUDE.md after the repository layout changed, preserving still-valid rules.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Consolidate duplicated instruction blocks across nested AGENTS.md files.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Check the instruction hierarchy for conflicting test commands and repair the guidance.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Migrate these Claude instructions and hooks to our Codex runtime while preserving behavior.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Write a README explaining this project to new users from the actual implementation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Compare agent context behavior across two hosts and repair parity gaps.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Revamp the human-facing setup instructions in README.md.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Translate this runtime skill and command setup into the new host capabilities.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "The project introduction is stale; update README usage and navigation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "We are changing agent applications; preserve permission and persistence semantics.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Create a concise getting-started README based on our manifests and commands.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    }
+  ]
+}

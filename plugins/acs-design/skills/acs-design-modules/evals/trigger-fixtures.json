@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-design-modules",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Turn this architecture into implementable module responsibilities and dependency directions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Our modules are shallow wrappers with tangled ownership. Redesign their boundaries.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Define owned types and deep interfaces for the new billing modules.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Decide where adapters and shared libraries belong in the code structure.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Split this oversized module into coherent responsibilities before implementation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Review wiring and dependency direction across these proposed modules.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Design the module migration path without implementing the refactor yet.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "The architecture is settled; specify how components and interfaces fit into code.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Define interface invariants and failure semantics for the payment API.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Simplify this code while preserving its observable behavior.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Our queue contract lacks ordering and idempotency guarantees. Design them.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Polish the recently changed functions with clearer names and less nesting.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Specify trust boundaries and preconditions for this upload endpoint.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Reduce duplication across these modules without changing functionality.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Design API evolution rules so old consumers have a clear compatibility contract.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Break up this oversized class with a behavior-preserving structural refactor.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    }
+  ]
+}

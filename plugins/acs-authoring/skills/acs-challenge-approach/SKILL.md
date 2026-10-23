@@ -26,3 +26,9 @@ Shared semantics: [shared protocol](../../resources/protocols/skill-declarations
 2. Follow the [questioning protocol](../../resources/protocols/questioning.md): classify candidates, ask only the settled-prerequisite frontier, and lead with a recommendation and its trade-off.
 3. Reflect each answer as a concrete decision and correct it immediately if the user disagrees.
 4. Stop when every decision required by the caller's completion criterion is resolved. Return confirmed decisions and genuinely open questions to the caller, which owns persistence and implementation.
+
+## When NOT to use
+
+- For production-readiness code review, use [acs-review-code-quality](../../resources/skills-src/test/review/acs-review-code-quality/SKILL.md) (reference procedure; capability not installed).
+- For unsettled flows, wireframes, or interaction states, use [acs-design-interaction-flow](../../resources/skills-src/design/ux/acs-design-interaction-flow/SKILL.md) (reference procedure; capability not installed).
+- For product-demand evidence grading (explicit invocation only), use [acs-validate-demand](../../resources/skills-src/plan/acs-validate-demand/SKILL.md) (reference procedure; capability not installed).

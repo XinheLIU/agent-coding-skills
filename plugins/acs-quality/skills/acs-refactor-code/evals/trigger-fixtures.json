@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-refactor-code",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Simplify this code while preserving its observable behavior.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Polish the recently changed functions with clearer names and less nesting.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Reduce duplication across these modules without changing functionality.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Break up this oversized class with a behavior-preserving structural refactor.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Clean up redundant wrappers and dead comments in my latest code.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Extract a useful abstraction from these repeated implementations and verify preserved behavior.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Refactor the tangled internals in approved groups with tests between changes.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Flatten this deeply nested function and keep its interface and behavior intact.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Turn this architecture into implementable module responsibilities and dependency directions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Review this PR for production readiness and return a merge verdict.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Our modules are shallow wrappers with tangled ownership. Redesign their boundaries.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Assess the recent diff against repository standards and the accepted spec.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Define owned types and deep interfaces for the new billing modules.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Review my code for reliability, security, performance, and maintainability findings.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Decide where adapters and shared libraries belong in the code structure.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Drill into the code behind these open architecture findings and report actionable defects.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    }
+  ]
+}

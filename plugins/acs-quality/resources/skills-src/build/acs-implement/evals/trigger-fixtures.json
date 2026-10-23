@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-implement",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "The feature scope and acceptance criteria are approved. Implement the whole change through its delivery tickets.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Resume the authorized delivery run from the existing ticket graph and evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Build this accepted bugfix end to end and return verified results.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "We approved the bootstrap plan. Carry its dependency-ordered work through implementation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Deliver the accepted account-export feature, including the ready tickets and integration verification.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Continue this interrupted implementation run using the retained status and prerequisite evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "The scoped change is ready and authorized; execute the delivery plan.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Implement the accepted migration across these dependent tickets and reconcile completion evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Execute this one ready ticket using its acceptance criteria and prerequisite evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-tdd"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Turn this accepted feature scope into dependency-ordered delivery tickets.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "For ticket AUTH-7, write a failing acceptance check and implement the smallest passing change.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-tdd"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "The design is approved; break the work into verifiable implementation slices.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "The delivery coordinator assigned only this ready parser ticket. Run its red-green-refactor loop.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-tdd"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Update ticket readiness after this dependency decision changed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Implement the single scoped retry ticket and map each criterion to executed evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-tdd"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Reconcile the delivery graph with the newly accepted design evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    }
+  ]
+}

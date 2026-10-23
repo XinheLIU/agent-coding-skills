@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "skill": "acs-challenge-approach",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "The repository answers the technical facts, but only I can decide whether launch speed matters more than customization. Help me settle that choice.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Our plan is blocked on my tolerance for downtime. Ask me the decision needed to proceed.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "I have two acceptable retention policies and no legal constraint picks one. Help me choose before the design continues.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "The triage brief needs a priority only the product owner can set. Resolve that remaining decision with me.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "All evidence is collected; whether to drop offline support is my call. Challenge the trade-off with me.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "A decision ticket is blocked on whether I accept a paid service. Get my answer without reopening settled facts.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "I disagree with the proposed scope reduction. Work through that user-owned choice before proceeding.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "The implementation cannot proceed until I choose which customers get the first rollout. Help resolve that choice.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Review this PR for production readiness and return a merge verdict.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Decide the checkout flow and its empty, loading, error, success, and partial states before styling.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "We know the migration destination but not the route. Map the unresolved decisions across sessions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-explore-unknowns"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Assess the recent diff against repository standards and the accepted spec.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Create wireframes for this accepted feature whose user journey is unsettled.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Break this broad engineering uncertainty into dependency-ordered decision tickets.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-explore-unknowns"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Review my code for reliability, security, performance, and maintainability findings.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Design navigation and information hierarchy for the new workspace.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-09",
+      "q": "/acs-validate-demand assess the customer evidence for this proposed workflow.",
+      "expect": "no-trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand",
+      "near_miss_of": "acs-validate-demand"
+    },
+    {
+      "id": "no-trigger-10",
+      "q": "/acs-validate-demand decide whether these interviews support building the idea.",
+      "expect": "no-trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand",
+      "near_miss_of": "acs-validate-demand"
+    }
+  ]
+}

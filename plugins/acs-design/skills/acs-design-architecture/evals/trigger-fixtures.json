@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-design-architecture",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Design the system boundaries and shared foundations for this accepted feature.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Audit our tangled service architecture and compare current, ideal, and feasible shapes.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Review whether these ADRs still hold under the new deployment constraints.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Decide technology and deployment fit for the system architecture.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Map product capabilities to architectural owners and shared infrastructure.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Review our greenfield architecture before we define module internals.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Assess the system-level data ownership and service boundary choices.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Rejudge accumulated architectural decisions and identify superseded ones.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Turn this architecture into implementable module responsibilities and dependency directions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Turn these requirements into a holistic technical design across architecture, modules, contracts, and testing.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Our modules are shallow wrappers with tangled ownership. Redesign their boundaries.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Review this RFC across all technical design aspects before coding.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Define owned types and deep interfaces for the new billing modules.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Assess the architecture proposal together with module, contract, and verification consequences.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Decide where adapters and shared libraries belong in the code structure.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Run a comprehensive design-quality review of this plan.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    }
+  ]
+}

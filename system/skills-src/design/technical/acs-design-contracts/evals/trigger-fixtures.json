@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-design-contracts",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Define interface invariants and failure semantics for the payment API.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Our queue contract lacks ordering and idempotency guarantees. Design them.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Specify trust boundaries and preconditions for this upload endpoint.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Design API evolution rules so old consumers have a clear compatibility contract.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Create a failure-modes table for the new code paths and their recovery semantics.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Determine what must stay true when this operation partially fails.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Our interfaces exist but error categories and postconditions are unstated. Define the contracts.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Review schema evolution and retry correctness guarantees for this integration.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Turn this architecture into implementable module responsibilities and dependency directions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Design the system boundaries and shared foundations for this accepted feature.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Our modules are shallow wrappers with tangled ownership. Redesign their boundaries.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Audit our tangled service architecture and compare current, ideal, and feasible shapes.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Define owned types and deep interfaces for the new billing modules.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Review whether these ADRs still hold under the new deployment constraints.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Decide where adapters and shared libraries belong in the code structure.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-modules"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Decide technology and deployment fit for the system architecture.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    }
+  ]
+}

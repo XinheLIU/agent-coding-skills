@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-release",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Prepare a first-use dry run for releasing this merged artifact.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Roll out the verified merged artifact using the declared production environment.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Check rollback thresholds and error budget before this deployment.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Observe the canary across two consecutive checks and report readiness.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "A merge command errored; inspect server state before deciding the release next step.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Resume the staged release using current artifact verification.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Plan rollback for this authorized rollout after its safety threshold trips.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Run release readiness without changing production and record not released.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Prepare this verified branch for an authorized pull request.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Rerun verification and draft the PR body for this finished change.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Ship this accepted branch to a pull request with current evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Check merge danger and prepare the smallest evidence-backed PR summary.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Resume PR preparation after fixes and rerun all configured verification.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "The code is implemented; complete the verification-to-PR handoff.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Build a PR body with stop conditions and current source-bound results.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Assess whether this branch converged before opening its authorized PR.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-ship"
+    }
+  ]
+}

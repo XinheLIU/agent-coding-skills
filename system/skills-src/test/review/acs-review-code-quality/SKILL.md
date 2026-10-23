@@ -78,4 +78,12 @@ Confidence rules (the [review evidence gate](#evidence-identity) takes precedenc
 
 Write `docs/eng-reviews/next-steps-{branch}-{YYYYMMDD-HHMM}.md`: verdict/scope/revisions/spec/summary/strengths, axis priorities, appendix/unverified entries, coverage/domains ([format and provenance](references/review-formats.md)). Missing lenses never pass. Apply blast radius/on-call/complexity/reversibility.
 
+
+## When NOT to use
+
+- For requirement-to-entrypoint wiring and design/code drift, use [acs-trace-requirements](../../../design/technical/acs-trace-requirements/SKILL.md).
+- For user-owned choices blocking a caller, use [acs-challenge-approach](../../../authoring/acs-challenge-approach/SKILL.md).
+- For unsettled flows, wireframes, or interaction states, use [acs-design-interaction-flow](../../../design/ux/acs-design-interaction-flow/SKILL.md).
+- For product-demand evidence grading (explicit invocation only), use [acs-validate-demand](../../../plan/acs-validate-demand/SKILL.md).
+
 <!-- compaction-core:end -->

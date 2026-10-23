@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-init-context",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Set up shared agent context and memory routing for this repository.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "A required persistent decision has nowhere configured to live. Initialize the routing first.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Configure canonical memory homes, scratch recovery, and retention for this project.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "The repository has no context routing index; establish one for future persistent writes.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Initialize the shared working and persistent context layout requested by the team.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "We lost the memory routing configuration and it blocks saving an accepted decision. Restore setup.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Configure this project context with change records and an optional derived code index.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Prepare shared context paths before the first durable design handoff.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Audit the scattered Markdown and HTML documents across this repository.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Migrate these Claude instructions and hooks to our Codex runtime while preserving behavior.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "The context routing exists but has drifted from the current file layout. Reconcile it.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Compare agent context behavior across two hosts and repair parity gaps.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Classify stale plans and abandoned working notes before proposing cleanup.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Translate this runtime skill and command setup into the new host capabilities.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Check whether durable domain context still matches the repository implementation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "We are changing agent applications; preserve permission and persistence semantics.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-translate-agent-context"
+    }
+  ]
+}

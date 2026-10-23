@@ -1,0 +1,5 @@
+interface:
+  display_name: "Validate Demand"
+  short_description: "Grade the evidence behind a product claim and issue a go/no-go verdict. Use when..."
+policy:
+  allow_implicit_invocation: false

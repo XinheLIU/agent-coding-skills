@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-settle-requirements",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Accepted product intent exists; define functional requirements and testable acceptance criteria.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Before technical design, turn these approved capabilities into observable behavior requirements.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Our accepted export scope lacks pass/fail acceptance criteria. Specify them.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Clarify what the product must do from the approved intent without designing screens.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Write stable requirement IDs for these accepted capabilities.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "The product decision is settled but behavior is ambiguous. Define requirements before architecture.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Translate the approved onboarding intent into independently testable acceptance conditions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Find and resolve gaps in functional requirements for this already accepted scope.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Decide the checkout flow and its empty, loading, error, success, and partial states before styling.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Turn these requirements into a holistic technical design across architecture, modules, contracts, and testing.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Create wireframes for this accepted feature whose user journey is unsettled.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Review this RFC across all technical design aspects before coding.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Design navigation and information hierarchy for the new workspace.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Assess the architecture proposal together with module, contract, and verification consequences.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "We know the capabilities but not how users move between screens. Define the interactions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Run a comprehensive design-quality review of this plan.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-technical-design"
+    }
+  ]
+}

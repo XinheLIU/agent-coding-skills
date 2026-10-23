@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-explore-unknowns",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "We know the migration destination but not the route. Map the unresolved decisions across sessions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Break this broad engineering uncertainty into dependency-ordered decision tickets.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "The goal is clear but several independent choices remain. Chart a wayfinding map.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Plan how to resolve the unknowns for this multi-session platform effort.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Build a dependency map of open decisions before any delivery scope can be accepted.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Identify which unanswered design decisions block the rest of this long effort.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Organize the path to our known destination as addressable decision tickets.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Reconcile the effort map after resolving one uncertainty and exposing two dependent questions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Turn this accepted feature scope into dependency-ordered delivery tickets.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "The repository answers the technical facts, but only I can decide whether launch speed matters more than customization. Help me settle that choice.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "The design is approved; break the work into verifiable implementation slices.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Our plan is blocked on my tolerance for downtime. Ask me the decision needed to proceed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Update ticket readiness after this dependency decision changed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "I have two acceptable retention policies and no legal constraint picks one. Help me choose before the design continues.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Reconcile the delivery graph with the newly accepted design evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "The triage brief needs a priority only the product owner can set. Resolve that remaining decision with me.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    }
+  ]
+}

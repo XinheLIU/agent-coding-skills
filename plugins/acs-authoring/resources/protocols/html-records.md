@@ -54,7 +54,7 @@ Targeted retrieval works only when records stay short:
 - One record per subject. Link to other records; do not copy them.
 - If a record is too long to read in one extract, link its evidence instead of inlining it.
 - Prefer a diagram, table or chip row to prose when it carries the same meaning. Give every diagram an adjacent one-sentence takeaway. Render graph diagrams as inline SVG when available. Otherwise keep their readable diagram source with a text explanation.
-- Write visible text to the [Writing rules](../skills-src/authoring/references/visual-report.md#writing).
+- Write visible text to the [Writing rules](../skills-src/design/technical/acs-trace-requirements/references/visual-report.md#writing).
 
 Collapsing content does not reduce agent context, because agents find the relevant records before they read. Format the source for targeted patches, with one record per readable block.
 

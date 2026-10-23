@@ -34,7 +34,7 @@ Use text or Markdown for simple results. Use HTML when diagrams, comparisons or 
 
 | Template | Use when |
 | --- | --- |
-| [Visual report](../skills-src/authoring/references/visual-report.md) | The default derived HTML companion: header, overview, finding cards, evidence, footer. It also holds the Writing rules for every view and HTML record. |
+| [Visual report](../skills-src/design/technical/acs-trace-requirements/references/visual-report.md) | The default derived HTML companion: header, overview, finding cards, evidence, footer. It also holds the Writing rules for every view and HTML record. |
 | [Tabbed discovery report](../skills-src/authoring/references/tabbed-discovery-report.md) | Complex analysis: 3 or more major concerns, revision history, nested options, before/after across several dimensions |
 
 A per-skill `HTML-REPORT.md` adds only that skill's content requirements. Display and writing rules stay in the shared templates. Canonical memory documents (`product.html`, `prototype.html`) are not Presenter views. The [HTML record format](html-records.md) defines their serialization.
@@ -42,7 +42,7 @@ A per-skill `HTML-REPORT.md` adds only that skill's content requirements. Displa
 ## Generate a view
 
 1. Resolve only the relevant records and revisions. Before formal review or downstream use, save the minimum proposal and evidence in Persistent Memory with its actual status, `proposed` included.
-2. Arrange existing conclusions around the focus. Put the conclusion first and write to the [Writing rules](../skills-src/authoring/references/visual-report.md#writing). Mark Working-only execution information as provisional run state and link its checkpoint. Keep rendering intermediates in Working; a persistent parallel ViewModel is not necessary.
+2. Arrange existing conclusions around the focus. Put the conclusion first and write to the [Writing rules](../skills-src/design/technical/acs-trace-requirements/references/visual-report.md#writing). Mark Working-only execution information as provisional run state and link its checkpoint. Keep rendering intermediates in Working; a persistent parallel ViewModel is not necessary.
 3. Show source references and revisions, domain status and applicable review findings. A view holds no unique domain conclusion and no hidden second copy of canonical state. Keep the existing renderer or template when it fits.
 4. Verify that links and the visible meaning agree with the sources. The delivered view represents the listed revisions. To refresh, reread the sources; rendering never changes them. A static offline page cannot detect later source changes.
 
@@ -60,7 +60,7 @@ A visible line near the top shows the same date and revision.
 - **One-off report:** name it `<slug>-YYYY-MM-DD.html`.
 - **File rebuilt or edited at a fixed path** (`technical-design.html`, `roadmap.html`, `delivery-plan.html`, `product.html`, `prototype.html`): keep the path and add `<meta name="view-kind" content="living">`.
 
-Before handover, run the [validator](../skills-src/authoring/scripts/validate-report-html.py). Finding reports run it plainly, as the [visual report](../skills-src/authoring/references/visual-report.md) contract requires. Every other HTML file runs it with `--version-only`. Fix every error.
+Before handover, run the [validator](../skills-src/authoring/scripts/validate-report-html.py). Finding reports run it plainly, as the [visual report](../skills-src/design/technical/acs-trace-requirements/references/visual-report.md) contract requires. Every other HTML file runs it with `--version-only`. Fix every error.
 
 You can delete and rebuild generated reports, delivery roadmaps and DAGs; no fact or decision changes. Canonical `product.html` records and design prototypes are Persistent artifacts, even when people read them. Do not discard their contents or accepted visuals as derived presentation.
 

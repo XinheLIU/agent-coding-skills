@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-resolving-merge-conflicts",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Git reports an active merge conflict in these files. Resolve both sides using their intended changes.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "This rebase stopped with unmerged paths. Reconcile the conflicts.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Conflict markers remain after our merge; preserve both documented intents when resolving them.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Help resolve the in-progress rebase conflict without losing either feature.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "The index has unmerged entries from an authorized merge. Repair the conflicted files.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "We are in MERGING state and the config file has conflict markers. Resolve it.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "This active cherry-picked change collided during our rebase; inspect the unmerged paths and reconcile intent.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "The ongoing Git merge has add/add conflicts. Work through the competing changes.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Simplify this code while preserving its observable behavior.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Review this PR for production readiness and return a merge verdict.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Polish the recently changed functions with clearer names and less nesting.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Assess the recent diff against repository standards and the accepted spec.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Reduce duplication across these modules without changing functionality.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Review my code for reliability, security, performance, and maintainability findings.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Break up this oversized class with a behavior-preserving structural refactor.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Drill into the code behind these open architecture findings and report actionable defects.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    }
+  ]
+}

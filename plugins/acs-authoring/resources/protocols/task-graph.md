@@ -11,7 +11,7 @@ Last updated: 2026-10-01
 
 One rendering contract for every task graph the suite draws: the delivery plan DAG, the roadmap view, and the live progress view an implement run refreshes. It fixes the vocabulary, the palette, the layout, and the legend so two graphs from two skills read the same way.
 
-The renderer is [`acs-draw-portfolio-dag`](../../skills/acs-draw-portfolio-dag/SKILL.md). Canonical tickets own status and dependencies; this protocol owns only how they are displayed. Derived views remain [Presenter](../skills-src/authoring/references/visual-report.md) output and are rebuilt, never hand-edited.
+The renderer is [`acs-draw-portfolio-dag`](../../skills/acs-draw-portfolio-dag/SKILL.md). Canonical tickets own status and dependencies; this protocol owns only how they are displayed. Derived views remain [Presenter](../skills-src/design/technical/acs-trace-requirements/references/visual-report.md) output and are rebuilt, never hand-edited.
 
 ## View status
 
@@ -57,7 +57,7 @@ Edges:
 
 Edges are orthogonal elbows from the right edge of the prerequisite to the left edge of the dependent. The critical path is drawn last, so it stays on top.
 
-Tokens are CSS custom properties declared once in a single `:root` block, redefined under `prefers-color-scheme: dark`. No rule, script, or inline style may use a raw colour value; markup carries `var(--token)`. This is the [visual report contract](../skills-src/authoring/references/visual-report.md#visual-and-runtime-rules) rule applied to task graphs, and it is what keeps the light and dark views from drifting apart.
+Tokens are CSS custom properties declared once in a single `:root` block, redefined under `prefers-color-scheme: dark`. No rule, script, or inline style may use a raw colour value; markup carries `var(--token)`. This is the [visual report contract](../skills-src/design/technical/acs-trace-requirements/references/visual-report.md#visual-and-runtime-rules) rule applied to task graphs, and it is what keeps the light and dark views from drifting apart.
 
 ## Layout
 

@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-sync-context",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Audit the scattered Markdown and HTML documents across this repository.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "The context routing exists but has drifted from the current file layout. Reconcile it.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Classify stale plans and abandoned working notes before proposing cleanup.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Check whether durable domain context still matches the repository implementation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Our code index is outdated; reconcile shared context against the current source.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Inventory the documentation tree and identify records in the wrong memory home.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Review this messy docs directory and propose a confirmed repair plan.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Working memory and accepted decisions disagree after the refactor. Audit the drift.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Set up shared agent context and memory routing for this repository.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-init-context"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Write a README explaining this project to new users from the actual implementation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "A required persistent decision has nowhere configured to live. Initialize the routing first.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-init-context"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Revamp the human-facing setup instructions in README.md.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Configure canonical memory homes, scratch recovery, and retention for this project.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-init-context"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "The project introduction is stale; update README usage and navigation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "The repository has no context routing index; establish one for future persistent writes.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-init-context"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Create a concise getting-started README based on our manifests and commands.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-create-readme"
+    }
+  ]
+}

@@ -71,3 +71,7 @@ The `TRC` section holds the summary counts, the matrix, unexpected code, build o
 ## Done when
 
 Every in-scope criterion has a status with evidence and every gap has one next action. Route `MISSING` and `PARTIAL` to `acs-implement`, `DIVERGENT` to the owning card, test gaps to `acs-analyze-test-gaps`, and broad doc drift to `acs-sync-context`.
+
+## When NOT to use
+
+- For production-readiness code review, use [acs-review-code-quality](../../resources/skills-src/test/review/acs-review-code-quality/SKILL.md) (reference procedure; capability not installed).

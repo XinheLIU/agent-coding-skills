@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-draw-portfolio-dag",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Render these Markdown workstreams as an interactive dependency graph.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Show which tickets are on the delivery frontier in an HTML portfolio view.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Turn the existing ticket dependencies into a Mermaid diagram.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "We already have a delivery plan; visualize cross-team sequencing from its tickets.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Refresh the live progress graph from the updated ticket statuses.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Make an openable dependency map of these parallel workstreams.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Highlight critical dependency chains across this portfolio without changing the ticket plan.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Visualize which ready tasks unblock the most downstream work.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Turn this accepted feature scope into dependency-ordered delivery tickets.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "We know the migration destination but not the route. Map the unresolved decisions across sessions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-explore-unknowns"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "The design is approved; break the work into verifiable implementation slices.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Break this broad engineering uncertainty into dependency-ordered decision tickets.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-explore-unknowns"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Update ticket readiness after this dependency decision changed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "The goal is clear but several independent choices remain. Chart a wayfinding map.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-explore-unknowns"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Reconcile the delivery graph with the newly accepted design evidence.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-plan-delivery"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Plan how to resolve the unknowns for this multi-session platform effort.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-explore-unknowns"
+    }
+  ]
+}

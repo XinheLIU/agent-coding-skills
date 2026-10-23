@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-design-system-create",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Create a visual design system from scratch; we have neither DESIGN.md nor a reference brand.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Define typography, color, and layout for this unbranded new product.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "There is no visual authority to adopt. Propose a style tied to our persona and constraints.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Build the first design system and preview its tokens before approval.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "We need a new visual language with no existing brand or design document.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Choose a coherent type and color system for our product from a blank slate.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Create the initial root DESIGN.md after exploring a new visual direction.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Our app has no brand references; establish an original design system.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Adopt the existing brand guide as the canonical root DESIGN.md.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-context"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "The wireframes are locked and DESIGN.md exists. Compare three visual directions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-visual-design-variants"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Our design authority lives in a legacy system.md. Migrate it to DESIGN.md.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-context"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Explore typography and color variants without changing the approved interaction structure.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-visual-design-variants"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Check whether DESIGN.md has drifted from the approved reference site.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-context"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "We need to choose a visual style for these locked screens before implementation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-visual-design-variants"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Before UX work, establish which existing visual rules govern this project.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-context"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Prepare distinct styled variants of the accepted wireframe using our design authority.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-visual-design-variants"
+    }
+  ]
+}

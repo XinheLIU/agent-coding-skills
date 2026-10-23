@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-engineer-domain-model",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Teams use customer and account interchangeably. Establish consistent domain terms.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "The code calls this a subscription but the domain model says entitlement. Reconcile the mismatch.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Record the hard-to-reverse decision to use event sourcing with its trade-offs in an ADR.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Clarify our domain vocabulary before the same concept gets two incompatible APIs.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "The stated aggregate boundaries disagree with the implementation. Review the model.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Capture the accepted database ownership decision as a durable architectural record.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Define the distinction between booking, reservation, and allocation in our shared model.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "We need a stable domain language and rationale for the chosen tenant boundary.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Design the system boundaries and shared foundations for this accepted feature.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Define interface invariants and failure semantics for the payment API.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Audit our tangled service architecture and compare current, ideal, and feasible shapes.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Our queue contract lacks ordering and idempotency guarantees. Design them.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Review whether these ADRs still hold under the new deployment constraints.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Specify trust boundaries and preconditions for this upload endpoint.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Decide technology and deployment fit for the system architecture.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-architecture"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Design API evolution rules so old consumers have a clear compatibility contract.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-contracts"
+    }
+  ]
+}

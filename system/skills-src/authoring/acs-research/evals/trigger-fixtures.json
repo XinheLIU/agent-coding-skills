@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-research",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "The repository does not document whether this database supports deferrable unique constraints. Find primary technical evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Check the vendor documentation for webhook ordering guarantees; our interface decision depends on it.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Find the official deprecation timeline for the API version our migration targets.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "We need an engineering answer on browser support for this Web API, with citations.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Compare the documented transaction isolation guarantees of these two stores for this design choice.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "The SDK source is not here. Verify from upstream whether cancellation aborts an in-flight request.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Find the current protocol specification for cache validation to settle our implementation question.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Our diagnosis depends on whether the provider retries failed callbacks; investigate external primary sources.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "The checkout intermittently returns 500 errors. Diagnose the cause with a reproducible feedback loop.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-diagnose-incident"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "The repository answers the technical facts, but only I can decide whether launch speed matters more than customization. Help me settle that choice.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Latency doubled after the last release; investigate the performance regression.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-diagnose-incident"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Our plan is blocked on my tolerance for downtime. Ask me the decision needed to proceed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "This bug survives the obvious fix. Gather evidence and isolate the failure.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-diagnose-incident"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "I have two acceptable retention policies and no legal constraint picks one. Help me choose before the design continues.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "The worker hangs only under load. Diagnose it before changing more code.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-diagnose-incident"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "The triage brief needs a priority only the product owner can set. Resolve that remaining decision with me.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    }
+  ]
+}

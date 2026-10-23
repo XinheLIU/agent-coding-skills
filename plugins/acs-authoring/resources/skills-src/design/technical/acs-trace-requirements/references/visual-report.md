@@ -2,11 +2,11 @@
 
 Last updated: 2026-10-11
 
-[Presenter](../../../protocols/presenter.md) uses this display template to render a complex Human Review View. Domain records supply the findings, options, recommendations, evidence and blockers. Arrange that content; do not add conclusions. Use text for simple results. The release builder bundles this file and its references for standalone consumers.
+[Presenter](../../../../../protocols/presenter.md) uses this display template to render a complex Human Review View. Domain records supply the findings, options, recommendations, evidence and blockers. Arrange that content; do not add conclusions. Use text for simple results. The release builder bundles this file and its references for standalone consumers.
 
 ## When to use tabbed layout
 
-Use the [tabbed layout](tabbed-discovery-report.md) instead of flat cards for any of these:
+Use the [tabbed layout](../../../../authoring/references/tabbed-discovery-report.md) instead of flat cards for any of these:
 
 - 3 or more major architectural concerns;
 - a long revision history;
@@ -142,11 +142,11 @@ The header meta line shows the same date and revision.
 - **One-off report** (review, audit, refactor report, discovery pass): name the file `<slug>-YYYY-MM-DD.html`. A later run writes a new file; the older one stays as dated evidence.
 - **Living view** rebuilt at a fixed path that other records link to (for example `technical-design.html`): keep the path and add `<meta name="view-kind" content="living">`. The date and revision tags are still required.
 
-The same rule covers every other human-readable HTML file: canonical records, roadmaps, delivery plans and prototypes. See [Presenter date and version](../../../protocols/presenter.md#date-and-version). Those files validate with `--version-only`, because the card rules apply only to finding reports.
+The same rule covers every other human-readable HTML file: canonical records, roadmaps, delivery plans and prototypes. See [Presenter date and version](../../../../../protocols/presenter.md#date-and-version). Those files validate with `--version-only`, because the card rules apply only to finding reports.
 
 ## Validate before handover
 
-Run [the report validator](../scripts/validate-report-html.py) on every generated view. Fix each error before handover:
+Run [the report validator](../../../../authoring/scripts/validate-report-html.py) on every generated view. Fix each error before handover:
 
 ```bash
 python3 <path of the validator link above> path/to/view.html

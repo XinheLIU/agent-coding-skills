@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-visual-design-variants",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "The wireframes are locked and DESIGN.md exists. Compare three visual directions.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Explore typography and color variants without changing the approved interaction structure.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "We need to choose a visual style for these locked screens before implementation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Prepare distinct styled variants of the accepted wireframe using our design authority.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Compare visual weight and color options on the fixed checkout layout.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "The user flow is settled; show alternative visual treatments within DESIGN.md.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Create style options for the approved prototype without moving buttons or navigation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Help select the visual direction after structure lock and before style approval.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Decide the checkout flow and its empty, loading, error, success, and partial states before styling.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Implement the approved styled prototype in our production stack using DESIGN.md.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Create wireframes for this accepted feature whose user journey is unsettled.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "The visual design and structure are locked; build the production component.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Design navigation and information hierarchy for the new workspace.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Convert the accepted styled checkout prototype into accessible application code.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "We know the capabilities but not how users move between screens. Define the interactions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Wire the approved design tokens into this ready-to-build UI.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-implement"
+    }
+  ]
+}

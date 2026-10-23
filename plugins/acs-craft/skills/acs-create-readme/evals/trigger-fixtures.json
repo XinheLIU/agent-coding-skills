@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-create-readme",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Write a README explaining this project to new users from the actual implementation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Revamp the human-facing setup instructions in README.md.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "The project introduction is stale; update README usage and navigation.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Create a concise getting-started README based on our manifests and commands.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Repair the README installation examples after checking the current tooling.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "New contributors cannot understand the project front door. Rewrite its README.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Update the README feature summary to match what the application actually does.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Improve the root README navigation without reorganizing all repository documents.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Our AGENTS.md repeats obsolete guidance; prune it against current repository behavior.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-agent-instructions"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Audit the scattered Markdown and HTML documents across this repository.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Repair the hierarchy between root and package CLAUDE.md instructions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-agent-instructions"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "The context routing exists but has drifted from the current file layout. Reconcile it.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "An incident revealed a rule that cannot be enforced mechanically. Add the concise lesson to agent instructions.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-agent-instructions"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Classify stale plans and abandoned working notes before proposing cleanup.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "The agent context pointers in AGENTS.md are broken. Repair their routing.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-agent-instructions"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Check whether durable domain context still matches the repository implementation.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-sync-context"
+    }
+  ]
+}

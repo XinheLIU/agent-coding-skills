@@ -14,6 +14,17 @@ Last updated: 2026-10-23
 
 Unfinished routing benchmarks, comparative behavioral evaluation and expiry audits are not included. Validation covers source contracts, local executable fixtures and package closure, not production or general model reliability.
 
+### Trigger fixtures and negative-routing boundaries
+
+B17 of the corpus alignment records what should select each skill and which neighbor an ambiguous request belongs to. The fixtures are authored expectations, not observed predictions.
+
+- Every model-invocable source skill owns `evals/trigger-fixtures.json` with at least eight automatic positive and eight automatic negative queries; `near_miss_of` names the intended neighbor outside the query text.
+- `system/evals/trigger_evals.py --check` validates fixture classes, near-misses and reciprocal `When NOT to use` links. The default command prints a dry call plan and makes no adapter call.
+- Five skills gained an explicit `When NOT to use` section: `acs-challenge-approach`, `acs-trace-requirements`, `acs-design-interaction-flow`, `acs-validate-demand`, `acs-review-code-quality`.
+- No adapter, model or budget is configured, so the 584 queries and 1,752 calls are a plan, not a measurement.
+
+Measured routing accuracy, comparative behavioral evaluation and expiry audits remain unfinished.
+
 ### Reference corpus refreshed; Addy Osmani and pstack packs added
 
 The Matt Pocock study copy was a skills-manager installation frozen at two old revisions. It has been replaced with the upstream tree, and two more well-known packs were added for comparison. All three are study material only; nothing under `system/` changed.

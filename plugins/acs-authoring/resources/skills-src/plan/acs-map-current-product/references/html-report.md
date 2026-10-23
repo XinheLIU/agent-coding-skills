@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-11
 
-Also read [the local visual report contract](../../../authoring/references/visual-report.md). It gives the compact card grammar, the standalone packaging rule, the before/after visual budget and the Writing rules. This document adds only the product-memory presentation guidance.
+Also read [the local visual report contract](../../../design/technical/acs-trace-requirements/references/visual-report.md). It gives the compact card grammar, the standalone packaging rule, the before/after visual budget and the Writing rules. This document adds only the product-memory presentation guidance.
 
 Read [the product memory contract](../../../../protocols/product-memory.md) first. The baseline enriches `discovery.html`. It does not own the document and does not produce a separate `current-product.html`. These patterns present current behavior inside shared concepts. Keep the records, IDs and styling that already exist.
 
@@ -92,4 +92,4 @@ A flex row of rounded boxes joined by SVG arrows, with the actor chip on the lef
 
 ## Writing
 
-Follow the [Writing rules](../../../authoring/references/visual-report.md#writing). Keep facts and inferences visually distinct with `inferred` chips. Let diagrams and tables carry the weight. If a diagram needs a paragraph to be understood, redraw the diagram.
+Follow the [Writing rules](../../../design/technical/acs-trace-requirements/references/visual-report.md#writing). Keep facts and inferences visually distinct with `inferred` chips. Let diagrams and tables carry the weight. If a diagram needs a paragraph to be understood, redraw the diagram.

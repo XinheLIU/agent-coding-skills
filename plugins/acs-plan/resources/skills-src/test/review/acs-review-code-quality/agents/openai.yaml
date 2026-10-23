@@ -1,0 +1,5 @@
+interface:
+  display_name: "Review Code Quality"
+  short_description: "Run a production-readiness code review. Orchestrates domain subagent pairs (api,..."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-trace-requirements",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Trace each requirement through route registration, owning module, contract, and test.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Which accepted requirements remain unwired in this partial implementation?",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Check design-to-code drift before our PR without issuing a code-quality verdict.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Build the traceability matrix showing missing and divergent requirement paths.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Does every criterion have a reachable entry point and matching implementation owner?",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Compare this built feature with the design and identify unconnected requirements.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Trace the design before build to find criteria with no module or verification owner.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Locate missing exports and registrations that leave accepted functionality unreachable.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Review this PR for production readiness and return a merge verdict.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Audit whether tests protect our business-critical checkout flows.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-analyze-test-gaps"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Assess the recent diff against repository standards and the accepted spec.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Before refactoring billing, assess whether the current test safety net is adequate.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-analyze-test-gaps"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Review my code for reliability, security, performance, and maintainability findings.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Which important product paths lack meaningful tests in this codebase?",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-analyze-test-gaps"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Drill into the code behind these open architecture findings and report actionable defects.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-review-code-quality"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Check test health once and prioritize gaps by business impact.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-analyze-test-gaps"
+    }
+  ]
+}

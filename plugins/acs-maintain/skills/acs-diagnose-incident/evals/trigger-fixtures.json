@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "skill": "acs-diagnose-incident",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "The checkout intermittently returns 500 errors. Diagnose the cause with a reproducible feedback loop.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Latency doubled after the last release; investigate the performance regression.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "This bug survives the obvious fix. Gather evidence and isolate the failure.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "The worker hangs only under load. Diagnose it before changing more code.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Users report missing notifications despite successful jobs. Investigate the broken behavior.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "The application crashes unpredictably; create a red-capable reproduction and evidence log.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Find the root cause of this intermittent database timeout.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "The report output is wrong and we do not know why. Diagnose the defect.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Classify these incoming issues using our configured triage states.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-triage"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "Simplify this code while preserving its observable behavior.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Follow up on the missing reproduction details for a needs-info issue.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-triage"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Polish the recently changed functions with clearer names and less nesting.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Assess which incoming requests are ready for an implementation agent.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-triage"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Reduce duplication across these modules without changing functionality.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Triage this external pull request and persist a durable agent brief.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-triage"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "Break up this oversized class with a behavior-preserving structural refactor.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-refactor-code"
+    }
+  ]
+}

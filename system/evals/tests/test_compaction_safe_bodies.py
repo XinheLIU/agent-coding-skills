@@ -33,6 +33,7 @@ END = "<!-- compaction-core:end -->"
 # an independently invoked model follows it. Review still checks semantic loss.
 CONTRACTS = {
     "acs-design-interaction-flow": (
+        "## When NOT to use", "acs-challenge-approach", "acs-review-code-quality", "acs-validate-demand",
         "LOADING/EMPTY/ERROR/SUCCESS/PARTIAL", "structure approval/lock precedes visuals",
         "Explicitly reopen", "ONLY approved/reopened", "44×44px", "reduced motion",
         "Persistent", "acs-write-prd", "questioning.md", "--version-only",
@@ -59,6 +60,8 @@ CONTRACTS = {
         "Persistent Memory", "--version-only",
     ),
     "acs-review-code-quality": (
+        "## When NOT to use", "acs-trace-requirements", "acs-challenge-approach",
+        "acs-design-interaction-flow", "acs-validate-demand",
         "invalid/empty → stop", "Spec unassessed", "failures inline/unassessed",
         "Always inline", "If you cannot quote the motivating line, the finding is unverified",
         "Cap 5/10, never raise", "Code that handles a deliverable is not the deliverable",

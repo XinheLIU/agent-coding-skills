@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "skill": "acs-review-code-quality",
+  "queries": [
+    {
+      "id": "trigger-01",
+      "q": "Review this PR for production readiness and return a merge verdict.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-02",
+      "q": "Assess the recent diff against repository standards and the accepted spec.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-03",
+      "q": "Review my code for reliability, security, performance, and maintainability findings.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-04",
+      "q": "Drill into the code behind these open architecture findings and report actionable defects.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-05",
+      "q": "Check these changes before commit with confidence-calibrated code-review evidence.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-06",
+      "q": "Evaluate code quality across this explicitly scoped codebase against its rules.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-07",
+      "q": "Find production-readiness problems in this diff and separate Spec from Standards findings.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "trigger-08",
+      "q": "Perform a code review of this PR including test quality and a prioritized findings report.",
+      "expect": "trigger",
+      "invocation": "automatic"
+    },
+    {
+      "id": "no-trigger-01",
+      "q": "Trace each requirement through route registration, owning module, contract, and test.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-trace-requirements"
+    },
+    {
+      "id": "no-trigger-02",
+      "q": "The repository answers the technical facts, but only I can decide whether launch speed matters more than customization. Help me settle that choice.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-03",
+      "q": "Decide the checkout flow and its empty, loading, error, success, and partial states before styling.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-04",
+      "q": "Which accepted requirements remain unwired in this partial implementation?",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-trace-requirements"
+    },
+    {
+      "id": "no-trigger-05",
+      "q": "Our plan is blocked on my tolerance for downtime. Ask me the decision needed to proceed.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-06",
+      "q": "Create wireframes for this accepted feature whose user journey is unsettled.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-design-interaction-flow"
+    },
+    {
+      "id": "no-trigger-07",
+      "q": "Check design-to-code drift before our PR without issuing a code-quality verdict.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-trace-requirements"
+    },
+    {
+      "id": "no-trigger-08",
+      "q": "I have two acceptable retention policies and no legal constraint picks one. Help me choose before the design continues.",
+      "expect": "no-trigger",
+      "invocation": "automatic",
+      "near_miss_of": "acs-challenge-approach"
+    },
+    {
+      "id": "no-trigger-09",
+      "q": "/acs-validate-demand assess the customer evidence for this proposed workflow.",
+      "expect": "no-trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand",
+      "near_miss_of": "acs-validate-demand"
+    },
+    {
+      "id": "no-trigger-10",
+      "q": "/acs-validate-demand decide whether these interviews support building the idea.",
+      "expect": "no-trigger",
+      "invocation": "explicit",
+      "explicit_skill": "acs-validate-demand",
+      "near_miss_of": "acs-validate-demand"
+    }
+  ]
+}

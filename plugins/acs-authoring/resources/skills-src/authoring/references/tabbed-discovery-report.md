@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-11
 
-Use this protocol for complex analysis with real interactive tabs that hide inactive content. **Copy the markup, CSS and script from [the template](tabbed-discovery-template.html)**; this file states the requirements the template meets. The [visual report contract](visual-report.md) still applies: card skeleton, `data-visual`, diagram budgets, colors, date and version, and the Writing rules.
+Use this protocol for complex analysis with real interactive tabs that hide inactive content. **Copy the markup, CSS and script from [the template](tabbed-discovery-template.html)**; this file states the requirements the template meets. The [visual report contract](../../design/technical/acs-trace-requirements/references/visual-report.md) still applies: card skeleton, `data-visual`, diagram budgets, colors, date and version, and the Writing rules.
 
 ## When to use
 
@@ -91,7 +91,7 @@ Never duplicate content across levels. Evidence lives only at level 3.
 
 ## Design tokens
 
-Use the same tokens as [visual-report.md](visual-report.md):
+Use the same tokens as [visual-report.md](../../design/technical/acs-trace-requirements/references/visual-report.md):
 
 - **Colors:** base `--bg`, `--fg`, `--mut` (muted text), `--line` (borders); status `--problem` (red), `--warn` (amber), `--ok` (emerald), `--neutral` (slate); one accent `--acc` (indigo or orange); `--code` (slightly darker or lighter than the base). Use color sparingly: one accent, red for leakage and problems, amber for warnings.
 - **Typography:** body `ui-sans-serif, -apple-system, system-ui, sans-serif`; code `ui-monospace, SFMono-Regular, Menlo, monospace`; headings in the same family at a heavier weight (serif is optional for an editorial tone); diagram module labels `text-xs uppercase tracking-wider`.
@@ -125,7 +125,7 @@ A packaged skill must include this reference and every template it needs.
 
 ## Writing
 
-Follow the [Writing rules](visual-report.md#writing). Two additions apply to tabbed reports:
+Follow the [Writing rules](../../design/technical/acs-trace-requirements/references/visual-report.md#writing). Two additions apply to tabbed reports:
 
 - **Wins:** name the concrete gain in at most 6 words: "Tests hit one interface", "Schema leak eliminated", "Batch edits now expressible", "Delete 4 shallow wrappers". Never write a vague win such as <s>"easier to maintain"</s> or <s>"cleaner code"</s>.
 - **Cost and gain lines:** state the concrete impact. "Cost: Goes stale after migration, no type safety." "Gain: Single source of truth, always current."
@@ -142,5 +142,5 @@ Follow the [Writing rules](visual-report.md#writing). Two additions apply to tab
 
 ## Related contracts
 
-- [visual-report.md](visual-report.md): card-based reports, inline SVG patterns and the Writing rules. Use it when all findings fit in one scrollable page.
+- [visual-report.md](../../design/technical/acs-trace-requirements/references/visual-report.md): card-based reports, inline SVG patterns and the Writing rules. Use it when all findings fit in one scrollable page.
 - [html-report.md](../../plan/acs-map-current-product/references/html-report.md): progressive disclosure for product mapping.
