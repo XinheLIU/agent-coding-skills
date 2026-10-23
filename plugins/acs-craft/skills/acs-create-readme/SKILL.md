@@ -1,11 +1,11 @@
 ---
 name: acs-create-readme
-description: Create or revamp a project's README.md after auditing its implementation, manifests, and existing documentation. Use for README authoring; agent instructions belong to acs-review-agent-instructions and repository-wide document organization belongs to acs-sync-context.
+description: Use when a project needs a new README or its human-facing introduction, setup instructions, or navigation needs revision.
 ---
 
 # Create README
 
-Last updated: 2026-10-04
+Last updated: 2026-10-23
 
 Write for a human arriving with zero project context. The README should answer
 what problem this solves, how to run it, and where to go next in under a minute.

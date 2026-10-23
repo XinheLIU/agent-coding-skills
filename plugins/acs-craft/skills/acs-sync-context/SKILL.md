@@ -1,11 +1,11 @@
 ---
 name: acs-sync-context
-description: Inventory and classify every repository document into its memory class, then repair shared-context drift. Use for a whole-repository documentation audit, cleaning up a messy documentation tree (scattered, stale, or malformed Markdown and HTML files) back to the protocol, stale or abandoned plan documents, broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state. Presents a classification table and confirms the edit plan before moving, promoting, or removing anything; if routing is absent, inspect explicit sources read-only or run acs-init-context first when setup is needed.
+description: Use when repository documents need an audit, or routing, domain context, plans, working memory, or the code index have drifted.
 ---
 
 # Sync Context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-23
 
 ## Context contract
 

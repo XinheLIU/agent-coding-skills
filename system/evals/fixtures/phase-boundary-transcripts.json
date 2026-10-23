@@ -1,0 +1,229 @@
+{
+  "evidence_kind": "Authored fixture transcripts, not observed agent or model runs.",
+  "cases": [
+    {
+      "id": "continuous-primary-source",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": true,
+          "transfer": null,
+          "formal_review": false
+        },
+        {
+          "event": "next_phase"
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "new-session",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": true,
+          "transfer": "session",
+          "formal_review": false
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "handoff",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ],
+          "identity": "change/task",
+          "scope": "accepted slice",
+          "delta": "phase complete",
+          "decisions": [
+            "decision@r1"
+          ],
+          "unresolved": [],
+          "next_action": "next phase",
+          "rulings_made": []
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    },
+    {
+      "id": "new-worktree",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": true,
+          "transfer": "worktree",
+          "formal_review": false
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "handoff",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ],
+          "identity": "change/task",
+          "scope": "accepted slice",
+          "delta": "phase complete",
+          "decisions": [
+            "decision@r1"
+          ],
+          "unresolved": [],
+          "next_action": "next phase",
+          "rulings_made": []
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    },
+    {
+      "id": "new-agent",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": true,
+          "transfer": "agent",
+          "formal_review": false
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "handoff",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ],
+          "identity": "change/task",
+          "scope": "accepted slice",
+          "delta": "phase complete",
+          "decisions": [
+            "decision@r1"
+          ],
+          "unresolved": [],
+          "next_action": "next phase",
+          "rulings_made": []
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    },
+    {
+      "id": "no-primary-source",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": false,
+          "context_room": true,
+          "transfer": null,
+          "formal_review": false
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    },
+    {
+      "id": "no-context-room",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": false,
+          "transfer": null,
+          "formal_review": false
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    },
+    {
+      "id": "unknown-context-room",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": null,
+          "transfer": null,
+          "formal_review": false
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    },
+    {
+      "id": "formal-review",
+      "transcript": [
+        {
+          "event": "phase_boundary",
+          "primary_source": true,
+          "context_room": true,
+          "transfer": null,
+          "formal_review": true
+        },
+        {
+          "event": "persist",
+          "references": [
+            "change/spec@r1",
+            "change/evidence@r1"
+          ]
+        },
+        {
+          "event": "next_phase"
+        }
+      ]
+    }
+  ]
+}

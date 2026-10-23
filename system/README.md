@@ -1,8 +1,14 @@
 # Agent Coding System
 
-Last updated: 2026-10-04
+Last updated: 2026-10-23
 
 This directory is the plugin and product. Its skills coordinate through shared repository records across the six lifecycle phases. Setup configures paths when needed; explicit inputs and unambiguous existing homes also support standalone work.
+
+ACS is for work that spans sessions, agents, or people, where the why must survive: client repositories, brownfield changes with audit needs, and parallel delivery. Its full lifecycle is not aimed at a solo developer making a bounded change; [Pocock-style skills](https://github.com/mattpocock/skills) or ACS's **Bounded** tier serve that work better.
+
+**Bounded is the default** [rigor tier](workflows/README.md#rigor-tiers): declare and record the tier and reason before the first skill so the user can override the selection, then use one ticket → short in-chat design → approval → [`acs-implement`](skills-src/build/acs-implement/SKILL.md#bounded-entry), which runs `acs-tdd` and retains revision-bound evidence. Reuse approval for the same stage and scope; no separate spec or HTML delivery plan is required. Follow the [five-step quick start](../README.md#quick-start).
+
+Use Spike for a throwaway question and Architectural for the full plan → design → build route. Complexity can only raise the tier; stop dependent execution and complete the higher tier's missing stages before resuming. Each reply approves the stage actually presented.
 
 ## System model
 
@@ -31,7 +37,7 @@ Six workflow documents cover the lifecycle. They are navigation and sequencing g
 
 - [Plan](workflows/plan.md) — turn uncertain concepts into accepted product intent
 - [Design](workflows/design.md) — settle requirements, UX, and technical architecture (three sub-phases: requirements → UX → technical)
-- [Build](workflows/build.md) — plan delivery from Product or Design, then execute ready slices with TDD and verification
+- [Build](workflows/build.md) — execute one Bounded ticket with TDD and verification, or plan and execute Architectural delivery from Product or Design
 - [Test](workflows/test.md) — audit coverage and add integration tests after build
 - [Deploy](workflows/deploy.md) — release to staging and production with evidence
 - [Maintain](workflows/maintain.md) — diagnose incidents and close the loop autonomously for in-band fixes
@@ -50,7 +56,7 @@ Preserve existing tracker/document locations. New local-only changes use tracked
 
 ## Setup
 
-Run the setup command once per target repository:
+When memory routing needs configuration, run the setup command once per target repository:
 
 ```text
 /agent-coding-skills:setup

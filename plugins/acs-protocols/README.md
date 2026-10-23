@@ -1,6 +1,6 @@
 # acs-protocols
 
-Last updated: 2026-10-04
+Last updated: 2026-10-23
 
 Shared ACS contracts and workflows; optional legacy distribution.
 

@@ -1,13 +1,13 @@
 ---
 protocol: acs:engineering-memory
-version: 1.1.0
+version: 1.2.0
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/engineering-memory.md
 ---
 
 # Engineering and Verification Context
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 Use the [protocol](skill-declarations.md) for lifecycle, identity, relationships, freshness, and coordination. This contract defines Implementation, Testing, and Refactoring artifact roles. Requirements, tickets, proposed/accepted contracts and concise evidence are Persistent Changes. Execution steps, claims, scheduler state and raw logs are Working; delivery reports and DAGs are derived [Presenter](presenter.md) views. Resolve all run paths and the one recovery entry through configuration.
 
@@ -35,6 +35,15 @@ Keep static coverage distinct from executed evidence. A compact retained verific
 | Readiness | What is established, what remains blocked, and next action |
 
 Raw output can remain in Working Memory only if the retained summary contains enough evidence to understand the verdict when raw logs disappear. Reconcile newer runs by scope and revision; preserve consequential prior failures. A code, contract, test, or environment change marks affected evidence for review. Standards review and Spec review remain separate axes; neither implies the other passed.
+
+### Review evidence gate
+
+Apply these rules to code-review findings and requirement traceability, before assigning confidence, priorities, or completion claims:
+
+- **If you cannot quote the motivating line, the finding is unverified.** Cite the inspected source revision, `file:line`, and verbatim motivating text. For absence claims, quote the inspected definition or registration where the item belongs; for generated symbols, quote the generating declaration. A path, paraphrase, or unrelated quote is insufficient. If the motivating text cannot be quoted, label the finding `unverified`, cap confidence at 5/10 (never raise a lower score), and retain it only in the appendix with the missing evidence and next check. It cannot drive main findings, priorities, or a blocking verdict. In a HIGH/MEDIUM/LOW ledger, use LOW and record `unverified; confidence ≤ 5/10` in the finding; retain it outside summaries. A quote is necessary, not sufficient, for high confidence.
+- **Code that handles a deliverable is not the deliverable.** Inspect the required artifact itself against the criterion, citing its path or identity, revision, and check result. When the artifact itself cannot be reached, report `UNVERIFIABLE`, not `DONE`, even if a handler, generator, or passing handler test exists. Record the access limitation and the exact next verification needed. If inspection establishes that the artifact is missing or incomplete, use the existing missing/partial status instead. `REACHABLE` describes static wiring only; it never establishes delivery or executed acceptance evidence.
+
+Adapted from [garrytan/gstack](https://github.com/garrytan/gstack) at `35dd014c580037d1c009776d8b0584587c1bd42c`: `review/SKILL.md` (lines 720–735) and `ship/sections/plan-completion.md` (line 90). ACS retains its own confidence scales, trace statuses, and evidence identity rules.
 
 ## Refactoring
 

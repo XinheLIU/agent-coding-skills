@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Ideate Product
 
-Last updated: 2026-09-29
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Product ideation has two lanes: greenfield creation and existing-product improvement. Most

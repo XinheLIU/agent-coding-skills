@@ -1,11 +1,11 @@
 ---
 name: acs-triage
-description: Move incoming issues or external pull requests through a configured triage state machine and persist durable agent briefs. Use for unlabeled requests, needs-info follow-up, or selecting agent-ready work.
+description: Use when incoming issues or external pull requests need classification, missing-information follow-up, or agent-readiness assessment.
 ---
 
 # Triage
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator, product, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../../docs/shared-semantics.md#execution)
 
 
 Read `docs/agents/memory.md`, tracker configuration, triage-label mapping, domain memory, and prior notes.

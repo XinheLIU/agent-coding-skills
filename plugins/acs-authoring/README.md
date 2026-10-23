@@ -1,6 +1,6 @@
 # acs-authoring
 
-Last updated: 2026-10-04
+Last updated: 2026-10-23
 
 ACS meta-tooling - research, DAG visualization, skill development
 

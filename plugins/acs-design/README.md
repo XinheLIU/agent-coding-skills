@@ -1,6 +1,6 @@
 # acs-design
 
-Last updated: 2026-10-04
+Last updated: 2026-10-23
 
 UX and technical design skills for the ACS suite.
 

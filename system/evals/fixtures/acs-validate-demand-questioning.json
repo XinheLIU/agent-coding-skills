@@ -1,0 +1,28 @@
+{
+  "evidence_kind": "deterministic authored fixture; not a model transcript",
+  "skill": "acs-validate-demand",
+  "claim": "A weekly export could replace the operator's manual reconciliation.",
+  "settled": ["target-operator"],
+  "candidates": [
+    {"id": "existing-export", "classification": "lookup fact", "action": "direct lookup", "basis": "Delegation is disabled in this fixture; inspect the supplied code."},
+    {"id": "export-timing", "classification": "observable fact", "action": "acs-validate-prototype", "basis": "Measure the export before claiming it meets the time budget."},
+    {"id": "evidence-grade", "classification": "mechanical decision", "action": "decide and record", "basis": "The supplied signup count is Stated interest, not Observed."},
+    {"id": "report-order", "classification": "taste decision", "action": "decide and show at next gate", "basis": "Lead with evidence gaps; expose this choice at the assessment gate."},
+    {"id": "demand", "classification": "user challenge", "action": "ask", "basis": "Challenge the user's claim that signup enthusiasm proves demand."},
+    {"id": "status-quo", "classification": "user challenge", "action": "ask", "basis": "Challenge the user's unverified claim that the current workflow costs a full day."},
+    {"id": "actor", "classification": "user challenge", "action": "ask", "basis": "Challenge treating the executive sponsor as the daily operator."},
+    {"id": "observation", "classification": "user challenge", "action": "ask", "basis": "Challenge counting a guided demo as independent usage."},
+    {"id": "future-fit", "classification": "user challenge", "action": "ask", "basis": "Challenge assuming a market forecast demonstrates this operator's future dependency."},
+    {"id": "wedge", "classification": "user challenge", "action": "ask", "basis": "Reconsider the proposed wedge after the actor is settled.", "prerequisites": ["actor"]}
+  ],
+  "round": [
+    {"number": 1, "id": "demand", "label": "Demand reality", "prerequisites": ["target-operator"], "question": "Do you accept grading the signup evidence as Stated interest?", "recommendation": "Grade it as Stated interest", "reason": "No repeated use or payment is supplied.", "yes_accepts": "Grade it as Stated interest"},
+    {"number": 2, "id": "status-quo", "label": "Current cost", "prerequisites": ["target-operator"], "question": "Do you accept leaving the full-day cost unverified pending a timed observation?", "recommendation": "Leave the full-day cost unverified", "reason": "The estimate lacks an observed session.", "yes_accepts": "Leave the full-day cost unverified"},
+    {"number": 3, "id": "actor", "label": "Specific user", "prerequisites": ["target-operator"], "question": "Do you accept separating the sponsor from the operator persona?", "recommendation": "Separate sponsor and operator", "reason": "Only the operator performs reconciliation.", "yes_accepts": "Separate sponsor and operator"},
+    {"number": 4, "id": "observation", "label": "Observed use", "prerequisites": ["target-operator"], "question": "Do you accept treating the guided demo as interest pending unguided use?", "recommendation": "Treat the guided demo as interest", "reason": "The presenter prompted every action.", "yes_accepts": "Treat the guided demo as interest"},
+    {"number": 5, "id": "future-fit", "label": "Future dependency", "prerequisites": ["target-operator"], "question": "Do you accept leaving future dependency as Inferred pending operator evidence?", "recommendation": "Leave future dependency as Inferred", "reason": "A market forecast does not show operator dependency.", "yes_accepts": "Leave future dependency as Inferred"}
+  ],
+  "deferred": [{"id": "wedge", "reason": "actor is still open in this round"}],
+  "replies": {"demand": "yes", "status-quo": "yes", "actor": "yes", "observation": "yes"},
+  "findings": [{"id": "future-fit", "grade": "Inferred", "disposition": "assumption", "consequence": "Future dependency cannot support a Green demand verdict."}]
+}

@@ -1,11 +1,11 @@
 ---
 name: acs-engineer-domain-model
-description: Maintain shared domain language and durable architectural decisions. Use when terms are vague or conflicting, the code and stated model disagree, or a hard-to-reverse trade-off needs an ADR.
+description: Use when domain terms conflict, code disagrees with the stated model, or a hard-to-reverse trade-off needs an ADR.
 ---
 
 # Engineer Domain Model
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 

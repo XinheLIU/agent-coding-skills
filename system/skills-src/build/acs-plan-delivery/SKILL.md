@@ -1,11 +1,11 @@
 ---
 name: acs-plan-delivery
-description: Turn accepted product scope or designs into delivery tickets and an openable HTML plan with an embedded DAG. Use after scope confirmation, to break a substantial change into smaller tickets, or to reconcile dependencies and readiness as decisions and execution change.
+description: Use when accepted scope needs delivery tickets, or changed decisions, dependencies, or evidence affect ticket readiness.
 ---
 
 # Plan Delivery
 
-Last updated: 2026-09-29
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared writes and claims: [Coordination](../../../protocols/context-coordination.md). Existing authorization persists. A planning request authorizes the plan, not implementation. Working Memory holds run recovery; Persistent Memory holds reusable domain records, including proposed review inputs. Save referenced conclusions before formal review or dependent handoff. For human-facing reports and review feedback, use [Presenter](../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+[Shared semantics](../../../docs/shared-semantics.md#planning)
 
 ## Enter from Product or Design
 

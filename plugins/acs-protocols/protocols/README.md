@@ -1,6 +1,6 @@
 # Shared Protocols
 
-Last updated: 2026-10-01
+Last updated: 2026-10-23
 
 `system/protocols/` is the canonical source of shared memory, ownership and handoff contracts. Skills own domain reasoning; the active coordinator resolves and reconciles records; Presenter organizes human reading. The [accepted design](../resources/docs/context-memory-presenter-proposal.md) explains the two-memory model and its trade-offs.
 
@@ -32,6 +32,7 @@ A domain contract never teaches HTML; a format file never defines ownership; a P
 | [Engineering](engineering-memory.md) | L1 | Planning, implementing, testing or retaining verification evidence |
 | [Operations](operations-memory.md) | L1 | Recording runtime constraints, release evidence or operational decisions |
 | [Orchestration](orchestration.md) | L4 | Dispatching and reconciling implementation work |
+| [Questioning](questioning.md) | L4 | Classifying candidate questions, ordering frontier rounds, and confirming shared understanding |
 | [Task graph](task-graph.md) | L3 | Rendering or reading a task DAG, delivery plan, or roadmap view |
 
 ## Source references and distribution

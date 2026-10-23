@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Manage Context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+[Shared semantics](../../../docs/shared-semantics.md#context)
 
 
 This entry retains the former context router's behavior. Older callers must migrate the name to `acs-manage-context`; no unprefixed alias is installed. Route by the requested outcome, then inspect the existing configuration:

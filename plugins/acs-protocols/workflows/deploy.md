@@ -1,6 +1,6 @@
 # Deploy Workflow
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 Release an authorized, verified artifact using the project's existing deployment tooling and the [Operations contract](../protocols/operations-memory.md).
 
@@ -9,6 +9,14 @@ Release an authorized, verified artifact using the project's existing deployment
 Resolve the canonical change, verification evidence, immutable artifact digest and source/build revision, target environment/configuration, applicable migration constraints, and rollback procedure. Reuse configured record homes. Missing evidence blocks the affected release; a green test percentage or a report alone does not establish readiness.
 
 Existing authorization persists. This workflow does not authorize staging/production deployment, commits, tags, or rollback by itself. Resolve only missing decisions or actions outside the authorized scope.
+
+## Skill route
+
+Use [acs-ship](../resources/skills-src/deploy/acs-ship/SKILL.md) (reference procedure; capability not installed) for a verified branch → open PR: rerun declared verification every invocation, bound review fixes, retain current evidence and a merge-danger call. Only actions are idempotent. Without PR-write authorization, prepare the body locally and report `PR not opened`.
+
+Use [acs-release](../resources/skills-src/deploy/acs-release/SKILL.md) (reference procedure; capability not installed) for a confirmed merged artifact → authorized production rollout. First use/configuration changes end in a non-mutating dry run and `not released`; later execution gates current evidence and error budget before staged rollout. After a preceding merge error, read server state and never retry the merge. These skills do not supply merge authorization or project infrastructure.
+
+The consumer must declare exact verification commands and environments under [consumer release configuration](../protocols/operations-memory.md#consumer-release-configuration); unset configuration blocks execution. Readiness and rollout thresholds come from current Operations/Design records, not guessed defaults.
 
 ## Execute and record
 

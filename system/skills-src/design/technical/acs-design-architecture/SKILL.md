@@ -1,11 +1,11 @@
 ---
 name: acs-design-architecture
-description: Design or review the system shape — feature-to-capability map, current/ideal/feasible architecture, shared foundations, data/technology/deploy fit, and the decision ledger. Use for greenfield architecture, brownfield audits ("this is tangled", "tech debt", "audit architecture"), architecture review, or ADR review (run the `adr` lens alone to re-judge accumulated ADRs and deprecate or supersede those that no longer hold); writes the ARC section of the shared technical-design.md.
+description: Use when system boundaries, shared foundations, technology choices, or ADRs need design or review.
 ---
 
 # Design Architecture
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design_modules, design_contracts, code_review]
 ```
 
-Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+[Shared semantics](../../../../docs/shared-semantics.md#technical-design)
 
 Follow [the card contract](../references/card-contract.md): read the record, write only `## Architecture (ARC)` and `FND-ARC-*` ledger rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md); run the contract's validator and fix every error before handover.
 

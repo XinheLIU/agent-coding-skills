@@ -7,6 +7,8 @@ import json
 import os
 import re
 import shutil
+import tempfile
+from datetime import date
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -16,7 +18,7 @@ PLUGINS = ROOT / "plugins"
 CATEGORY_TO_PLUGIN = {
     "plan": "acs-plan", "design/requirements": "acs-plan",
     "design/ux": "acs-design", "design/technical": "acs-design",
-    "build": "acs-build", "test": "acs-build",
+    "build": "acs-build", "test": "acs-build", "deploy": "acs-deploy",
     "quality/review": "acs-quality", "test/review": "acs-quality",
     "quality/debugging": "acs-quality", "test/debugging": "acs-quality",
     "maintain": "acs-quality", "craft/context": "acs-craft",
@@ -28,6 +30,7 @@ PLUGIN_DESCRIPTIONS = {
     "acs-design": "UX and technical design skills for the ACS suite.",
     "acs-build": "Delivery planning, implementation, and test-gap analysis skills for the ACS suite.",
     "acs-quality": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite.",
+    "acs-deploy": "Pull request preparation and production release skills for the ACS suite.",
     "acs-craft": "Context lifecycle and authoring skills for the ACS suite.",
 }
 LINK = re.compile(r"(!?\[[^\]]*\])\(([^)]+)\)")
@@ -58,6 +61,7 @@ class Materializer:
         self.destinations: dict[Path, Path] = {}
         self.pending: list[tuple[Path, Path]] = []
         self.copied: set[Path] = set()
+        self.sources: set[Path] = set()
         # Shared contracts keep one stable packaged home so link targets never
         # depend on which skill's dereferenced copy registered the file first.
         for contract in sorted((self.suite / "protocols").iterdir()):
@@ -71,6 +75,7 @@ class Materializer:
         if destination in self.copied:
             return
         self.copied.add(destination)
+        self.sources.add(canonical)
         self.destinations.setdefault(canonical, destination)
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(canonical, destination)
@@ -113,8 +118,46 @@ class Materializer:
             self.add_file(source, destination)
         return self.destinations.get(source, destination)
 
+    def source_date(self) -> str:
+        """Use the newest declared date in this package's source closure, never wall time."""
+        dates = []
+        for source in sorted(self.sources):
+            if source.suffix == ".md":
+                match = re.search(r"^Last updated: (\d{4}-\d{2}-\d{2})$",
+                                  source.read_text(), re.MULTILINE)
+                if match:
+                    dates.append(date.fromisoformat(match[1]))
+        if not dates:
+            raise ValueError("Package sources must declare at least one Last updated date")
+        return max(dates).isoformat()
+
+    def shared_semantics(self, source: Path, destination: Path, text: str) -> str:
+        """Expand the linked canonical section while resolving links at its source."""
+        if source.name != "SKILL.md":
+            return text
+        marker = re.compile(r"^\[Shared semantics\]\(([^)]+)\)$", re.MULTILINE)
+        matches = list(marker.finditer(text))
+        if len(matches) > 1:
+            raise ValueError(f"Duplicate shared semantics link: {source}")
+        if not matches:
+            return text
+        match = matches[0]
+        path, separator, anchor = match[1].partition("#")
+        shared = (source.parent / path).resolve(strict=True)
+        if shared != (self.suite / "docs/shared-semantics.md").resolve() or not separator:
+            raise ValueError(f"Invalid shared semantics source: {source}")
+        self.sources.add(shared)
+        sections = re.split(r"^## (.+)\n", shared.read_text(), flags=re.MULTILINE)
+        for index in range(1, len(sections), 2):
+            if sections[index].lower().replace(" ", "-") == anchor:
+                paragraph = self.rewrite(shared, destination, sections[index + 1].strip())
+                return text[:match.start()] + paragraph + text[match.end():]
+        raise ValueError(f"Missing shared semantics section {anchor}: {source}")
+
     def rewrite(self, source: Path, destination: Path, text: str) -> str:
         def replace(match: re.Match[str]) -> str:
+            if source.name == "SKILL.md" and match[1] == "[Shared semantics]":
+                return match[0]  # Expanded separately from its canonical source.
             reference = local_reference(match[2])
             if reference is None:
                 return match[0]
@@ -154,7 +197,9 @@ class Materializer:
         while index < len(self.pending):
             source, destination = self.pending[index]
             index += 1
-            destination.write_text(self.rewrite(source, destination, source.read_text()))
+            # Inserted links are relative to the canonical paragraph's source.
+            text = self.rewrite(source, destination, source.read_text())
+            destination.write_text(self.shared_semantics(source, destination, text))
 
 
 def build_standalone_skill(suite: Path, output: Path, source: Path) -> None:
@@ -178,7 +223,7 @@ def write_manifest(output: Path, name: str, description: str, version: str) -> N
 
 
 def write_package_metadata(output: Path, name: str, description: str,
-                           version: str, skills: dict[str, Path]) -> None:
+                           version: str, skills: dict[str, Path], source_date: str) -> None:
     catalog = {"name": name, "version": version, "skills": [
         {"id": skill, "path": f"skills/{skill}/SKILL.md"} for skill in sorted(skills)
     ]}
@@ -190,7 +235,7 @@ def write_package_metadata(output: Path, name: str, description: str,
     }, indent=2) + "\n")
     inventory = "\n".join(f"- [{skill}](skills/{skill}/SKILL.md)" for skill in sorted(skills))
     (output / "README.md").write_text(
-        f"# {name}\n\nLast updated: 2026-10-04\n\n{description}\n\n"
+        f"# {name}\n\nLast updated: {source_date}\n\n{description}\n\n"
         "Generated by `scripts/build-plugins.py`; edit canonical sources, then rebuild.\n\n"
         "Install or move this entire plugin directory. Keep `skills/` and `resources/` together; "
         "copying only `skills/` loses embedded contracts. No companion plugin is required. "
@@ -210,12 +255,14 @@ def build_package(suite: Path, output: Path, skills: dict[str, Path], *, name: s
             target.unlink()
         elif target.exists():
             shutil.rmtree(target)
-    Materializer(suite, output, skills).build()
+    materializer = Materializer(suite, output, skills)
+    materializer.build()
     write_manifest(output, name, description, version)
-    write_package_metadata(output, name, description, version, skills)
+    write_package_metadata(output, name, description, version, skills, materializer.source_date())
 
 
 def build_plugins(output: Path) -> list[dict[str, str]]:
+    output = output.resolve()
     catalog = json.loads((ROOT / "catalog/skill-set.json").read_text())
     grouped: dict[str, dict[str, Path]] = {}
     for category in catalog["categories"]:
@@ -235,7 +282,7 @@ def build_plugins(output: Path) -> list[dict[str, str]]:
                 materializer.add_tree(SUITE / directory, destination / directory)
             materializer.build()
             write_manifest(destination, name, description, "1.0.0")
-            write_package_metadata(destination, name, description, "1.0.0", {})
+            write_package_metadata(destination, name, description, "1.0.0", {}, materializer.source_date())
             for host in ("claude", "codex"):
                 manifest_path = destination / f".{host}-plugin/plugin.json"
                 manifest = json.loads(manifest_path.read_text())
@@ -263,29 +310,78 @@ def build_plugins(output: Path) -> list[dict[str, str]]:
     return entries
 
 
+def marketplace_text(entries: list[dict[str, str]]) -> str:
+    marketplace = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text())
+    marketplace["plugins"] = entries + [{
+        "name": "agent-coding-skills", "source": "./system",
+        "description": "All ACS skills, shared memory contracts, and workflows.",
+    }]
+    return json.dumps(marketplace, indent=2) + "\n"
+
+
+def build_output(output: Path, *, standalone: bool) -> list[dict[str, str]]:
+    if standalone:
+        for source in sorted((SUITE / "skills-src").rglob("SKILL.md")):
+            build_standalone_skill(SUITE, output / source.parent.name, source.parent)
+        return []
+    return build_plugins(output)
+
+
+def check_output(output: Path, *, standalone: bool) -> list[str]:
+    """Compare generated surfaces without modifying the selected output tree.
+
+    Plugin builds preserve unknown user files outside generated resource trees;
+    check those same owned trees and metadata, not unrelated retained packages.
+    """
+    output = output.resolve()
+    with tempfile.TemporaryDirectory(prefix="acs-build-check-") as temporary:
+        expected = Path(temporary).resolve()
+        entries = build_output(expected, standalone=standalone)
+        files = {path.relative_to(expected) for path in expected.rglob("*") if path.is_file()}
+        findings = []
+        for relative in sorted(files):
+            actual = output / relative
+            if actual.is_symlink() or not actual.is_file() or actual.read_bytes() != (expected / relative).read_bytes():
+                findings.append(f"STALE {relative}")
+        for package in sorted(expected.iterdir()):
+            actual = output / package.name
+            roots = [actual] if standalone else [actual / directory for directory in (
+                "skills", "resources", "shared", "protocols", "workflows",
+            )]
+            for root in roots:
+                if root.is_symlink():
+                    findings.append(f"STALE {root.relative_to(output)} (symlink)")
+                for path in sorted(root.rglob("*")):
+                    if (path.is_file() or path.is_symlink()) and path.relative_to(output) not in files:
+                        findings.append(f"STALE {path.relative_to(output)} (unexpected generated file)")
+        if output == PLUGINS.resolve() and not standalone:
+            path = ROOT / ".claude-plugin/marketplace.json"
+            if path.read_text() != marketplace_text(entries):
+                findings.append("STALE .claude-plugin/marketplace.json")
+        return findings
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=PLUGINS,
                         help="Build elsewhere without changing the repository marketplace")
     parser.add_argument("--standalone", action="store_true",
                         help="Export self-contained skill directories for individual-skill installers")
+    parser.add_argument("--check", action="store_true",
+                        help="Fail on stale generated surfaces without writing to --output")
     args = parser.parse_args()
     output = args.output.resolve()
-    if args.standalone:
-        if output == PLUGINS.resolve():
-            parser.error("--standalone requires a separate --output directory")
-        for source in sorted((SUITE / "skills-src").rglob("SKILL.md")):
-            build_standalone_skill(SUITE, output / source.parent.name, source.parent)
-        return
-    entries = build_plugins(output)
+    if args.standalone and output == PLUGINS.resolve():
+        parser.error("--standalone requires a separate --output directory")
+    if args.check:
+        findings = check_output(output, standalone=args.standalone)
+        for finding in findings:
+            print(finding)
+        print(f"Generated surfaces: {'FAIL' if findings else 'PASS'}")
+        raise SystemExit(bool(findings))
+    entries = build_output(output, standalone=args.standalone)
     if output == PLUGINS.resolve():
-        path = ROOT / ".claude-plugin/marketplace.json"
-        marketplace = json.loads(path.read_text())
-        marketplace["plugins"] = entries + [{
-            "name": "agent-coding-skills", "source": "./system",
-            "description": "All ACS skills, shared memory contracts, and workflows.",
-        }]
-        path.write_text(json.dumps(marketplace, indent=2) + "\n")
+        (ROOT / ".claude-plugin/marketplace.json").write_text(marketplace_text(entries))
 
 
 if __name__ == "__main__":

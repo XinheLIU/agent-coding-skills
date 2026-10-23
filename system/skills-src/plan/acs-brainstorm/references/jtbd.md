@@ -1,6 +1,6 @@
 # Jobs-to-be-Done Framework — Reference
 
-Last updated: 2026-09-17
+Last updated: 2026-10-23
 
 The framework behind the JTBD brief that `acs-brainstorm` produces. Read this when the Specify phase needs the full pillar detail, the interview probes, or the output template.
 
@@ -94,7 +94,7 @@ These constrain form without choosing it. The form decision itself belongs to `a
 
 ## Interview Probes
 
-Ask only what the input has not already answered. One question at a time, and push once when an answer stays generic.
+Ask only what the input has not already answered, following the [questioning protocol](../../../../protocols/questioning.md) for classification and frontier rounds. Push once when an answer stays generic.
 
 | Area | Opening question | Push when the answer is vague |
 | --- | --- | --- |

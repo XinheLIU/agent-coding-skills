@@ -1,11 +1,11 @@
 ---
 name: acs-resolving-merge-conflicts
-description: Resolve an in-progress Git merge or rebase from both sides' documented intent. Use only when conflict markers or Git state show an active conflict operation.
+description: Use when Git state or conflict markers show an active merge or rebase conflict.
 ---
 
 # Resolving Merge Conflicts
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [testing, coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../../docs/shared-semantics.md#execution)
 
 
 Inspect Git state, conflicting files, commits, source issues/specs, and relevant shared memory. For each hunk, state both intents and preserve both when compatible. When incompatible, choose the result that matches the operation’s stated goal and report the trade-off. Do not invent unrelated behavior.

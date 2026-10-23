@@ -1,12 +1,14 @@
 # Domain Lenses
 
-Last updated: 2026-09-29
+Last updated: 2026-10-23
 
 Step 1 applies these seven lenses to the files in scope. For each lens, first **map** what exists in scope (endpoints, queries, auth flows, external calls, and so on), then **judge** it against the checks. Every finding needs a `file:line` anchor and evidence.
 
 A lens can run inline or as a delegated task. A delegated task gets this file's section for its lens as its whole instruction, plus the scope, the rules digest and the parent findings filtered to its domain. It returns findings and never edits files.
 
 **Confidence.** `HIGH` = both the defect and a caller or consumer have been read. `MEDIUM` = one side has been read. `LOW` = inferred from a pattern alone.
+
+**Security evidence.** Apply the [security evidence rubric](../SKILL.md#security-evidence-rubric) to security claims from any lens, including auth and db. Return severity, confidence and evidence state separately, plus entrypoint, boundary crossing, demonstrated impact, reachability and challenge record. Unknown parts stay explicit; a pattern match alone is a candidate. The review evidence gate takes precedence over the confidence shorthand above.
 
 **Out of scope for every lens.** Design-level issues (module seams, schema ownership, topology, missing decisions) go to *Cross-references to design cards* (Step 5.1), not into findings. Each lens leaves its neighbours' checks alone; the lens named in brackets owns that check.
 

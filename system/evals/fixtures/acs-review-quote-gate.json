@@ -1,0 +1,117 @@
+{
+  "evidence_kind": "Authored contract examples; not a model transcript or executed skill behavior.",
+  "skills": [
+    "acs-review-code-quality",
+    "acs-trace-requirements"
+  ],
+  "findings": [
+    {
+      "id": "no-quote-high-confidence",
+      "initial_confidence": 9,
+      "quote": null,
+      "source": "external.py:12",
+      "source_text": null,
+      "result": {
+        "confidence": 5,
+        "verification": "unverified",
+        "placement": "appendix",
+        "ledger_confidence": "LOW",
+        "blocks": false
+      }
+    },
+    {
+      "id": "no-quote-low-confidence",
+      "initial_confidence": 3,
+      "quote": null,
+      "source": "external.py:12",
+      "source_text": null,
+      "result": {
+        "confidence": 3,
+        "verification": "unverified",
+        "placement": "appendix",
+        "ledger_confidence": "LOW",
+        "blocks": false
+      }
+    },
+    {
+      "id": "quoted-handler-bug",
+      "initial_confidence": 9,
+      "quote": "return render(document)",
+      "source": "handler.py:12",
+      "source_text": "return render(document)",
+      "result": {
+        "confidence": 9,
+        "verification": "quoted",
+        "placement": "main",
+        "ledger_confidence": "HIGH",
+        "blocks": true
+      }
+    },
+    {
+      "id": "paraphrase-is-not-quote",
+      "initial_confidence": 8,
+      "quote": "renders the document",
+      "source": "handler.py:12",
+      "source_text": "return render(document)",
+      "result": {
+        "confidence": 5,
+        "verification": "unverified",
+        "placement": "appendix",
+        "ledger_confidence": "LOW",
+        "blocks": false
+      }
+    },
+    {
+      "id": "quote-does-not-raise-confidence",
+      "initial_confidence": 3,
+      "quote": "return render(document)",
+      "source": "handler.py:12",
+      "source_text": "return render(document)",
+      "result": {
+        "confidence": 3,
+        "verification": "quoted",
+        "placement": "appendix",
+        "ledger_confidence": "LOW",
+        "blocks": false
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "handler-only",
+      "handler_exists": true,
+      "handler_tests_pass": true,
+      "inspection": "unreachable",
+      "evidence": "Sibling publishing repository is unavailable; only the renderer and its unit test are visible.",
+      "status": "UNVERIFIABLE",
+      "next_check": "Inspect publishing/docs/report.md in the publishing repository and validate the required sections."
+    },
+    {
+      "id": "artifact-confirmed-missing",
+      "handler_exists": true,
+      "handler_tests_pass": true,
+      "inspection": "missing",
+      "evidence": "Publishing repository inspected; docs/report.md absent.",
+      "status": "MISSING",
+      "next_check": "Produce docs/report.md and inspect it."
+    },
+    {
+      "id": "artifact-incomplete",
+      "handler_exists": true,
+      "handler_tests_pass": true,
+      "inspection": "incomplete",
+      "evidence": "docs/report.md inspected; required Results section absent.",
+      "status": "PARTIAL",
+      "next_check": "Add the Results section and validate the artifact."
+    },
+    {
+      "id": "artifact-inspected-static",
+      "handler_exists": true,
+      "handler_tests_pass": true,
+      "inspection": "present",
+      "evidence": "docs/report.md@fixture-rev inspected, required sections and wiring found; static evidence only.",
+      "status": "REACHABLE",
+      "next_check": "Obtain executed acceptance evidence separately."
+    }
+  ]
+}

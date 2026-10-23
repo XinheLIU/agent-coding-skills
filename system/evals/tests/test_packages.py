@@ -46,7 +46,7 @@ class PackageTests(unittest.TestCase):
             suite = root / "source/system"
             skill = suite / "skills-src/build/acs-example"
             skill.mkdir(parents=True)
-            (suite / "THIRD_PARTY_NOTICES.md").write_text("# Fixture provenance\n")
+            (suite / "THIRD_PARTY_NOTICES.md").write_text("# Fixture provenance\n\nLast updated: 2026-01-01\n")
             (suite.parent / "LICENSE").write_text("Fixture license\n")
             protocols = suite / "protocols"
             protocols.mkdir()

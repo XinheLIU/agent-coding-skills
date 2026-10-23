@@ -1,0 +1,48 @@
+{
+  "skill": "acs-diagnose-incident",
+  "evidence_kind": "Authored simulated transcript; not a model transcript or an actual incident run.",
+  "symptom": "A receipt total is doubled by the local reproduction.",
+  "transcript": [
+    {
+      "role": "assistant",
+      "action": "set_boundary",
+      "directory": "src/receipts",
+      "text": "The first hypothesis concerns receipt arithmetic. Edits are restricted to src/receipts; the minimized reproduction stays red."
+    },
+    {
+      "role": "assistant",
+      "action": "probe",
+      "hypothesis": "H1",
+      "prediction": "If duplicate input lines cause the doubling, one input line will yield the expected total.",
+      "observation": "The authored scenario still doubles a single line.",
+      "verdict": "falsified"
+    },
+    {
+      "role": "assistant",
+      "action": "probe",
+      "hypothesis": "H2",
+      "prediction": "If a stale cached receipt causes the doubling, a fresh cache will yield the expected total.",
+      "observation": "The authored scenario still doubles the total with an empty cache.",
+      "verdict": "falsified"
+    },
+    {
+      "role": "assistant",
+      "action": "probe",
+      "hypothesis": "H3",
+      "prediction": "If the tax adjustment causes the doubling, zero tax will yield the expected total.",
+      "observation": "The authored scenario still doubles the total with zero tax.",
+      "verdict": "falsified"
+    },
+    {
+      "role": "assistant",
+      "action": "stop_and_offer_options",
+      "text": "Three hypotheses were falsified: single-line input, empty cache, and zero tax all still double the total. Investigation is paused. Choose the next step.",
+      "options": [
+        {"choice": "continue", "text": "Authorize testing a new hypothesis: the renderer applies the multiplier twice."},
+        {"choice": "escalate", "text": "Ask the receipt owner to review the three falsifications."},
+        {"choice": "instrument_and_wait", "text": "Authorize scoped logs tagged [DEBUG-a4f2] and wait for recurrence."}
+      ],
+      "awaiting_user_choice": true
+    }
+  ]
+}

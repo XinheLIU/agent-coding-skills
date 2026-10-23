@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Manage Context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-23
 
 ## Context contract
 

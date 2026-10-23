@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Validate Demand
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 ## Context contract
 
 ```yaml
@@ -19,7 +19,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Decide whether a product idea has real demand behind it, and say so plainly.
@@ -59,11 +59,10 @@ the method.
 ### 1. Grade the evidence
 
 Run the six-area diagnostic (demand reality, status quo, specific user, narrowest wedge,
-observation, future fit), prioritized by product stage. Ask the stage-prioritized areas as
-**one block of 4–5 questions** per `references/shared-understanding.md`: numbered, each with
-a recommended answer grounded in the evidence already read. Ask only what shared memory and
-supplied context have not answered. A question the user skips grades as Inferred and is named
-as a finding, never silently filled in. Send a follow-up block only where answers stayed
+observation, future fit), prioritized by product stage. Classify candidate questions and ask
+the stage-prioritized frontier using the [questioning protocol](../../../protocols/questioning.md).
+Ask only what shared memory and supplied context have not answered. A question the user skips
+grades as Inferred and is named as a finding, never silently filled in. Send a follow-up block only where answers stayed
 generic, aimed at the thinnest answers.
 
 For active products, prefer evidence that reflects real use: support tickets, analytics,
@@ -108,9 +107,9 @@ carries far stronger evidence.
 ### 5. Issue the verdict
 
 Before issuing, read the three zone colors back to the user with the evidence level each
-rests on, and ask them to confirm or contest the reading (the close in
-`references/shared-understanding.md`). A contested zone records the disagreement and the
-observation that would settle it; the verdict still follows the evidence — the gate is not
+rests on, and ask them to confirm or contest the reading (the
+[questioning close](../../../protocols/questioning.md#the-close)). A contested zone records the
+disagreement and the observation that would settle it; the verdict still follows the evidence — the gate is not
 vetoable by preference — but cites the dispute.
 
 The verdict is the **lowest zone across the three questions**. One Red makes it Red.

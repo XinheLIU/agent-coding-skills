@@ -1,11 +1,11 @@
 ---
 name: acs-draw-portfolio-dag
-description: Render Markdown workstreams and dependency tickets as an interactive HTML DAG or Mermaid flowchart. Use for portfolio sequencing, frontier visibility, cross-cutting ticket tags, or live progress rendering during an implement run.
+description: Use when workstreams or dependency tickets need a portfolio view, frontier visibility, or live delivery progress.
 ---
 
 # Draw Portfolio DAG
 
-Last updated: 2026-10-01
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Resolve `SKILL_DIR` as this skill's directory and call its scripts by absolute path.

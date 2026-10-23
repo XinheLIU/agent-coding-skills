@@ -1,10 +1,12 @@
 # Agent Coding System
 
-Last updated: 2026-10-04
+Last updated: 2026-10-23
 
 Inspired by the [AI-native SDLC playbook](https://claude.com/blog/the-ai-native-sdlc-playbook) from Anthropic.
 
 A coding-agent system whose skills coordinate through shared repository memory. The distributable product lives in [`system/`](system); copied upstream material stays in the local, ignored `references/` workspace.
+
+ACS is for work that spans sessions, agents, or people, where the why must survive: client repositories, brownfield changes with audit needs, and parallel delivery. Its full lifecycle is not aimed at a solo developer making a bounded change; [Pocock-style skills](https://github.com/mattpocock/skills) or ACS's **Bounded** tier serve that work better.
 
 ## Quick start
 
@@ -16,9 +18,15 @@ A coding-agent system whose skills coordinate through shared repository memory. 
 
 For Codex, OpenCode, Cursor, Pi, and multi-agent setups see [installation.md](installation.md).
 
-1. Use existing project context or explicit task inputs. Run `/acs-init-context` when routing needs configuration — it writes `docs/agents/memory.md`, which tells every skill where shared memory lives.
-2. Follow the [lifecycle workflows](system/workflows/README.md): plan → design → build → test → deploy → maintain. These are workflow documents, not installed commands or router skills.
-3. Select a skill by its public ID (`acs-brainstorm`, `acs-engineer-domain-model`, `acs-tdd`, etc.), using the host's invocation syntax and plugin namespace.
+The smallest useful path, in five steps:
+
+1. **Bounded is the default:** declare and record the [rigor tier](system/workflows/README.md#rigor-tiers) and reason before the first skill so the user can override the selection.
+2. Reuse or create one ticket with scope and checks, using existing context or explicit inputs; invoke `acs-init-context` only when routing needs configuration.
+3. Present a short in-chat design and obtain implementation approval; reuse existing approval for the same stage and scope.
+4. Invoke [`acs-implement`](system/skills-src/build/acs-implement/SKILL.md#bounded-entry), which runs `acs-tdd`; no separate spec or HTML delivery plan is required.
+5. Run the agreed checks and retain compact revision-bound evidence on the ticket, with any consequential decision.
+
+Use Spike for a throwaway question and Architectural for the full plan → design → build route. Complexity can only raise the tier; stop dependent execution and complete the higher tier's missing stages before resuming. Each reply approves the stage actually presented. Invoke named skills using the host's syntax and plugin namespace.
 
 All suite skill IDs use `acs-`; the plugin remains `agent-coding-skills`. See the [portable harness architecture](system/docs/harness-architecture.md).
 

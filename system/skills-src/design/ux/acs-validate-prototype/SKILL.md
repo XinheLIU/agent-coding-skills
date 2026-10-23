@@ -1,11 +1,11 @@
 ---
 name: acs-validate-prototype
-description: Build throwaway code to answer one design question. Use when conversation cannot settle how behavior should work or what an interface should look like.
+description: Use when conversation cannot settle a specific behavior or interface question and a throwaway prototype could answer it.
 ---
 
 # Validate Prototype
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [requesting_domain]
 ```
 
-Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../../docs/shared-semantics.md#execution)
 
 
 A prototype is **throwaway code that answers a question**. The question decides the shape: a hand-driven harness for a state model ([LOGIC.md](references/LOGIC.md)), or competing renderings of one surface ([UI.md](references/UI.md)).

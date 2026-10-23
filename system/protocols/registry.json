@@ -7,14 +7,14 @@
       "title": "Skill Context Declaration Contract",
       "canonical": "protocols/skill-declarations.md",
       "anchor": "#skill-declarations",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "status": "stable"
     },
     "context-coordination": {
       "id": "protocol:acs:context-coordination",
       "title": "Context Coordination Workflow",
       "canonical": "protocols/context-coordination.md",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "status": "stable"
     },
     "orchestration": {
@@ -35,14 +35,14 @@
       "id": "protocol:acs:engineering-memory",
       "title": "Engineering Domain Memory Contract",
       "canonical": "protocols/engineering-memory.md",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "status": "stable"
     },
     "operations-memory": {
       "id": "protocol:acs:operations-memory",
       "title": "Operations Domain Memory Contract",
       "canonical": "protocols/operations-memory.md",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "status": "stable"
     },
     "product-memory": {
@@ -70,6 +70,13 @@
       "id": "protocol:acs:task-graph",
       "title": "Task Graph View Contract",
       "canonical": "protocols/task-graph.md",
+      "version": "1.0.0",
+      "status": "stable"
+    },
+    "questioning": {
+      "id": "protocol:acs:questioning",
+      "title": "Questioning and Shared Understanding",
+      "canonical": "protocols/questioning.md",
       "version": "1.0.0",
       "status": "stable"
     }

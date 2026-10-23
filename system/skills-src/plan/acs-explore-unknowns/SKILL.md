@@ -1,11 +1,11 @@
 ---
 name: acs-explore-unknowns
-description: Map a multi-session effort into dependency-ordered decision tickets. Use when the destination is known but the route is unclear, or independent decisions can proceed concurrently.
+description: Use when a multi-session effort has a known destination but an unclear route or independent unresolved decisions.
 ---
 
 # Explore Unknowns
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Wayfinding resolves broad uncertainty. For accepted scope that needs delivery slices and specific design blockers, use [acs-plan-delivery](../../build/acs-plan-delivery/SKILL.md); share existing decision tickets between the two skills.

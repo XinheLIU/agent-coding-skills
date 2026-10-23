@@ -1,11 +1,11 @@
 ---
 name: acs-settle-requirements
-description: Define WHAT capabilities the product provides through functional requirements and testable acceptance criteria. Use when starting the design phase from accepted product intent, or when requirements are missing or ambiguous before technical design begins.
+description: Use when accepted product intent lacks functional requirements or testable acceptance criteria before technical design.
 ---
 
 # Settle Requirements
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 

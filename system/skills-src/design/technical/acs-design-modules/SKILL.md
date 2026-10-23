@@ -1,11 +1,11 @@
 ---
 name: acs-design-modules
-description: Design or review code structure — module responsibilities, deep interfaces, owned types, dependency direction, wiring, shared-capability forms (library, component, middleware, adapter), splits and migration. Use when an architecture must become implementable code or when modules are shallow, tangled, or need splitting; writes the MOD section of the shared technical-design.md.
+description: Use when architecture needs implementable module boundaries, or responsibilities, interfaces, wiring, or dependencies are tangled.
 ---
 
 # Design Modules
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design_contracts, design_test_strategy, trace_requirements, implementation]
 ```
 
-Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+[Shared semantics](../../../../docs/shared-semantics.md#technical-design)
 
 Follow [the card contract](../references/card-contract.md): read ARC, write only `## Modules & Interfaces (MOD)` and `FND-MOD-*` rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md); run the contract's validator and fix every error before handover.
 

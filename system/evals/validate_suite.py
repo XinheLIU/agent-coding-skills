@@ -2,7 +2,8 @@
 """Dependency-free structural checks for this suite; not a runtime Harness.
 
 Validates the deliberately constrained six-field YAML declaration syntax, source
-skill discovery, and suite-local Markdown references. Behavioral scenarios in
+skill discovery, catalog description budgets, and suite-local Markdown references.
+Behavioral scenarios in
 evals/evals require an isolated agent run; this script does not execute them.
 """
 from __future__ import annotations
@@ -111,6 +112,74 @@ def inventory_errors(suite: Path = SUITE) -> list[str]:
     return errors
 
 
+DESCRIPTION_BYTE_CAP = 260
+CATALOG_BYTE_CAP = 5_000
+# These catch workflow shortcuts, not arbitrary natural-language meaning. Review
+# trigger semantics too: a sentence can summarize a procedure without these cues.
+WORKFLOW_SUMMARY = re.compile(
+    r"\b(?:then|workflow|steps?|produces?|outputs?|returns?)\b|[→]|->|"
+    r"(?:^|[.;] )(?:(?:it|this skill) )?"
+    r"(?:run|runs|write|writes|read|reads|create|creates|generate|generates|"
+    r"apply|applies|execute|executes|inspect|inspects|audit|audits|"
+    r"classify|classifies|render|renders|use|uses|follow|follows)\b",
+    re.IGNORECASE,
+)
+
+
+def catalog_budget_errors(suite: Path = SUITE) -> list[str]:
+    """Budget decoded UTF-8 descriptions of model-invocable source skills only.
+
+    Keep this frontmatter subset explicit and fail closed on unsupported scalars;
+    no YAML dependency is needed. Bodies and discovery symlinks never count.
+    """
+    errors: list[str] = []
+    total = 0
+    for path in sorted((suite / "skills-src").rglob("SKILL.md")):
+        relative = path.relative_to(suite)
+        match = re.match(r"\A---\n(.*?)\n---\n", path.read_text(encoding="utf-8"), re.DOTALL)
+        if not match:
+            errors.append(f"{relative}: catalog requires frontmatter")
+            continue
+        frontmatter = match[1]
+        invocation = re.findall(r"^disable-model-invocation: *(.*)$", frontmatter, re.MULTILINE)
+        if invocation and invocation not in (["true"], ["false"]):
+            errors.append(f"{relative}: disable-model-invocation must be one literal boolean")
+            continue
+        if invocation == ["true"]:
+            continue
+        descriptions = re.findall(r"^description: *([^\n]*(?:\n[ \t]+[^\n]*)*)", frontmatter, re.MULTILINE)
+        if len(descriptions) != 1:
+            errors.append(f"{relative}: catalog requires exactly one description")
+            continue
+        raw = descriptions[0].strip()
+        try:
+            if raw.startswith('"'):
+                description = json.loads(raw)
+            elif raw.startswith("'") and raw.endswith("'") and "\n" not in raw:
+                description = raw[1:-1].replace("''", "'")
+            elif raw.split("\n", 1)[0] in {">", ">-", ">+", "|", "|-", "|+"}:
+                # Whitespace-normalized catalog text; indentation is YAML syntax.
+                description = " ".join(line.strip() for line in raw.splitlines()[1:])
+            elif raw and raw[0] not in "'>&*!|[{" and "\n" not in raw:
+                description = raw
+            else:
+                raise ValueError("unsupported description scalar")
+        except ValueError as error:
+            errors.append(f"{relative}: invalid catalog description: {error}")
+            continue
+        size = len(description.encode("utf-8"))
+        total += size
+        if size > DESCRIPTION_BYTE_CAP:
+            errors.append(f"{relative}: description is {size} bytes; limit is {DESCRIPTION_BYTE_CAP}")
+        if not description.startswith("Use when ") or not description[9:].strip():
+            errors.append(f"{relative}: model-invocable description must start with 'Use when ' and name a trigger")
+        if WORKFLOW_SUMMARY.search(description.removeprefix("Use when ")):
+            errors.append(f"{relative}: description contains workflow-summary language; move procedure into the body")
+    if total > CATALOG_BYTE_CAP:
+        errors.append(f"catalog: model-invocable descriptions total {total} bytes; limit is {CATALOG_BYTE_CAP}")
+    return errors
+
+
 class HtmlAnchors(HTMLParser):
     def __init__(self) -> None:
         super().__init__()
@@ -190,6 +259,7 @@ def validate(suite: Path = SUITE, *, inventory_only: bool = False) -> list[str]:
     errors = inventory_errors(suite)
     if inventory_only:
         return errors
+    errors.extend(catalog_budget_errors(suite))
     skills = sorted((suite / "skills-src").rglob("SKILL.md"))
     for path in skills:
         text = path.read_text(encoding="utf-8")
@@ -217,6 +287,6 @@ if __name__ == "__main__":
     for finding in findings:
         print(finding)
     count = sum(1 for _ in (SUITE / "skills-src").rglob("SKILL.md"))
-    checks = "inventory" if args.inventory_only else "inventory, declarations, local links/anchors"
+    checks = "inventory" if args.inventory_only else "inventory, catalog budget, declarations, local links/anchors"
     print(f"{count} source skills; {checks}: {'FAIL' if findings else 'PASS'}")
     sys.exit(bool(findings))

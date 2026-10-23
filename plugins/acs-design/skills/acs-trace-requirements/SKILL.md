@@ -1,11 +1,11 @@
 ---
 name: acs-trace-requirements
-description: Trace every requirement through entry point, registration, module, contract, and test — against the design before build and against the code after build — classifying each as REACHABLE, PARTIAL, MISSING, DIVERGENT, UNEXPECTED, or UNASSESSED, and applying scoped wiring repairs. Use for "what's left to do", "what did I miss from the design", resuming a partial implementation, or pre-PR drift checks; writes the TRC section of the shared technical-design.md.
+description: Use when requirement wiring is uncertain, an implementation is partial, or design-to-code drift needs checking before a PR.
 ---
 
 # Trace Requirements
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -32,6 +32,8 @@ Follow [the card contract](../../resources/skills-src/design/technical/reference
 
 ## Trace
 
+Apply the [review evidence gate](../../resources/protocols/engineering-memory.md#review-evidence-gate) to trace evidence and `FND-TRC` findings. **If you cannot quote the motivating line, the finding is unverified**: cite the inspected `file:line` and verbatim source text; otherwise use LOW, record `unverified; confidence ≤ 5/10` in the finding, and retain it outside summaries. Never invent a quote or line number. **Code that handles a deliverable is not the deliverable**: for an artifact requirement, inspect the artifact itself; when it cannot be reached, report `UNVERIFIABLE`, not `DONE`, and record the exact next check. A handler or its tests can establish wiring evidence only.
+
 For each criterion, one `TRC-n` row following the chain `requirement → entry (route/menu/command/job/export) → registration → MOD interface → owning module → adapter → CON items → TST test`:
 
 ```markdown
@@ -47,7 +49,10 @@ For each criterion, one `TRC-n` row following the chain `requirement → entry (
 | `MISSING` | No code (post-build) or no design owner (pre-build) |
 | `DIVERGENT` | Exists but differs meaningfully from the design: other approach, data model, or API shape |
 | `UNEXPECTED` | Code in scope that no requirement or target item explains |
-| `UNASSESSED` | Could not be traced; name the reason (dynamic registration, external consumer, missing access) |
+| `UNASSESSED` | Could not trace the wiring; name the reason (dynamic registration, external consumer, missing source access) |
+| `UNVERIFIABLE` | Required artifact itself cannot be reached for inspection; cite the access limitation and exact next check, even if its handler is reachable |
+
+For artifact criteria, `UNVERIFIABLE` takes precedence over handler-only `REACHABLE` evidence. Confirmed absence or incompleteness remains `MISSING` or `PARTIAL`. `REACHABLE` never means `DONE` or executed acceptance; preserve the [engineering evidence identity](../../resources/protocols/engineering-memory.md#testing-and-review) and distinguish static checks from execution.
 
 Also verify dependency direction against MOD, middleware order, and error and permission paths where the chain crosses them. Do not call code unused only because static search misses it; dynamic and external consumers stay `UNASSESSED`.
 
@@ -61,7 +66,7 @@ Only in post-build mode, only within the requested scope, and only when the evid
 
 ## Output
 
-The `TRC` section holds the summary counts, the matrix, unexpected code, build order, repairs, and the commands and environment used. Its `### Open` names which non-`REACHABLE` rows `acs-review-code-quality` should focus on.
+The `TRC` section holds the summary counts, the matrix, unexpected code, build order, repairs, and the commands and environment used. Its `### Open` names which non-`REACHABLE` rows `acs-review-code-quality` should focus on. Keep unverified `FND-TRC` entries in an appendix within this card's section, outside summaries and blocking findings; the matrix still retains `UNVERIFIABLE` criteria with their limitations and next checks.
 
 ## Done when
 

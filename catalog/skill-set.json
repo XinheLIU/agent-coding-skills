@@ -28,14 +28,14 @@
     },
     {
       "id": "design/requirements",
-      "label": "Design · Requirements",
+      "label": "Design \u00b7 Requirements",
       "skills": [
         "acs-settle-requirements"
       ]
     },
     {
       "id": "design/ux",
-      "label": "Design · UX",
+      "label": "Design \u00b7 UX",
       "skills": [
         "acs-design-context",
         "acs-design-system-create",
@@ -47,7 +47,7 @@
     },
     {
       "id": "design/technical",
-      "label": "Design · Technical",
+      "label": "Design \u00b7 Technical",
       "skills": [
         "acs-technical-design",
         "acs-design-architecture",
@@ -74,6 +74,14 @@
       ]
     },
     {
+      "id": "deploy",
+      "label": "Deploy",
+      "skills": [
+        "acs-ship",
+        "acs-release"
+      ]
+    },
+    {
       "id": "maintain",
       "label": "Maintain",
       "skills": [
@@ -82,7 +90,7 @@
     },
     {
       "id": "test/review",
-      "label": "Test · Review",
+      "label": "Test \u00b7 Review",
       "skills": [
         "acs-review-code-quality",
         "acs-refactor-code"
@@ -90,7 +98,7 @@
     },
     {
       "id": "test/debugging",
-      "label": "Test · Debugging",
+      "label": "Test \u00b7 Debugging",
       "skills": [
         "acs-triage",
         "acs-resolving-merge-conflicts"
@@ -200,6 +208,14 @@
       "version": "1.0.0",
       "description": "Context lifecycle and authoring skills for the ACS suite.",
       "skillCount": 11,
+      "dependencies": []
+    },
+    {
+      "name": "acs-deploy",
+      "version": "1.0.0",
+      "description": "Pull request preparation and production release skills for the ACS suite.",
+      "phase": "deploy",
+      "skillCount": 2,
       "dependencies": []
     }
   ]

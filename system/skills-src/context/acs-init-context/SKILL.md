@@ -1,11 +1,11 @@
 ---
 name: acs-init-context
-description: Initialize shared agent context when setup is requested or missing/lost routing blocks a required persistent write. Configure canonical context paths, durable change records, run scratch, retention and audit boundaries, and an optional derived code index; use acs-sync-context for drift inspection and whole-repository document audits.
+description: Use when context setup is requested or missing routing blocks a required persistent write.
 ---
 
 # Init Context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+[Shared semantics](../../../docs/shared-semantics.md#context)
 
 
 Set up routing for Working and Persistent Memory under the model in [the protocol](../../../protocols/skill-declarations.md). Do not define another layer scheme.

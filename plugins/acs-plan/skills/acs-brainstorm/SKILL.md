@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Brainstorm
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -48,8 +48,8 @@ Three phases: Explore → Synthesize → Handoff. Keep it conversational and lig
 
 ### 1. Explore — Socratic dialogue in blocks
 
-Open with **one question block** covering the five core dimensions (format and rules:
-`references/shared-understanding.md`). Don't rush to solutions.
+Explore the five core dimensions using the [questioning protocol](../../resources/protocols/questioning.md):
+classify candidates and ask only the current frontier each round. Don't rush to solutions.
 
 The five dimensions:
 

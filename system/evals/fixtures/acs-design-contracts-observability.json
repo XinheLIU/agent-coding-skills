@@ -1,0 +1,45 @@
+{
+  "evidence_kind": "Authored design and local mock exercise; not a model transcript or production evidence",
+  "contract": "CON-OBS-1",
+  "path": "checkout -> provider",
+  "failure_mode": "Provider timeout leaves checkout unavailable",
+  "questions": [
+    {"id": "Q1", "text": "Which checkout requests failed?"},
+    {"id": "Q2", "text": "Which dependency failed, and why?"}
+  ],
+  "signals": [
+    {
+      "name": "checkout_result",
+      "kind": "structured_log",
+      "answers": {
+        "Q1": "SELECT request_id, path FROM telemetry WHERE event = 'checkout_result' AND outcome = 'failed'",
+        "Q2": "SELECT request_id, dependency, cause FROM telemetry WHERE event = 'checkout_result' AND outcome = 'failed'"
+      }
+    }
+  ],
+  "alerts": [
+    {
+      "name": "checkout_unavailable",
+      "question": "Q1",
+      "signal": "checkout_result",
+      "symptom": "Checkout requests fail",
+      "threshold": 1,
+      "duration": "one request in this local exercise",
+      "rationale": "A single failed synthetic checkout violates the fixture's zero-failure criterion; this is not a production threshold",
+      "query": "SELECT COUNT(*) FROM telemetry WHERE event = 'checkout_result' AND outcome = 'failed'",
+      "destination": "scratch-inbox",
+      "runbook": "#/runbooks/checkout_unavailable"
+    }
+  ],
+  "runbooks": {
+    "checkout_unavailable": [
+      "Means: Checkout users cannot complete their request.",
+      "First query: SELECT request_id, path, dependency, cause FROM telemetry WHERE event = 'checkout_result' AND outcome = 'failed'",
+      "Escalate to: local exercise owner; no external notification."
+    ]
+  },
+  "verification": {
+    "command": "python3 -m unittest discover -s system/evals/tests -p test_design_contracts_observability.py -v",
+    "environment": "local Python stdlib mock; in-memory SQLite telemetry and temporary scratch inbox"
+  }
+}

@@ -1,6 +1,6 @@
 # Demand Validation Framework
 
-Last updated: 2026-09-17
+Last updated: 2026-10-23
 
 Two instruments, used in sequence. The **evidence scale** grades how strongly each claim is
 supported. The **Three Soul Questions** convert those graded claims into zones and a verdict.
@@ -44,9 +44,9 @@ next validation action must be the experiment that moves them up the scale.
 
 ## The Diagnostic
 
-Six forcing questions. Ask only what the upstream brief has not already answered, as one
-block of 4–5 with recommended answers (`shared-understanding.md`); follow up where an
-answer stays generic.
+Six diagnostic areas. Ask only what the upstream brief has not already answered, using the
+[questioning protocol](../../../resources/protocols/questioning.md) for classification and frontier
+rounds; follow up where an answer stays generic.
 
 | Area | Forcing question | Strong evidence looks like |
 | --- | --- | --- |

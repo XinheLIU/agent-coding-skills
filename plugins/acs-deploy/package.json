@@ -1,0 +1,7 @@
+{
+  "name": "acs-deploy",
+  "version": "1.0.0",
+  "description": "Pull request preparation and production release skills for the ACS suite.",
+  "license": "MIT",
+  "main": "catalog/skill-set.json"
+}

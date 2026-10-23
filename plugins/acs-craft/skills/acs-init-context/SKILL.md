@@ -1,11 +1,11 @@
 ---
 name: acs-init-context
-description: Initialize shared agent context when setup is requested or missing/lost routing blocks a required persistent write. Configure canonical context paths, durable change records, run scratch, retention and audit boundaries, and an optional derived code index; use acs-sync-context for drift inspection and whole-repository document audits.
+description: Use when context setup is requested or missing routing blocks a required persistent write.
 ---
 
 # Init Context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-23
 
 ## Context contract
 

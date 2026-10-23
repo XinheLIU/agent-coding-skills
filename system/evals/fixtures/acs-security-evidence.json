@@ -1,0 +1,226 @@
+{
+  "evidence_kind": "Authored contract examples and challenger exchange; not a model transcript or executed security reproduction.",
+  "findings": [
+    {
+      "id": "tenant-read-static",
+      "scope_revision": "authored-fixture-v1",
+      "severity": "P1",
+      "severity_rationale": "Conditional impact requires the stated attacker path; priority is independent of evidence state.",
+      "confidence": 9,
+      "confidence_rationale": "Based only on the authored evidence below; unknowns remain explicit.",
+      "evidence": {
+        "entrypoint": {
+          "status": "shown",
+          "detail": "Authenticated tenant A chooses tenant B document ID.",
+          "source": "routes.py:4",
+          "quote": "get_document(request.path_id)"
+        },
+        "boundary_crossing": {
+          "status": "shown",
+          "detail": "Route checks login only; unscoped lookup crosses tenant ownership.",
+          "source": "documents.py:8",
+          "quote": "return db.documents[id]"
+        },
+        "demonstrated_impact": {
+          "status": "shown",
+          "detail": "Complete static trace returns B private body to A without owner check.",
+          "source": "routes.py:5",
+          "quote": "return document.body"
+        }
+      },
+      "controls": "Login middleware and route registration inspected; no ownership guard.",
+      "reachability": "reachable",
+      "evidence_state": "supported-static",
+      "placement": "main",
+      "reproduction": null
+    },
+    {
+      "id": "traversal-reproduction",
+      "scope_revision": "authored-fixture-v1",
+      "severity": "P1",
+      "severity_rationale": "Conditional impact requires the stated attacker path; priority is independent of evidence state.",
+      "confidence": 9,
+      "confidence_rationale": "Based only on the authored evidence below; unknowns remain explicit.",
+      "evidence": {
+        "entrypoint": {
+          "status": "shown",
+          "detail": "Authenticated uploader controls filename.",
+          "source": "uploads.py:3",
+          "quote": "name = request.filename"
+        },
+        "boundary_crossing": {
+          "status": "shown",
+          "detail": "Join accepts parent traversal beyond upload root; no normalization guard.",
+          "source": "uploads.py:4",
+          "quote": "target = root / name"
+        },
+        "demonstrated_impact": {
+          "status": "shown",
+          "detail": "Authored reproduction record: sibling sentinel overwritten; normal upload still succeeds.",
+          "source": "uploads.py:5",
+          "quote": "target.write_bytes(request.body)"
+        }
+      },
+      "controls": "Upload routing and middleware checked; login does not restrict target path.",
+      "reachability": "reachable",
+      "evidence_state": "supported-reproduced",
+      "placement": "main",
+      "reproduction": {
+        "command": "python3 -m unittest test_upload_boundary",
+        "environment": "Authored isolated temporary-directory scenario; not executed in this task.",
+        "security_assertion": "Sibling sentinel changed on vulnerable source.",
+        "legitimate_control": "Normal upload returns success and writes within root.",
+        "observed": false
+      }
+    },
+    {
+      "id": "dependency-unknown-reachability",
+      "scope_revision": "authored-fixture-v1",
+      "severity": "P0",
+      "severity_rationale": "Conditional impact requires the stated attacker path; priority is independent of evidence state.",
+      "confidence": 4,
+      "confidence_rationale": "Based only on the authored evidence below; unknowns remain explicit.",
+      "evidence": {
+        "entrypoint": {
+          "status": "unknown",
+          "detail": "Runtime/build/test/deploy callers unavailable; inspect call graph and deployment config.",
+          "source": null,
+          "quote": null
+        },
+        "boundary_crossing": {
+          "status": "unknown",
+          "detail": "Parser advisory describes a possible boundary crossing; inspect actual caller validation.",
+          "source": null,
+          "quote": null
+        },
+        "demonstrated_impact": {
+          "status": "unknown",
+          "detail": "No affected invocation or observed harm; trace attacker input to parser before claiming impact.",
+          "source": null,
+          "quote": null
+        }
+      },
+      "controls": "Unknown: deployment and caller controls have not been inspected.",
+      "reachability": "unknown",
+      "evidence_state": "candidate",
+      "placement": "appendix",
+      "reproduction": null
+    },
+    {
+      "id": "tenant-guard-disproves",
+      "scope_revision": "authored-fixture-v1",
+      "severity": "P1",
+      "severity_rationale": "Conditional impact requires the stated attacker path; priority is independent of evidence state.",
+      "confidence": 9,
+      "confidence_rationale": "Based only on the authored evidence below; unknowns remain explicit.",
+      "evidence": {
+        "entrypoint": {
+          "status": "shown",
+          "detail": "Authenticated A can request a B document ID.",
+          "source": "routes.py:4",
+          "quote": "get_document(request.path_id)"
+        },
+        "boundary_crossing": {
+          "status": "refuted",
+          "detail": "Ownership guard rejects cross-tenant access before response.",
+          "source": "documents.py:9",
+          "quote": "if doc.tenant != user.tenant: raise Forbidden()"
+        },
+        "demonstrated_impact": {
+          "status": "refuted",
+          "detail": "Claimed disclosure is blocked on every route in the scoped call graph.",
+          "source": "documents.py:10",
+          "quote": "return doc.body"
+        }
+      },
+      "controls": "All scoped callers execute the quoted ownership guard; legitimate same-tenant access remains.",
+      "reachability": "unreachable",
+      "evidence_state": "disproved",
+      "placement": "appendix",
+      "reproduction": null
+    },
+    {
+      "id": "missing-impact",
+      "scope_revision": "authored-fixture-v1",
+      "severity": "P2",
+      "severity_rationale": "Conditional impact requires the stated attacker path; priority is independent of evidence state.",
+      "confidence": 6,
+      "confidence_rationale": "Based only on the authored evidence below; unknowns remain explicit.",
+      "evidence": {
+        "entrypoint": {
+          "status": "shown",
+          "detail": "Public requester supplies an arbitrarily long label.",
+          "source": "labels.py:2",
+          "quote": "label = request.query[\"label\"]"
+        },
+        "boundary_crossing": {
+          "status": "shown",
+          "detail": "Input reaches log storage without a length cap.",
+          "source": "labels.py:3",
+          "quote": "logger.info(label)"
+        },
+        "demonstrated_impact": {
+          "status": "unknown",
+          "detail": "No demonstrated exhaustion or disclosure; inspect sink limits and a bounded failure scenario.",
+          "source": null,
+          "quote": null
+        }
+      },
+      "controls": "Input path inspected; log sink quota/rotation remains unknown.",
+      "reachability": "reachable",
+      "evidence_state": "candidate",
+      "placement": "appendix",
+      "reproduction": null
+    }
+  ],
+  "challenger_exchange": {
+    "evidence_kind": "Authored exchange demonstrating withheld conclusion; no independent model was invoked.",
+    "producer_private": {
+      "conclusion": "Dependency is exploitable remotely.",
+      "severity": "P0",
+      "confidence": 9,
+      "evidence_state": "supported-static",
+      "proposed_fix": "Remove parser."
+    },
+    "input": {
+      "neutral_id": "C3",
+      "scope_revision": "authored-fixture-v1",
+      "locations": [
+        "lockfile:7"
+      ],
+      "source_evidence": {
+        "quote": "parser==1.0",
+        "parts": {
+          "entrypoint": {
+            "status": "unknown",
+            "detail": "Runtime/build/test/deploy callers unavailable; inspect call graph and deployment config.",
+            "source": null,
+            "quote": null
+          },
+          "boundary_crossing": {
+            "status": "unknown",
+            "detail": "Parser advisory describes a possible boundary crossing; inspect actual caller validation.",
+            "source": null,
+            "quote": null
+          },
+          "demonstrated_impact": {
+            "status": "unknown",
+            "detail": "No affected invocation or observed harm; trace attacker input to parser before claiming impact.",
+            "source": null,
+            "quote": null
+          }
+        }
+      },
+      "invariant": "Untrusted parser input must not escape process permissions.",
+      "environment_assumptions": "Deployment and caller code unavailable.",
+      "rubric": "Require entrypoint, boundary crossing and demonstrated impact; unknown reachability stays unknown."
+    },
+    "response": {
+      "evidence_state": "candidate",
+      "reachability": "unknown",
+      "rationale": "A version match cannot establish caller control or impact; obtain caller and deployment evidence.",
+      "counterevidence": "No verified protective controls available; neither safe nor exploitable is established."
+    },
+    "reconciliation": "Retain candidate with unknown reachability; producer conclusion is unsupported."
+  }
+}

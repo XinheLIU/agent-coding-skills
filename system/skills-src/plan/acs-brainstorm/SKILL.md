@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Brainstorm
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [product]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Turn an ambiguous idea into a Jobs-to-be-Done brief through natural Socratic conversation.
@@ -48,8 +48,8 @@ Three phases: Explore → Synthesize → Handoff. Keep it conversational and lig
 
 ### 1. Explore — Socratic dialogue in blocks
 
-Open with **one question block** covering the five core dimensions (format and rules:
-`references/shared-understanding.md`). Don't rush to solutions.
+Explore the five core dimensions using the [questioning protocol](../../../protocols/questioning.md):
+classify candidates and ask only the current frontier each round. Don't rush to solutions.
 
 The five dimensions:
 

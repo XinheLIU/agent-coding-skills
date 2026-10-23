@@ -1,11 +1,11 @@
 ---
 name: acs-technical-design
-description: Run technical design or design review as a set of aspect cards — architecture, modules, contracts, test strategy, traceability — that write one shared technical-design.md and one HTML view. Use for "technical design", "architecture review", "review the design", "review this plan/RFC before coding", or a holistic design-quality read; it picks which cards to run and consolidates cross-card findings.
+description: Use when requirements need technical design, or an architecture, plan, or RFC needs review across aspects before implementation.
 ---
 
 # Technical Design
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 

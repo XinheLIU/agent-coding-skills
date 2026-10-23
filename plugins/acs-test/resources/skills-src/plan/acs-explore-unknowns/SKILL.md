@@ -1,11 +1,11 @@
 ---
 name: acs-explore-unknowns
-description: Map a multi-session effort into dependency-ordered decision tickets. Use when the destination is known but the route is unclear, or independent decisions can proceed concurrently.
+description: Use when a multi-session effort has a known destination but an unclear route or independent unresolved decisions.
 ---
 
 # Explore Unknowns
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 

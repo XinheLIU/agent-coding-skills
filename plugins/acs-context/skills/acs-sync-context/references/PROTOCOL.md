@@ -1,13 +1,13 @@
 ---
 protocol: acs:skill-declarations
-version: 1.4.0
+version: 1.4.1
 status: stable
 canonical: https://github.com/XinheLIU/agent-coding-skills/blob/main/system/protocols/skill-declarations.md
 ---
 
 # Shared Context Protocol
 
-Last updated: 2026-09-29
+Last updated: 2026-10-23
 
 This is the suite's canonical lifecycle, identity, ownership, and handoff contract. Domain contracts specialize artifact meaning; workflows coordinate execution. It applies to standalone skills as well as composed workflows.
 
@@ -30,7 +30,7 @@ Three questions decide where a record belongs:
 2. A later task, collaborator, or decision will reference it → Persistent, with an explicit domain status (`proposed`, `accepted`, `rejected`, …).
 3. Reconstructible entirely from already-recorded sources → a derived view, not memory.
 
-Working may be saved to disk; Persistent does not mean accepted or implemented. Save a proposal with `proposed` status before formal review, cross-run handoff, or downstream reliance. Record domain status separately from retention and freshness.
+Working may be saved to disk; Persistent does not mean accepted or implemented. Save a proposal with `proposed` status before formal review, cross-run handoff, or downstream reliance, with timing governed by [Phase boundaries](../../../resources/protocols/context-coordination.md#phase-boundaries). Record domain status separately from retention and freshness.
 
 Classify records by ownership and future use, never by file extension or directory. A file may contain several Persistent purposes. `product.html` owns canonical product records; accepted prototypes own design intent and exact visual content. Preserve their versions and necessary assets. Code, schemas, tests and configuration establish executable facts; accepted intent does not establish shipped behavior.
 
@@ -148,15 +148,18 @@ Load [Product](../../../resources/protocols/product-memory.md), [Design](../../.
 
 ## Handoff envelope
 
-Every cross-session or domain handoff contains:
+Apply [Phase boundaries](../../../resources/protocols/context-coordination.md#phase-boundaries) to determine when a handoff is required. Every required handoff contains:
 
 ```text
 change/task identity + scope
 references and consumed revisions
 delta + accepted decision references
+Rulings made: [Ruling: <what> — <why> — <cost if wrong>; record reference + review due]
 unresolved questions and blocking effects
 next action
 ```
+
+The **Rulings made** list is required; use an empty list when no rulings were made. Carry mechanical and provisional taste rulings from the recovery entry, identifying classification and task/revision, and link consequential rulings retained in Persistent Changes. Include any pending taste review; a ruling is not an accepted decision unless acceptance is recorded. Failed tickets include retry counts, stop reasons, and blocking effects under the [failure policy](../../../resources/protocols/orchestration.md#failure-policy).
 
 References must be accessible to the receiver, including across worktrees. If a reference cannot be shared directly, transport a bounded, revision-labelled excerpt as temporary Working Memory, identifying its canonical source and expiry/revalidation condition. Do not turn the excerpt into a second requirements source. Persist records and minimum evidence needed by the receiver before handing off, including proposed inputs; private conversation is insufficient. Attach the configured run checkpoint only for execution recovery and a view link only for human reading. A view never replaces canonical references. Review feedback follows [Presenter review reconciliation](../../../resources/protocols/presenter.md#review-reconciliation).
 

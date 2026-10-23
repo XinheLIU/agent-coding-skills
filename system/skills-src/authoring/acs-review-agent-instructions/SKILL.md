@@ -1,11 +1,11 @@
 ---
 name: acs-review-agent-instructions
-description: Review or update a repository's AGENTS.md or CLAUDE.md. Use to encode one incident lesson, repair instruction hierarchy and pointers, prune ineffective guidance, or reconnect shared-context routing; use acs-translate-agent-context for runtime migration.
+description: Use when AGENTS.md or CLAUDE.md needs an incident lesson, hierarchy repair, guidance pruning, or context routing repair.
 ---
 
 # Review Agent Instructions
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Own the requested `AGENTS.md` or `CLAUDE.md` and its context pointers. The file should contain only always-needed repository constraints and trigger-bearing pointers to canonical detail.
@@ -46,7 +46,21 @@ Inspection is complete when every proposed change is grounded in an incident, a 
 
 ### Intake
 
-Route the lesson before writing:
+Before writing an instruction, choose the highest applicable rung that prevents the recorded failure. Inspect the repository's existing check commands and how they run; an existing check that is unwired or broken is the finding, not a reason to duplicate it. Record why each higher rung cannot prevent this failure.
+
+| Rung, in order | Enforcement |
+| --- | --- |
+| Architecture | Remove the invalid path or give shared state one owner so the mistake cannot be expressed. |
+| Types | Make the invalid state fail type checking. |
+| Lint | Add a deterministic check whose error names the fix. |
+| Test | Add a regression check at the relevant behavioral boundary. |
+| Documentation | Only when no check is possible, record an explicit **instruction fallback** and why architecture, types, lint, and tests cannot enforce the lesson. |
+
+Each new check must fail on the recorded mistake: use the old code or a faithful reproducer, verify the expected failure reason (not an import or setup error), then run the same check unchanged on the corrected code and require it to pass. Record the incident, chosen rung, exact command/result, tested revision or tree fingerprint, and timestamp under the [evidence contract](../../../protocols/orchestration.md#evidence-contract). Missing tools, permission, or a runnable reproducer leave the check incomplete; they do not establish that no check is possible.
+
+For example, a lesson that a technically accurate review sounded dismissive can be an **instruction fallback**: architecture, types, lint, and tests cannot decide whether wording respects the reader in context. Record the observed wording and the desired respectful, concrete alternative; a word ban cannot enforce that judgment.
+
+Route an instruction fallback or a pointer to enforcement at the narrowest scope:
 
 | Lesson scope | Home |
 | --- | --- |
@@ -55,9 +69,9 @@ Route the lesson before writing:
 | Detailed procedure or reference | Canonical document or skill, with a trigger pointer |
 | Active effort only | Configured run recovery entry or linked effort artifact |
 
-Write the minimum checkable instruction that names the target behavior, reason or consequence, and verification when available. Make room by removing or disclosing weaker material from the same owned file. Preserve unrelated structure.
+For a fallback, write the minimum instruction that names the target behavior, reason or consequence, and manual verification. Keep the lesson and its enforcer or fallback rationale together in the owned record; a repeated lesson whose rule already exists is an enforcement finding. Make room by removing or disclosing weaker material from the same owned file. Preserve unrelated structure.
 
-Intake is complete when the new instruction would have prevented the recorded failure, lives at the narrowest correct scope, and does not duplicate another canonical rule.
+Intake is complete when the new check would have failed on the recorded failure and passes on the correction, or no check is possible and the instruction is explicitly marked as the fallback with its rationale. Any retained instruction or pointer lives at the narrowest correct scope and does not duplicate another canonical rule.
 
 ### Review
 

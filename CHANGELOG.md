@@ -1,8 +1,28 @@
 # Changelog
 
-Last updated: 2026-10-11
+Last updated: 2026-10-23
 
 ## Unreleased
+
+### Align skills with the reference corpus
+
+- Reduce model-invocable catalog descriptions and enforce byte budgets; introduce shared questioning, scope postures, proportional rigor tiers and a Bounded default route.
+- Add per-ticket independent review contracts, bounded retries and rulings, revision-bound evidence validation, phase-boundary persistence and explicit host capability bindings.
+- Strengthen TDD seams, diagnosis stops, review quotation/security evidence, constraint-floor scanning and lesson-to-check enforcement.
+- Add shipping/release skills, observability contracts and a read-only coordination CLI. External operations still require their own authorization and project configuration.
+- Front-load long skill procedures, centralize generated shared semantics, derive package dates from sources and check generated-output drift. Tokenizer-specific compaction verification remains explicitly conditional on configured tooling.
+
+Unfinished routing benchmarks, comparative behavioral evaluation and expiry audits are not included. Validation covers source contracts, local executable fixtures and package closure, not production or general model reliability.
+
+### Reference corpus refreshed; Addy Osmani and pstack packs added
+
+The Matt Pocock study copy was a skills-manager installation frozen at two old revisions. It has been replaced with the upstream tree, and two more well-known packs were added for comparison. All three are study material only; nothing under `system/` changed.
+
+- `references/matt-pocock/` is now the upstream `mattpocock/skills` tree at `49dd158` (v1.3.1, 2026-10-09): 38 skills, up from 22. New here: `implement-spec`, `pr`, `retro`, `wizard`, `to-questionnaire`, `wait-what`, and the `in-progress/` and `misc/` buckets. `resolving-merge-conflicts` is gone upstream with no replacement; `writing-great-skills` became `writing-for-agents`; `grilling` now works numbered frontier rounds instead of one question at a time.
+- `references/addy-osmani/` is new: the `addyosmani/agent-skills` tree at `aeac41d` (v0.6.13, 2026-10-13). 25 skills organized by lifecycle phase (define, plan, build, verify, review, ship), with 4 review personas, 7 shared checklists, 9 command wrappers, and lifecycle hooks.
+- `references/pstack/` is new: `cursor/plugins` → `pstack/` at `0b8e952` (v0.15.26, 2026-10-18). One mode skill (`poteto-mode`) with 23 playbooks, 24 citable principles, two subagents, and role→model routing, in 55 skill directories.
+- All three folders gained a registry `README.md`, and `references/README.md` gained matching rows. gstack stays indexed as a separate runtime suite. The side-by-side comparison first written as `references/COMPARISON.md` was later merged into `references/ANALYSIS.md`. That page models each pack's assumptions, reads the packs' release histories, grades the assumptions behind `system/`, and ranks what to borrow.
+- `system/THIRD_PARTY_NOTICES.md` records the Addy Osmani and pstack packs as study material with no adaptation, and notes that the Matt Pocock adaptations were made against the older revisions.
 
 ### Human review views follow STE wording rules
 

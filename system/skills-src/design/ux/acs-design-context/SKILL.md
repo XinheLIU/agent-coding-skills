@@ -1,9 +1,9 @@
 ---
 name: acs-design-context
-description: "Establish or refresh this project's design authority — the root DESIGN.md that answers HOW the product looks. Adopt an existing DESIGN.md, import from a reference site or brand, fold in a legacy docs/design/system.md, or route to from-scratch creation. Run before any other UX skill; they all read DESIGN.md. Use when no design authority exists, when system.md needs migrating, or when DESIGN.md has drifted from its source."
+description: Use when design work lacks a canonical DESIGN.md, legacy design authority needs migration, or visual rules have drifted.
 ---
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -17,7 +17,7 @@ context:
   handoff_to: [interaction_design, visual_design]
 ```
 
-Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../../docs/shared-semantics.md#execution)
 
 
 # Design Context

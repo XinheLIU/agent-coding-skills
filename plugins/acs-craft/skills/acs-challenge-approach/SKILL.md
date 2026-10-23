@@ -1,11 +1,11 @@
 ---
 name: acs-challenge-approach
-description: Resolve user-owned decisions one at a time. Use when choices that cannot be discovered from the environment block an idea, plan, design, triage brief, or wayfinder ticket.
+description: Use when a user-owned decision blocks an idea, plan, design, triage brief, or decision ticket.
 ---
 
 # Challenge Approach
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -23,6 +23,6 @@ Shared semantics: [shared protocol](../../resources/protocols/skill-declarations
 
 
 1. Inspect the available context until every remaining blocker is a decision rather than a discoverable fact.
-2. Walk prerequisite decisions before downstream choices. Ask one question at a time; lead with a recommendation and its trade-off.
+2. Follow the [questioning protocol](../../resources/protocols/questioning.md): classify candidates, ask only the settled-prerequisite frontier, and lead with a recommendation and its trade-off.
 3. Reflect each answer as a concrete decision and correct it immediately if the user disagrees.
 4. Stop when every decision required by the caller's completion criterion is resolved. Return confirmed decisions and genuinely open questions to the caller, which owns persistence and implementation.

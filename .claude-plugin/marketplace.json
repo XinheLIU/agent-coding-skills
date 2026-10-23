@@ -32,6 +32,11 @@
       "description": "Code review, refactoring, debugging, and incident diagnosis skills for the ACS suite."
     },
     {
+      "name": "acs-deploy",
+      "source": "./plugins/acs-deploy",
+      "description": "Pull request preparation and production release skills for the ACS suite."
+    },
+    {
       "name": "acs-craft",
       "source": "./plugins/acs-craft",
       "description": "Context lifecycle and authoring skills for the ACS suite."

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Explore Unknowns"
+  short_description: "Map a multi-session effort into dependency-ordered decision tickets. Use when th..."
+policy:
+  allow_implicit_invocation: false

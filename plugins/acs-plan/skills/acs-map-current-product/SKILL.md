@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Map Current Product
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 Read the standalone [visual report contract](references/visual-report.md) before creating or extending `discovery.html`. This local reference is bundled with the skill; do not depend on `/meta` or another installed skill.
 

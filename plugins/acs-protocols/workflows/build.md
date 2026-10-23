@@ -1,8 +1,8 @@
 # Build Workflow
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
-Turn accepted scope into a delivery graph, and execute the ready implementation slices when authorized.
+Apply the declared [rigor tier](README.md#rigor-tiers). Bounded goes through one ticket, an in-chat design, approval, then [acs-implement's Bounded entry](../resources/skills-src/build/acs-implement/SKILL.md#bounded-entry) (reference procedure; capability not installed), with no HTML delivery plan. Reuse current approvals and preserve revision-bound verification. Spike returns its answer without entering delivery. The graph sequence below is the Architectural route: turn accepted scope into a delivery graph, and execute the ready implementation slices when authorized.
 
 ```text
 entry_artifact: accepted product scope or accepted requirements/designs, with canonical references

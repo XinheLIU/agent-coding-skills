@@ -1,18 +1,11 @@
 ---
 name: acs-translate-agent-context
-description: >
-  Preserve required agent behavior while translating instructions, skills,
-  commands, hooks, roles, and context between agent runtimes or host applications.
-  Use for runtime migration, parity, or drift across any named or unknown agent
-  system, including Codex-like hosts. Classify source and target by verified
-  discovery, tools, delegation, permissions, persistence, enforcement, and
-  lifecycle or timing rather than by brand. Use `acs-review-agent-instructions` for
-  content quality alone.
+description: Use when agent instructions, skills, hooks, roles, or context need migration or behavioral parity across runtimes.
 ---
 
 # Translate Agent Context
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -26,7 +19,7 @@ context:
   handoff_to: [coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+[Shared semantics](../../../docs/shared-semantics.md#context)
 
 
 Translate required behavior, not filenames or brand-specific conventions. The source remains available until its destination exists and passes an equivalent check.

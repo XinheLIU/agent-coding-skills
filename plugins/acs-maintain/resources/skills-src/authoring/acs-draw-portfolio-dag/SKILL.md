@@ -1,11 +1,11 @@
 ---
 name: acs-draw-portfolio-dag
-description: Render Markdown workstreams and dependency tickets as an interactive HTML DAG or Mermaid flowchart. Use for portfolio sequencing, frontier visibility, cross-cutting ticket tags, or live progress rendering during an implement run.
+description: Use when workstreams or dependency tickets need a portfolio view, frontier visibility, or live delivery progress.
 ---
 
 # Draw Portfolio DAG
 
-Last updated: 2026-10-01
+Last updated: 2026-10-23
 
 ## Context contract
 

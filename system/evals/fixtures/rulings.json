@@ -1,0 +1,351 @@
+{
+  "evidence_kind": "Authored contract examples, not observed model behavior or actual executor transcripts. Revisions, checks, and recovery/persistent references are illustrative fixture values.",
+  "cases": [
+    {
+      "id": "taste-continues",
+      "decision": {
+        "classification": "Taste decision",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": null
+      },
+      "action": "continue",
+      "ruling": {
+        "text": "Ruling: Use the existing compact list \u2014 both layouts meet the accepted contract \u2014 a small layout revision if wrong",
+        "classification": "Taste decision",
+        "recovery_entry": ".scratch/example/state.md",
+        "revision": "fixture-source-1",
+        "consequential": true,
+        "persistent_reference": "changes/example#layout-ruling"
+      },
+      "review_due": true,
+      "handoff": {
+        "rulings_made": [
+          {
+            "text": "Ruling: Use the existing compact list \u2014 both layouts meet the accepted contract \u2014 a small layout revision if wrong",
+            "classification": "Taste decision",
+            "recovery_entry": ".scratch/example/state.md",
+            "revision": "fixture-source-1",
+            "consequential": true,
+            "persistent_reference": "changes/example#layout-ruling"
+          }
+        ]
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": null,
+      "dependents_blocked": false
+    },
+    {
+      "id": "destructive-stop",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": false,
+        "explicit_gate": false,
+        "stop_class": "Irreversible or destructive operation"
+      },
+      "action": "stop dependent work",
+      "ruling": null,
+      "review_due": false,
+      "handoff": {
+        "rulings_made": []
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": "Irreversible or destructive operation",
+      "dependents_blocked": true
+    },
+    {
+      "id": "security-stop",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": false,
+        "explicit_gate": false,
+        "stop_class": "Security-sensitive action"
+      },
+      "action": "stop dependent work",
+      "ruling": null,
+      "review_due": false,
+      "handoff": {
+        "rulings_made": []
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": "Security-sensitive action",
+      "dependents_blocked": true
+    },
+    {
+      "id": "external-stop",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": false,
+        "explicit_gate": false,
+        "stop_class": "Externally visible action"
+      },
+      "action": "stop dependent work",
+      "ruling": null,
+      "review_due": false,
+      "handoff": {
+        "rulings_made": []
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": "Externally visible action",
+      "dependents_blocked": true
+    },
+    {
+      "id": "hopeless-stop",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": "Hopeless plan"
+      },
+      "action": "stop dependent work",
+      "ruling": null,
+      "review_due": false,
+      "handoff": {
+        "rulings_made": []
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": "Hopeless plan",
+      "dependents_blocked": true
+    },
+    {
+      "id": "user-challenge-stop",
+      "decision": {
+        "classification": "User challenge",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": null
+      },
+      "action": "stop dependent work",
+      "ruling": null,
+      "review_due": false,
+      "handoff": {
+        "rulings_made": []
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": "user challenge",
+      "dependents_blocked": true
+    },
+    {
+      "id": "explicit-gate-stop",
+      "decision": {
+        "classification": "Taste decision",
+        "authorized": true,
+        "explicit_gate": true,
+        "stop_class": null
+      },
+      "action": "stop dependent work",
+      "ruling": null,
+      "review_due": false,
+      "handoff": {
+        "rulings_made": []
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": "explicit gate",
+      "dependents_blocked": true
+    },
+    {
+      "id": "authorized-destructive-continues",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": "Irreversible or destructive operation"
+      },
+      "action": "continue",
+      "ruling": {
+        "text": "Ruling: Remove the explicitly approved disposable fixture \u2014 authorization matches this exact path \u2014 recreate the fixture if wrong",
+        "classification": "Mechanical decision",
+        "recovery_entry": ".scratch/example/state.md",
+        "revision": "fixture-source-1",
+        "consequential": true,
+        "persistent_reference": "changes/example#layout-ruling"
+      },
+      "review_due": true,
+      "handoff": {
+        "rulings_made": [
+          {
+            "text": "Ruling: Remove the explicitly approved disposable fixture \u2014 authorization matches this exact path \u2014 recreate the fixture if wrong",
+            "classification": "Mechanical decision",
+            "recovery_entry": ".scratch/example/state.md",
+            "revision": "fixture-source-1",
+            "consequential": true,
+            "persistent_reference": "changes/example#layout-ruling"
+          }
+        ]
+      },
+      "retry_limit": 2,
+      "attempts": [],
+      "stop_reason": null,
+      "dependents_blocked": false
+    },
+    {
+      "id": "mechanical-retry-succeeds",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": null
+      },
+      "action": "continue",
+      "ruling": {
+        "text": "Ruling: Correct the fixture path using the repository map \u2014 the referenced file exists there \u2014 revert the path if the mapping is stale",
+        "classification": "Mechanical decision",
+        "recovery_entry": ".scratch/example/state.md",
+        "revision": "fixture-source-1",
+        "consequential": true,
+        "persistent_reference": "changes/example#layout-ruling"
+      },
+      "review_due": false,
+      "handoff": {
+        "rulings_made": [
+          {
+            "text": "Ruling: Correct the fixture path using the repository map \u2014 the referenced file exists there \u2014 revert the path if the mapping is stale",
+            "classification": "Mechanical decision",
+            "recovery_entry": ".scratch/example/state.md",
+            "revision": "fixture-source-1",
+            "consequential": true,
+            "persistent_reference": "changes/example#layout-ruling"
+          }
+        ]
+      },
+      "retry_limit": 2,
+      "attempts": [
+        {
+          "retries_used": 0,
+          "revision": "fixture-source-1",
+          "evidence": "authored-check-1: failed",
+          "result": "failed",
+          "correction": null,
+          "recorded_before_retry": false,
+          "stop_reason": null
+        },
+        {
+          "retries_used": 1,
+          "revision": "fixture-source-2",
+          "evidence": "authored-check-2: passed",
+          "result": "passed",
+          "correction": "Use the observed fixture path",
+          "recorded_before_retry": true,
+          "stop_reason": null
+        }
+      ],
+      "stop_reason": null,
+      "dependents_blocked": false
+    },
+    {
+      "id": "retry-exhausted",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": null
+      },
+      "action": "continue",
+      "ruling": {
+        "text": "Ruling: Correct the fixture path using the repository map \u2014 the referenced file exists there \u2014 revert the path if the mapping is stale",
+        "classification": "Mechanical decision",
+        "recovery_entry": ".scratch/example/state.md",
+        "revision": "fixture-source-1",
+        "consequential": true,
+        "persistent_reference": "changes/example#layout-ruling"
+      },
+      "review_due": false,
+      "handoff": {
+        "rulings_made": [
+          {
+            "text": "Ruling: Correct the fixture path using the repository map \u2014 the referenced file exists there \u2014 revert the path if the mapping is stale",
+            "classification": "Mechanical decision",
+            "recovery_entry": ".scratch/example/state.md",
+            "revision": "fixture-source-1",
+            "consequential": true,
+            "persistent_reference": "changes/example#layout-ruling"
+          }
+        ]
+      },
+      "retry_limit": 2,
+      "attempts": [
+        {
+          "retries_used": 0,
+          "revision": "fixture-source-1",
+          "evidence": "authored-check-1: failed",
+          "result": "failed",
+          "correction": null,
+          "recorded_before_retry": false,
+          "stop_reason": null
+        },
+        {
+          "retries_used": 1,
+          "revision": "fixture-source-2",
+          "evidence": "authored-check-2: failed",
+          "result": "failed",
+          "correction": "Use the observed fixture path",
+          "recorded_before_retry": true,
+          "stop_reason": null
+        },
+        {
+          "retries_used": 2,
+          "revision": "fixture-source-3",
+          "evidence": "authored-check-3: failed",
+          "result": "failed",
+          "correction": "Use the observed fixture path",
+          "recorded_before_retry": true,
+          "stop_reason": "budget exhausted"
+        }
+      ],
+      "stop_reason": "budget exhausted",
+      "dependents_blocked": true
+    },
+    {
+      "id": "retry-hopeless",
+      "decision": {
+        "classification": "Mechanical decision",
+        "authorized": true,
+        "explicit_gate": false,
+        "stop_class": null
+      },
+      "action": "continue",
+      "ruling": {
+        "text": "Ruling: Correct the fixture path using the repository map \u2014 the referenced file exists there \u2014 revert the path if the mapping is stale",
+        "classification": "Mechanical decision",
+        "recovery_entry": ".scratch/example/state.md",
+        "revision": "fixture-source-1",
+        "consequential": true,
+        "persistent_reference": "changes/example#layout-ruling"
+      },
+      "review_due": false,
+      "handoff": {
+        "rulings_made": [
+          {
+            "text": "Ruling: Correct the fixture path using the repository map \u2014 the referenced file exists there \u2014 revert the path if the mapping is stale",
+            "classification": "Mechanical decision",
+            "recovery_entry": ".scratch/example/state.md",
+            "revision": "fixture-source-1",
+            "consequential": true,
+            "persistent_reference": "changes/example#layout-ruling"
+          }
+        ]
+      },
+      "retry_limit": 2,
+      "attempts": [
+        {
+          "retries_used": 0,
+          "revision": "fixture-source-1",
+          "evidence": "authored-check-1: failed",
+          "result": "failed",
+          "correction": null,
+          "recorded_before_retry": false,
+          "stop_reason": "no evidence-backed correction"
+        }
+      ],
+      "stop_reason": "no evidence-backed correction",
+      "dependents_blocked": true
+    }
+  ]
+}

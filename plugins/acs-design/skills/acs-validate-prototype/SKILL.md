@@ -1,11 +1,11 @@
 ---
 name: acs-validate-prototype
-description: Build throwaway code to answer one design question. Use when conversation cannot settle how behavior should work or what an interface should look like.
+description: Use when conversation cannot settle a specific behavior or interface question and a throwaway prototype could answer it.
 ---
 
 # Validate Prototype
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 

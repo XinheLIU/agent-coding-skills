@@ -1,11 +1,11 @@
 ---
 name: acs-technical-design
-description: Run technical design or design review as a set of aspect cards — architecture, modules, contracts, test strategy, traceability — that write one shared technical-design.md and one HTML view. Use for "technical design", "architecture review", "review the design", "review this plan/RFC before coding", or a holistic design-quality read; it picks which cards to run and consolidates cross-card findings.
+description: Use when requirements need technical design, or an architecture, plan, or RFC needs review across aspects before implementation.
 ---
 
 # Technical Design
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design_architecture, design_modules, design_contracts, design_test_strategy, trace_requirements, delivery_planning]
 ```
 
-Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+[Shared semantics](../../../../docs/shared-semantics.md#technical-design)
 
 Read [the card contract](../references/card-contract.md) first. This skill owns no aspect lens. It decides which cards run, in which mode, and merges their findings. Every aspect judgment belongs to a card.
 

@@ -1,0 +1,14 @@
+{
+  "name": "acs-deploy",
+  "version": "1.0.0",
+  "skills": [
+    {
+      "id": "acs-release",
+      "path": "skills/acs-release/SKILL.md"
+    },
+    {
+      "id": "acs-ship",
+      "path": "skills/acs-ship/SKILL.md"
+    }
+  ]
+}

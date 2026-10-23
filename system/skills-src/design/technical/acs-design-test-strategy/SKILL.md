@@ -1,11 +1,11 @@
 ---
 name: acs-design-test-strategy
-description: Design or review the test strategy before code — critical paths, which layer tests what, seams and test doubles policy, contract tests, fixtures and data, characterization for brownfield changes, and CI gates — so every requirement, contract, and failure mode has a verification method. Use when a design needs a test plan or a plan's testing section is thin; writes the TST section of the shared technical-design.md.
+description: Use when a design lacks verification methods for requirements, contracts, or failure modes, or its test plan is thin.
 ---
 
 # Design Test Strategy
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [trace_requirements, delivery_planning, testing, implementation]
 ```
 
-Shared semantics: [memory and handoff protocol](../../../../protocols/skill-declarations.md); shared execution: [Coordination](../../../../protocols/context-coordination.md). Save domain records, including proposed review inputs, in Persistent Memory before formal review or dependent handoff. Run recovery belongs to Working Memory. For human-facing reports and review feedback, use [Presenter](../../../../protocols/presenter.md); views carry source revisions and never own domain facts.
+[Shared semantics](../../../../docs/shared-semantics.md#technical-design)
 
 Follow [the card contract](../references/card-contract.md): read MOD and CON, write only `## Test Strategy (TST)` and `FND-TST-*` rows. Views follow [the technical view template](../references/technical-view.md) and [the visual report contract](references/visual-report.md); run the contract's validator and fix every error before handover.
 

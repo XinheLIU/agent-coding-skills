@@ -2,6 +2,52 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "acs-implement run state",
   "description": "Working Memory scheduler details referenced by the configured recovery entry. Canonical tickets own durable status; entries here are derived execution observations. Retain necessary evidence before cleanup.",
+  "$defs": {
+    "review_package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "brief",
+        "acceptance_criteria",
+        "diff",
+        "base",
+        "revision",
+        "input_revision"
+      ],
+      "properties": {
+        "brief": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Readable accepted ticket brief and binding constraints; never an implementer report."
+        },
+        "acceptance_criteria": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Readable canonical criterion reference."
+        },
+        "diff": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Readable complete BASE-to-current diff, or scoped FIX_BASE diff for re-review."
+        },
+        "base": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Immutable dispatch source identity backed by a retrievable snapshot."
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Independently measured completion source identity."
+        },
+        "input_revision": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Consumed ticket/design input identity, independently checked for freshness."
+        }
+      }
+    }
+  },
   "type": "object",
   "required": ["change_id", "started_at", "tickets"],
   "properties": {
@@ -13,10 +59,14 @@
       "items": {
         "type": "object",
         "required": ["id", "title", "status", "acceptance_criteria", "depends_on"],
+        "allOf": [
+          {"if": {"properties": {"status": {"enum": ["in_review", "fix_round"]}}, "required": ["status"]}, "then": {"required": ["fix_rounds_used", "review_package"]}},
+          {"if": {"properties": {"status": {"const": "fix_round"}}, "required": ["status"]}, "then": {"required": ["fix_base", "review_result_path"], "properties": {"fix_rounds_used": {"minimum": 1}}}}
+        ],
         "properties": {
           "id": { "type": "string" },
           "title": { "type": "string" },
-          "status": { "enum": ["blocked", "ready", "in_progress", "done", "failed"] },
+          "status": { "enum": ["blocked", "ready", "in_progress", "in_review", "fix_round", "done", "failed"] },
           "acceptance_criteria": {
             "type": "array",
             "items": { "type": "string" },
@@ -29,6 +79,10 @@
           "started_at": { "type": "string", "format": "date-time" },
           "completed_at": { "type": "string", "format": "date-time" },
           "evidence_path": { "type": "string", "description": "Coordinator-resolved evidence reference. Retain criterion-linked evidence before dependent handoff or cleanup." },
+          "fix_rounds_used": {"type": "integer", "minimum": 0, "maximum": 5, "description": "Persist before each correction dispatch; independent of B8 retries_used. Never reset on resume or executor replacement."},
+          "review_package": {"$ref": "#/$defs/review_package"},
+          "review_result_path": {"type": "string", "minLength": 1, "description": "Ordered spec/quality verdicts, cannot-verify items and dispositions, reviewed source/input identities. Coordinator checks current evidence before done."},
+          "fix_base": {"type": "string", "minLength": 1, "description": "Previous reviewed source identity; original dispatch BASE remains immutable."},
           "failure": { "type": "string", "description": "Present when status is failed: what failed and where the evidence is" }
         }
       }

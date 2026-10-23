@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Pre-Mortem Analysis
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -27,7 +27,7 @@ Run a 6-phase "project autopsy" starting from an assumed total failure, then pro
 risk analysis that enriches shared HTML product memory. The autopsy is a dialogue: the
 user holds context the records do not, and the output is a reading of the risks that the
 user has confirmed or explicitly disputed — not a list the model believes is true.
-Questioning and confirmation follow [the shared-understanding protocol](../acs-brainstorm/references/shared-understanding.md).
+Questioning and confirmation follow [the shared-understanding protocol](../../resources/protocols/questioning.md).
 
 ## Shared Memory Contract
 

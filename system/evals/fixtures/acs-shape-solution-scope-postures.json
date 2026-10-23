@@ -1,0 +1,48 @@
+{
+  "evidence_kind": "Authored acceptance fixtures; not a model transcript or observed skill run",
+  "skill": "acs-shape-solution",
+  "cases": [
+    {
+      "posture": "Expansion",
+      "basis": "Fixture user instruction: explore an ambitious weekly reporting experience",
+      "baseline": ["weekly report"],
+      "changes": [
+        {"item": "trend comparison", "operation": "add", "disposition": "approved", "approval": "Fixture user opts in to trend comparison", "reason": "Makes changes over time visible"},
+        {"item": "team alerts", "operation": "add", "disposition": "rejected", "approval": null, "reason": "Outside the individual reporting job"}
+      ],
+      "accepted_scope": ["weekly report", "trend comparison"],
+      "record": {"Scope posture": "Expansion", "NOT in scope": "team alerts — outside the individual reporting job"}
+    },
+    {
+      "posture": "Selective expansion",
+      "basis": "Fixture user instruction: keep the report and offer optional additions",
+      "baseline": ["weekly report"],
+      "changes": [
+        {"item": "CSV export", "operation": "add", "disposition": "approved", "approval": "Fixture user opts in to CSV export", "reason": "Reuses the report in the existing spreadsheet"},
+        {"item": "scheduled email", "operation": "add", "disposition": "deferred", "approval": null, "reason": "Revisit after first-use feedback"},
+        {"item": "team dashboard", "operation": "add", "disposition": "pending", "approval": null, "reason": "Fixture user skipped this choice"}
+      ],
+      "accepted_scope": ["weekly report", "CSV export"],
+      "record": {"Scope posture": "Selective expansion", "NOT in scope": "scheduled email — revisit after first-use feedback"}
+    },
+    {
+      "posture": "Hold",
+      "basis": "Fixture accepted decision: retain the weekly reporting scope",
+      "baseline": ["weekly report"],
+      "changes": [],
+      "accepted_scope": ["weekly report"],
+      "record": {"Scope posture": "Hold", "NOT in scope": "none recorded"}
+    },
+    {
+      "posture": "Reduction",
+      "basis": "Fixture user instruction: simplify while preserving the weekly report",
+      "baseline": ["weekly report", "team alerts", "CSV export"],
+      "changes": [
+        {"item": "team alerts", "operation": "remove", "disposition": "approved", "approval": "Fixture user opts in to removing team alerts", "reason": "Not needed for the core reporting outcome"},
+        {"item": "CSV export", "operation": "remove", "disposition": "pending", "approval": null, "reason": "Fixture user has not answered the proposed cut"}
+      ],
+      "accepted_scope": ["weekly report", "CSV export"],
+      "record": {"Scope posture": "Reduction", "NOT in scope": "team alerts — not needed for the core reporting outcome"}
+    }
+  ]
+}

@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # PRD Writer
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -20,7 +20,7 @@ context:
   handoff_to: [design, delivery_planning]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Preserve accepted product intent so the project still knows what it is building and why after working memory is deleted. Consolidate canonical records rather than retelling each skill's report into a second copy.

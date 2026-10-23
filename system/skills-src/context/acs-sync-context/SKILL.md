@@ -1,11 +1,11 @@
 ---
 name: acs-sync-context
-description: Inventory and classify every repository document into its memory class, then repair shared-context drift. Use for a whole-repository documentation audit, cleaning up a messy documentation tree (scattered, stale, or malformed Markdown and HTML files) back to the protocol, stale or abandoned plan documents, broken routing, stale domain context, an outdated code index, or working memory that no longer matches repository state. Presents a classification table and confirms the edit plan before moving, promoting, or removing anything; if routing is absent, inspect explicit sources read-only or run acs-init-context first when setup is needed.
+description: Use when repository documents need an audit, or routing, domain context, plans, working memory, or the code index have drifted.
 ---
 
 # Sync Context
 
-Last updated: 2026-09-26
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [domain_owners, coordinator]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+[Shared semantics](../../../docs/shared-semantics.md#context)
 
 
 Use the [protocol](../../../protocols/skill-declarations.md) and [document layout](../acs-init-context/references/canonical-doc-layout.md) for routing, freshness, ownership, and retention, and [the census procedure](references/document-census.md) for inventory, effort verdicts, and why-extraction. Configuration is relevant context, not a precondition: absent routing, inspect explicit sources read-only and use `acs-init-context` when a repair needs routing.

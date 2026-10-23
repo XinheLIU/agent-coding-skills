@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["root", "tickets", "frontier", "next", "warnings"],
+  "additionalProperties": false,
+  "properties": {
+    "root": {"type": "string"},
+    "tickets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "readiness", "ticket_type", "deps", "execution_ready", "missing_dependencies", "blocked_dependencies", "unresolved_dep_text", "source_file", "source_revision"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"type": "string"},
+          "readiness": {"type": "string"},
+          "ticket_type": {"type": "string"},
+          "deps": {"type": "array", "items": {"type": "string"}},
+          "execution_ready": {"type": "boolean"},
+          "missing_dependencies": {"type": "array", "items": {"type": "string"}},
+          "blocked_dependencies": {"type": "array", "items": {"type": "string"}},
+          "unresolved_dep_text": {"type": "string"},
+          "source_file": {"type": "string"},
+          "source_revision": {"type": "string"}
+        }
+      }
+    },
+    "frontier": {"type": "array", "items": {"type": "string"}},
+    "next": {
+      "type": "object",
+      "required": ["action", "ticket_id"],
+      "additionalProperties": false,
+      "properties": {
+        "action": {"type": "string", "enum": ["implement", "wait", "resolve_blockers", "complete"]},
+        "ticket_id": {"type": ["string", "null"]}
+      }
+    },
+    "warnings": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,11 +1,11 @@
 ---
 name: acs-engineer-domain-model
-description: Maintain shared domain language and durable architectural decisions. Use when terms are vague or conflicting, the code and stated model disagree, or a hard-to-reverse trade-off needs an ADR.
+description: Use when domain terms conflict, code disagrees with the stated model, or a hard-to-reverse trade-off needs an ADR.
 ---
 
 # Engineer Domain Model
 
-Last updated: 2026-09-25
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -19,7 +19,7 @@ context:
   handoff_to: [design, implementation]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Domain results and proposed transitions use those contracts; existing authorization persists.
+[Shared semantics](../../../docs/shared-semantics.md#context)
 
 
 Read the configured `CONTEXT.md` or `CONTEXT-MAP.md`, relevant ADRs, and the product document resolved through memory/state pointers (`product.html#prd`, or a canonical legacy PRD) for candidate terms. Challenge overloaded terms with concrete scenarios and compare claims against code.

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement"
+  short_description: "Deliver a verifiable change end-to-end using dependency-ordered tickets from acs..."
+policy:
+  allow_implicit_invocation: false

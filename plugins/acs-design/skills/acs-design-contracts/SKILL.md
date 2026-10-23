@@ -1,11 +1,11 @@
 ---
 name: acs-design-contracts
-description: Design or review correctness contracts — invariants, pre/postconditions, error and failure semantics, idempotency and ordering, trust boundaries, and API/schema evolution — plus a failure-modes table for every new code path. Use when interfaces exist but what must stay true, what can fail, and how it fails are unstated; writes the CON section of the shared technical-design.md.
+description: Use when interfaces lack invariants, failure semantics, trust boundaries, ordering guarantees, or evolution rules.
 ---
 
 # Design Contracts
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -58,12 +58,22 @@ Recover contracts the code already enforces, or silently relies on, before desig
 
 A row that is unhandled, untested, and silent is a `P0` finding.
 
+### Observability
+
+Before naming signals or instrumenting a new or changed production path, write **2–4 on-call questions** in CON: what users experience, where failure occurs, and why. Then map every proposed signal to a question ID and a concrete query; cover every question. Choose structured logs, metrics, or traces for the answer needed, not a mandatory inventory of all three. Tie the map to the path's failure-mode row. Use correlation IDs across boundaries, allowlisted fields without secrets or personal data, and bounded metric labels.
+
+For **every alert**, record its user-visible symptom, threshold and duration with rationale, destination, and a linked **three-line runbook**: `Means:` (impact), `First query:` (executable telemetry query), `Escalate to:` (owner). Require one test-fire per alert with evidence of receipt at the declared test destination and successful runbook resolution. A configured rule alone is not evidence.
+
+Hand these CON IDs to `acs-design-test-strategy` to define verification, then implementation to execute it: declare the command and local mock/scratch environment before running; unset commands or environments block execution. Induce one named failure and retain telemetry, the queries used, and the diagnosis. The diagnostic pass must locate the affected path and cause **from telemetry alone**, without source, injection controls, or an answer key. Missing or ambiguous telemetry fails the exercise. Bind results to the tested source revision and configuration; relevant changes invalidate them. Preserve existing authorization; any external notification or environment needs authorization covering that action.
+
+Keep planned checks distinct from executed evidence. Missing test-fire or failure-exercise evidence remains an open CON item routed to TST/implementation; do not claim operational readiness from a design or a mock. A local exercise establishes only its stated environment.
+
 **Assumptions.** Every implicit assumption in the design or a supplied plan ("X is never null", "events arrive in order") becomes either a stated precondition or a finding.
 
 ## Review mode
 
-Flag as `FND-CON-n`: invariants with no enforcement point, preconditions validated nowhere or twice, errors that leave undefined state, non-idempotent operations behind retries, breaking schema changes without migration, silent failure paths, and unstated assumptions.
+Flag as `FND-CON-n`: invariants with no enforcement point, preconditions validated nowhere or twice, errors that leave undefined state, non-idempotent operations behind retries, breaking schema changes without migration, silent failure paths, unmapped signals or uncovered on-call questions, alerts without runbooks or test-fire evidence, undiagnosable induced failures, and unstated assumptions.
 
 ## Done when
 
-Every interface on the feature path has pre/post/error semantics, every invariant names where it is enforced, and every new path has a failure-mode row. Hand every `CON-n` to `acs-design-test-strategy`, which gives each one a verification method.
+Every interface on the feature path has pre/post/error semantics, every invariant names where it is enforced, and every new path has a failure-mode row. The observability design includes 2–4 questions before signals, a complete signal map, and a three-line runbook per alert; unexecuted checks remain explicit open items. Hand every `CON-n` to `acs-design-test-strategy`, which gives each one a verification method.

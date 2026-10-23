@@ -1,9 +1,9 @@
 ---
 name: acs-refactor-code
-description: "Improve existing code without changing behavior, at two depths. Depth 1 — quick polish of recently modified code — renames vague identifiers, flattens nesting with early returns, drops redundant wrappers and dead comments, aligns with the repo's style guide; applied directly, verified by tests. Depth 2 — structural refactor — extracts abstractions, eliminates duplication across files, applies design patterns (Strategy / Template Method / Adapter) where they earn their keep, breaks up overgrown units; workflow is scope confirmation → baseline metrics → ranked proposal → user approval → grouped edits with tests between groups → re-measured before/after report. Triggers: \"refactor\", \"simplify\", \"polish\", \"clean up what I just wrote\", \"reduce duplication\", \"break up this class\". Tests are the safety net; behavior must not change."
+description: Use when existing code needs behavior-preserving polish, simplification, deduplication, or structural refactoring.
 ---
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 
@@ -17,7 +17,7 @@ context:
   handoff_to: [testing, design, code_review]
 ```
 
-Shared semantics: [shared protocol](../../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../../docs/shared-semantics.md#execution)
 
 
 # Refactor Code

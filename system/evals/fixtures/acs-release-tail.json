@@ -1,0 +1,22 @@
+{
+  "evidence_kind": "authored local scenarios, not model transcripts or live provider measurements",
+  "merge_error": [
+    {"action": "merge_error", "origin": "preceding authorized operation"},
+    {"action": "read_server_state", "state": "merged", "revision": "merge-revision"},
+    {"action": "bind_merged_revision", "revision": "merge-revision"}
+  ],
+  "dry_run": [
+    {"action": "read_configuration", "revision": "config-v1"},
+    {"action": "preview", "stages": ["staging", "canary", "full"], "mutating": false},
+    {"action": "record_outcome", "outcome": "not released"}
+  ],
+  "canary": [
+    {"pattern": "latency", "valid": true, "artifact": "digest-a", "environment": "mock-prod", "alert": false},
+    {"pattern": null, "valid": true, "artifact": "digest-a", "environment": "mock-prod", "alert": false},
+    {"pattern": "latency", "valid": true, "artifact": "digest-a", "environment": "mock-prod", "alert": false},
+    {"pattern": "latency", "valid": false, "artifact": "digest-a", "environment": "mock-prod", "alert": false},
+    {"pattern": "latency", "valid": true, "artifact": "digest-a", "environment": "mock-prod", "alert": false},
+    {"pattern": "latency", "valid": true, "artifact": "digest-b", "environment": "mock-prod", "alert": false},
+    {"pattern": "latency", "valid": true, "artifact": "digest-b", "environment": "mock-prod", "alert": true}
+  ]
+}

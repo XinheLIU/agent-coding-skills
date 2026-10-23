@@ -1,0 +1,5 @@
+interface:
+  display_name: "Tdd"
+  short_description: "Execute one ticket through criterion-based red-green-refactor loops, directly or..."
+policy:
+  allow_implicit_invocation: false

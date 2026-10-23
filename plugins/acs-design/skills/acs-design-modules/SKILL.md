@@ -1,11 +1,11 @@
 ---
 name: acs-design-modules
-description: Design or review code structure — module responsibilities, deep interfaces, owned types, dependency direction, wiring, shared-capability forms (library, component, middleware, adapter), splits and migration. Use when an architecture must become implementable code or when modules are shallow, tangled, or need splitting; writes the MOD section of the shared technical-design.md.
+description: Use when architecture needs implementable module boundaries, or responsibilities, interfaces, wiring, or dependencies are tangled.
 ---
 
 # Design Modules
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 ## Context contract
 

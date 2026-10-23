@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Map Current Product
 
-Last updated: 2026-09-30
+Last updated: 2026-10-23
 
 Read the standalone [visual report contract](references/visual-report.md) before creating or extending `discovery.html`. This local reference is bundled with the skill; do not depend on `/meta` or another installed skill.
 
@@ -22,7 +22,7 @@ context:
   handoff_to: [product, design]
 ```
 
-Shared semantics: [shared protocol](../../../protocols/skill-declarations.md#skill-declarations); shared execution: [Coordination](../../../protocols/context-coordination.md). Apply their memory ownership and save-before-handoff rules; existing authorization persists. For human reports or review feedback, use [Presenter](../../../protocols/presenter.md); source records retain authority.
+[Shared semantics](../../../docs/shared-semantics.md#execution)
 
 
 Extract the current product from the code, docs, and tests before proposing anything new. The output is a source-backed baseline: who can do what today, what is partly built, what is only planned, and where the product surface has gaps.
